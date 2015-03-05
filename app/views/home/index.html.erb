@@ -1,0 +1,229 @@
+<% content_for :head do %>
+
+    <!-- Includes the main Leaflet CSS and JS files, as well as Mapbox files -->
+    <%= render 'shared/mapScriptsBeforeBody', include_all_scripts: false %>
+
+    <!-- Specific Leaflet files (plugins) to be loaded for this page -->
+    <%= stylesheet_link_tag 'leaflet.awesome-markers' %>
+    <%= stylesheet_link_tag 'leaflet-sidebar' %>
+    <%= stylesheet_link_tag 'MarkerCluster' %>
+    <%= stylesheet_link_tag 'MarkerCluster.Default' %>
+    <%= stylesheet_link_tag 'font-awesome.min' %>
+
+    <style type="text/css">
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>
+
+<% end %>
+
+<div id="wrap">
+
+  <%= render 'shared/navigation' %>
+
+  <div id="main" class="container-fluid clear-top">
+    <div class="row">
+
+      <!-- Leaflet sidebar section, with guided navigation - start -->
+      <div id="sidebar" class="semi-transparent hide">
+        <!-- Sidebar - 'Create ad' section -->
+        <div class="list-group">
+            <% if user_signed_in? %>
+              <div class="list-group-item smaller-no-border-no-background">
+                 <a class="btn btn-success no-color" href="/ads/new"><i class="fa fa-plus"></i> <%= t('home.create_new_ad') %></a>
+              </div>
+            <% else %>
+              <div class="list-group-item smaller-no-border-no-background">
+                <button type="button" class="btn btn-default disabled"><i class="fa fa-plus"></i> <%= t('home.create_new_ad') %></button>
+              </div>
+              <div class="list-group-item smaller-no-border-no-background">
+                <span><%= t('home.post_ad_please_html', signin: (link_to t('home.sign_in'), new_session_path(resource_name)), createaccount: (link_to t('home.create_account'), new_registration_path(resource_name)) )%>
+                </span>
+               </div>
+            <% end %>
+        </div>
+
+        <!-- Sidebar - Refinements section -->
+        <% if (@categories && @categories.select{|cat| cat.is_refinement(params)}.length > 0) || @location_search_refinement_to_display || user_search_action %>
+            <div class="list-group">
+              <h4><%= t('home.refinements') %></h4>
+
+              <% if @categories.select{|cat| cat.is_refinement(params)}.length > 1 %>
+                  <div id="deleteAllId">
+                      <a href="/" class="list-group-item smaller-no-border-no-background">
+                        <span class="guided-nav-label"><%= t('home.delete_all') %></span>
+                        <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
+                      </a>
+                  </div>
+              <% end %>
+
+              <% if @location_search_refinement_to_display %>
+                  <a href = "/" class="list-group-item smaller-no-border-no-background">
+                    <span class="guided-nav-label"><%= t('home.your_searched_location') %></span>
+                    <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
+                  </a>
+              <% end %>
+              <% if user_search_action %>
+                  <a href = "/" class="list-group-item smaller-no-border-no-background">
+                    <span class="guided-nav-label"><%= user_search_action %></span>
+                    <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
+                  </a>
+              <% end %>
+              <div id="refinementsId">
+              <% @categories.each do |category| %>
+                  <% if category.is_refinement(params) %>
+                      <a href = "<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background">
+                        <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
+                        <span class="guided-nav-label"><%= category.name %></span>
+                        <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
+                      </a>
+                  <% end %>
+              <% end %>
+              </div>
+            </div>
+        <% end %>
+
+        <!-- Sidebar - list of Categories -->
+        <div class="list-group">
+          <% if @categories.length > 0 %>
+              <h4><%= t('home.title_guided_nav') %></h4>
+              <% @categories.each do |category| %>
+                  <% if !category.is_refinement(params) %>
+                      <a href ="<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background">
+                        <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
+                        <span class="guided-nav-label"><%= category.name %></span>
+                      </a>
+                  <% end %>
+              <% end %>
+          <% else %>
+              <div class="list-group">
+                <div class="list-group-item smaller-no-border-no-background">
+                  <p><%= t('home.no_ad') %></p>
+                  <% if user_signed_in? %>
+                      <p><%= t('home.create_an_ad_now_html', createad: (link_to t('home.create_new_ad'), new_ad_url) )%></p>
+                  <% else %>
+                      <hr/>
+                      <p><%= t('home.signin_now_html', signin: (link_to t('home.sign_in').capitalize, new_session_path(resource_name)) )%></p>
+                  <% end %>
+                </div>
+              </div>
+
+          <% end %>
+
+        </div>
+
+      </div>
+      <!-- Leaflet sidebar section, with guided navigation - end -->
+
+      <!-- Map section -->
+      <div class="col-xs-12 no-left-right-border">
+        <% if @error_location_message %>
+            <!-- Alert popup indicating that the searched location was not found, or error occurred while requesting Nominatim data-->
+            <div class="alert alert-dismissable alert-danger">
+              <button type="button" class="close" data-dismiss="alert">×</button>
+              <%= @error_location_message %>
+            </div>
+        <% end %>
+
+        <div id="home-map-canvas-wrapper">
+          <div id="map"></div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <!-- Row with 3 columns, above the footer-->
+    <div id="upper-footer-id" class="row upper-footer">
+      <% if @links.nil? || @links.length == 0 %>
+        <!-- If there is no link to display, we span the description section over 2 columns -->
+          <div class="col-lg-8">
+            <h2><%= t('home.about_website', website: site_name) %></h2>
+            <span>
+                <% @website_description_paragraph.each do |paragraph| %>
+                    <p><%= paragraph %></p>
+                <% end %>
+              <p><%= link_to "More about #{site_name}...", about_path %></p>
+            </span>
+          </div>
+      <% else %>
+          <div class="col-lg-4">
+            <h2><%= t('home.about_website', website: site_name) %></h2>
+            <span>
+                <% @website_description_paragraph.each do |paragraph| %>
+                    <p><%= paragraph %></p>
+                <% end %>
+              <p><%= link_to "More about #{site_name}...", about_path %></p>
+            </span>
+          </div>
+          <div class="col-lg-4">
+            <h2><%= t('home.links') %></h2>
+            <span>
+              <ul>
+                <% @links.each do |link| %>
+                    <% if link && link[:label] && link[:label] != '' %>
+                        <li><a href="<%= link[:url]%>"><%= link[:label] %></a></li>
+                    <% end %>
+                <% end %>
+              </ul>
+            </span>
+          </div>
+      <% end %>
+      <div class="col-lg-4">
+        <h2><%= t('home.contact_us') %></h2>
+        <span>
+          <% if @contact_email && @contact_email != '' %>
+            <p><%= t('home.send_us_message_html', email: (link_to @contact_email, "mailto:#{@contact_email}") ) %></p>
+          <% end %>
+          <% if @social_medias.length > 0 %>
+            <p>
+              <% @social_medias.each do |media| %>
+                  <%= link_to image_tag("#{media['name']}.png", size: '40x40'), media['url'], target: '_blank' %>&nbsp;&nbsp;
+              <% end %>
+            </p>
+          <% end %>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div id="push"></div>
+
+</div>
+
+<%= render 'shared/footer' %>
+
+<!--  /.container -->
+
+<!-- Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and initializeMap partial that create the actual map)-->
+<%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
+
+<!-- Leaflet plug-ins and library used on the home page -->
+<%= javascript_include_tag 'leaflet-sidebar', 'leaflet-function-button' %>
+<%= javascript_include_tag 'leaflet.markercluster' %>
+
+<!-- Javascript function calls, related specifically to the home page -->
+<script>
+    // specific script to render map markers and initialize the sidebar.
+
+    var locations_exact = <%= raw @locations_exact.to_json(:include => { :ads => { :include =>  {:item => { :include => :category }}}}) %>;
+    var locations_postal = <%= raw @locations_postal.to_json(:include => { :ads => { :include =>  {:item => { :include => :category }}}}) %>;
+    var locations_district = <%= raw @locations_district.to_json(:include => { :ads => { :include =>  {:item => { :include => :category }}}}) %>;
+
+    var area_geocodes = <%= raw @area_geocodes.to_json %>;
+    var marker_colors = <%= raw MARKER_COLORS.to_json %>;
+
+    putLocationMarkers();
+
+    var category_colors = <%= raw @category_colors.to_json %>;
+
+    initializeSideBar();
+
+</script>
+	

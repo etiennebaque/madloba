@@ -1,0 +1,34 @@
+var map_settings_array = <%= raw @mapSettings.to_json %>;
+
+var map = null;
+var newmarker;
+var markers;
+
+var default_marker_icon = "<%= j ActionController::Base.helpers.asset_path('images/marker-icon.png') %>";
+var new_marker_icon = "<%= j ActionController::Base.helpers.asset_path('images/marker-icon-red.png') %>";
+var defaultIcon = L.icon ({
+    iconUrl: default_marker_icon,
+    iconAnchor: [12, 41],
+    popupAnchor:  [0, -34]
+});
+
+var newIcon = L.icon ({
+    iconUrl: new_marker_icon,
+    iconAnchor: [12, 41],
+    popupAnchor:  [0, -34]
+});
+
+var areaIcon = L.icon({
+    iconUrl: '<%= j ActionController::Base.helpers.asset_path('images/marker-area.png') %>',
+    iconAnchor:   [24, 24], // point of the icon which will correspond to marker's location
+    popupAnchor:  [0, -18] // point from which the popup should open relative to the iconAnchor
+});
+
+// There are 2 types of markers, when defining a new location: exact (by full address, default one), and area (by postal code, or district)
+var location_marker_type = map_settings_array['clickableMapMarker'];
+
+// Initialization of the marker that will be in the center of the map.
+var center_marker;
+
+// Call to the JS function that will initialize the map.
+initLeafletMap(map_settings_array);

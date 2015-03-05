@@ -1,0 +1,214 @@
+<% content_for :head do %>
+
+    <%= stylesheet_link_tag 'font-awesome.min' %>
+
+<% end %>
+
+<div class="row">
+
+  <%= render 'user/shared/leftMenu' %>
+
+
+  <div id="content" class="col-lg-10 col-sm-10">
+    <!-- content starts -->
+
+    <div>
+      <ul class="breadcrumb">
+        <li><a href="/user">Home</a></li>
+        <li><a href="/user/managerecords"><%= t('admin.manage_records') %></a></li>
+        <% if @isAdding %>
+            <li><%= t('admin.add_category') %></li>
+        <% else %>
+            <li><%= t('admin.edit_category') %></li>
+        <% end %>
+      </ul>
+    </div>
+
+    <div class="row">
+      <div class="box col-md-12">
+        <div class="box-inner">
+          <div class="box-header well" data-original-title="">
+            <h2>
+              <% if @isAdding %>
+                  <i class="glyphicon glyphicon-plus"></i> <%= t('admin.new_category') %>
+              <% else %>
+                  <i class="glyphicon glyphicon-edit"></i> <%= t('admin.edit_category') %>
+              <% end %>
+            </h2>
+          </div>
+
+          <% if @category.errors.any? %>
+              <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong><%= t('admin.category.cat_error_occurred', errors: pluralize(@category.errors.count, "error")) %>:</strong>
+                <ul>
+                  <% @category.errors.full_messages.each do |msg| %>
+                      <li><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+          <% end %>
+          <% if flash[:name] %>
+              <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <%= t('admin.category.update_success', name: flash[:name]) %>
+                <a href="/user/managerecords#categories"><%= t('admin.back_to_records') %></a>
+              </div>
+          <% end %>
+          <% if flash[:new_name] %>
+              <div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <%= t('admin.category.created_success', name: flash[:new_name]) %>
+                <a href="/user/managerecords"><%= t('admin.back_to_records') %></a>
+              </div>
+          <% end %>
+          <% if flash[:icon_error] %>
+              <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <%= flash[:icon_error] %>
+              </div>
+          <% end %>
+
+          <div class="box-content">
+            <%= form_for [:user, @category], html: { id: 'categoryForm', role: 'form' } do |f| %>
+
+                <!-- Category id -->
+                <% if !@isAdding %>
+
+                    <div class="form-group">
+                      <a href="#" class="btn btn-danger btn-delete-right btn-setting"><%= t('admin.category.delete_category') %></a>
+                    </div>
+
+                    <div class="form-group">
+                      <%= label_tag :nameId, t('admin.mandatory'), class:'control-label' %>
+                    </div>
+
+                    <div class="form-inline">
+                      <%= label_tag :idId, 'Id:', class:'control-label' %>
+                      <%=@category.id%>
+                    </div>
+
+                    <div class="form-group"></div>
+                <% end %>
+
+                <!-- Category name -->
+                <div class="form-group">
+                  <%= label_tag :name, t('admin.category_name')+'*:', class:'control-label' %>
+                  <div class="form-inline">
+                    <%= f.text_field :name, class: 'form-control', maxlength:'90' %>
+                  </div>
+                </div>
+
+                <!-- Category description -->
+                <div class="form-group">
+                  <%= label_tag :description, t('admin.description')+':', class:'control-label' %>
+                  <div class="form-group">
+                    <%= f.text_area :description, cols: 40, rows: 6 %>
+                  </div>
+                </div>
+
+                <hr />
+
+                <h4>Your marker</h4>
+
+                <!-- Category marker -->
+                <div class="form-inline">
+                  <%= label_tag 'marker_color_id', t('admin.category.marker')+'*:', class:'control-label' %>
+                  <% MARKER_COLORS.each_with_index do |(marker_color_name, marker_color_code), index| %>
+                      <div class="radio">
+                        <label>
+                          <% if (@category.marker_color && marker_color_name == @category.marker_color) || index == 0 %>
+                              <%= f.radio_button :marker_color, marker_color_name, checked: true %>
+                          <% else %>
+                              <%= f.radio_button :marker_color, marker_color_name %>
+                          <% end %>
+                          <%= image_tag("images/marker-#{marker_color_name}.png") %>&nbsp;&nbsp;&nbsp;
+                        </label>
+                      </div>
+                  <% end %>
+                </div>
+
+                <!-- Category Font-Awesome icon -->
+                <!-- More info here: http://fortawesome.github.io/Font-Awesome -->
+                <div class="form-group">
+                  <%= label_tag 'category_icon', t('admin.category.icon')+'*:', class:'control-label' %>
+                  <% if @category.icon %>
+                      <p>
+                        <%= t('admin.category.currently_selected') %>: '<%= @category.icon %>' <i class="fa <%= @category.icon %>"> </i>
+                      </p>
+                  <% end %>
+                  <p>
+                    <i><%= t('admin.category.font_awesome_link_html', href: link_to('our selection list', '#', class: 'btn-icon-modal')) %></i><br />
+                    <i><%= t('admin.category.font_awesome_link2_html', href: link_to('Font Awesome', 'http://fortawesome.github.io/Font-Awesome/icons/', target: '_blank')) %></i>
+                  </p>
+                  <div class="form-inline">
+                    <%= f.text_field :icon, class: 'form-control', maxlength:'90', autocomplete: 'off',
+                                     :data => {:content => t('admin.category.font_awesome_help'), :placement => 'right',
+                                               :toggle => 'popover', :trigger => 'hover focus'} %>
+                  </div>
+                </div>
+
+                <% if !@isAdding %>
+
+                    <hr />
+
+                    <!-- List of items this category is attached to -->
+                    <div class="form-group">
+                      <% if @category.items.length > 0 %>
+                          <%= label_tag :items, t('admin.category.item_linked')+':', class:'control-label' %>
+                          <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                            <thead>
+                            <tr>
+                              <th>ID</th>
+                              <th><%= t('admin.category.item_name') %></th>
+                            </tr>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <% @category.items.each do |item| %>
+                                <tr>
+                                  <td><%= item.id %></td>
+                                  <td><a href="/user/items/<%=item.id%>"><%=item.name%></a></td>
+                                </tr>
+                            <% end %>
+                            </tbody>
+                          </table>
+                      <% else %>
+                          <strong><%= t('admin.category.no_item') %></strong>
+                      <% end %>
+                    </div>
+
+                <% end %>
+
+                <hr />
+
+                <!-- Submit button and cancel link -->
+                <%= render 'user/shared/submitSection' %>
+
+            <% end %>
+
+          </div>
+        </div>
+        <!--/span-->
+
+      </div>
+
+    </div>
+    <!--/row-->
+
+    <!-- content ends -->
+  </div>
+  <!--/#content.span10-->
+</div>
+<!--/fluid-row-->
+
+<hr>
+
+<% if !@isAdding %>
+    <!-- "Delete category" modal window -->
+    <%= render 'delete_modal_window' %>
+<% end %>
+
+<!-- Category icon list - modal window -->
+<%= render 'icon_list_modal_window' %>
+

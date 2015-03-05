@@ -1,0 +1,499 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  activerecord:
+    errors:
+      models:
+        category:
+          attributes:
+            name:
+              blank: The category name can't be blank
+            marker_color:
+              taken: "and Icon error - the chosen pair is not available: both this icon and this marker color have already been used for another category. Please choose another marker and/or icon."
+            icon:
+              blank: name can't be blank.
+  home:
+    home: Home
+    page: Home page
+    create_new_ad: Create a new ad
+    post_ad_please_html: To post an ad, please %{signin} or %{createaccount}.
+    reply_ad_please_html: To reply to an ad, please %{signin} or %{createaccount}.
+    sign_in: sign in
+    sign_up: Sign up here
+    not_have_account_yet_html: "%{signup} if you don't have an account yet."
+    or: or
+    create_account: create an account
+    refinements: Your selection
+    delete_all: Delete all
+    refine_location: Refine location
+    cancel: Cancel
+    sign_register: Sign in / Register
+    e-mail: E-mail
+    password: Password
+    record_not_exist: Sorry, this page does not exist!
+    giving: "I'm giving away:"
+    searching: "I'm searching for:"
+    search_items: Type an item
+    location_example: Street name, postal code...
+    search: Search
+    about: About
+    about_website: About %{website}
+    links: Links
+    your_searched_location: Your searched location
+    no_ad: There's no ad at the moment :(
+    create_an_ad_now_html: "%{createad} to tell your community what you have to give, or what you're looking for!"
+    signin_now_html: "%{signin} and create an ad to tell your community what you have to give, or what you're looking for!"
+    about_page: About %{appname}
+    about_description_1_html: "%{appname} is a website powered by %{madloba_link}."
+    about_description_2_html: "%{madloba_link} is an open-source platform that allows you to let your community know about what you want to give away."
+    about_description_3: So many (still useful!) objects go to waste all the time! Luckily, as we increasingly live in an open-data and location driven world, we now have the technological means to solve this problem. Madloba will give your community a new way to recycle, give or dispose all "this stuff" :)
+    contact_us: Contact us
+    send_us_message_html: Send us an email at %{email}
+    about_send_message_html: If you want to contact us, feel free to send us a message at %{email}.
+    osm_error: Sorry, an error occurred while trying to retrieve data from OpenStreetMap.
+    loc_not_found: Sorry, this location was not found.
+    server_error: Sorry, there was a server error. Please try again later.
+    default_current_loc: This is your current location.
+    title_guided_nav: Categories
+    map_positioned_found: "Map positioned on: %{address}"
+    full_not_found_map_position: "Full address not found, map positioned on: %{address}"
+    not_found_map_position: Sorry, address not found.
+    click_on_map_after: Once general area found, click on the map underneath to select the desired location.
+  errors:
+    oops: "Oops!"
+    not_found: 404 Page Not Found
+    server_error: 500 Internal server error
+    404_sorry: "Sorry, the requested page has not been found!"
+    500_sorry: "Sorry, there's been a server error. Please try again later."
+  config:
+    not_authorized: You are not allowed go to that page.
+  location:
+    location: "Location:*"
+    new_location: New Location
+    name: "Location name:"
+    name_help: Give a name to your new location (eg shop name, random name you give your workshop...). It will be shown publicly. Leave blank if you don't want to assign any name.
+    name_to_use: "Which name would you like to use for this ad?*:"
+    ad_action: "What are you doing with your item?*:"
+    ad_action_giving: I'm giving it away
+    ad_action_accepting: I'm searching for/accepting it
+    name_username: the username
+    name_fullname: the full name
+    definition: Enter your location
+    definition_exact: by exact address
+    definition_postal_code: by postal code
+    definition_district: by district
+    street_number: Street number
+    street_name: Street name
+    street_name_help: For this location, the name of the street, avenue, drive...
+    postal_code: Postal Code
+    province: Province
+    city: City
+    district: District
+    define_geocode_button: Find general area on the map
+    geocodes: Geocodes
+    latitude_help: The latitude of your location (can be automatically found with the button above)
+    longitude_help: The longitude of your location (can be automatically found with the button above)
+    map: Map
+    phone_number: Phone number
+    website: Website
+    description: Location description
+    description_help: Fill this optional section if you want to give additional detail about the location (eg. how to find it, what it looks like...)
+    not_found: Location not found
+    not_found_descr1: Based on the entered information, the location could not be found.
+    not_found_descr2: Please select it manually on the map, in order to get its geocodes.
+    district_help: Choose the district where this location can be found.
+  ad:
+    new_ad: New ad
+    area: area
+    error_occurred: "%{errors} occurred while saving this ad"
+    published: "Published by:"
+    expiration_date: This ad will expire on %{expire_date}.
+    expires_today: This ad expires today!
+    has_expired: This ad has expired on %{expire_date}, and is not visible on the website any longer.
+    title: "Ad title*:"
+    title_help: e.g. 'Gives away 5 shirts' or 'I want to get rid of my old laptop'...
+    item: "Item*:"
+    item_help: Type the item you're giving away/looking for. Choose it in the list, if it appears.
+    number_item: Number of items
+    location_website: "Location website:"
+    send_message: Send your message
+    send_message_label: Send a message to %{name} about this ad
+    category: "Category*:"
+    category_help: Choose the category this new item belongs to.
+    description: Description
+    location_description: "About this place:"
+    description_help: Give some details about the item(s) you're giving away/searching.
+    expire_day_number_html: "Number of days for publication (Max: %{expire_max_number})"
+    expire_day_number_help: Number of days your ad will be published for, after it's created.
+    anonymous: Anonymous ad?
+    anonymous_help: Check this box if you want to publicly show your username, instead of your real name, when publishing this ad.
+    new_location: Enter a new location
+    submit: Submit
+    cancel: Cancel
+    create_success: The ad '%{title}' has been created. You will shortly receive an e-mail, with the new ad details.
+    your_new: Your new ad
+    where_to_find: "Where to find the item(s):"
+    where_to_bring: "Where to bring the item(s):"
+    you_own: You created this ad.
+    you_manage: You can manage it
+    here: here
+    error_empty_message: Please enter a valid, non-empty message.
+    error_refresh: A problem occurred while sending your message. Please try to send it again.
+    from: From
+    get_back_to: You can directly get back to %{first_name} by replying to this e-mail.
+    success_sent: Your message has been sent successfully.
+    summary: "Summary:"
+    giving_away: Giving away
+    accepting: Accepting
+    edit_current_location: Edit current location
+    ad_create_expire: Your ad will expire in %{day_number} days, on %{expire_date}.
+    ad_has_expired: Sorry, this ad has expired, and is not visible anymore.
+    no_ad_created_yet: You have not created any ad yet. Click on the button above to create your first one!
+    no_location_yet: "Nothing to edit here: you have not created any ad with an exact location in it yet."
+  mailer:
+    welcome: "Welcome to %{name}!"
+    confirmation_descr1: You received this message because an account, based on your e-mail address, was created on this website.
+    confirmation_descr2: You can confirm your account through the link below
+    confirm_account: Confirm my account
+    thanks: Thank you! :-)
+    signature: The %{name} team.
+    dear: "Dear %{name}"
+    ad_created: You have successfully created the following ad, on %{site_name}
+    ad_title: Ad title
+    item: Item
+    description: Description
+    where_pick_up: Where to pick up the item
+    where_to_drop: Where to drop the item
+    admin_panel: our admin panel.
+    manage_ad_html: "To manage this ad, as well as your previously posted ads, login to %{href}"
+    thanks: Thanks, and have a good day!
+    received_message: You received a reply for your '%{ad_title}' ad on %{site_name}.
+    new_ad_object: Your new ad on %{site_name} - '%{ad_title}'
+    reply_ad_object: Reply to your '%{ad_title}' ad on %{site_name}
+    account_locked: Your account has been locked due to an excessive number of unsuccessful sign in attempts.
+    link_unlock: Click the link below to unlock your account
+    unlock_account: Unlock my account
+    ad_will_expire: This ad will expire in %{day_number} days, on %{expire_date}
+  registration:
+    all_mandatory: (All fields are mandatory)
+    first_name: First name
+    last_name: Last name
+    username: Username
+    username_help: Your username will be used if you don't want to show your full name, when publishing an ad.
+    email: E-mail
+    password: Password
+    password_confirm: Password confirmation
+    sign_up: Sign up
+    not_received: Didn't receive confirmation instructions?
+    waiting_confirmation: Currently waiting confirmation for
+    leave_blank: (leave blank if you don't want to change it)
+    need_current: (we need your current password to confirm your changes)
+    cancel_account: Cancel my account
+    update: Update
+    unhappy: Unhappy?
+    you_sure: Are you sure?
+    back: Back
+    cancel_account: Cancel my account
+    resend_unlock: Resend unlock instructions
+  confirmation:
+    resend: Resend confirmation instructions
+  session:
+    hello: Hello
+    sign_in: Sign in
+    someone_requested: Someone has requested a link to change your password. You can do this through the link below.
+    please_ignore: If you didn't request this, please ignore this email.
+    password_not_changing: Your password won't change until you access the link above and create a new one.
+    forgot: Forgot your password?
+    not_received_unlock: Didn't receive unlock instructions?
+    sign_in_with: Sign in with %{name}
+    change_password: Change my password
+    reset_password: Send me reset password instructions
+    change_your_password: Change your password
+  admin:
+    dashboard: Dashboard
+    name: Name
+    address: Address/Postal code/District
+    exact_area: Location type
+    ads: Ads
+    ad_settings: Ad settings
+    location_tab: Location
+    location_name: location
+    expiration_date: Expiration date
+    locations: Locations
+    items: Items
+    item_name: item
+    categories: Categories
+    add_location: Add location
+    edit_location: Edit location
+    new_location: New location
+    add_item: Add item
+    edit_item: Edit item
+    new_item: New item
+    add_category: Add category
+    edit_category: Edit category
+    new_category: New category
+    title: Title
+    actions: Actions
+    description: Description
+    item_under_cat: Item(s) under this category
+    category_name: Category name
+    marker: Marker
+    icon: Icon
+    edit_delete: Edit details / Delete
+    item_quantity: Item (quantity)
+    user: User
+    website: Website
+    created_by_user: Created by user
+    manage_your_ads: Manage your ads
+    manage_records: Manage records
+    records_message: From here, you can manage the ads posted on the website, as well as their locations, items, and categories.
+    back_to_records: Back to the 'Manage records' page
+    back_to_ads: Back to 'Manage your ads' page
+    back_to_users: Back to 'Manage users' page
+    create_ad: Create ad
+    mandatory: (* mandatory fields)
+    general_settings_menu: General settings
+    save: Save
+    cancel: Cancel
+    log_out: Log out
+    nothing_to_do: Yay! Nothing to worry about :)
+    no_mapbox_account_html: You don't have entered a Mapbox key yet, in "Map settings". You can get one by opening an account on <strong>%{href}</strong>, to get a new map style for your website.
+    no_mapquest_account_html: You don't have entered a MapQuest key yet, in "Map settings". You can get one by opening an account on <strong>%{href}</strong>, to get a new map style for your website.
+    no_social: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General settings". Specify some of them to increase your visibility.
+    no_categories_html: <strong>No category has been created yet</strong>. Please create a few categories to allow the user to refine their search by specific item categories.
+    no_website_description: No website description has been written yet, in "General settings". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
+    no_area_type_html: <strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area settings", please indicate how an area is defined (eg by postal code, by district), to give the user more flexibility, when it comes to choose a location.
+    you_admin: You're an administrator of this website.
+    use_left_hand: Use the left-hand side menu to manage
+    admin_descr1: the different components of this website (ads, locations, items, categories)
+    admin_descr2: the registered users (admins and regulars users)
+    admin_descr3: the website main settings
+    admin_descr4: the settings for the map on the front page
+    admin_descr5: the settings that define an area in your town (eg postal codes and/or districts)
+    regular_actions: You can also perform regular users' actions.
+    todo_list: To-do list
+    welcome_user: Welcome to your %{site_name} dashboard. Use the left-hand side menu to manage
+    user_descr1: the ads you published, as well as the locations tied to them.
+    user_descr2: your user information.
+    social_media: Social media
+    useful_links: Useful links
+    delete_sure: Are you sure you want to delete this %{entity}?
+    warning_ads_before_delete: "WARNING: some ads are still tied to this %{entity}. Deleting this %{entity} will permanently delete these ads."
+    delete_confirm: Yes, delete this %{entity}
+    save_not_possible: "Demo - Update not possible for this page"
+    left_menu:
+      admin_task: Admin tasks
+      user_tasks: Regular user tasks
+      map_settings: Map settings
+      area_settings: Area settings
+      manage_users: Manage users
+      manage_profile: Manage your profile
+    ad:
+      manage_ads: Manage ads
+      update_ad: Update ad
+      ad_edit: Ad details - Edit
+      ad_updated: The ad '%{title}' has been updated.
+      error_update: "%{errors} occurred while updating this ad"
+      delete: Delete this ad
+      your_locations: "Your locations:"
+      this_user_locations: "This user's locations:"
+      location_new_edit: Edit current location (%{current_location})
+      delete_ad_error_html: "Error occurred when updating this ad! Back to %{href}"
+      manage_ads_page: "'Manage your ads' page"
+      giving_accepting_title: Giving away/Accepting
+      giving_away: Giving away
+      accepting: Accepting
+      delete_ad: Delete this ad?
+      delete_ad_permanently: Are you sure you want to delete this ad permanently?
+      delete_this_ad: Yes, delete this ad
+    location:
+      error_occurred: "%{errors} occurred while saving this location"
+      update_success: The location '%{name}' has been updated.
+      created_success: The location '%{name}' has been created.
+      delete: Delete this location
+      map_location_help: If the exact geocodes of this location cannot be found, please point on this map where this location is.
+      linked_ads: Ads linked to that location
+      no_ad: There is no ad linked to this location yet.
+      area: Area
+      exact_address: Exact address
+      map_notification_postal_code: Click on the map to locate your general postal code area.
+      map_notification_exact: Click on the map to locate your exact address.
+      location_deleted: The location '%{deleted_location_name}' has been deleted.
+      unnamed: unnamed location
+      no_ad_tied: No ads are currently tied to this location.
+    category:
+      update_success: The category '%{name}' has been updated.
+      created_success: The category '%{name}' has been created.
+      cat_error_occurred: "%{errors} occurred while saving this category"
+      error_updating: Something went wrong went updating this category. Please try again later.
+      delete_category: Delete this category
+      choose_icon: Choose an icon
+      delete_confirm: Are you sure you want to delete this category?
+      before_you_delete1: Some items are still tied to the category you want to delete.
+      before_you_delete2: Please choose another category, in the list below, to transfer these items to, before going ahead with the deletion of this category.
+      cannot_delete: You cannot this category, as it is the only existing category.
+      delete_yes: Yes, delete this category
+      transfer_and_delete: Transfer items & delete this category
+      success_deleted: The category '%{name}' has been deleted.
+      name: Category name
+      marker: Category marker
+      icon: Category icon
+      currently_selected: Currently selected icon
+      current_marker: Current marker/icon
+      font_awesome_link_html: Pick an icon from %{href}.
+      font_awesome_link2_html: You can also choose an icon from the complete list, in the %{href} library, and type its keyword underneath.
+      font_awesome_help: Type the name of the icon as you see them on the Font Awesome page (eg. 'fa-bell', 'fa-circle'...)
+      item_linked: Items linked to that category
+      item_name: Item name
+      icon_error: The icon name you entered is not valid
+      no_item: There is no item linked to that category yet.
+    item:
+      error_occurred: "%{errors} occurred while saving this item"
+      update_success: The item '%{name}' has been updated.
+      created_success: The item '%{name}' has been created.
+      delete_item: Delete this item
+      name: Item name
+      category: Category
+      ads_promoting: Ads promoting this item
+      ad_title: Ad title
+      remaining_quantity: Remaining quantity
+      no_ad: There is no ad where this item is currently promoted.
+      item_deleted: the item '%{deleted_item_name}' has been deleted.
+    general_settings:
+      name: Website name
+      description: Website description
+      contact_email: Contact e-mail address
+      facebook: Facebook page URL
+      twitter: Twitter handle
+      pinterest: Pinterest page URL
+      success_message: The general settings have been updated.
+      error_message: The "Website name" field cannot be empty.
+      max_ad_expire: Ad expiration - Max. number of days
+      max_ad_expire_help: Set the maximum number of days an ad can remain published, after its creation (Enter '0' to set no limit).
+      link_one: First link
+      link_two: Second link
+      link_three: Third link
+      link_four: Fourth link
+      link_help: Create up to 4 links in this section, to advertise relevant websites/pages, at the bottom of the front page.
+    area_settings:
+      title: Area settings
+      define_area: An area can be defined
+      by_postal_code: by postal code
+      by_district: by district
+      area_postal_code: Area defined by a postal code
+      area_district: Area defined by a district
+      map_description: Click on the 'Add district' link, type a name for this new district, and click on the map to define its location.
+      error_update_district: An server error occurred while updating districts. Please try again later.
+    map_settings:
+      title: Map settings
+      type: "Map type:"
+      mapbox: "Mapbox API key:"
+      mapbox_link: Go to your Mapbox account...
+      mapquest: "MapQuest API key:"
+      zoom_level: Map zoom level
+      mapquest_link: Go to your MapQuest developer account...
+      map_api_keys: Map API keys
+      key_first: After entering a new API key, save the changes first. Then, in the drop down box above, select the type of the map related to that new key.
+      location_info: Location information
+      postal_code: Postal code format
+      postal_code_field1: Postal code length
+      postal_code_field2: Area length
+      postal_code_help1: Maximum number of characters used in your city's postal codes (eg. 6 for 'A1B2C3')
+      postal_code_help2: Number of characters within the postal codes, that defines an area. (eg. 3 for 'A1B')
+      map_center: Default Map center coordinates
+      refresh_map: Refresh the map
+      find_city_map: "Find a city on the map underneath:"
+      city: City
+      state: State/Region (optional)
+      country: Country
+      find_city: Find this city
+      map_description: "- Choose the map default center by clicking on this map. The selected location will be used when no address is entered by the user."
+      map_description_zoom: "- Set also the desired default level of zoom (by clicking on '-' or '+')."
+      should_be_numeric: Latitude and longitude should be numeric values.
+      cannot_be_empty: Latitude or longitude cannot be empty.
+      postal_area_error: The postal code length should be greater or equals to the area code.
+      update_success: The map settings have been updated.
+    users:
+      title: Manage users
+      description: From here, you can manage user accounts (admin and regular users).
+      add: Create user
+      email: E=mail
+      full_name: Full name
+      role: Role
+      error_occurred: "%{errors} occurred while saving this user"
+      myprofile_update_success: Your user profile has been updated.
+      update_success: The user '%{email}' has been updated.
+      created_success: The user '%{email}' has been created. A welcome message has been sent to that e-mail address.
+      delete: Delete this user
+      confirm_delete: "WARNING: All posted ads, as well as the locations registered by this user will be permanently deleted."
+      confirm_delete_2: Are you sure you want to delete this user permanently?
+      delete_yes: Yes, delete this user
+      user_destroyed: The user '%{email}' and the ads they posted have been deleted.
+      delete_not_possible: Demo - User deletion not available
+    profile:
+      title: Manage your profile
+      title_manage_users: Manage users
+      update_profile: Update profile
+      new_user: New user
+      make_user_admin: Make this user an admin.
+      email: E-mail
+      first_name: First name
+      last_name: Last name
+      username: Username
+      current_password: Current password
+      new_password: New password
+      confirm_password: Confirm password
+  setup:
+    welcome_madloba: Welcome to Madloba!
+    about_to_setup: You're about to setup Madloba on your server.
+    process_takes: The setup process takes about 10 minutes, then you'll be ready to go!
+    click_next: Click on "Next" to continue.
+    back: Back
+    next: Next
+    general_info: General information
+    name_description: The name of your website
+    description_description: Write what your website is about...
+    map_settings: Map settings
+    city_help: The city your Madloba website is about
+    state_help: The state/province where this city is
+    country_help: The country where this city is
+    creation_admin: Creation of admin user
+    all_done: All done!
+    setup_successfully: Your Madloba website has been setup successfully!
+    add_config: There are some additional configurations to take care of.
+    check_config: Make sure to check them out in your admin panel!
+    enjoy: Enjoy!
+    go_to_website: Go to your website!
+    name_cant_be_blank: The website name cannot be blank.
+    select_geocodes: Please select a center point on the map.
+    state_province: State/Province
+    find_city_on_map: Find this city on the map
+    map_description: "Click somewhere in your city: the marker showing up will set the middle of the map, on the home page of your website."
+    map_description_2: "Click also on '+/-' to choose the default level of zoom."
+    gmail_note: "If you've set up a Gmail address as your SMTP username, you need to let Google know about it. So before submitting this form:"
+    gmail_note2: Open a new tab right now, and log into your Gmail SMTP email account (log out from any other Gmail account).
+    gmail_note3_html: Notify Google that you want to use this Gmail account with a third-party website, by clicking %{link}.
+    gmail_link_here: here
+    gmail_note4: Once you're done, you can continue with the submission of this form.
+    confirm_email: If the information entered above in this form is correct, and after you click "Next", a confirmation e-mail will be sent to you.
+    check_email: Please check your inbox to confirm your account.
+    city_country_mandatory: "'City' and 'Country' fields are mandatory."

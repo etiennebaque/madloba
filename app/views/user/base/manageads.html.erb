@@ -1,0 +1,162 @@
+<div class="row">
+
+  <%= render 'user/shared/leftMenu' %>
+
+  <div id="content" class="col-lg-10 col-sm-10">
+    <!-- content starts -->
+
+    <!-- Success/Error flash messages -->
+    <% if flash[:error] %>
+        <div class="box-content alerts">
+          <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%= flash[:error] %>
+          </div>
+        </div>
+    <% end %>
+    <% if flash[:success] %>
+        <div class="box-content alerts">
+          <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%=flash[:success]%>
+          </div>
+        </div>
+    <% end %>
+
+
+    <div>
+      <ul class="breadcrumb">
+        <li>
+          <a href="/user"><%= t('admin.dashboard')%></a>
+        </li>
+        <li>
+          <%= t('admin.manage_your_ads') %>
+        </li>
+      </ul>
+    </div>
+
+    <div class="row">
+      <div class="box col-md-12">
+        <div class="box-inner">
+          <div class="box-header well" data-original-title="">
+            <h2><i class="glyphicon glyphicon-pencil"></i> <%= t('admin.manage_your_ads') %></h2>
+          </div>
+
+
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#ads" data-toggle="tab"><%= t('admin.ads') %></a></li>
+            <li><a href="#locations" data-toggle="tab"><%= t('admin.locations') %></a></li>
+          </ul>
+
+          <div class="tab-content">
+            <!-- Ads tab pane -->
+            <div class="tab-pane active" id="ads">
+              <div class="box-content">
+
+                <p class="left">
+                  <a class="btn btn-success" href="/ads/new">
+                    <i class="glyphicon glyphicon-plus icon-white"></i>
+                    <%= t('admin.create_ad') %>
+                  </a>
+                </p>
+
+                <% if @ads && @ads.length > 0 %>
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
+                      <thead>
+                      <tr>
+                        <th><%= t('admin.title') %></th>
+                        <th><%= t('admin.ad.giving_accepting_title') %></th>
+                        <th><%= t('admin.item_quantity') %></th>
+                        <th><%= t('admin.location_tab') %></th>
+                        <th><%= t('admin.expiration_date') %></th>
+                        <th><%= t('admin.actions') %></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <% @ads.each do |ad| %>
+                          <tr>
+                            <td class="vert-align"><%= ad.title %></td>
+                            <td class="vert-align"><%= ad.is_giving ? t('admin.ad.giving_away') : t('admin.ad.accepting') %></td>
+                            <td class="vert-align"><%= "#{ad.item.name} (#{ad.number_of_items})" %></td>
+                            <td class="vert-align"><a href="/user/locations/<%= ad.location.id %>/edit"><%= ad.location.location_full_name %></a></td>
+                            <% if ad.expire_date.to_s != '2100-01-01' %>
+                                <td class="vert-align"><%= ad.expire_date %></td>
+                            <% else %>
+                                <td class="vert-align">N/A</td>
+                            <% end %>
+                            <td class="center"><a class="btn btn-info" href="/user/ads/<%= ad.id %>/edit"> <i class="glyphicon glyphicon-pencil"></i> <%= t('admin.edit_delete') %> </a>
+                            </td>
+                          </tr>
+                      <% end %>
+                      </tbody>
+                    </table>
+                <% else %>
+                    <p><%= t('ad.no_ad_created_yet') %></p>
+                <% end %>
+
+              </div>
+            </div>
+            <!-- Ads tab pane end -->
+
+            <!-- Location tab pane -->
+            <div class="tab-pane" id="locations">
+              <div class="box-content">
+
+                <p class="left">
+                  <a class="btn btn-success" href="/user/locations/new">
+                    <i class="glyphicon glyphicon-plus icon-white"></i>
+                    <%= t('admin.add_location') %>
+                  </a>
+                </p>
+
+                <% if @locations && @locations.length > 0 %>
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable responsive">
+                      <thead>
+                      <tr>
+                        <th><%= t('admin.name') %></th>
+                        <th><%= t('admin.exact_area') %></th>
+                        <th><%= t('admin.address') %></th>
+                        <th><%= t('admin.ads') %></th>
+                        <th><%= t('admin.actions') %></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <% @locations.each do |location| %>
+                          <tr>
+                            <td class="vert-align"><%= location.location_full_name %></td>
+                            <td class="vert-align"><%= location.is_area ? t('admin.location.area') : t('admin.location.exact_address') %></td>
+                            <td class="vert-align"><%= location.location_type_address %></td>
+                            <td>
+                              <% if location.ads.length == 0 %>
+                                  <i><%= t('admin.location.no_ad_tied') %></i>
+                              <% else %>
+                                  <ul>
+                                    <% location.ads.each do |ad| %>
+                                        <li><%= ad.title %></li>
+                                    <% end %>
+                                  </ul>
+                              <% end %>
+                            </td>
+                            <td class="center"><a class="btn btn-info" href="/user/locations/<%= location.id %>/edit"> <i class="glyphicon glyphicon-pencil"></i> <%= t('admin.edit_delete') %> </a></td>
+                          </tr>
+                      <% end %>
+                      </tbody>
+                    </table>
+                <% else %>
+                    <p><%= t('ad.no_location_yet') %></p>
+                <% end %>
+
+
+              </div>
+            </div>
+            <!-- Location tab pane end-->
+
+          </div>
+          <!-- Tab panes end -->
+
+        </div>
+      </div>
+    </div>
+    <!-- content ends -->
+  </div><!--/#content.span10-->
+</div><!--/row-->

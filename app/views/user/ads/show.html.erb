@@ -1,0 +1,168 @@
+<% content_for :head do %>
+
+    <!-- Includes the main Leaflet CSS and JS files, as well as Mapbox files -->
+    <%= render 'shared/mapScriptsBeforeBody', include_all_scripts: false %>
+
+    <!-- Specific map scripts loaded for this page -->
+    <%= stylesheet_link_tag 'leaflet.awesome-markers' %>
+    <%= stylesheet_link_tag 'font-awesome.min' %>
+
+    <style type="text/css">
+        #map {
+            width: 100%;
+            height: 250px;
+            margin: 0;
+        }
+    </style>
+
+<% end %>
+
+<div id="wrap">
+
+  <%= render 'shared/navigation' %>
+
+  <div class="container">
+
+    <% if flash[:new_ad] %>
+        <div class="alert alert-dismissable alert-success">
+          <button data-dismiss="alert" class="close" type="button">×</button>
+          <%= t('ad.create_success', title: flash[:new_ad]) %>
+        </div>
+        <div class="alert alert-dismissable alert-info">
+          <button data-dismiss="alert" class="close" type="button">×</button>
+          <%= flash[:ad_expire] %>
+        </div>
+    <% end %>
+    <% if flash[:success] %>
+        <div class="alert alert-dismissable alert-success">
+          <button data-dismiss="alert" class="close" type="button">×</button>
+          <%= flash[:success] %>
+        </div>
+    <% end %>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset>
+          <h3><%= @ad.title %></h3>
+
+          <div class="ad-title">
+              <% if !is_owning(@ad) %>
+                  <!-- Ad publisher -->
+                    <label class="ad-label"><%= t('ad.published') %></label>
+                    <span><%= publisher_name(@ad) %></span>
+              <% else %>
+                  <% if @your_ad_has_expired %>
+                        <strong><%= t('ad.you_own') %></strong><br>
+                        <span class="ad-expiring"><%= t('ad.has_expired', expire_date: @ad.expire_date)%></span>
+                  <% else %>
+                        <strong><%= t('ad.you_own') %></strong> <%= t('ad.you_manage')%> <a href="/user/ads/<%= @ad.id %>/edit"><%= t('ad.here')%></a>.
+                  <% end %>
+              <% end %>
+          </div>
+
+          <div class="col-lg-6" style="padding-bottom: 20px">
+
+            <!-- Left-hand side: Item (and number) -->
+            <div>
+              <label class="ad-label"><%= t('ad.summary') %></label>
+              <span>
+                <% if @ad.is_giving %>
+                    <%= t('ad.giving_away') %>
+                <% else %>
+                    <%= t('ad.accepting') %>
+                <% end %>
+                <%= @ad.item.name.downcase %>
+              </span>
+            </div>
+
+            <!-- Left-hand side: Location -->
+            <div>
+              <label class="ad-label">
+                <% if @ad.is_giving %>
+                  <%= t('ad.where_to_find') %>
+                <% else %>
+                    <%= t('ad.where_to_bring') %>
+                <% end %>
+              </label>
+              <span><%= @ad.location.name_and_or_full_address %></span>
+            </div>
+
+            <!-- Left-hand side: Number of items -->
+            <div>
+              <label class="ad-label"><%= t('ad.number_item') %>:</label>
+              <span><%= @ad.number_of_items %></span>
+            </div>
+
+            <% if @ad.location.loc_type == 'exact' %>
+                <!-- Left-hand side: Website -->
+                <% if @ad.location.website && @ad.location.website != '' %>
+                    <div>
+                      <label class="ad-label"><%= t('ad.location_website') %></label>
+                      <span><a href="<%= @ad.location.website %>" target="_blank"><%= @ad.location.website %></a></span>
+                    </div>
+                <% end %>
+
+                <!-- Location description -->
+                <% if @ad.location.description && @ad.location.description != '' %>
+                    <div>
+                      <label class="ad-label"><%= t('ad.location_description') %></label>
+                      <span><%= @ad.location.description %></span>
+                    </div>
+                <% end %>
+            <% end %>
+
+          </div>
+
+          <div class="col-lg-6 ad-paragraph">
+            <!-- Right-hand side: Map -->
+            <div id="map"></div>
+          </div>
+
+          <div class="col-lg-12 ad-paragraph">
+
+            <!-- Ad description -->
+            <div class="ad-show-description">
+              <label class="ad-label"><%= t('ad.description') %>:</label>
+              <span><%= @ad.description %></span>
+            </div>
+
+            <% if !is_owning(@ad) %>
+                <!-- Send message to the ad publisher -->
+                <%= form_tag '/ads/send_message', :html => {:class => 'form-horizontal'} do %>
+                    <%= hidden_field_tag 'id', @ad.id %>
+                    <%= label_tag :title, t('ad.send_message_label', name: publisher_name(@ad))+':', class: 'control-label' %>
+                    <div class="form-group">
+                        <textarea id="ad_message_id" name="message" rows="8" class="form-control" style="padding-bottom: 20px"></textarea>
+                    </div>
+                    <% if user_signed_in? %>
+                        <div class="form-actions">
+                          <%= submit_tag(t('ad.send_message'), class: 'btn btn-success') %>
+                        </div>
+                    <% else %>
+                        <div class="form-actions">
+                          <%= submit_tag(t('ad.send_message'), class: 'btn btn-default disabled') %>
+                          <span style="padding-left: 5px;"><%= t('home.reply_ad_please_html', signin: (link_to t('home.sign_in'), new_session_path(resource_name)), createaccount: (link_to t('home.create_account'), new_registration_path(resource_name)) )%>
+                          </span>
+                        </div>
+
+                    <% end %>
+                <% end %>
+            <% end %>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="push"></div>
+
+</div>
+
+<%= render 'shared/footer' %>
+
+<!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initializeMap partial that create the actual map -->
+<%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>

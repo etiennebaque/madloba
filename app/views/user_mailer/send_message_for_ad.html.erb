@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+<strong><%= t('mailer.dear', name: @ad.user.first_name) %></strong>
+<p>
+  <%= t('mailer.received_message', ad_title: @ad.title, site_name: @site_name) %>
+</p>
+
+<hr />
+<p>
+  <%= t('ad.from') %>: <%= "#{@sender.first_name} #{@sender.last_name} (#{@sender.email})" %>
+  <p>
+    <%= @message %>
+  </p>
+</p>
+<hr />
+
+<p>
+  <%= t('ad.get_back_to', first_name: @sender.first_name) %>
+</p>
+
+<p><%= t('mailer.thanks') %><br />
+  <%= t('mailer.signature', name: @site_name) %></p>
+</body>
+</html>

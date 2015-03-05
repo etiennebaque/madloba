@@ -1,0 +1,21 @@
+// Place all the styles related to the admin controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+/*
+/* User panel - Manage record page
+/* --------------------------------------
+*/
+.table tbody>tr>td.vert-align{
+  vertical-align: middle;
+}
+
+.form-text{
+  padding: 8px 4px;
+  display: inline-block;
+}
+
+.ad-expiring{
+  color: red;
+  font-weight: bold;
+}

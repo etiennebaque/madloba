@@ -1,0 +1,16 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+default:
+  name: Default
+  marker_color: blue
+  description: this is the default category
+
+custom:
+  name: Custom
+  marker_color: red
+  description: this is a custom category
+
+special:
+  name: Special one
+  marker_color: green
+  description: how about a special category?

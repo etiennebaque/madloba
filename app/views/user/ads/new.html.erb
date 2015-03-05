@@ -1,0 +1,224 @@
+<% content_for :head do %>
+
+    <!-- Includes the main Leaflet CSS and JS files, as well as Mapbox files -->
+    <%= render 'shared/mapScriptsBeforeBody', include_all_scripts: false %>
+
+    <style type="text/css">
+        #map {
+            width: 100%;
+            height: 450px;
+            margin: 0;
+        }
+    </style>
+
+    <script>
+        var current_page = "new_ad";
+        // array containing all the item names, used for the type-ahead, on the item field.
+        var all_items = <%= raw all_items.to_json %>;
+    </script>
+
+
+<% end %>
+
+<div id="wrap">
+
+  <%= render 'shared/navigation' %>
+
+  <div class="container">
+
+    <% if @ad && @ad.errors.any? %>
+        <div class="alert alert-dismissable alert-danger">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <strong><%= t('ad.error_occurred', errors: pluralize(@ad.errors.count, 'error')) %>:</strong>
+          <ul>
+            <% @ad.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <%= form_for @ad, :html => {:class => 'form-horizontal'} do |f| %>
+            <fieldset>
+              <legend><%= t('ad.new_ad') %></legend>
+
+              <!-- Ad title -->
+              <div class="form-group">
+                <%= f.label :title, t('ad.title'), class: 'col-lg-2 control-label' %>
+                <div class="col-lg-6">
+                  <%= f.text_field :title, class: 'form-control help-message', autofocus: true,
+                      :data => {:content => t('ad.title_help'), :placement => 'right',
+                                :toggle => 'popover', :trigger => 'hover focus'} %>
+                </div>
+              </div>
+
+              <!-- Name to use -->
+              <div class="form-group">
+                <%= f.label :is_anonymous, t('location.name_to_use'), class: 'col-lg-2 control-label' %>
+                <div class='col-lg-6'>
+                  <div class="radio">
+                    <label>
+                      <%= f.radio_button :is_anonymous, true, checked: true, value: true %>
+                      <%= t('location.name_username') %> (<%= current_user.username %>)
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <%= f.radio_button :is_anonymous, false, value: false %>
+                      <%= t('location.name_fullname') %> (<%= current_user.first_name %> <%= current_user.last_name %>)
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item -->
+              <div class="form-group">
+                <%= f.label :item, t('ad.item'), class: 'col-lg-2 control-label' %>
+                <div class="col-lg-6">
+                  <%= text_field_tag 'ad_item', nil, class: 'form-control help-message', autocomplete: 'off',
+                                     :data => {:provide => 'typeahead', :content => t('ad.item_help'), :placement => 'right',
+                                     :toggle => 'popover', :trigger => 'hover focus'} %>
+                </div>
+              </div>
+
+              <!-- Message that asks user to choose a category underneath, when new item is entered in field above -->
+              <div class="form-group">
+                <div class="col-lg-2"></div>
+                <div id="item_notification" class="col-lg-10"></div>
+              </div>
+
+              <!-- Categories -->
+              <div id="category-section" class="form-group hide">
+                <%= f.label :category, t('ad.category'), class: 'col-lg-2 control-label' %>
+                <div class="col-lg-6">
+                  <%= select_tag :category, options_for_select(@categories), class: 'form-control help-message',
+                                 :data => {:content => t('ad.category_help'), :placement => 'right',
+                                           :toggle => 'popover', :trigger => 'hover focus'} %>
+                </div>
+              </div>
+
+              <!-- Number of items -->
+              <div class="form-group">
+                <%= f.label :number_of_items, t('ad.number_item')+'*:', class: 'col-lg-2 control-label' %>
+                <div class="col-lg-1">
+                  <%= f.number_field :number_of_items, class: 'form-control', maxlength: '4', min: 1, max: 1000 %>
+                </div>
+              </div>
+
+              <!-- Giving / Accepting items -->
+              <div class="form-group">
+                <%= f.label :is_giving, t('location.ad_action'), class: 'col-lg-2 control-label' %>
+                <div class='col-lg-6'>
+                  <div class="radio">
+                    <label>
+                      <%= f.radio_button :is_giving, true, checked: true %><%= t('location.ad_action_giving') %>
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <%= f.radio_button :is_giving, false %><%= t('location.ad_action_accepting') %>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ad description -->
+              <div class="form-group">
+                <%= f.label :description, t('ad.description')+'*:', class: 'col-lg-2 control-label' %>
+                <div class="col-lg-6">
+                  <%= f.text_area :description, class: 'form-control help-message', rows: 6,
+                                  :data => {:content => t('ad.description_help'), :placement => 'right',
+                                            :toggle => 'popover', :trigger => 'hover focus'} %>
+                </div>
+              </div>
+
+              <!-- List of all the different locations previously entered by the current user -->
+              <div class="form-group">
+                <%= f.label :location_id, t('location.location'), class: 'col-lg-2 control-label' %>
+                <div class="col-lg-6">
+                  <% user_locations.each_with_index do |loc, index| %>
+                      <div class='radio existing_location'>
+                        <label>
+                          <% if index == 0 %>
+                            <%= radio_button_tag 'location_id', loc.id, true %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                          <% else %>
+                            <%= radio_button_tag 'location_id', loc.id  %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                           <% end %>
+                        </label>
+                      </div>
+                  <% end %>
+                  <div class='radio'>
+                    <%= t('home.or') %>
+                   </div>
+                  <div class='radio'>
+                    <label>
+                      <input id="new_location_radio" type="radio" name="location_id" value=0>
+                      <%= t('ad.new_location') %>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <%= f.fields_for :location, :html => {:class => 'form-horizontal'} do |loc| %>
+
+                  <div id="new_location_section" class="hide">
+                    <hr />
+
+                    <h4><%= t('location.new_location') %></h4>
+
+                    <!-- Partial that contains the creation form for a location -->
+                    <%= render 'shared/locationForm', form: loc, location: @ad.location,
+                               label_class: 'col-lg-2 control-label',
+                               col10: 'col-lg-10', col6: 'col-lg-6', col4: 'col-lg-4', col3: 'col-lg-3',
+                               col2: 'col-lg-2', col_radio: 'col-lg-6' %>
+
+                    <hr />
+                  </div>
+              <% end %>
+
+
+              <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                  <%= f.submit t('ad.submit'), class: 'btn btn-primary' %>
+                  <a href="/" class="btn"><%= t('ad.cancel') %></a>
+                </div>
+              </div>
+
+
+            </fieldset>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="push"></div>
+
+</div>
+
+<div class="modal" id="myErrorModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4><%= t('location.not_found')%></h4>
+      </div>
+      <div class="modal-body">
+        <p><%= t('location.not_found_descr1')%></p>
+        <p><%= t('location.not_found_descr2')%></p>
+      </div>
+      <div class="modal-footer">
+        <a type="button" class="btn btn-default" data-dismiss="modal">OK</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render 'shared/footer' %>
+
+<%= javascript_include_tag 'admin/admin' %>
+
+<!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initializeMap partial that create the actual map -->
+<%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
