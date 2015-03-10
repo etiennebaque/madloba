@@ -17,7 +17,7 @@
 
 <!-- Choose between 'exact location (address)' or 'area location (postal code or district)' -->
 <div class="form-group">
-  <%= form.label :loc_type, t('location.definition')+'*:', class: "#{col2} #{label_class}" %>
+  <%= form.label :loc_type, t('location.definition'), class: "#{col2} #{label_class}" %>
     <div class="<%= col_radio %>">
         <div class="radio">
           <label>
@@ -47,7 +47,7 @@
 <div class="exact_location_section">
   <!-- Street number -->
   <div class="form-group">
-    <%= form.label :street_number, t('location.street_number')+':', class: label_class %>
+    <%= form.label :street_number, t('location.street_number'), class: label_class %>
     <div class='<%= col2 %>'>
       <%= form.text_field :street_number, class: 'form-control location_streetnumber', maxlength:'6' %>
     </div>
@@ -55,7 +55,7 @@
 
   <!-- Street name -->
   <div class="form-group">
-    <%= form.label :address, t('location.street_name')+'*:', class: label_class %>
+    <%= form.label :address, t('location.street_name'), class: label_class %>
     <div class='<%= col6 %>'>
       <%= form.text_field :address, class: 'form-control help-message location_streetname', maxlength:'90',
                           :data => {:content => t('location.street_name_help'),
@@ -67,7 +67,7 @@
 <div id="postal_code_section">
   <!-- Postal code ('area' type or 'exact' type address) -->
   <div class="form-group">
-    <%= form.label :postal_code, t('location.postal_code')+'*:', class: label_class %>
+    <%= form.label :postal_code, t('location.postal_code'), class: label_class %>
     <div class='<%= col4 %>'>
         <%= form.text_field :postal_code, class: 'form-control location_postal_code', maxlength:'8' %>
         <span id="postal_code_notification"></span>
@@ -100,7 +100,7 @@
 <div id="district_section">
   <!-- List of district ('area' type address only) -->
   <div class="form-group">
-    <%= form.label :district_id, t('location.district')+'*:', class: label_class %>
+    <%= form.label :district_id, t('location.district'), class: label_class %>
     <div class='<%= col3 %>'>
       <%= form.select :district_id, options_for_select(@districts, location.district_id), {}, {class: 'form-control help-message district_dropdown',
                                                                          :data => {:content => t('location.district_help'), :placement => 'right',
@@ -113,7 +113,7 @@
 
 <!-- Canvas for the map -->
 <div class="form-group">
-  <%= form.label 'map-canvas-wrapper', t('location.map')+':', class: label_class %>
+  <%= form.label 'map-canvas-wrapper', t('location.map'), class: label_class %>
   <div class='<%= col10 %>'>
     <span id="map_notification_exact" class="map_notification"><i><%= t('admin.location.map_notification_exact')%></i></span>
     <span id="map_notification_postal_code_only" class="map_notification"><i><%= t('admin.location.map_notification_postal_code')%></i></span>
@@ -123,7 +123,7 @@
 
 <!-- Phone number -->
 <div class="form-group">
-  <%= form.label :phone_number, t('location.phone_number')+':', class: label_class %>
+  <%= form.label :phone_number, t('location.phone_number'), class: label_class %>
   <div class='<%= col3 %>'>
     <%= form.text_field :phone_number, class: 'form-control', maxlength:'15' %>
   </div>
@@ -131,7 +131,7 @@
 
 <!-- Website -->
 <div class="form-group">
-  <%= form.label :website, t('location.website')+':', class: label_class %>
+  <%= form.label :website, t('location.website'), class: label_class %>
   <div class='<%= col4 %>'>
     <%= form.text_field :website, class: 'form-control', maxlength:'60' %>
   </div>
@@ -139,7 +139,7 @@
 
 <!-- Description -->
 <div class="form-group">
-  <%= form.label :description, t('location.description')+':', class: label_class %>
+  <%= form.label :description, t('location.description'), class: label_class %>
   <div class='<%= col6 %>'>
     <%= form.text_area :description, class: 'help-message', cols: 40, rows: 6,
                        :data => {:content => t('location.description_help'),

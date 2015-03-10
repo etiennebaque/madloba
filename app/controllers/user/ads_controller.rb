@@ -269,7 +269,7 @@ class User::AdsController < ApplicationController
     @ad.build_location
 
     # Initializing the map (when creating a new location)
-    getMapSettings(@ad.location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
+    getMapSettings(@ad.location, HAS_NOT_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
 
     # Getting the maximum number of days of publication, before ad expires.
     @max_expire_days = Setting.where(key: 'ad_max_expire').pluck(:value).first

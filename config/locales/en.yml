@@ -88,7 +88,7 @@ en:
     not_authorized: You are not allowed go to that page.
   location:
     location: "Location:*"
-    new_location: New Location
+    new_location: New location for this ad
     name: "Location name:"
     name_help: Give a name to your new location (eg shop name, random name you give your workshop...). It will be shown publicly. Leave blank if you don't want to assign any name.
     name_to_use: "Which name would you like to use for this ad?*:"
@@ -97,25 +97,25 @@ en:
     ad_action_accepting: I'm searching for/accepting it
     name_username: the username
     name_fullname: the full name
-    definition: Enter your location
+    definition: "Enter your location*:"
     definition_exact: by exact address
     definition_postal_code: by postal code
     definition_district: by district
-    street_number: Street number
-    street_name: Street name
+    street_number: "Street number:"
+    street_name: "Street name*:"
     street_name_help: For this location, the name of the street, avenue, drive...
-    postal_code: Postal Code
+    postal_code: "Postal code*:"
     province: Province
     city: City
-    district: District
+    district: "District*:"
     define_geocode_button: Find general area on the map
     geocodes: Geocodes
     latitude_help: The latitude of your location (can be automatically found with the button above)
     longitude_help: The longitude of your location (can be automatically found with the button above)
-    map: Map
-    phone_number: Phone number
-    website: Website
-    description: Location description
+    map: "Map:"
+    phone_number: "Phone number:"
+    website: "Website:"
+    description: "Location description:"
     description_help: Fill this optional section if you want to give additional detail about the location (eg. how to find it, what it looks like...)
     not_found: Location not found
     not_found_descr1: Based on the entered information, the location could not be found.

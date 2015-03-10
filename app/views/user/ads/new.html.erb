@@ -15,6 +15,8 @@
         var current_page = "new_ad";
         // array containing all the item names, used for the type-ahead, on the item field.
         var all_items = <%= raw all_items.to_json %>;
+
+        var location_number = <%= user_locations.length %>;
     </script>
 
 
@@ -134,33 +136,39 @@
                 </div>
               </div>
 
-              <!-- List of all the different locations previously entered by the current user -->
-              <div class="form-group">
-                <%= f.label :location_id, t('location.location'), class: 'col-lg-2 control-label' %>
-                <div class="col-lg-6">
-                  <% user_locations.each_with_index do |loc, index| %>
-                      <div class='radio existing_location'>
+              <% if user_locations.length > 0 %>
+                  <!-- List of all the different locations previously entered by the current user -->
+                  <div class="form-group">
+                    <%= f.label :location_id, t('location.location'), class: 'col-lg-2 control-label' %>
+                    <div class="col-lg-6">
+                      <% user_locations.each_with_index do |loc, index| %>
+                          <div class='radio existing_location'>
+                            <label>
+                              <% if index == 0 %>
+                                <%= radio_button_tag 'location_id', loc.id, true %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                              <% else %>
+                                <%= radio_button_tag 'location_id', loc.id  %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                               <% end %>
+                            </label>
+                          </div>
+                      <% end %>
+                      <div class='radio'>
+                        <%= t('home.or') %>
+                       </div>
+                      <div class='radio'>
                         <label>
-                          <% if index == 0 %>
-                            <%= radio_button_tag 'location_id', loc.id, true %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
-                          <% else %>
-                            <%= radio_button_tag 'location_id', loc.id  %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
-                           <% end %>
+                          <input id="new_location_radio" type="radio" name="location_id" value=0>
+                          <%= t('ad.new_location') %>
                         </label>
                       </div>
-                  <% end %>
-                  <div class='radio'>
-                    <%= t('home.or') %>
-                   </div>
-                  <div class='radio'>
-                    <label>
-                      <input id="new_location_radio" type="radio" name="location_id" value=0>
-                      <%= t('ad.new_location') %>
-                    </label>
+                    </div>
                   </div>
-                </div>
-              </div>
+              <% else %>
+                  <!-- No locations tied to this user yet: opening the "New Location" form underneath. -->
+                  <%= hidden_field_tag 'location_id', 0 %>
+              <% end %>
 
+              <!-- "New Location" form - start -->
               <%= f.fields_for :location, :html => {:class => 'form-horizontal'} do |loc| %>
 
                   <div id="new_location_section" class="hide">
@@ -177,6 +185,7 @@
                     <hr />
                   </div>
               <% end %>
+              <!-- "New Location" form - end -->
 
 
               <div class="form-group">

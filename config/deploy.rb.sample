@@ -3,7 +3,11 @@ SSHKit.config.command_map[:rake] = 'bundle exec rake'
 # config valid only for Capistrano 3.1
 lock '3.1.0'
 
+
+# Set up the name of your application here
 set :application, 'madloba'
+
+
 set :repo_url, 'git@github.com:etiennebaque/madloba.git'
 
 # Default branch is :master

@@ -92,6 +92,12 @@ $(document).ready(function(){
         initLeafletMap(map_settings_array);
     });
 
+    // "Create ad" form: if the user has no existing location yet, open automatically the "New location" form
+    if (location_number == 0){
+        $("#new_location_section").removeClass('hide');
+        initLeafletMap(map_settings_array);
+    }
+
     // "Create ad" form: when "New location" radio button is not selected.
     $(".existing_location").click(function(){
         $("#new_location_section").addClass('hide');

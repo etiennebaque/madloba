@@ -35,7 +35,7 @@ echo 'export MADLOBA_SMTP_PORT='$smtp_port >> ~/.bash_profile
 echo 'export MADLOBA_SMTP_USERNAME="'$smtp_username'"' >> ~/.bash_profile
 echo 'export MADLOBA_SMTP_PASSWORD="'$smtp_password'"' >> ~/.bash_profile
 echo 'export MADLOBA_SMTP_AUTHENTICATION="'$smtp_authentication'"' >> ~/.bash_profile
-echo 'export MADLOBA_NOTIFICATION_SENDER="'notification_sender'"' >> ~/.bash_profile
+echo 'export MADLOBA_NOTIFICATION_SENDER="'$notification_sender'"' >> ~/.bash_profile
 echo 'export MADLOBA_ERROR_SENDER="'$error_sender'"' >> ~/.bash_profile
 echo 'export MADLOBA_ERROR_RECIPIENTS="'$error_recipient'"' >> ~/.bash_profile
 echo '' >> ~/.bash_profile

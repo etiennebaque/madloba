@@ -17,7 +17,7 @@ set :rails_env, 'production'
 # as well as the username used for deployment on this server.
 server 'your.server.ip.address', user: 'username', roles: %w{web app}
 
-# Set the absolute path where the 'shared' folder of your Madloba application is situated.
+# Set the absolute path where the 'shared' folder of your Madloba application is situated, on your server.
 set :shared_path, '/absolute/shared/folder/path'
 
 
