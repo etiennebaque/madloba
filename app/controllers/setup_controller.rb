@@ -112,6 +112,9 @@ class SetupController < ApplicationController
     setup_step.update_attribute(:value, '0')
     setup_step.save
 
+    # Caching this value.
+    Rails.cache.write(CACHE_SETUP_STEP, 0)
+
     render 'setup/finish'
   end
 

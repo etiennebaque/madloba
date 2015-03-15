@@ -2,11 +2,11 @@ module ApplicationHelper
 
 
   def site_name
-    Setting.find_by_key(:app_name).value
+    Rails.cache.fetch(CACHE_APP_NAME) {Setting.find_by_key(:app_name).value}
   end
 
   def site_city
-    Setting.find_by_key(:city).value
+    Rails.cache.fetch(CACHE_CITY_NAME) {Setting.find_by_key(:city).value}
   end
 
   # Regardless of what the current navigation state is, we need store all the item names into an array, in order to make the type-ahead of the item search bar work.

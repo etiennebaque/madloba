@@ -91,7 +91,7 @@ class User::BaseController < ApplicationController
 
     @settings = {}
     settings.each do |setting|
-      @settings[setting['key']] = setting['value']
+      @settings[setting.key] = setting.value
     end
 
     @description_remaining = 500
@@ -107,6 +107,9 @@ class User::BaseController < ApplicationController
         if params[key].present?
           app_name_settings = Setting.find_by_key(key)
           app_name_settings.update_attribute(:value, params[key])
+
+          # Updating cached value.
+          Rails.cache.write(CACHE_APP_NAME, params[key])
         else
           # the application name has been deleted. We can't save an empty app name.
           flash[:setting_success] = 0
@@ -140,13 +143,16 @@ class User::BaseController < ApplicationController
     if settings
       settings.each do |setting|
         @mapSettings[setting.key] = setting.value
+        # Updating cache value
+        if setting.key == 'city'
+          Rails.cache.write(CACHE_CITY_NAME, setting.value)
+        end
       end
     end
 
     # Adding this element to the hash, in order to get the 'zoomend' event working,
     # only for the map settings page (needed to define zoom level).
     @mapSettings['page'] = 'mapsettings'
-
 
     # Initializing the map type drop down box.
     @options_for_maptype_select = []

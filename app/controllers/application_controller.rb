@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   # is not complete. Redirects to setup screens if it is the case.
   def check_if_setup
     if !(((request.original_url).include? 'setup') || ((request.original_url).include? 'user/register') || ((request.original_url).include? 'getCityGeocodes'))
-      setup_step_value = Setting.where(key: 'setup_step').pluck(:value).first.to_i
+      setup_step_value = Rails.cache.fetch(CACHE_SETUP_STEP) {Setting.where(key: 'setup_step').pluck(:value).first.to_i}
       if setup_step_value == 1
         redirect_to setup_path
       end
