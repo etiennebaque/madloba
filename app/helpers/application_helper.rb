@@ -38,6 +38,15 @@ module ApplicationHelper
     end
   end
 
+  # display user's locations, to allow them to tie existing one to an ad.
+  def user_locations_number
+    if (current_user && current_user.locations)
+      current_user.locations.count
+    else
+      0 # no registered user, or registered user with no locations.
+    end
+  end
+
 
   # Geocoding methods
   # -----------------

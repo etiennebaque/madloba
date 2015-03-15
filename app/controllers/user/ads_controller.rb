@@ -193,11 +193,11 @@ class User::AdsController < ApplicationController
   end
 
   def ad_params
-    params.require(:ad).permit(:title, :number_of_items, :description, :is_anonymous, :location_id, :is_giving, :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :latitude, :longitude, :phone_number, :website, :description])
+    params.require(:ad).permit(:title, :number_of_items, :description, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image, :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :latitude, :longitude, :phone_number, :website, :description])
   end
 
   def ad_params_update
-    params.require(:ad).permit(:title, :number_of_items, :description, :is_anonymous, :location_id, :is_giving)
+    params.require(:ad).permit(:title, :number_of_items, :description, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image)
   end
 
   def ad_location_params

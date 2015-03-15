@@ -10,11 +10,6 @@ module User::AdsHelper
     Item.pluck(:name)
   end
 
-  # display user's locations, to allow them to tie existing one to an ad.
-  def user_locations
-    current_user.locations
-  end
-
   # check if current user owns this ad.
   def is_owning(ad)
     current_user && current_user.owns_ad(ad)

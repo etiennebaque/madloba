@@ -169,6 +169,8 @@ en:
     ad_has_expired: Sorry, this ad has expired, and is not visible anymore.
     no_ad_created_yet: You have not created any ad yet. Click on the button above to create your first one!
     no_location_yet: "Nothing to edit here: you have not created any ad with an exact location in it yet."
+    upload_image: "Upload image:"
+    remove_image: Remove image
   mailer:
     welcome: "Welcome to %{name}!"
     confirmation_descr1: You received this message because an account, based on your e-mail address, was created on this website.

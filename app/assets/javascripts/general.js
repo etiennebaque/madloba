@@ -93,7 +93,7 @@ $(document).ready(function(){
     });
 
     // "Create ad" form: if the user has no existing location yet, open automatically the "New location" form
-    if (location_number == 0){
+    if (typeof location_number != 'undefined' && location_number == 0){
         $("#new_location_section").removeClass('hide');
         initLeafletMap(map_settings_array);
     }

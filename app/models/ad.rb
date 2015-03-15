@@ -3,6 +3,8 @@ class Ad < ActiveRecord::Base
   belongs_to :location
   belongs_to :user
 
+  mount_uploader :image, ImageUploader
+
   accepts_nested_attributes_for :location
 
   validates :title, :number_of_items, :location_id, :item_id, :user_id, :description, presence: true

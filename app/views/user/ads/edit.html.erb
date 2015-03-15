@@ -63,13 +63,13 @@
     <div class="alert alert-danger">
       <button type="button" class="close" data-dismiss="alert">×</button>
       <% if @ad && @ad.errors.any? %>
-        <strong><%= t('admin.ad.error_update', errors: pluralize(@ad.errors.count, 'error')) %>:</strong>
+          <strong><%= t('admin.ad.error_update', errors: pluralize(@ad.errors.count, 'error')) %>:</strong>
 
-        <ul>
-          <% @ad.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-          <% end %>
-        </ul>
+          <ul>
+            <% @ad.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
       <% else %>
           <% if flash[:error_delete_ad] %>
               <%= t('admin.ad.delete_ad_error_html', href: link_to(t('admin.ad.manage_ads_page'), '/user/manageads')) %>
@@ -120,18 +120,18 @@
       <!-- Name to use -->
       <div class="form-group">
         <%= f.label :is_anonymous, t('location.name_to_use'), class: 'control-label' %>
-          <div class="radio">
-            <label>
-              <%= f.radio_button :is_anonymous, true, value: true %>
-              <%= t('location.name_username') %> (<%= @ad.user.username %>)
-            </label>
-          </div>
-          <div class="radio">
-            <label>
-              <%= f.radio_button :is_anonymous, false, value: false %>
-              <%= t('location.name_fullname') %> (<%= @ad.user.first_name %> <%= @ad.user.last_name %>)
-            </label>
-          </div>
+        <div class="radio">
+          <label>
+            <%= f.radio_button :is_anonymous, true, value: true %>
+            <%= t('location.name_username') %> (<%= @ad.user.username %>)
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <%= f.radio_button :is_anonymous, false, value: false %>
+            <%= t('location.name_fullname') %> (<%= @ad.user.first_name %> <%= @ad.user.last_name %>)
+          </label>
+        </div>
       </div>
 
       <!-- Item -->
@@ -167,16 +167,35 @@
       <!-- Giving / Accepting items -->
       <div class="form-group">
         <%= f.label :is_giving, t('location.ad_action'), class: 'control-label' %>
-          <div class="radio">
-            <label>
-              <%= f.radio_button :is_giving, true, checked: true %><%= t('location.ad_action_giving') %>
-            </label>
-          </div>
-          <div class="radio">
-            <label>
-              <%= f.radio_button :is_giving, false %><%= t('location.ad_action_accepting') %>
-            </label>
-          </div>
+        <div class="radio">
+          <label>
+            <%= f.radio_button :is_giving, true, checked: true %><%= t('location.ad_action_giving') %>
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <%= f.radio_button :is_giving, false %><%= t('location.ad_action_accepting') %>
+          </label>
+        </div>
+      </div>
+
+      <!-- Image upload -->
+      <div class="form-group">
+        <%= f.label :description, t('ad.upload_image'), class: 'control-label' %>
+        <div class="col-inline">
+          <%= f.file_field :image, class: 'form-control', style: 'border: 0px; box-shadow: none;' %>
+          <%= f.hidden_field :image_cache %>
+          <% if @ad.image? %>
+              <!-- if model validation fails on other fields, display image that was loaded previously -->
+              <%= image_tag @ad.image_url(:normal).to_s %>
+              <div class="checkbox">
+                <label>
+                  <%= f.check_box :remove_image %>
+                  <%= t('ad.remove_image') %>
+                </label>
+              </div>
+          <% end %>
+        </div>
       </div>
 
       <!-- Ad description -->
@@ -204,22 +223,22 @@
         <% end %>
 
 
-          <% @ad.user.locations.each do |loc| %>
+        <% @ad.user.locations.each do |loc| %>
 
-              <div class='radio existing_location'>
-                <label>
-                    <%= f.radio_button :location_id, loc.id , checked: @ad.location_id == loc.id, class: 'radio no-min-height' %>
-                    <%= loc.location_type_address %> - <a href="/user/locations/<%= loc.id %>/edit"><%= loc.location_full_name %></a>
-                </label>
-              </div>
-          <% end %>
-          <label style="font-weight: normal;"><%= t('home.or') %></label>
-          <div class='radio'>
-            <label>
-              <input id="new_location_radio" type="radio" name="location_id" value=0>
-              <%= t('admin.ad.location_new_edit', current_location: "#{@ad.location.location_full_name} - #{@ad.location.location_type_address}") %>
-            </label>
-          </div>
+            <div class='radio existing_location'>
+              <label>
+                <%= f.radio_button :location_id, loc.id , checked: @ad.location_id == loc.id, class: 'radio no-min-height' %>
+                <%= loc.location_type_address %> - <a href="/user/locations/<%= loc.id %>/edit"><%= loc.location_full_name %></a>
+              </label>
+            </div>
+        <% end %>
+        <label style="font-weight: normal;"><%= t('home.or') %></label>
+        <div class='radio'>
+          <label>
+            <input id="new_location_radio" type="radio" name="location_id" value=0>
+            <%= t('admin.ad.location_new_edit', current_location: "#{@ad.location.location_full_name} - #{@ad.location.location_type_address}") %>
+          </label>
+        </div>
       </div>
 
       <div id="new_location_section" class="hide">

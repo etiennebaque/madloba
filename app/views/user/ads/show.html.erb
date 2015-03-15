@@ -46,21 +46,21 @@
           <h3><%= @ad.title %></h3>
 
           <div class="ad-title">
-              <% if !is_owning(@ad) %>
-                  <!-- Ad publisher -->
-                    <label class="ad-label"><%= t('ad.published') %></label>
-                    <span><%= publisher_name(@ad) %></span>
-              <% else %>
-                  <% if @your_ad_has_expired %>
-                        <strong><%= t('ad.you_own') %></strong><br>
-                        <span class="ad-expiring"><%= t('ad.has_expired', expire_date: @ad.expire_date)%></span>
-                  <% else %>
-                        <strong><%= t('ad.you_own') %></strong> <%= t('ad.you_manage')%> <a href="/user/ads/<%= @ad.id %>/edit"><%= t('ad.here')%></a>.
-                  <% end %>
-              <% end %>
+            <% if !is_owning(@ad) %>
+                <!-- Ad publisher -->
+                <label class="ad-label"><%= t('ad.published') %></label>
+                <span><%= publisher_name(@ad) %></span>
+            <% else %>
+                <% if @your_ad_has_expired %>
+                    <strong><%= t('ad.you_own') %></strong><br>
+                    <span class="ad-expiring"><%= t('ad.has_expired', expire_date: @ad.expire_date)%></span>
+                <% else %>
+                    <strong><%= t('ad.you_own') %></strong> <%= t('ad.you_manage')%> <a href="/user/ads/<%= @ad.id %>/edit"><%= t('ad.here')%></a>.
+                <% end %>
+            <% end %>
           </div>
 
-          <div class="col-lg-6" style="padding-bottom: 20px">
+          <div class="col-lg-6 ad-paragraph">
 
             <!-- Left-hand side: Item (and number) -->
             <div>
@@ -79,7 +79,7 @@
             <div>
               <label class="ad-label">
                 <% if @ad.is_giving %>
-                  <%= t('ad.where_to_find') %>
+                    <%= t('ad.where_to_find') %>
                 <% else %>
                     <%= t('ad.where_to_bring') %>
                 <% end %>
@@ -118,38 +118,80 @@
             <div id="map"></div>
           </div>
 
-          <div class="col-lg-12 ad-paragraph">
 
-            <!-- Ad description -->
-            <div class="ad-show-description">
-              <label class="ad-label"><%= t('ad.description') %>:</label>
-              <span><%= @ad.description %></span>
-            </div>
+          <% if @ad.image? %>
+              <div class="col-lg-6 ad-paragraph">
+                <!-- Ad description -->
+                <div class="ad-show-description">
+                  <label class="ad-label"><%= t('ad.description') %>:</label>
+                  <span><%= @ad.description %></span>
+                </div>
+              </div>
 
-            <% if !is_owning(@ad) %>
-                <!-- Send message to the ad publisher -->
-                <%= form_tag '/ads/send_message', :html => {:class => 'form-horizontal'} do %>
-                    <%= hidden_field_tag 'id', @ad.id %>
-                    <%= label_tag :title, t('ad.send_message_label', name: publisher_name(@ad))+':', class: 'control-label' %>
-                    <div class="form-group">
-                        <textarea id="ad_message_id" name="message" rows="8" class="form-control" style="padding-bottom: 20px"></textarea>
-                    </div>
-                    <% if user_signed_in? %>
-                        <div class="form-actions">
-                          <%= submit_tag(t('ad.send_message'), class: 'btn btn-success') %>
+              <!-- Ad image -->
+              <div class="col-lg-6 ad-image">
+                <%= image_tag @ad.image_url(:normal).to_s %>
+              </div>
+
+              <% if !is_owning(@ad) %>
+                  <div class="col-lg-12 ad-paragraph">
+                    <!-- Send message to the ad publisher -->
+                    <%= form_tag '/ads/send_message', :html => {:class => 'form-horizontal'} do %>
+                        <%= hidden_field_tag 'id', @ad.id %>
+                        <%= label_tag :title, t('ad.send_message_label', name: publisher_name(@ad))+':', class: 'control-label' %>
+                        <div class="form-group">
+                          <textarea id="ad_message_id" name="message" rows="8" class="form-control" style="padding-bottom: 20px"></textarea>
                         </div>
-                    <% else %>
-                        <div class="form-actions">
-                          <%= submit_tag(t('ad.send_message'), class: 'btn btn-default disabled') %>
-                          <span style="padding-left: 5px;"><%= t('home.reply_ad_please_html', signin: (link_to t('home.sign_in'), new_session_path(resource_name)), createaccount: (link_to t('home.create_account'), new_registration_path(resource_name)) )%>
+                        <% if user_signed_in? %>
+                            <div class="form-actions">
+                              <%= submit_tag(t('ad.send_message'), class: 'btn btn-success') %>
+                            </div>
+                        <% else %>
+                            <div class="form-actions">
+                              <%= submit_tag(t('ad.send_message'), class: 'btn btn-default disabled') %>
+                              <span style="padding-left: 5px;"><%= t('home.reply_ad_please_html', signin: (link_to t('home.sign_in'), new_session_path(resource_name)), createaccount: (link_to t('home.create_account'), new_registration_path(resource_name)) )%>
                           </span>
-                        </div>
+                            </div>
 
+                        <% end %>
+                    <% end %>
+                  </div>
+              <% end %>
+          <% else %>
+              <div class="col-lg-12 ad-paragraph">
+
+                <!-- Ad description -->
+                <div class="ad-show-description">
+                  <label class="ad-label"><%= t('ad.description') %>:</label>
+                  <span><%= @ad.description %></span>
+                </div>
+
+                <% if !is_owning(@ad) %>
+                    <!-- Send message to the ad publisher -->
+                    <%= form_tag '/ads/send_message', :html => {:class => 'form-horizontal'} do %>
+                        <%= hidden_field_tag 'id', @ad.id %>
+                        <%= label_tag :title, t('ad.send_message_label', name: publisher_name(@ad))+':', class: 'control-label' %>
+                        <div class="form-group">
+                          <textarea id="ad_message_id" name="message" rows="8" class="form-control" style="padding-bottom: 20px"></textarea>
+                        </div>
+                        <% if user_signed_in? %>
+                            <div class="form-actions">
+                              <%= submit_tag(t('ad.send_message'), class: 'btn btn-success') %>
+                            </div>
+                        <% else %>
+                            <div class="form-actions">
+                              <%= submit_tag(t('ad.send_message'), class: 'btn btn-default disabled') %>
+                              <span style="padding-left: 5px;"><%= t('home.reply_ad_please_html', signin: (link_to t('home.sign_in'), new_session_path(resource_name)), createaccount: (link_to t('home.create_account'), new_registration_path(resource_name)) )%>
+                          </span>
+                            </div>
+
+                        <% end %>
                     <% end %>
                 <% end %>
-            <% end %>
 
-          </div>
+              </div>
+          <% end %>
+
 
         </fieldset>
       </div>
