@@ -140,17 +140,26 @@
             <div class="form-group">
               <%= f.label :description, t('ad.upload_image'), class: 'col-lg-2 control-label' %>
               <div class="col-lg-6">
-                <%= f.file_field :image, class: 'form-control', style: 'border: 0px;' %>
+                <%= f.file_field :image, class: 'form-control', style: 'border: 0px; height: auto;' %>
                 <%= f.hidden_field :image_cache %>
                 <% if @ad.image? %>
-                    <!-- if model validation fails on other fields, display image that was loaded previously -->
-                    <%= image_tag @ad.image_url(:normal).to_s %>
-                    <div class="checkbox">
-                      <label>
-                        <%= f.check_box :remove_image %>
-                        <%= t('ad.remove_image') %>
-                      </label>
-                    </div>
+                    <% if is_image_available(@ad) %>
+                        <%= image_tag @ad.image_url(:normal).to_s %>
+                        <div class="checkbox">
+                          <label>
+                            <%= f.check_box :remove_image %>
+                            <%= t('ad.remove_image') %>
+                          </label>
+                        </div>
+                    <% else %>
+                        <%= image_tag 'being_processed.png', style: 'background-color: #f1f1f1' %>
+                        <div class="ad-processing">
+                          <%= t('ad.image_currently_processed') %><br />
+                          <%= t('ad.will_show_up') %>
+                        </div>
+                    <% end %>
+                <% else %>
+                    <%= t('ad.no_image_yet') %>
                 <% end %>
               </div>
             </div>

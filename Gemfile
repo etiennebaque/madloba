@@ -54,6 +54,8 @@ gem 'carrierwave'
 gem 'mini_magick'
 # Delayed job
 gem 'delayed_job_active_record'
+# Processes/Uploads iamge in the background
+gem 'carrierwave_backgrounder'
 
 group :development, :test do
 

@@ -171,6 +171,10 @@ en:
     no_location_yet: "Nothing to edit here: you have not created any ad with an exact location in it yet."
     upload_image: "Upload image:"
     remove_image: Remove image
+    image_currently_processed: Your image is currently being processed.
+    show_ad_image_processed: The image of this ad is currently being processed.
+    will_show_up: It will show up in a moment after you refresh the page.
+    no_image_yet: No image has been uploaded yet.
   mailer:
     welcome: "Welcome to %{name}!"
     confirmation_descr1: You received this message because an account, based on your e-mail address, was created on this website.
@@ -341,6 +345,7 @@ en:
       map_notification_exact: Click on the map to locate your exact address.
       location_deleted: The location '%{deleted_location_name}' has been deleted.
       unnamed: unnamed location
+      area_name: "%{area} area"
       no_ad_tied: No ads are currently tied to this location.
     category:
       update_success: The category '%{name}' has been updated.

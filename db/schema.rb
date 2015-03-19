@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150124112533) do
+ActiveRecord::Schema.define(version: 20150318132850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20150124112533) do
     t.boolean  "is_anonymous"
     t.boolean  "is_giving"
     t.date     "expire_date"
+    t.string   "image"
   end
 
   add_index "ads", ["item_id"], name: "index_ads_on_item_id", using: :btree
@@ -37,11 +38,35 @@ ActiveRecord::Schema.define(version: 20150124112533) do
   create_table "categories", force: true do |t|
     t.string   "name"
     t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "icon"
     t.string   "marker_color"
+  end
+
+  create_table "delayed_jobs", force: true do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
+  create_table "destinations", force: true do |t|
+    t.integer "item_id"
+    t.string  "destination", limit: 300
+    t.string  "description", limit: 1500
+  end
+
+  add_index "destinations", ["item_id"], name: "fk_destinations_item_id_idx", using: :btree
 
   create_table "districts", force: true do |t|
     t.string   "name"
@@ -51,14 +76,31 @@ ActiveRecord::Schema.define(version: 20150124112533) do
     t.datetime "updated_at"
   end
 
+  create_table "icons", force: true do |t|
+    t.string   "key"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "is_proposition"
+  end
+
   create_table "items", force: true do |t|
     t.string   "name"
+    t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "category_id"
   end
 
   add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
+
+  create_table "location_item", force: true do |t|
+    t.integer "location_id"
+    t.integer "item_id"
+    t.integer "cost"
+  end
+
+  add_index "location_item", ["item_id"], name: "fk_location_item_item_id_idx", using: :btree
+  add_index "location_item", ["location_id"], name: "fk_location_item_location_id_idx", using: :btree
 
   create_table "locations", force: true do |t|
     t.string   "name"
@@ -82,12 +124,36 @@ ActiveRecord::Schema.define(version: 20150124112533) do
   add_index "locations", ["district_id"], name: "index_locations_on_district_id", using: :btree
   add_index "locations", ["user_id"], name: "index_locations_on_user_id", using: :btree
 
-  create_table "settings", force: true do |t|
-    t.string   "key"
-    t.text     "value",         limit: 1000
+  create_table "marker_colors", force: true do |t|
+    t.string   "name"
+    t.string   "code"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "postalcodetrees", force: true do |t|
+    t.string "area",       limit: 3
+    t.string "neighbours", limit: 45
+  end
+
+  create_table "roles", force: true do |t|
+    t.string "role", limit: 20
+  end
+
+  create_table "settings", force: true do |t|
+    t.string   "key"
+    t.string   "value",      limit: 1000
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_role", force: true do |t|
+    t.integer "user_id"
+    t.integer "role_id"
+  end
+
+  add_index "user_role", ["role_id"], name: "RoleID_idx", using: :btree
+  add_index "user_role", ["user_id"], name: "UserID_idx", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                              null: false

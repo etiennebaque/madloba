@@ -4,6 +4,7 @@ class Ad < ActiveRecord::Base
   belongs_to :user
 
   mount_uploader :image, ImageUploader
+  process_in_background :image
 
   accepts_nested_attributes_for :location
 
@@ -21,6 +22,10 @@ class Ad < ActiveRecord::Base
 
   def has_expired
     self.expire_date < Date.today
+  end
+
+  def thumb_image_url
+    self.image_url(:thumb)
   end
 
 end

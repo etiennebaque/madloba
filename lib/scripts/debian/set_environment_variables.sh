@@ -12,6 +12,12 @@ smtp_username=user@example.com
 smtp_password=password
 smtp_authentication=plain
 
+# Your Amazon S3 settings
+s3_access_key=your_aws_access_key
+s3_secret_key=your_aws_secret_key
+s3_region=us-east-1
+s3_bucket_name=your_aws_bucket
+
 # Notification sender e-mail
 # This is the sender e-mail address the users will see, when they'll receive e-mails from your Madloba app.
 notification_sender=noreply@yourdomain.com
@@ -38,6 +44,10 @@ echo 'export MADLOBA_SMTP_AUTHENTICATION="'$smtp_authentication'"' >> ~/.bash_pr
 echo 'export MADLOBA_NOTIFICATION_SENDER="'$notification_sender'"' >> ~/.bash_profile
 echo 'export MADLOBA_ERROR_SENDER="'$error_sender'"' >> ~/.bash_profile
 echo 'export MADLOBA_ERROR_RECIPIENTS="'$error_recipient'"' >> ~/.bash_profile
+echo 'export MADLOBA_S3_KEY="'$s3_access_key'"' >> ~/.bash_profile
+echo 'export MADLOBA_S3_SECRET="'$s3_secret_key'"' >> ~/.bash_profile
+echo 'export MADLOBA_S3_REGION="'$s3_region'"' >> ~/.bash_profile
+echo 'export MADLOBA_S3_BUCKET="'$s3_bucket_name'"' >> ~/.bash_profile
 echo '' >> ~/.bash_profile
 
 echo "--------------------------------------------------------"
