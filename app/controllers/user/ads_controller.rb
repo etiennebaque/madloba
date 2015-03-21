@@ -46,7 +46,6 @@ class User::AdsController < ApplicationController
   def new
     @ad = Ad.new
     authorize @ad
-    ##@ad.process_image_upload = true
     @ad.number_of_items = 1 # default number of items
     initializeNewForm()
   end
@@ -117,7 +116,6 @@ class User::AdsController < ApplicationController
 
   def edit
     @ad = Ad.includes(:location => :district).where(id: params[:id]).first!
-    #@ad.process_image_upload = true
 
     authorize @ad
 

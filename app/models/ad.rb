@@ -3,6 +3,7 @@ class Ad < ActiveRecord::Base
   belongs_to :location
   belongs_to :user
 
+  # Ad image
   mount_uploader :image, ImageUploader
   process_in_background :image
 
@@ -11,6 +12,8 @@ class Ad < ActiveRecord::Base
   validates :title, :number_of_items, :location_id, :item_id, :user_id, :description, presence: true
   validates :is_giving, inclusion: [true, false]
   validates :is_anonymous, inclusion: [true, false]
+
+  after_save { self.delay.recreate_delayed_versions! }
 
   def username_to_display
     if (self.is_anonymous)
@@ -26,6 +29,11 @@ class Ad < ActiveRecord::Base
 
   def thumb_image_url
     self.image_url(:thumb)
+  end
+
+  def recreate_delayed_versions!
+    self.image.is_processing_delayed = true
+    self.image.recreate_versions!
   end
 
 end

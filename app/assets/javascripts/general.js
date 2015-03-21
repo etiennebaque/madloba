@@ -29,6 +29,7 @@ $(document).ready(function(){
         $('.row-offcanvas').toggleClass('active');
     });
 
+
     // ***********************
     // Create/Edit an ad pages
     // ***********************

@@ -13,6 +13,18 @@ class ImageUploader < CarrierWave::Uploader::Base
   # storage :file
   storage :fog
 
+  def is_processing_delayed?(img = nil)
+    !! @is_processing_delayed
+  end
+
+  def is_processing_immediate?(img = nil)
+    ! is_processing_delayed?
+  end
+
+  def is_processing_delayed=(value)
+    @is_processing_delayed = value
+  end
+
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   #def store_dir
@@ -20,13 +32,13 @@ class ImageUploader < CarrierWave::Uploader::Base
   #end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
-  #def default_url
+  def default_url
   #   # For Rails 3.1+ asset pipeline compatibility:
   #   # ActionController::Base.helpers.asset_path("fallback/" + [version_name, "default.png"].compact.join('_'))
   #
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
-  #   'default_image.png' #rails will look at 'app/assets/images/default_image.png'
-  #end
+     'being_processed.png' #rails will look at 'app/assets/images/default_image.png'
+  end
 
   # Process files as they are uploaded:
   # process :scale => [200, 300]
@@ -36,11 +48,11 @@ class ImageUploader < CarrierWave::Uploader::Base
   # end
 
   # Create different versions of your uploaded files:
-  version :thumb do
+  version :thumb, :if => :is_processing_immediate? do
     process :resize_to_fit => [80, 80]
   end
 
-  version :normal do
+  version :normal, :if => :is_processing_immediate? do
     process :resize_to_fit => [400, 400]
   end
 

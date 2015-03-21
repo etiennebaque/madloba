@@ -177,7 +177,7 @@ function createPopupHtml(first_sentence, ad){
 
     if (ad['image']['thumb']['url'] != null && ad['image']['thumb']['url'] != ''){
         // Popup is created with a thumbnail image in it.
-        var ad_image = "<img src='"+ad['image']['thumb']['url']+"'>";
+        var ad_image = "<img onError=\"this.src='../assets/being_processed_thumb.png'; this.title='Ad image is currently being processed.'\" src='"+ad['image']['thumb']['url']+"'>";
         result =  "<div style='overflow: auto;'><div class='col-sm-6'>"+first_sentence+"</div><div class='col-sm-6'>"+ad_image+"</div><div class='col-sm-12'><br>"+second_sentence+"</div></div>";
     }else{
         // Popup is created without any thumbnail image.

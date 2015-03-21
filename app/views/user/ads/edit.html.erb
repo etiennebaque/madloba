@@ -140,7 +140,7 @@
         <div class="form-inline">
           <%= text_field_tag 'ad_item', @ad.item.name, class: 'form-control help-message', autocomplete: 'off',
                              :data => {:provide => 'typeahead', :content => t('ad.item_help'), :placement => 'right',
-                                       :toggle => 'popover', :trigger => 'hover'} %>
+                                       :toggle => 'popover', :trigger => 'hover'}, size: 30 %>
         </div>
       </div>
 
@@ -203,7 +203,7 @@
                   </div>
               <% end %>
           <% else %>
-              <%= t('no_image_yet') %>
+              <%= t('ad.no_image_yet') %>
           <% end %>
         </div>
       </div>
