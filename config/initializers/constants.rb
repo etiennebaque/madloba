@@ -58,3 +58,10 @@ ICON_SELECTION =
 CACHE_SETUP_STEP = 'cache_setup_step'
 CACHE_APP_NAME = 'cache_app_name'
 CACHE_CITY_NAME = 'cache_city_name'
+CACHE_IMAGE_STORAGE = 'cache_image_storage'
+
+# Image storage constants
+IMAGE_NO_STORAGE = 'nostorage'
+IMAGE_AMAZON_S3 = 's3'
+IMAGE_ON_SERVER = 'server'
+

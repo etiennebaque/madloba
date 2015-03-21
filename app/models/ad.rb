@@ -13,8 +13,6 @@ class Ad < ActiveRecord::Base
   validates :is_giving, inclusion: [true, false]
   validates :is_anonymous, inclusion: [true, false]
 
-  after_save { self.delay.recreate_delayed_versions! }
-
   def username_to_display
     if (self.is_anonymous)
       self.user.username

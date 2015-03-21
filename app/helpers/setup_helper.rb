@@ -15,4 +15,7 @@ module SetupHelper
     return settings
   end
 
+  def total_setup_pages
+    6 # Total number of setup pages
+  end
 end

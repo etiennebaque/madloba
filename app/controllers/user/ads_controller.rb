@@ -116,13 +116,9 @@ class User::AdsController < ApplicationController
 
   def edit
     @ad = Ad.includes(:location => :district).where(id: params[:id]).first!
-
     authorize @ad
-
     initialize_areas()
-
     @categories = Category.pluck(:name, :id)
-
     getMapSettings(@ad.location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
 
     render layout: 'admin'

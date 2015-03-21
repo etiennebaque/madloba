@@ -1,17 +1,20 @@
 # encoding: utf-8
 
 class ImageUploader < CarrierWave::Uploader::Base
-
-  # Include RMagick or MiniMagick support:
-  # include CarrierWave::RMagick
-  include CarrierWave::MiniMagick
-
   # include CarrierWave Backgrounder
   include ::CarrierWave::Backgrounder::Delay
 
-  # Choose what kind of storage to use for this uploader:
-  # storage :file
-  storage :fog
+  # include CarrierWave MiniMagick
+  include CarrierWave::MiniMagick
+
+  # Choose what kind of storage to use for this uploader - either on server or on Amazon S3, depending
+  # of 'image_storage' value in Settings table.
+  image_storage = Rails.cache.fetch(CACHE_IMAGE_STORAGE) {Setting.find_by_key(:image_storage).value}
+  if (image_storage == IMAGE_ON_SERVER)
+    storage :file
+  else
+    storage :fog
+  end
 
   def is_processing_delayed?(img = nil)
     !! @is_processing_delayed
@@ -32,13 +35,13 @@ class ImageUploader < CarrierWave::Uploader::Base
   #end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
-  def default_url
+  #def default_url
   #   # For Rails 3.1+ asset pipeline compatibility:
   #   # ActionController::Base.helpers.asset_path("fallback/" + [version_name, "default.png"].compact.join('_'))
   #
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
-     'being_processed.png' #rails will look at 'app/assets/images/default_image.png'
-  end
+  #   'being_processed.png' #rails will look at 'app/assets/images/default_image.png'
+  #end
 
   # Process files as they are uploaded:
   # process :scale => [200, 300]
@@ -48,11 +51,11 @@ class ImageUploader < CarrierWave::Uploader::Base
   # end
 
   # Create different versions of your uploaded files:
-  version :thumb, :if => :is_processing_immediate? do
+  version :thumb do
     process :resize_to_fit => [80, 80]
   end
 
-  version :normal, :if => :is_processing_immediate? do
+  version :normal do
     process :resize_to_fit => [400, 400]
   end
 

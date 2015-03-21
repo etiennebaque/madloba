@@ -35,7 +35,8 @@ setting_list = [
     ['area_length', ''],
     %w(area_type postal_code),
     %w(ad_max_expire 90),
-    %w(setup_step 1)
+    %w(setup_step 1),
+    ['image_storage', '']
 ]
 
 setting_list.each do |setting|

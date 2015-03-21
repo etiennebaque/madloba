@@ -137,32 +137,34 @@
             </div>
 
             <!-- Image upload -->
-            <div class="form-group">
-              <%= f.label :description, t('ad.upload_image'), class: 'col-lg-2 control-label' %>
-              <div class="col-lg-6">
-                <%= f.file_field :image, class: 'form-control', style: 'border: 0px; height: auto;' %>
-                <%= f.hidden_field :image_cache %>
-                <% if @ad.image? %>
-                    <% if is_image_available(@ad) %>
-                        <%= image_tag @ad.image_url(:normal).to_s %>
-                        <div class="checkbox">
-                          <label>
-                            <%= f.check_box :remove_image %>
-                            <%= t('ad.remove_image') %>
-                          </label>
-                        </div>
+            <% if can_upload_image %>
+                <div class="form-group">
+                  <%= f.label :description, t('ad.upload_image'), class: 'col-lg-2 control-label' %>
+                  <div class="col-lg-6">
+                    <%= f.file_field :image, class: 'form-control', style: 'border: 0px; height: auto;' %>
+                    <%= f.hidden_field :image_cache %>
+                    <% if @ad.image? %>
+                        <% if is_image_available(@ad) %>
+                            <%= image_tag @ad.image_url(:normal).to_s %>
+                            <div class="checkbox">
+                              <label>
+                                <%= f.check_box :remove_image %>
+                                <%= t('ad.remove_image') %>
+                              </label>
+                            </div>
+                        <% else %>
+                            <%= image_tag 'being_processed.png', style: 'background-color: #f1f1f1' %>
+                            <div class="ad-processing">
+                              <%= t('ad.image_currently_processed') %><br />
+                              <%= t('ad.will_show_up') %>
+                            </div>
+                        <% end %>
                     <% else %>
-                        <%= image_tag 'being_processed.png', style: 'background-color: #f1f1f1' %>
-                        <div class="ad-processing">
-                          <%= t('ad.image_currently_processed') %><br />
-                          <%= t('ad.will_show_up') %>
-                        </div>
+                        <%= t('ad.no_image_yet') %>
                     <% end %>
-                <% else %>
-                    <%= t('ad.no_image_yet') %>
-                <% end %>
-              </div>
-            </div>
+                  </div>
+                </div>
+            <% end %>
 
             <!-- "Choose a location" section -->
             <% if user_locations_number > 0 %>
@@ -173,11 +175,7 @@
                     <% current_user.locations.each_with_index do |loc, index| %>
                         <div class='radio existing_location'>
                           <label>
-                            <% if index == 0 %>
-                                <%= radio_button_tag 'location_id', loc.id, true %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
-                            <% else %>
-                                <%= radio_button_tag 'location_id', loc.id  %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
-                            <% end %>
+                            <%= radio_button_tag 'location_id', loc.id, index == 0 %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
                           </label>
                         </div>
                     <% end %>

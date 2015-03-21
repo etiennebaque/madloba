@@ -16,6 +16,7 @@ class SetupController < ApplicationController
   # Method for 'Welcome' page (first page)
   # --------------------------------------
   def show_welcome
+    @current_step = 1
     render 'setup/welcome'
   end
 
@@ -29,6 +30,7 @@ class SetupController < ApplicationController
     records.each do |setting|
       @settings[setting.key] = setting.value
     end
+    @current_step = 2
 
     render 'setup/general'
   end
@@ -52,13 +54,14 @@ class SetupController < ApplicationController
     redirect_to setup_map_path
   end
 
-
   # -----------------------------------------
   # Methods for 'Map settings' page
   # -----------------------------------------
   def show_map
     getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
     @mapSettings['page'] = 'mapsettings'
+    @current_step = 3
+
     render 'setup/map'
   end
 
@@ -81,7 +84,7 @@ class SetupController < ApplicationController
         end
         setting_record.save
       }
-      redirect_to setup_admin_path
+      redirect_to setup_image_path
     else
       flash[:error] = t('setup.select_geocodes')
       getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
@@ -89,6 +92,38 @@ class SetupController < ApplicationController
     end
   end
 
+  # -----------------------------------------
+  # Methods for 'Image storage' page
+  # -----------------------------------------
+  def show_image
+    @storage_choices = [[IMAGE_NO_STORAGE, t('setup.option_no_storage')],
+                        [IMAGE_AMAZON_S3, t('setup.option_s3')]]
+    @is_on_heroku = !! ENV['MADLOBA_IS_ON_HEROKU']
+    @current_step = 4
+
+    @current_image_choice = Setting.find_by_key('image_storage').value
+
+    if !@is_on_heroku
+      @storage_choices << [IMAGE_ON_SERVER, t('setup.option_server')]
+    end
+
+    render 'setup/image'
+  end
+
+
+  def process_image
+    setting = Setting.find_by_key('image_storage')
+    setting.value = params['storage_choice']
+
+    if setting.save
+      # Caching image strategy choice.
+      Rails.cache.write(CACHE_IMAGE_STORAGE, params['storage_choice'])
+      redirect_to setup_admin_path
+    else
+      flash[:error] = t('setup.image_error')
+      render 'setup/image'
+    end
+  end
 
   # -----------------------------------------
   # Methods for 'Creation of admin user' page
@@ -96,6 +131,7 @@ class SetupController < ApplicationController
   def show_admin
     @user = User.new
     @user.role = 1 # New user will be admin.
+    @current_step = 5
     render 'setup/admin'
   end
 
@@ -114,6 +150,8 @@ class SetupController < ApplicationController
 
     # Caching this value.
     Rails.cache.write(CACHE_SETUP_STEP, 0)
+
+    @current_step = 6
 
     render 'setup/finish'
   end

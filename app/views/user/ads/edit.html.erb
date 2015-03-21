@@ -79,7 +79,7 @@
 <% end %>
 
 <div class="box-content">
-  <%= form_for [:user, @ad], html: { id: 'locationForm', role: 'form' } do |f| %>
+  <%= form_for [:user, @ad], html: { id: 'ad-edit-form', role: 'form' } do |f| %>
 
 
       <div class="form-group">
@@ -268,6 +268,10 @@
       </div>
 
       <%= render 'user/shared/submitSection' %>
+      <div>
+        <span id="upload-in-progress"></span>
+      </div>
+
 
   <% end %>
 </div>
@@ -325,4 +329,13 @@
 <% content_for :scripts do %>
     <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initializeMap partial that create the actual map -->
     <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
+
+    <script>
+        $('#ad-edit-form').submit(function() {
+            var image_path = $('#ad_image').val();
+            if (image_path != null && image_path != ''){
+                $('#upload-in-progress').html('<i>New image is being uploaded. Please wait.</i>');
+            }
+        });
+    </script>
 <% end %>

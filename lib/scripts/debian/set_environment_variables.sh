@@ -48,6 +48,7 @@ echo 'export MADLOBA_S3_KEY="'$s3_access_key'"' >> ~/.bash_profile
 echo 'export MADLOBA_S3_SECRET="'$s3_secret_key'"' >> ~/.bash_profile
 echo 'export MADLOBA_S3_REGION="'$s3_region'"' >> ~/.bash_profile
 echo 'export MADLOBA_S3_BUCKET="'$s3_bucket_name'"' >> ~/.bash_profile
+echo 'export MADLOBA_IS_ON_HEROKU="false"' >> ~/.bash_profile
 echo '' >> ~/.bash_profile
 
 echo "--------------------------------------------------------"

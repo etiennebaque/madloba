@@ -10,10 +10,17 @@ module User::AdsHelper
     Item.pluck(:name)
   end
 
-  # check if current user owns this ad.
+  # Checks if current user owns this ad.
   def is_owning(ad)
     current_user && current_user.owns_ad(ad)
   end
+
+  # Checks if image upload is allowed
+  def can_upload_image
+    image_storage = Rails.cache.fetch(CACHE_IMAGE_STORAGE) {Setting.find_by_key(:image_storage).value}
+    return (image_storage == IMAGE_ON_SERVER || image_storage == IMAGE_AMAZON_S3)
+  end
+
 
   def publisher_name(ad)
     publisher_name = ''

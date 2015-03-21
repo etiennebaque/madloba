@@ -79,13 +79,13 @@
                 <div class="form-group">
                   <div class="col-lg-2"></div>
                   <div class="col-lg-6">
-                    <p><i><%= t('setup.gmail_note') %></i></p>
+                    <p><%= t('setup.gmail_note') %></p>
                     <ol>
-                      <li><i><%= t('setup.gmail_note2') %></i></li>
-                      <li><i><%= t('setup.gmail_note3_html', link: link_to(t('setup.gmail_link_here'), 'https://accounts.google.com/DisplayUnlockCaptcha', {target: '_blank'})) %></i></li>
+                      <li><%= t('setup.gmail_note2') %></li>
+                      <li><%= t('setup.gmail_note3_html', link: link_to(t('setup.gmail_link_here'), 'https://accounts.google.com/DisplayUnlockCaptcha', {target: '_blank'})) %></li>
                     </ol>
 
-                    <p><i><%= t('setup.gmail_note4') %></i></p>
+                    <p><%= t('setup.gmail_note4') %></p>
                   </div>
                 </div>
 
@@ -95,8 +95,8 @@
                 <div class="form-group">
                   <div class="col-lg-2"></div>
                   <div class="col-lg-6">
-                    <p><i><%= t('setup.confirm_email') %></i></p>
-                    <p><i><%= t('setup.check_email') %></i></p>
+                    <p><%= t('setup.confirm_email') %></p>
+                    <p><%= t('setup.check_email') %></p>
                   </div>
                 </div>
 
@@ -107,7 +107,7 @@
                 <div class="form-group">
                   <div class="col-lg-2"></div>
                   <div class="col-lg-6 pull-right">
-                    <a href="/setup/map" class="btn btn-link"><%= t('setup.back') %></a>
+                    <a href="/setup/image" class="btn btn-link"><%= t('setup.back') %></a>
                     <%= submit_tag(t('setup.next'), class: 'btn btn-success') %>
                   </div>
                 </div>
