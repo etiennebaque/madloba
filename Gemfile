@@ -46,15 +46,15 @@ gem 'pundit'
 gem 'exception_notification', github: 'smartinez87/exception_notification', branch: 'master'
 
 # Gems for image upload
-# For AWS cloud storage
-gem 'fog'
 # File upload solution
 gem 'carrierwave'
 # Photo resizing
 gem 'mini_magick'
+# For AWS cloud storage
+gem 'fog'
 # Delayed job
 gem 'delayed_job_active_record'
-# Processes/Uploads iamge in the background
+# Processes/Uploads image in the background
 gem 'carrierwave_backgrounder'
 
 group :development, :test do

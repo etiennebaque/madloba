@@ -79,7 +79,7 @@
 <% end %>
 
 <div class="box-content">
-  <%= form_for [:user, @ad], html: { id: 'ad-edit-form', role: 'form' } do |f| %>
+  <%= form_for [:user, @ad], html: { id: 'ad-edit-form', role: 'form', multipart: true } do |f| %>
 
 
       <div class="form-group">
@@ -196,7 +196,6 @@
                     </label>
                   </div>
               <% else %>
-                  <%= image_tag 'being_processed.png', style: 'background-color: #f1f1f1' %>
                   <div class="ad-processing">
                     <%= t('ad.image_currently_processed') %><br />
                     <%= t('ad.will_show_up') %>

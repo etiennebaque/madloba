@@ -60,27 +60,12 @@ ActiveRecord::Schema.define(version: 20150318132850) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
-  create_table "destinations", force: true do |t|
-    t.integer "item_id"
-    t.string  "destination", limit: 300
-    t.string  "description", limit: 1500
-  end
-
-  add_index "destinations", ["item_id"], name: "fk_destinations_item_id_idx", using: :btree
-
   create_table "districts", force: true do |t|
     t.string   "name"
     t.decimal  "latitude",   precision: 7, scale: 5
     t.decimal  "longitude",  precision: 8, scale: 5
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "icons", force: true do |t|
-    t.string   "key"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "is_proposition"
   end
 
   create_table "items", force: true do |t|
@@ -92,15 +77,6 @@ ActiveRecord::Schema.define(version: 20150318132850) do
   end
 
   add_index "items", ["category_id"], name: "index_items_on_category_id", using: :btree
-
-  create_table "location_item", force: true do |t|
-    t.integer "location_id"
-    t.integer "item_id"
-    t.integer "cost"
-  end
-
-  add_index "location_item", ["item_id"], name: "fk_location_item_item_id_idx", using: :btree
-  add_index "location_item", ["location_id"], name: "fk_location_item_location_id_idx", using: :btree
 
   create_table "locations", force: true do |t|
     t.string   "name"
@@ -124,36 +100,12 @@ ActiveRecord::Schema.define(version: 20150318132850) do
   add_index "locations", ["district_id"], name: "index_locations_on_district_id", using: :btree
   add_index "locations", ["user_id"], name: "index_locations_on_user_id", using: :btree
 
-  create_table "marker_colors", force: true do |t|
-    t.string   "name"
-    t.string   "code"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "postalcodetrees", force: true do |t|
-    t.string "area",       limit: 3
-    t.string "neighbours", limit: 45
-  end
-
-  create_table "roles", force: true do |t|
-    t.string "role", limit: 20
-  end
-
   create_table "settings", force: true do |t|
     t.string   "key"
     t.string   "value",      limit: 1000
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "user_role", force: true do |t|
-    t.integer "user_id"
-    t.integer "role_id"
-  end
-
-  add_index "user_role", ["role_id"], name: "RoleID_idx", using: :btree
-  add_index "user_role", ["user_id"], name: "UserID_idx", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                              null: false

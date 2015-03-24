@@ -46,7 +46,7 @@ heroku config:set MADLOBA_S3_KEY="$s3_access_key"
 heroku config:set MADLOBA_S3_SECRET="$s3_secret_key"
 heroku config:set MADLOBA_S3_REGION="$s3_region"
 heroku config:set MADLOBA_S3_BUCKET="$s3_bucket_name"
-heroku config:set MADLOBA_IS_ON_HEROKU="$true"
+heroku config:set MADLOBA_IS_ON_HEROKU="true"
 
 
 echo "-----------------------------------------------------------"
