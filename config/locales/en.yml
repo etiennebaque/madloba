@@ -31,6 +31,10 @@ en:
               taken: "and Icon error - the chosen pair is not available: both this icon and this marker color have already been used for another category. Please choose another marker and/or icon."
             icon:
               blank: name can't be blank.
+        ad:
+          attributes:
+            image:
+              too_long: must be less than 5MB.
   home:
     home: Home
     page: Home page
@@ -170,11 +174,11 @@ en:
     no_ad_created_yet: You have not created any ad yet. Click on the button above to create your first one!
     no_location_yet: "Nothing to edit here: you have not created any ad with an exact location in it yet."
     upload_image: "Upload image:"
+    less_than_limit: Image must be less than 5MB.
     remove_image: Remove image
     image_currently_processed: Your image is currently being processed.
     show_ad_image_processed: The image of this ad is currently being processed.
     will_show_up: It will show up in a moment after you refresh the page.
-    no_image_yet: No image has been uploaded yet.
   mailer:
     welcome: "Welcome to %{name}!"
     confirmation_descr1: You received this message because an account, based on your e-mail address, was created on this website.

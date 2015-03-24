@@ -142,7 +142,7 @@
                   <%= f.label :description, t('ad.upload_image'), class: 'col-lg-2 control-label' %>
                   <div class="col-lg-6">
                     <%= f.file_field :image, class: 'form-control', style: 'border: 0px; height: auto;' %>
-                    <%= f.hidden_field :image_cache %>
+                    <%= f.hidden_field :image_cache, value: params[:image_cache] %>
                     <% if @ad.image? %>
                         <% if is_image_available(@ad) %>
                             <%= image_tag @ad.image_url(:normal).to_s %>
@@ -152,12 +152,14 @@
                                 <%= t('ad.remove_image') %>
                               </label>
                             </div>
-                        <% else %>
+                        <% elsif @ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0) %>
                             <div class="ad-processing">
                               <%= t('ad.image_currently_processed') %><br />
                               <%= t('ad.will_show_up') %>
                             </div>
                         <% end %>
+                    <% else %>
+                        <%= t('ad.less_than_limit') %>
                     <% end %>
                   </div>
                 </div>
