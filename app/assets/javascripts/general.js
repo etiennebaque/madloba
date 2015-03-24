@@ -104,6 +104,14 @@ $(document).ready(function(){
         $("#new_location_section").addClass('hide');
     });
 
+    // "Create ad" form: create message when image needs to be uploaded.
+    $('#ad-edit-form').submit(function() {
+        var image_path = $('#ad_image').val();
+        if (image_path != null && image_path != ''){
+            $('#upload-in-progress').html('<i>New image is being uploaded. Please wait.</i>');
+        }
+    });
+
 
     // Location form: show appropriate section when entering an exact address
     $(".location_type_exact").click(function(){

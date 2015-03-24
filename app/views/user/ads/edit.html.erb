@@ -267,6 +267,8 @@
       </div>
 
       <%= render 'user/shared/submitSection' %>
+
+      <!-- After submit, a notification shows up here, if a new image is being uploaded -->
       <div>
         <span id="upload-in-progress"></span>
       </div>
@@ -328,13 +330,4 @@
 <% content_for :scripts do %>
     <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initializeMap partial that create the actual map -->
     <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
-
-    <script>
-        $('#ad-edit-form').submit(function() {
-            var image_path = $('#ad_image').val();
-            if (image_path != null && image_path != ''){
-                $('#upload-in-progress').html('<i>New image is being uploaded. Please wait.</i>');
-            }
-        });
-    </script>
 <% end %>

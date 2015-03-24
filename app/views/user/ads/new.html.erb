@@ -153,14 +153,11 @@
                               </label>
                             </div>
                         <% else %>
-                            <%= image_tag 'being_processed.png', style: 'background-color: #f1f1f1' %>
                             <div class="ad-processing">
                               <%= t('ad.image_currently_processed') %><br />
                               <%= t('ad.will_show_up') %>
                             </div>
                         <% end %>
-                    <% else %>
-                        <%= t('ad.no_image_yet') %>
                     <% end %>
                   </div>
                 </div>
@@ -219,6 +216,13 @@
               <div class="col-lg-10 col-lg-offset-2">
                 <%= f.submit t('ad.submit'), class: 'btn btn-primary' %>
                 <a href="/" class="btn"><%= t('ad.cancel') %></a>
+              </div>
+            </div>
+
+            <!-- After submit, a notification shows up here, if a new image is being uploaded -->
+            <div class="form-group">
+              <div class="col-lg-10 col-lg-offset-2">
+                <span id="upload-in-progress"></span>
               </div>
             </div>
 
