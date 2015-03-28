@@ -13,7 +13,10 @@ FactoryGirl.define do
     location
     item
     user
+  end
 
+  factory :invalid_ad_image_too_big, parent: :ad do |f|
+    f.image {  }
   end
 
   factory :invalid_ad, parent: :ad do |f|

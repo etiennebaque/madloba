@@ -107,7 +107,11 @@
                 <div class="form-group">
                   <div class="col-lg-2"></div>
                   <div class="col-lg-6 pull-right">
-                    <a href="/setup/image" class="btn btn-link"><%= t('setup.back') %></a>
+                    <% if is_on_heroku %>
+                        <a href="/setup/map" class="btn btn-link"><%= t('setup.back') %></a>
+                    <% else %>
+                        <a href="/setup/image" class="btn btn-link"><%= t('setup.back') %></a>
+                    <% end %>
                     <%= submit_tag(t('setup.next'), class: 'btn btn-success') %>
                   </div>
                 </div>

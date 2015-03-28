@@ -15,7 +15,17 @@ module SetupHelper
     return settings
   end
 
-  def total_setup_pages
-    6 # Total number of setup pages
+  def is_on_heroku
+    !! ENV['MADLOBA_IS_ON_HEROKU']
   end
+
+  def total_setup_pages
+    # Total number of setup pages
+    if is_on_heroku
+      5 # Skipping the image storage page, while on Heroku (functionality not developed for Heroku yet)
+    else
+      6
+    end
+  end
+
 end

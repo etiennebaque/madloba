@@ -21,7 +21,6 @@ module User::AdsHelper
     return (image_storage == IMAGE_ON_SERVER || image_storage == IMAGE_AMAZON_S3)
   end
 
-
   def publisher_name(ad)
     publisher_name = ''
     ad_user = ad.user
@@ -33,15 +32,15 @@ module User::AdsHelper
     return publisher_name
   end
 
-  # When an ad- related page loads, the associated image might still be processed. This method checks if the image is available yet.
+  # When an ad-related page loads, the associated image might still be processed, or being uploaded to S3.
+  # This method checks if the normal image is available yet.
   def is_image_available(ad)
-    img_url = ad.image_url(:normal).to_s
-    result = false
-    if img_url && img_url != ''
-      res = Net::HTTP.get_response(URI.parse(img_url))
-      result = (res.code.to_i >= 200 && res.code.to_i < 400)
-    end
-    return result
+    return (ad.image.versions)[:normal].file.exists?
+  end
+
+  # Getting the maximum number of days of publication, before ad expires.
+  def max_expire_days
+    Setting.where(key: 'ad_max_expire').pluck(:value).first
   end
 
 end

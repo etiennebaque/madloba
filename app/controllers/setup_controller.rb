@@ -70,11 +70,11 @@ class SetupController < ApplicationController
     lng = params['hiddenLngId']
     if lat && lat != '' && lng && lng != ''
       map_center = "#{lat},#{lng}"
-      settings_hash = {:city => params['city'],
-                       :state => params['state'],
-                       :country => params['country'],
-                       :zoom_level => params['zoom_level'],
-                       :map_center_geocode => map_center}
+      settings_hash = {city: params['city'],
+                       state: params['state'],
+                       country: params['country'],
+                       zoom_level: params['zoom_level'],
+                       map_center_geocode: map_center}
       settings_hash.each {|key, value|
         setting_record = Setting.find_by_key(key)
         if setting_record.nil?
@@ -84,7 +84,12 @@ class SetupController < ApplicationController
         end
         setting_record.save
       }
-      redirect_to setup_image_path
+
+      if is_on_heroku
+        redirect_to setup_admin_path
+      else
+        redirect_to setup_image_path
+      end
     else
       flash[:error] = t('setup.select_geocodes')
       getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
@@ -96,16 +101,19 @@ class SetupController < ApplicationController
   # Methods for 'Image storage' page
   # -----------------------------------------
   def show_image
+
     @storage_choices = [[IMAGE_NO_STORAGE, t('setup.option_no_storage')],
                         [IMAGE_AMAZON_S3, t('setup.option_s3')]]
-    @is_on_heroku = !! ENV['MADLOBA_IS_ON_HEROKU']
-    @current_step = 4
 
-    @current_image_choice = Setting.find_by_key('image_storage').value
-
-    if !@is_on_heroku
+    if !is_on_heroku
       @storage_choices << [IMAGE_ON_SERVER, t('setup.option_server')]
+    else
+      # If app deployed on Heroku, we should not be here. Redirection to next step, admin page.
+      redirect_to setup_admin_path
     end
+
+    @current_step = 4
+    @current_image_choice = Setting.find_by_key('image_storage').value
 
     render 'setup/image'
   end
@@ -154,6 +162,12 @@ class SetupController < ApplicationController
     @current_step = 6
 
     render 'setup/finish'
+  end
+
+  private
+
+  def is_on_heroku
+    !! ENV['MADLOBA_IS_ON_HEROKU']
   end
 
 end
