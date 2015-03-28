@@ -361,7 +361,7 @@ en:
       delete_confirm: Are you sure you want to delete this category?
       before_you_delete1: Some items are still tied to the category you want to delete.
       before_you_delete2: Please choose another category, in the list below, to transfer these items to, before going ahead with the deletion of this category.
-      cannot_delete: You cannot this category, as it is the only existing category.
+      cannot_delete: You cannot delete this category, as it is the only existing category.
       delete_yes: Yes, delete this category
       transfer_and_delete: Transfer items & delete this category
       success_deleted: The category '%{name}' has been deleted.
