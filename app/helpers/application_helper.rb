@@ -9,6 +9,10 @@ module ApplicationHelper
     Rails.cache.fetch(CACHE_CITY_NAME) {Setting.find_by_key(:city).value}
   end
 
+  def max_number_days_publish
+    Rails.cache.fetch(CACHE_MAX_DAYS_EXPIRE) {Setting.find_by_key(:ad_max_expire).value}
+  end
+
   # Regardless of what the current navigation state is, we need store all the item names into an array, in order to make the type-ahead of the item search bar work.
   # (TODO: make Ajax calls instead)
   def all_ads_items
@@ -217,7 +221,7 @@ module ApplicationHelper
 
   # Define whether the app is deployed on Heroku or not.
   def is_on_heroku
-    !! ENV['MADLOBA_IS_ON_HEROKU']
+    ENV['MADLOBA_IS_ON_HEROKU'].downcase == 'true'
   end
 
 end

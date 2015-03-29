@@ -122,6 +122,8 @@ class User::BaseController < ApplicationController
           if (params[key] != '') && (!params[key].include? 'http')
             cleaned_data = "http://#{params[key]}"
           end
+        elsif key == 'ad_max_expire'
+          Rails.cache.write(CACHE_MAX_DAYS_EXPIRE, cleaned_data)
         end
         app_name_settings.update_attribute(:value, cleaned_data)
       end

@@ -59,6 +59,7 @@ CACHE_SETUP_STEP = 'cache_setup_step'
 CACHE_APP_NAME = 'cache_app_name'
 CACHE_CITY_NAME = 'cache_city_name'
 CACHE_IMAGE_STORAGE = 'cache_image_storage'
+CACHE_MAX_DAYS_EXPIRE = 'cache_max_days_expire'
 
 # Image storage constants
 IMAGE_NO_STORAGE = 'nostorage'

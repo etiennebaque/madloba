@@ -2,10 +2,14 @@ class SetupController < ApplicationController
   layout 'home'
   before_action :check_setup_step
 
+  include ApplicationHelper
+
   # We first check that the user really has to go through the setup process.
+  # The process finishes once the user reaches the 'All done' page.
   def check_setup_step
-    setup_step = Setting.where(key: 'setup_step').pluck(:value).first.to_i
-    if setup_step == 0
+    setup_step = Setting.find_or_create_by(key: 'setup_step')
+    setup_step_val = setup_step.value.to_i
+    if setup_step_val == 0
       # The app is already good to go, the user must be redirected to root
       redirect_to root_path
     end
@@ -113,14 +117,15 @@ class SetupController < ApplicationController
     end
 
     @current_step = 4
-    @current_image_choice = Setting.find_by_key('image_storage').value
+    image_storage = Setting.find_or_create_by(key: 'image_storage')
+    @current_image_choice = image_storage.value
 
     render 'setup/image'
   end
 
 
   def process_image
-    setting = Setting.find_by_key('image_storage')
+    setting = Setting.find_or_create_by(key: 'image_storage')
     setting.value = params['storage_choice']
 
     if setting.save
@@ -152,7 +157,7 @@ class SetupController < ApplicationController
   # Method for 'All done' page (last page)
   # --------------------------------------
   def show_finish
-    setup_step = Setting.find_by_key('setup_step')
+    setup_step = Setting.find_or_create_by(key: 'setup_step')
     setup_step.update_attribute(:value, '0')
     setup_step.save
 
@@ -162,12 +167,6 @@ class SetupController < ApplicationController
     @current_step = 6
 
     render 'setup/finish'
-  end
-
-  private
-
-  def is_on_heroku
-    !! ENV['MADLOBA_IS_ON_HEROKU']
   end
 
 end

@@ -76,19 +76,20 @@ class User::AdsController < ApplicationController
     end
 
     # we define the date when the ad won't be published any longer (see maximum number of days, in Settings table)
-    max_expire_days = Setting.where(key: 'ad_max_expire').pluck(:value).first
-    if max_expire_days == '0'
+    if max_number_days_publish == '0'
       # No limit set for ad expiration. Let's use 2100-01-01 as a default date value
       @ad.expire_date = Date.new(2100,1,1)
     else
       d = Date.today
-      @ad.expire_date = d + max_expire_days.to_i
+      @ad.expire_date = d + max_number_days_publish.to_i
     end
 
     if @ad.save
       flash[:new_ad] = @ad.title
       # Letting the user know when their ad will expire.
-      flash[:ad_expire] = t('ad.ad_create_expire', day_number: max_expire_days, expire_date: @ad.expire_date)
+      if (max_number_days_publish.to_i > 0)
+        flash[:ad_expire] = t('ad.ad_create_expire', day_number: max_number_days_publish, expire_date: @ad.expire_date)
+      end
 
       redirect_to ad_path(@ad.id)
 

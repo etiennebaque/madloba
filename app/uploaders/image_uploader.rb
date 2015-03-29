@@ -9,7 +9,7 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   # Choose what kind of storage to use for this uploader - either on server or on Amazon S3, depending
   # of 'image_storage' value in Settings table.
-  image_storage = Rails.cache.fetch(CACHE_IMAGE_STORAGE) {Setting.find_by_key(:image_storage).value}
+  image_storage = Rails.cache.fetch(CACHE_IMAGE_STORAGE) {Setting.find_or_create_by(key: 'image_storage').value}
   if (image_storage == IMAGE_ON_SERVER)
     storage :file
   else

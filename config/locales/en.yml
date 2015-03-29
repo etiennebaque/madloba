@@ -127,6 +127,7 @@ en:
     district_help: Choose the district where this location can be found.
   ad:
     new_ad: New ad
+    once_created_expire: Once created, your ad will be published for %{max_expire_days} days.
     area: area
     error_occurred: "%{errors} occurred while saving this ad"
     published: "Published by:"

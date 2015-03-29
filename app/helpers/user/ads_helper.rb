@@ -17,7 +17,7 @@ module User::AdsHelper
 
   # Checks if image upload is allowed
   def can_upload_image
-    image_storage = Rails.cache.fetch(CACHE_IMAGE_STORAGE) {Setting.find_by_key(:image_storage).value}
+    image_storage = Rails.cache.fetch(CACHE_IMAGE_STORAGE) {Setting.find_or_create_by(key: 'image_storage').value}
     return (image_storage == IMAGE_ON_SERVER || image_storage == IMAGE_AMAZON_S3)
   end
 
