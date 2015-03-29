@@ -179,33 +179,36 @@
         </div>
       </div>
 
-      <!-- Image upload -->
-      <div class="form-group">
-        <%= f.label :description, t('ad.upload_image'), class: 'control-label' %>
-        <div class="col-inline">
-          <%= f.file_field :image, class: 'form-control', style: 'border: 0px; box-shadow: none; height: auto;' %>
-          <%= f.hidden_field :image_cache, value: params[:image_cache] %>
-          <% if @ad.image? %>
-              <!-- if model validation fails on other fields, display image that was loaded previously -->
-              <% if is_image_available(@ad) %>
-                  <%= image_tag @ad.image_url(:normal).to_s %>
-                  <div class="checkbox">
-                    <label>
-                      <%= f.check_box :remove_image %>
-                      <%= t('ad.remove_image') %>
-                    </label>
-                  </div>
-              <% elsif @ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0) %>
-                  <div class="ad-processing">
-                    <%= t('ad.image_currently_processed') %><br />
-                    <%= t('ad.will_show_up') %>
-                  </div>
+      <% if !is_on_heroku && can_upload_image %>
+          <!-- Image upload - only possible when app deployed on server, for now -->
+          <div class="form-group">
+            <%= f.label :description, t('ad.upload_image'), class: 'control-label' %>
+            <div class="col-inline">
+              <%= f.file_field :image, class: 'form-control', style: 'border: 0px; box-shadow: none; height: auto;' %>
+              <%= f.hidden_field :image_cache, value: params[:image_cache] %>
+              <% if @ad.image? %>
+                  <!-- if model validation fails on other fields, display image that was loaded previously -->
+                  <% if is_image_available(@ad) %>
+                      <%= image_tag @ad.image_url(:normal).to_s %>
+                      <div class="checkbox">
+                        <label>
+                          <%= f.check_box :remove_image %>
+                          <%= t('ad.remove_image') %>
+                        </label>
+                      </div>
+                  <% elsif @ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0) %>
+                      <div class="ad-processing">
+                        <%= t('ad.image_currently_processed') %><br />
+                        <%= t('ad.will_show_up') %>
+                      </div>
+                  <% end %>
+              <% else %>
+                  <%= t('ad.less_than_limit') %>
               <% end %>
-          <% else %>
-              <%= t('ad.less_than_limit') %>
-          <% end %>
-        </div>
-      </div>
+            </div>
+          </div>
+      <% end %>
+
 
       <!-- Ad description -->
       <div class="form-group">

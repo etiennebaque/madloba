@@ -15,10 +15,6 @@ module SetupHelper
     return settings
   end
 
-  def is_on_heroku
-    !! ENV['MADLOBA_IS_ON_HEROKU']
-  end
-
   def total_setup_pages
     # Total number of setup pages
     if is_on_heroku

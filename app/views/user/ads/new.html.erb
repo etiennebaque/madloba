@@ -136,8 +136,8 @@
               </div>
             </div>
 
-            <!-- Image upload -->
-            <% if can_upload_image %>
+            <!-- Image upload - only possible when app deployed on server, for now -->
+            <% if !is_on_heroku && can_upload_image %>
                 <div class="form-group">
                   <%= f.label :description, t('ad.upload_image'), class: 'col-lg-2 control-label' %>
                   <div class="col-lg-6">
