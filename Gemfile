@@ -42,7 +42,20 @@ gem 'devise'
 # Used for authorization
 gem 'pundit'
 
+# Exception notification
 gem 'exception_notification', github: 'smartinez87/exception_notification', branch: 'master'
+
+# Gems for image upload
+# File upload solution
+gem 'carrierwave'
+# Photo resizing
+gem 'mini_magick'
+# For AWS cloud storage
+gem 'fog'
+# Delayed job
+gem 'delayed_job_active_record'
+# Processes/Uploads image in the background
+gem 'carrierwave_backgrounder'
 
 group :development, :test do
 

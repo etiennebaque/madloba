@@ -2,21 +2,11 @@ class User::AdsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   before_action :authenticate_user!, except: [:show]
   before_action :requires_user, except: [:show]
-  before_action :get_city_name
-  before_action :get_area_type
   after_action :verify_authorized, except: :checkItemExists
 
   layout 'home'
 
   include ApplicationHelper
-
-  def get_area_type
-    @area_type = Setting.where(key: 'area_type').pluck(:value).first
-  end
-
-  def get_city_name
-    @state = Setting.where(key: 'state').pluck('value').first
-  end
 
   def show
     @ad = Ad.includes(:location => :district).where(id: params['id']).first!
@@ -77,7 +67,7 @@ class User::AdsController < ApplicationController
       new_location = Location.new(ad_location_params)
       new_location.user = current_user
       new_location.city = site_city
-      new_location.province = @state
+      new_location.province = Setting.where(key: 'state').pluck('value').first
 
       new_location.save
       @ad.location = new_location
@@ -116,13 +106,9 @@ class User::AdsController < ApplicationController
 
   def edit
     @ad = Ad.includes(:location => :district).where(id: params[:id]).first!
-
     authorize @ad
-
     initialize_areas()
-
     @categories = Category.pluck(:name, :id)
-
     getMapSettings(@ad.location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
 
     render layout: 'admin'
@@ -193,11 +179,11 @@ class User::AdsController < ApplicationController
   end
 
   def ad_params
-    params.require(:ad).permit(:title, :number_of_items, :description, :is_anonymous, :location_id, :is_giving, :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :latitude, :longitude, :phone_number, :website, :description])
+    params.require(:ad).permit(:title, :number_of_items, :description, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image, :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :latitude, :longitude, :phone_number, :website, :description])
   end
 
   def ad_params_update
-    params.require(:ad).permit(:title, :number_of_items, :description, :is_anonymous, :location_id, :is_giving)
+    params.require(:ad).permit(:title, :number_of_items, :description, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image)
   end
 
   def ad_location_params
@@ -270,9 +256,5 @@ class User::AdsController < ApplicationController
 
     # Initializing the map (when creating a new location)
     getMapSettings(@ad.location, HAS_NOT_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
-
-    # Getting the maximum number of days of publication, before ad expires.
-    @max_expire_days = Setting.where(key: 'ad_max_expire').pluck(:value).first
-
   end
 end

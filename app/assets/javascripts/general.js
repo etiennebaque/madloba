@@ -29,6 +29,7 @@ $(document).ready(function(){
         $('.row-offcanvas').toggleClass('active');
     });
 
+
     // ***********************
     // Create/Edit an ad pages
     // ***********************
@@ -93,7 +94,7 @@ $(document).ready(function(){
     });
 
     // "Create ad" form: if the user has no existing location yet, open automatically the "New location" form
-    if (location_number == 0){
+    if (typeof location_number != 'undefined' && location_number == 0){
         $("#new_location_section").removeClass('hide');
         initLeafletMap(map_settings_array);
     }
@@ -101,6 +102,14 @@ $(document).ready(function(){
     // "Create ad" form: when "New location" radio button is not selected.
     $(".existing_location").click(function(){
         $("#new_location_section").addClass('hide');
+    });
+
+    // "Create ad" form: create message when image needs to be uploaded.
+    $('#ad-edit-form').submit(function() {
+        var image_path = $('#ad_image').val();
+        if (image_path != null && image_path != ''){
+            $('#upload-in-progress').html('<i>New image is being uploaded. Please wait.</i>');
+        }
     });
 
 

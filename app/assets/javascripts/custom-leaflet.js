@@ -103,14 +103,15 @@ function putLocationMarkers(){
 
             // HTML snippet for the popup
             if (location['name'] != ''){
-                popup_html_text = createPopupHtml("<b>"+location['name']+"</b><br />" +location['street_number'] + " " + location['address'] + "<br /><br />", ad);
+                popup_html_text = createPopupHtml("<b>"+location['name']+"</b><br />" +location['street_number'] + " " + location['address'], ad);
             }else{
-                popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'] + "</b><br /><br />", ad);
+                popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'], ad);
             }
 
             marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address']})
+            var popup = L.popup({minWidth: 250}).setContent(popup_html_text);
 
-            marker.bindPopup(popup_html_text);
+            marker.bindPopup(popup);
             markers.addLayer(marker);
 
         }
@@ -163,6 +164,7 @@ function putLocationMarkers(){
  */
 function createPopupHtml(first_sentence, ad){
     var second_sentence = '';
+    var result = '';
 
     var popup_ad_link = "<a href='/ads/"+ad['id']+"/'>"+ad['title']+"</a>";
     var popup_item_name = "<span style='color:" + marker_colors[ad['item']['category']['marker_color']] + "';><strong>" + ad['item']['name'] + "</strong></span>";
@@ -173,11 +175,21 @@ function createPopupHtml(first_sentence, ad){
         second_sentence = "Item(s) being searched for:<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
     }
 
-    return first_sentence + second_sentence;
+    if (ad['image']['thumb']['url'] != null && ad['image']['thumb']['url'] != ''){
+        // Popup is created with a thumbnail image in it.
+        var ad_image = "<img class='thumb_ad_image' onError=\"$('.thumb_ad_image').remove(); $('.image_notification').html('<i>Image not available yet.</i>');\" src='"+ad['image']['thumb']['url']+"'><span class=\"image_notification\"></span>";
+        result =  "<div style='overflow: auto;'><div class='col-sm-6'>"+first_sentence+"</div><div class='col-sm-6'>"+ad_image+"</div><div class='col-sm-12'><br>"+second_sentence+"</div></div>";
+    }else{
+        // Popup is created without any thumbnail image.
+        result =  "<div style='overflow: auto;'>"+first_sentence+"<br><br>"+second_sentence+"</div>";
+    }
+
+    return result;
 }
 
 /**
- * Creates the text to be shown in a marker popup, giving details about the selected area-type location (postal or district).
+ * Creates the text to be shown in a marker popup,
+ * giving details about the selected area-type location (postal or district).
  * @param first_sentence
  * @param location
  * @returns Popup text content.

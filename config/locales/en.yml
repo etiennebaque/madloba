@@ -31,6 +31,10 @@ en:
               taken: "and Icon error - the chosen pair is not available: both this icon and this marker color have already been used for another category. Please choose another marker and/or icon."
             icon:
               blank: name can't be blank.
+        ad:
+          attributes:
+            image:
+              too_long: must be less than 5MB.
   home:
     home: Home
     page: Home page
@@ -169,6 +173,12 @@ en:
     ad_has_expired: Sorry, this ad has expired, and is not visible anymore.
     no_ad_created_yet: You have not created any ad yet. Click on the button above to create your first one!
     no_location_yet: "Nothing to edit here: you have not created any ad with an exact location in it yet."
+    upload_image: "Upload image:"
+    less_than_limit: Image must be less than 5MB.
+    remove_image: Remove image
+    image_currently_processed: Your image is currently being processed.
+    show_ad_image_processed: The image of this ad is currently being processed.
+    will_show_up: It will show up in a moment after you refresh the page.
   mailer:
     welcome: "Welcome to %{name}!"
     confirmation_descr1: You received this message because an account, based on your e-mail address, was created on this website.
@@ -339,6 +349,7 @@ en:
       map_notification_exact: Click on the map to locate your exact address.
       location_deleted: The location '%{deleted_location_name}' has been deleted.
       unnamed: unnamed location
+      area_name: "%{area} area"
       no_ad_tied: No ads are currently tied to this location.
     category:
       update_success: The category '%{name}' has been updated.
@@ -350,7 +361,7 @@ en:
       delete_confirm: Are you sure you want to delete this category?
       before_you_delete1: Some items are still tied to the category you want to delete.
       before_you_delete2: Please choose another category, in the list below, to transfer these items to, before going ahead with the deletion of this category.
-      cannot_delete: You cannot this category, as it is the only existing category.
+      cannot_delete: You cannot delete this category, as it is the only existing category.
       delete_yes: Yes, delete this category
       transfer_and_delete: Transfer items & delete this category
       success_deleted: The category '%{name}' has been deleted.
@@ -470,6 +481,7 @@ en:
     back: Back
     next: Next
     general_info: General information
+    image_storage: Image storage
     name_description: The name of your website
     description_description: Write what your website is about...
     map_settings: Map settings
@@ -497,3 +509,15 @@ en:
     confirm_email: If the information entered above in this form is correct, and after you click "Next", a confirmation e-mail will be sent to you.
     check_email: Please check your inbox to confirm your account.
     city_country_mandatory: "'City' and 'Country' fields are mandatory."
+    option_no_storage: Users won't be allowed to upload any pictures at all.
+    option_s3: Images will directly uploaded to Amazon S3.
+    option_server: Images will be stored on the same server where this Madloba website is deployed.
+    image_description: When users create ads, they'll have the choice to attach an image with it.
+    image_server_or_s3_html: "This image can either be stored on your server, or on %{link}"
+    image_s3_only_html: "Ad images will be stored on %{s3_link}"
+    image_no_storage: Alternatively, you can choose not to have any image uploaded at all.
+    image_strategy: Image storage strategy
+    image_select_option: Please select below which photo storage strategy you'd like to choose.
+    install_guide: the installation guide
+    amazon_s3_warning_html: If you're choosing Amazon S3, make sure you've set up the relevant environment variables correctly (check out %{link} - section about the set_environment_variables script - for more details).
+    image_error: A problem occured while saving your settings. Please refresh this page and try again in a moment.
