@@ -2,7 +2,7 @@ class User::AdsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   before_action :authenticate_user!, except: [:show]
   before_action :requires_user, except: [:show]
-  after_action :verify_authorized, except: :checkItemExists
+  after_action :verify_authorized, except: [:checkItemExists, :send_message]
 
   layout 'home'
 
@@ -87,12 +87,22 @@ class User::AdsController < ApplicationController
 
     if @ad.save
       flash[:new_ad] = @ad.title
-      redirect_to ad_path(@ad.id)
-
       # Letting the user know when their ad will expire.
       flash[:ad_expire] = t('ad.ad_create_expire', day_number: max_expire_days, expire_date: @ad.expire_date)
 
-      UserMailer.created_ad(current_user, @ad, request).deliver
+      redirect_to ad_path(@ad.id)
+
+      # Sending email confirmation, about the creation of the ad.
+      full_admin_url = "http://#{request.env['HTTP_HOST']}/user/manageads"
+      flatten_ad = @ad.as_json
+      flatten_ad['location'] = @ad.location.name_and_or_full_address
+      flatten_ad['item_name'] = @ad.item.name
+      if is_on_heroku
+        UserMailer.created_ad(current_user.as_json, flatten_ad, full_admin_url).deliver
+      else
+        # Queueing email sending, when not on heroku.
+        UserMailer.delay.created_ad(current_user.as_json, flatten_ad, full_admin_url)
+      end
 
     else
       # Saving the ad failed.
@@ -230,7 +240,12 @@ class User::AdsController < ApplicationController
       ad = Ad.find(params['id'])
 
       if message && message.gsub(/\s+/, '') != ''
-        UserMailer.send_message_for_ad(current_user, message, ad).deliver
+        ad_info = {'title' => ad.title, 'first_name' => ad.user.first_name, 'email' => ad.user.email}
+        if is_on_heroku
+          UserMailer.send_message_for_ad(current_user.as_json, message, ad_info).deliver
+        else
+          UserMailer.delay.send_message_for_ad(current_user.as_json, message, ad_info)
+        end
         flash[:success] = t('ad.success_sent')
         session["ad_id_#{ad_id}"] = false
       else

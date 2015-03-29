@@ -147,7 +147,7 @@
                         <%= hidden_field_tag 'id', @ad.id %>
                         <%= label_tag :title, t('ad.send_message_label', name: publisher_name(@ad))+':', class: 'control-label' %>
                         <div class="form-group">
-                          <textarea id="ad_message_id" name="message" rows="8" class="form-control" style="padding-bottom: 20px"></textarea>
+                          <%= text_area_tag 'message', nil, rows: 8, class: 'form-control', style: 'padding-bottom: 20px;' %>
                         </div>
                         <% if user_signed_in? %>
                             <div class="form-actions">
@@ -179,7 +179,7 @@
                         <%= hidden_field_tag 'id', @ad.id %>
                         <%= label_tag :title, t('ad.send_message_label', name: publisher_name(@ad))+':', class: 'control-label' %>
                         <div class="form-group">
-                          <textarea id="ad_message_id" name="message" rows="8" class="form-control" style="padding-bottom: 20px"></textarea>
+                          <%= text_area_tag 'message', nil, rows: 8, class: 'form-control', style: 'padding-bottom: 20px;' %>
                         </div>
                         <% if user_signed_in? %>
                             <div class="form-actions">
