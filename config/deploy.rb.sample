@@ -4,8 +4,11 @@ SSHKit.config.command_map[:rake] = 'bundle exec rake'
 lock '3.1.0'
 
 
-# Set up the name of your application here
+# TODO: Set up the name of your application here
 set :application, 'madloba'
+
+# TODO: Set up the absolute path where your Madloba application is location, on your server.
+set :deploy_to, '/absolute/madloba_app/path'
 
 
 set :repo_url, 'git@github.com:etiennebaque/madloba.git'
@@ -16,6 +19,9 @@ set :branch, 'master'
 
 # Default value for :scm is :git
 set :scm, :git
+
+# Variable added for delayed job
+set :rails_env, 'production'
 
 # Default value for :format is :pretty
 # set :format, :pretty
@@ -32,9 +38,37 @@ set :scm, :git
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+# Number of delayed_job workers
+# default value: 1
+# set :delayed_job_workers, 2
 
-# Set up the absolute path where your Madloba application is location, on your server.
-set :deploy_to, '/absolute/madloba_app/path'
+# String to be prefixed to worker process names
+# This feature allows a prefix name to be placed in front of the process.
+# For example:  reports/delayed_job.0  instead of just delayed_job.0
+set :delayed_job_prefix, :madloba
+
+# Delayed_job queue or queues
+# Set the --queue or --queues option to work from a particular queue.
+# default value: nil
+# set :delayed_job_queues, ['mailer','tracking']
+
+# Specify different pools
+# You can use this option multiple times to start different numbers of workers for different queues.
+# default value: nil
+# set :delayed_job_pools, {
+#                          :mailer => 2,
+#                          :tracking => 1,
+#                          :* => 2
+#                      }
+
+# Set the roles where the delayed_job process should be started
+# default value: :app
+# set :delayed_job_roles, [:app, :background]
+
+# Set the location of the delayed_job executable
+# Can be relative to the release_path or absolute
+# default value 'bin'
+# set :delayed_job_bin_path, 'script' # for rails 3.x
 
 
 set :linked_files, %w{config/database.yml config/secrets.yml}
@@ -53,4 +87,8 @@ namespace :deploy do
   after :publishing, 'deploy:restart'
   after :finishing, 'deploy:cleanup'
 
+end
+
+after 'deploy:published', 'restart' do
+  invoke 'delayed_job:restart'
 end
