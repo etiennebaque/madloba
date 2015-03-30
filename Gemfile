@@ -56,6 +56,8 @@ gem 'fog'
 gem 'delayed_job_active_record'
 # Processes/Uploads image in the background
 gem 'carrierwave_backgrounder'
+# Daemons gem to activate Delayed job via Capistrano
+gem 'daemons'
 
 group :development, :test do
 

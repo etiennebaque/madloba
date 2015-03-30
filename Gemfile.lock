@@ -386,6 +386,7 @@ DEPENDENCIES
   carrierwave
   carrierwave_backgrounder
   coffee-rails (~> 4.0.0)
+  daemons
   database_cleaner
   delayed_job_active_record
   devise
