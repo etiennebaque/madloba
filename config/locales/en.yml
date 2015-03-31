@@ -444,6 +444,8 @@ en:
       cannot_be_empty: Latitude or longitude cannot be empty.
       postal_area_error: The postal code length should be greater or equals to the area code.
       update_success: The map settings have been updated.
+      update_success_demo: Only the map type has been updated (demo).
+      demo_message: For demo purposes, you are able to update only the "Map type" on this screen.
     users:
       title: Manage users
       description: From here, you can manage user accounts (admin and regular users).

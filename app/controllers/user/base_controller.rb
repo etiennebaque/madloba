@@ -7,6 +7,8 @@ class User::BaseController < ApplicationController
 
   layout 'admin'
 
+  include ApplicationHelper
+
   def requires_user
     if !user_signed_in?
       redirect_to '/user/login'
@@ -173,7 +175,13 @@ class User::BaseController < ApplicationController
     lat = params['hiddenLatId']
     lng = params['hiddenLngId']
 
-    if ((lat.is_a? Numeric) && (lng.is_a? Numeric)) || lat != nil || lng != nil
+    if is_demo
+      # If this is the Madloba Demo, then we update only the chosen_map. The other parameters cannot be changed.
+      setting_record = Setting.find_by_key(:chosen_map)
+      setting_record.update_attribute(:value, params['maptype'])
+      flash[:setting_success] = t('admin.map_settings.update_success_demo')
+
+    elsif ((lat.is_a? Numeric) && (lng.is_a? Numeric)) || lat != nil || lng != nil
       # All the information on the map settings page that can be saved
       new_map_center = "#{lat},#{lng}"
       settings_hash = {:map_box_api_key => params['mapBoxApiKey'],
@@ -194,12 +202,10 @@ class User::BaseController < ApplicationController
         setting_record = Setting.find_by_key('chosen_map')
         setting_record.update_attribute(:value, 'osm')
       end
-
       flash[:setting_success] = t('admin.map_settings.update_success')
-      redirect_to user_mapsettings_path
-    else
-      # Latitude and/or longitude information is not correct - check done in latitude_longitude_should_be_numeric
     end
+
+    redirect_to user_mapsettings_path
   end
 
 

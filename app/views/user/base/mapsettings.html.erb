@@ -57,7 +57,13 @@
                 </div>
               </div>
           <% end %>
-
+          <% if is_demo %>
+              <div class="box-content alerts">
+                <div class="alert alert-info">
+                  <%= t('admin.map_settings.demo_message') %>
+                </div>
+              </div>
+          <% end %>
 
           <div class="box-content">
             <%= form_tag '/user/mapsettings/update', html: { id: 'mapSettingFormId', role: 'form' } do %>
@@ -128,16 +134,8 @@
                   </div>
                 </div>
 
-                <% if is_demo %>
-                    <!-- User creation and update is not allowed on Madloba demo website-->
-                    <div class="form-actions">
-                      <%= link_to t('admin.save_not_possible'), '#', class: 'btn btn-success disabled' %>
-                      <%= link_to t('admin.cancel'), '/user/managerecords', class: 'btn' %>
-                    </div>
-                <% else %>
-                    <!-- Submit button and cancel link -->
-                    <%= render 'user/shared/submitSection' %>
-                <% end %>
+                <!-- Submit button and cancel link -->
+                <%= render 'user/shared/submitSection' %>
 
             <% end %>
 

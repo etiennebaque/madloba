@@ -59,6 +59,9 @@ gem 'carrierwave_backgrounder'
 # Daemons gem to activate Delayed job via Capistrano
 gem 'daemons'
 
+# Memcache client
+gem 'dalli'
+
 group :development, :test do
 
   # Mailcatcher
