@@ -22,6 +22,10 @@ if ([ ! -f "$path_to_app/shared/config/secrets.yml" ]); then
     curl https://raw.githubusercontent.com/etiennebaque/madloba/master/config/secrets.yml > "$path_to_app/shared/config/secrets.yml"
 fi
 
+if ([ ! -f "$path_to_app/shared/.rbenv-vars" ]); then
+    cd "$path_to_app/shared" && touch .rbenv-vars
+fi
+
 echo "---------------------------------------------------"
 echo "Deployment folder for Madloba app has been created."
 echo "---------------------------------------------------"

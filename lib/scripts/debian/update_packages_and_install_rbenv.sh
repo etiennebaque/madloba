@@ -26,6 +26,13 @@ echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
 git clone git://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
 echo 'export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"' >> ~/.bash_profile
 
+if ([ ! -d "$HOME/.rbenv/plugins" ]); then
+    mkdir -p "$HOME/.rbenv/plugins"
+fi
+cd $HOME/.rbenv/plugins
+git clone https://github.com/sstephenson/rbenv-vars.git
+
+
 echo "--------------------------------------------------------"
 echo "Packages have been updated and rbenv has been installed."
 echo "--------------------------------------------------------"
