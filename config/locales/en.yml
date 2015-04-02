@@ -82,6 +82,8 @@ en:
     full_not_found_map_position: "Full address not found, map positioned on: %{address}"
     not_found_map_position: Sorry, address not found.
     click_on_map_after: Once general area found, click on the map underneath to select the desired location.
+    demo_sidebar_note_html: (Demo) As an administrator, you can change the colors and the icons of these categories in the %{link}.
+    admin_panel: admin panel
   errors:
     oops: "Oops!"
     not_found: 404 Page Not Found

@@ -61,6 +61,7 @@ gem 'daemons'
 
 # Memcache client
 gem 'dalli'
+gem 'memcachier'
 
 group :development, :test do
 

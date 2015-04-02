@@ -114,9 +114,15 @@
               </div>
 
           <% end %>
-
         </div>
 
+        <!-- Sidebar - note with some explanation, for demo only -->
+        <% if is_demo %>
+            <div class="list-group">
+                <i><%= t('home.demo_sidebar_note_html', link: link_to(t('home.admin_panel'), '/user/managerecords#categories')) %></i>
+            </div>
+        <% end %>
+        
       </div>
       <!-- Leaflet sidebar section, with guided navigation - end -->
 
