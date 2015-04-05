@@ -47,7 +47,7 @@ $(document).ready(function(){
     $('#ad_item').focusin(function(){
         sendAjaxRequest = true;
     });
-    $('#ad_item').focusout(function(){
+    $('#ad_item').on('focusout change', function(){
         setTimeout(function() {
             var item_name = $('#ad_item').val();
             if (sendAjaxRequest){
@@ -75,7 +75,7 @@ $(document).ready(function(){
                             $('#item_notification').html('<i>Choose a category for this new item you just entered</i>');
                             $('#category').prop ('disabled', false);
                             $('#category-section').removeClass('hide');
-                        }
+                            }
                     }
 
                 });
@@ -105,13 +105,12 @@ $(document).ready(function(){
     });
 
     // "Create ad" form: create message when image needs to be uploaded.
-    $('#ad-edit-form').submit(function() {
+    $('#new_ad').submit(function() {
         var image_path = $('#ad_image').val();
         if (image_path != null && image_path != ''){
             $('#upload-in-progress').html('<i>New image is being uploaded. Please wait.</i>');
         }
     });
-
 
     // Location form: show appropriate section when entering an exact address
     $(".location_type_exact").click(function(){

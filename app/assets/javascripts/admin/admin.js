@@ -188,14 +188,6 @@ $(document).ready(function(){
         $('#records-tabs a[href='+window.location.hash+']').tab('show')
     }
 
-    // Edit ad page
-    $('#ad-edit-form').submit(function() {
-        var image_path = $('#ad_image').val();
-        if (image_path != null && image_path != ''){
-            $('#upload-in-progress').html('<i>New image is being uploaded. Please wait.</i>');
-        }
-    });
-
 });
 
 if($('.geolocation').length > 0){

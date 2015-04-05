@@ -56,6 +56,7 @@
               <% if @categories.select{|cat| cat.is_refinement(params)}.length > 1 %>
                   <div id="deleteAllId">
                       <a href="/" class="list-group-item smaller-no-border-no-background">
+                        <label style='width: 15px;'>&nbsp;</label>
                         <span class="guided-nav-label"><%= t('home.delete_all') %></span>
                         <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
                       </a>
@@ -78,7 +79,9 @@
               <% @categories.each do |category| %>
                   <% if category.is_refinement(params) %>
                       <a href = "<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background">
-                        <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
+                        <label style='width: 15px;'>
+                            <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
+                        </label>
                         <span class="guided-nav-label"><%= category.name %></span>
                         <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
                       </a>
@@ -95,11 +98,20 @@
               <% @categories.each do |category| %>
                   <% if !category.is_refinement(params) %>
                       <a href ="<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background">
-                        <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
+                        <label style='width: 15px;'>
+                            <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
+                        </label>
                         <span class="guided-nav-label"><%= category.name %></span>
                       </a>
                   <% end %>
               <% end %>
+
+              <% if @locations_postal.length > 0 || @locations_district.length > 0 %>
+                <hr />
+                <%= image_tag 'madloba_logo.png', width: '26px' %>
+                <span class="guided-nav-label"><%= t('home.same_area') %></span>
+              <% end %>
+
           <% else %>
               <div class="list-group">
                 <div class="list-group-item smaller-no-border-no-background">
@@ -118,6 +130,7 @@
 
         <!-- Sidebar - note with some explanation, for demo only -->
         <% if is_demo %>
+            <hr />
             <div class="list-group">
                 <i><%= t('home.demo_sidebar_note_html', link: link_to(t('home.admin_panel'), '/user/managerecords#categories')) %></i>
             </div>

@@ -102,4 +102,12 @@ class Location < ActiveRecord::Base
     end
   end
 
+  def full_website_url
+    if self.website && !self.website.include?('http')
+      "http://#{self.website}"
+    else
+      self.website
+    end
+  end
+
 end

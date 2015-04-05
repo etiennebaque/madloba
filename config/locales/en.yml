@@ -84,6 +84,7 @@ en:
     click_on_map_after: Once general area found, click on the map underneath to select the desired location.
     demo_sidebar_note_html: (Demo) As an administrator, you can change the colors and the icons of these categories in the %{link}.
     admin_panel: admin panel
+    same_area: Ads related to a same area
   errors:
     oops: "Oops!"
     not_found: 404 Page Not Found
@@ -139,7 +140,7 @@ en:
     title: "Ad title*:"
     title_help: e.g. 'Gives away 5 shirts' or 'I want to get rid of my old laptop'...
     item: "Item*:"
-    item_help: Type the item you're giving away/looking for. Choose it in the list, if it appears.
+    item_help: Type the item you're giving away/looking for (choose it in the list, if it appears in it).
     number_item: Number of items
     location_website: "Location website:"
     send_message: Send your message

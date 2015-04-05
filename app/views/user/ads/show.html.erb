@@ -100,7 +100,7 @@
                 <% if @ad.location.website && @ad.location.website != '' %>
                     <div>
                       <label class="ad-label"><%= t('ad.location_website') %></label>
-                      <span><a href="<%= @ad.location.website %>" target="_blank"><%= @ad.location.website %></a></span>
+                      <span><a href="<%= @ad.location.full_website_url %>" target="_blank"><%= @ad.location.website %></a></span>
                     </div>
                 <% end %>
 

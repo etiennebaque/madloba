@@ -151,9 +151,17 @@
                   <div class="col-lg-6">
                     <%= f.file_field :image, class: 'form-control', style: 'border: 0px; height: auto;' %>
                     <%= f.hidden_field :image_cache, value: params[:image_cache] %>
+                    <span id="message"><%= t('ad.less_than_limit') %></span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-lg-2"></div>
+                  <div class="col-lg-10">
                     <% if @ad.image? %>
                         <% if is_image_available(@ad) %>
-                            <%= image_tag @ad.image_url(:normal).to_s %>
+                            <div id="image-section">
+                                <%= image_tag @ad.image_url(:normal).to_s %>
+                            </div>
                             <div class="checkbox">
                               <label>
                                 <%= f.check_box :remove_image %>
@@ -167,7 +175,7 @@
                             </div>
                         <% end %>
                     <% else %>
-                        <%= t('ad.less_than_limit') %>
+                        <div id="image-section"></div>
                     <% end %>
                   </div>
                 </div>
@@ -231,11 +239,10 @@
 
             <!-- After submit, a notification shows up here, if a new image is being uploaded -->
             <div class="form-group">
-              <div class="col-lg-10 col-lg-offset-2">
-                <span id="upload-in-progress"></span>
-              </div>
+                <div class="col-lg-10 col-lg-offset-2">
+                    <span id="upload-in-progress"></span>
+                </div>
             </div>
-
 
           </fieldset>
       <% end %>

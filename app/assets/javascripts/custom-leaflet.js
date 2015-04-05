@@ -105,7 +105,7 @@ function putLocationMarkers(){
             if (location['name'] != ''){
                 popup_html_text = createPopupHtml("<b>"+location['name']+"</b><br />" +location['street_number'] + " " + location['address'], ad);
             }else{
-                popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'], ad);
+                popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'] + "</b>", ad);
             }
 
             marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address']})
