@@ -1,6 +1,11 @@
 #!/bin/bash
 
-path_to_app=~/madloba
+#--------------------------------------
+
+# Replace '<path_to_my_app>' by the absolute path where your Madloba app will be deployed (e.g: /home/username/madloba).
+root_app=<path_to_my_app>
+
+#--------------------------------------
 
 if ([ ! -d "$path_to_app" ]); then
     mkdir "$path_to_app"
