@@ -187,11 +187,6 @@
                         <%= f.file_field :image, class: 'form-control', style: 'border: 0px; box-shadow: none; height: auto;' %>
                         <%= f.hidden_field :image_cache, value: params[:image_cache] %>
                       </div>
-                      <div class="col-inline" style="padding: 10px 0px;">
-                        <span id="upload-text-section"></span>
-                        <span id="upload-button-section"></span>
-                        <span id="progress-percent"></span>
-                      </div>
                       <% if @ad.image? %>
                           <!-- if model validation fails on other fields, display image that was loaded previously -->
                           <% if is_image_available(@ad) %>
@@ -276,6 +271,11 @@
 
                 <%= render 'user/shared/submitSection' %>
 
+                <!-- After submit, a notification shows up here, if a new image is being uploaded -->
+                <div class="form-group" style="margin-top: 15px;">
+                  <span id="upload-in-progress"></span>
+                </div>
+
             <% end %>
           </div>
         </div>
@@ -332,37 +332,4 @@
 <% content_for :scripts do %>
     <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initializeMap partial that create the actual map -->
     <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
-
-    <%= javascript_include_tag 'jquery.ui.widget', 'jquery.iframe-transport', 'jquery.fileupload' %>
-
-    <script>
-        $(function () {
-            $('#ad_image').fileupload({
-                add: function (e, data) {
-                    data.context = $('<button id="upload-button" class="btn btn-sm btn-info"/>').text('Upload this file')
-                            .appendTo('#upload-button-section')
-                            .click(function () {
-                                data.context = $('<button id="upload-button" class="btn btn-sm btn-info disabled"/>').text('Upload this file').appendTo('#upload-button-section').replaceAll($(this));
-                                data.submit();
-                            });
-                },
-                progressall: function (e, data) {
-                    var progress = parseInt(data.loaded / data.total * 100, 10);
-                    $('#progress-percent').html("Uploading... " + progress + "%");
-                },
-                done: function (e, data) {
-                    $('#image-section').addClass('ad-processing').html('Upload done. Your picture will be processed once you save this page.');
-                }
-            });
-
-            $('#ad_image').bind('fileuploadadd', function (e, data) {
-                $.each(data.files, function (index, file) {
-                    $('#ad_image').css('color', 'transparent');
-                    $('#upload-text-section').html('Selected file: ' + file.name);
-                });
-            });
-
-        });
-    </script>
-
 <% end %>
