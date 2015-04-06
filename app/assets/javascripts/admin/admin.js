@@ -34,6 +34,14 @@ $(document).ready(function(){
         initLeafletMap(map_settings_array);
     }
 
+    // "Create ad" form: create message when image needs to be uploaded.
+    $('#ad-edit-form').submit(function() {
+        var image_path = $('#ad_image').val();
+        if (image_path != null && image_path != ''){
+            $('#upload-in-progress').html('<i>New image is being uploaded. Please wait.</i>');
+        }
+    });
+
     // Area settings page: JQuery snippet to add text fields dynamically, when "Add district..." link is clicked.
     var max_fields      = 10; //maximum input boxes allowed
     var wrapper         = $(".district_wrapper"); //Fields wrapper
@@ -161,7 +169,6 @@ $(document).ready(function(){
             $( "form:first" ).submit();
         }
     });
-
 
     // Character counter (class 'textarea_count'), for text area, in 'General settings'.
     $( ".textarea_count" ).keyup(function() {

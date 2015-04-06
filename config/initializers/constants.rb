@@ -53,3 +53,16 @@ ICON_SELECTION =
        fa-sun-o fa-thumbs-o-up fa-ticket fa-trash fa-angellist fa-briefcase fa-dashboard fa-envelope fa-globe
        fa-music fa-newspaper-o fa-tree fa-trophy fa-truck fa-umbrella fa-user fa-users fa-video-camera
        fa-wheelchair fa-wifi fa-wrench)
+
+# Cache keys
+CACHE_SETUP_STEP = 'cache_setup_step'
+CACHE_APP_NAME = 'cache_app_name'
+CACHE_CITY_NAME = 'cache_city_name'
+CACHE_IMAGE_STORAGE = 'cache_image_storage'
+CACHE_MAX_DAYS_EXPIRE = 'cache_max_days_expire'
+
+# Image storage constants
+IMAGE_NO_STORAGE = 'nostorage'
+IMAGE_AMAZON_S3 = 's3'
+IMAGE_ON_SERVER = 'server'
+

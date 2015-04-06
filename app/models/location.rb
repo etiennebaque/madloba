@@ -16,7 +16,6 @@ class Location < ActiveRecord::Base
     locations = Location.includes(ads: {item: :category}).type(location_type).references(:ads)
 
     if cat_nav_state || searched_item
-      #ads = ads.includes(:location => :district).joins(:item)
       if cat_nav_state
         if searched_item
           # We search for ads in relation to the searched item and the current category navigation state.
@@ -67,9 +66,9 @@ class Location < ActiveRecord::Base
 
   def name_and_or_full_address
     if self.name && self.name != ''
-      "#{self.name} - #{self.full_address}"
+      "#{self.name} - #{self.location_type_address_public}"
     else
-      self.full_address
+      self.location_type_address_public
     end
   end
 
@@ -89,6 +88,25 @@ class Location < ActiveRecord::Base
       self.postal_code
     elsif self.loc_type == 'district'
       self.district.name
+    end
+  end
+
+  def location_type_address_public
+    if self.loc_type == 'exact'
+      full_address
+    elsif self.loc_type == 'postal'
+      # if action is ads#show, we don't display the full postal code
+      I18n.t('admin.location.area_name', area: self.area)
+    elsif self.loc_type == 'district'
+      self.district.name
+    end
+  end
+
+  def full_website_url
+    if self.website && !self.website.include?('http')
+      "http://#{self.website}"
+    else
+      self.website
     end
   end
 

@@ -96,7 +96,7 @@ body {
 }
 
 .smaller-no-border-no-background{
-    padding: 5px 15px;
+    padding: 5px 15px 0px;
     border: none;
     background-color: transparent;
 }
@@ -216,12 +216,23 @@ body {
     padding-bottom: 20px;
 }
 
+.ad-image{
+    padding-bottom: 20px;
+    text-align: center;
+}
+
 .ad-title{
     padding-bottom: 30px;
 }
 
 .ad-label{
     width:120px;
+}
+
+.ad-processing{
+    padding-top: 20px;
+    color: #3a87ad;
+    font-weight: bold;
 }
 
 /*

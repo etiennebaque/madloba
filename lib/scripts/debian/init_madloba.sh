@@ -1,6 +1,11 @@
 #!/bin/bash
 
-path_to_app=~/madloba
+#--------------------------------------
+
+# Replace '<path_to_my_app>' by the absolute path where your Madloba app will be deployed (e.g: /home/username/madloba).
+root_app=<path_to_my_app>
+
+#--------------------------------------
 
 if ([ ! -d "$path_to_app" ]); then
     mkdir "$path_to_app"
@@ -20,6 +25,10 @@ fi
 
 if ([ ! -f "$path_to_app/shared/config/secrets.yml" ]); then
     curl https://raw.githubusercontent.com/etiennebaque/madloba/master/config/secrets.yml > "$path_to_app/shared/config/secrets.yml"
+fi
+
+if ([ ! -f "$path_to_app/shared/.rbenv-vars" ]); then
+    cd "$path_to_app/shared" && touch .rbenv-vars
 fi
 
 echo "---------------------------------------------------"

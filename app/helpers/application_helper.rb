@@ -2,11 +2,15 @@ module ApplicationHelper
 
 
   def site_name
-    Setting.find_by_key(:app_name).value
+    Rails.cache.fetch(CACHE_APP_NAME) {Setting.find_by_key(:app_name).value}
   end
 
   def site_city
-    Setting.find_by_key(:city).value
+    Rails.cache.fetch(CACHE_CITY_NAME) {Setting.find_by_key(:city).value}
+  end
+
+  def max_number_days_publish
+    Rails.cache.fetch(CACHE_MAX_DAYS_EXPIRE) {Setting.find_by_key(:ad_max_expire).value}
   end
 
   # Regardless of what the current navigation state is, we need store all the item names into an array, in order to make the type-ahead of the item search bar work.
@@ -35,6 +39,15 @@ module ApplicationHelper
       redirect_to user_managerecords_path
     else
       redirect_to root_path
+    end
+  end
+
+  # display user's locations, to allow them to tie existing one to an ad.
+  def user_locations_number
+    if (current_user && current_user.locations)
+      current_user.locations.count
+    else
+      0 # no registered user, or registered user with no locations.
     end
   end
 
@@ -204,6 +217,11 @@ module ApplicationHelper
 
     return @mapSettings
 
+  end
+
+  # Define whether the app is deployed on Heroku or not.
+  def is_on_heroku
+    ENV['MADLOBA_IS_ON_HEROKU'].downcase == 'true'
   end
 
 end

@@ -7,10 +7,17 @@
         <h3><%= t('admin.category.delete_category') %>?</h3>
       </div>
 
-      <% if @category.items && @category.items.length > 0 %>
+      <% if Category.all.length == 1 %>
+          <!-- We can't delete this category if it is the only existing one. -->
+          <div class="modal-body">
+            <p><%= t('admin.category.cannot_delete') %></p>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal"><%= t('admin.cancel') %></a>
+          </div>
+      <% elsif @category.items && @category.items.length > 0 %>
           <!-- Before deletion of this category, we need to transfer linked items to another category -->
           <%= form_tag "/user/categories/#{@category.id}", method: :destroy do %>
-
               <div class="modal-body">
                 <p><%= t('admin.category.before_you_delete1') %></p>
                 <p><%= t('admin.category.before_you_delete2') %></p>
@@ -29,14 +36,6 @@
                 <%= submit_tag(t('admin.category.transfer_and_delete'), class: 'btn btn-danger') %>
               </div>
           <% end %>
-      <% elsif Category.all.length == 1 %>
-          <!-- We can't delete this category if it is the only existing one. -->
-          <div class="modal-body">
-            <p><%= t('admin.category.cannot_delete') %></p>
-          </div>
-          <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal"><%= t('admin.cancel') %></a>
-          </div>
       <% else %>
           <!-- No item tied to this category, just ask for confirmation. -->
           <div class="modal-body">

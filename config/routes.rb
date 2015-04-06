@@ -16,6 +16,8 @@ Madloba::Application.routes.draw do
   post 'setup/general/process', to: 'setup#process_general'
   get 'setup/map', to: 'setup#show_map'
   post 'setup/map/process', to: 'setup#process_map'
+  get 'setup/image', to: 'setup#show_image'
+  post 'setup/image/process', to: 'setup#process_image'
   get 'setup/admin', to: 'setup#show_admin'
   post 'setup/admin/process', to: 'setup#process_admin'
   get 'setup/done', to: 'setup#show_finish'

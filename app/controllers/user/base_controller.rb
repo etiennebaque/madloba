@@ -7,6 +7,8 @@ class User::BaseController < ApplicationController
 
   layout 'admin'
 
+  include ApplicationHelper
+
   def requires_user
     if !user_signed_in?
       redirect_to '/user/login'
@@ -91,7 +93,7 @@ class User::BaseController < ApplicationController
 
     @settings = {}
     settings.each do |setting|
-      @settings[setting['key']] = setting['value']
+      @settings[setting.key] = setting.value
     end
 
     @description_remaining = 500
@@ -107,6 +109,9 @@ class User::BaseController < ApplicationController
         if params[key].present?
           app_name_settings = Setting.find_by_key(key)
           app_name_settings.update_attribute(:value, params[key])
+
+          # Updating cached value.
+          Rails.cache.write(CACHE_APP_NAME, params[key])
         else
           # the application name has been deleted. We can't save an empty app name.
           flash[:setting_success] = 0
@@ -119,6 +124,8 @@ class User::BaseController < ApplicationController
           if (params[key] != '') && (!params[key].include? 'http')
             cleaned_data = "http://#{params[key]}"
           end
+        elsif key == 'ad_max_expire'
+          Rails.cache.write(CACHE_MAX_DAYS_EXPIRE, cleaned_data)
         end
         app_name_settings.update_attribute(:value, cleaned_data)
       end
@@ -140,13 +147,16 @@ class User::BaseController < ApplicationController
     if settings
       settings.each do |setting|
         @mapSettings[setting.key] = setting.value
+        # Updating cache value
+        if setting.key == 'city'
+          Rails.cache.write(CACHE_CITY_NAME, setting.value)
+        end
       end
     end
 
     # Adding this element to the hash, in order to get the 'zoomend' event working,
     # only for the map settings page (needed to define zoom level).
     @mapSettings['page'] = 'mapsettings'
-
 
     # Initializing the map type drop down box.
     @options_for_maptype_select = []
@@ -165,7 +175,13 @@ class User::BaseController < ApplicationController
     lat = params['hiddenLatId']
     lng = params['hiddenLngId']
 
-    if ((lat.is_a? Numeric) && (lng.is_a? Numeric)) || lat != nil || lng != nil
+    if is_demo
+      # If this is the Madloba Demo, then we update only the chosen_map. The other parameters cannot be changed.
+      setting_record = Setting.find_by_key(:chosen_map)
+      setting_record.update_attribute(:value, params['maptype'])
+      flash[:setting_success] = t('admin.map_settings.update_success_demo')
+
+    elsif ((lat.is_a? Numeric) && (lng.is_a? Numeric)) || lat != nil || lng != nil
       # All the information on the map settings page that can be saved
       new_map_center = "#{lat},#{lng}"
       settings_hash = {:map_box_api_key => params['mapBoxApiKey'],
@@ -186,12 +202,10 @@ class User::BaseController < ApplicationController
         setting_record = Setting.find_by_key('chosen_map')
         setting_record.update_attribute(:value, 'osm')
       end
-
       flash[:setting_success] = t('admin.map_settings.update_success')
-      redirect_to user_mapsettings_path
-    else
-      # Latitude and/or longitude information is not correct - check done in latitude_longitude_should_be_numeric
     end
+
+    redirect_to user_mapsettings_path
   end
 
 

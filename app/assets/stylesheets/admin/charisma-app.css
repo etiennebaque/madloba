@@ -1,4 +1,5 @@
-@import url(https://fonts.googleapis.com/css?family=Shojumaru);
+/*@import url(https://fonts.googleapis.com/css?family=Shojumaru);*/
+@import url("//fonts.googleapis.com/css?family=Lato:400,700,400italic");
 
 select {
     background-color: #fff;
@@ -318,11 +319,11 @@ div.center, p.center, img.center {
 }
 
 .navbar-brand {
-    font-family: 'Shojumaru', cursive, Arial, serif;
+    font-family: 'Lato', cursive, Arial, serif;
     letter-spacing: 2px;
     text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-    width: 224px;
-    font-size: 17px;
+    font-size: 19px;
+    font-weight: bold;
 }
 
 .navbar-brand img {
