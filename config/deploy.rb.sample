@@ -71,7 +71,7 @@ set :delayed_job_prefix, :madloba
 # set :delayed_job_bin_path, 'script' # for rails 3.x
 
 
-set :linked_files, %w{config/database.yml config/secrets.yml}
+set :linked_files, %w{config/database.yml config/secrets.yml .rbenv-vars}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 set :assets_roles, [:web, :app]
 
