@@ -14,6 +14,10 @@
     <script>
         // array containing all the item names, used for the type-ahead, on the item field.
         var all_items = <%= raw all_items.to_json %>;
+        var category_select = "<%= escape_javascript new_item_category_tag %>";
+        var item_name_field = "<%= escape_javascript new_item_name_tag %>";
+        var quantity_field = "<%= escape_javascript new_item_quantity_tag %>";
+        var item_index = <%= @ad.items.count %>;
     </script>
 
 <% end %>
@@ -134,34 +138,39 @@
                   </div>
                 </div>
 
-                <!-- Item -->
+                <!-- Items -->
                 <div class="form-group">
                   <%= f.label :item, t('ad.item'), class: 'control-label' %>
                   <div class="form-inline">
-                    <%= text_field_tag 'ad_item', @ad.item.name, class: 'form-control help-message', autocomplete: 'off',
-                                       :data => {:provide => 'typeahead', :content => t('ad.item_help'), :placement => 'right',
-                                                 :toggle => 'popover', :trigger => 'hover'}, size: 30 %>
+                    <table id="dynamic-table" class="table table-striped" style="width: 80%;">
+                      <thead>
+                      <tr>
+                        <th><%= t('ad.item_name') %></th>
+                        <th><%= t('ad.category_header') %></th>
+                        <th><%= t('ad.number_item') %></th>
+                        <th></th>
+                      </tr>
+                      </thead>
+                      <tbody id="items_body">
+                      <% @ad.ad_items.each_with_index do |ad_item, index| %>
+                          <tr>
+                            <td class="district_name vert-align"><%= ad_item.item.name %></td>
+                            <td class="vert-align"><%= ad_item.item.category.name %></td>
+                            <td class="vert-align"><%= ad_item.quantity %></td>
+                            <td class="vert-align">
+                              <button type="button" id="aditem_<%= index %>" class="dynamic_update btn btn-info btn-xs"><%= t('home.update') %></button>
+                            </td>
+                          </tr>
+                          <input type="hidden" name="items[<%= index %>]" value="<%= ad_item.item.name %>|<%= ad_item.item.category.id %>|<%= ad_item.quantity %>"/>
+                      <% end %>
+                      </tbody>
+                    </table>
                   </div>
-                </div>
 
-                <!-- Number of items -->
-                <div class="form-group">
-                  <%= f.label :number_of_items, t('ad.number_item'), class: 'control-label' %>
-                  <div class="form-inline">
-                    <%= f.number_field :number_of_items, class: 'form-control', maxlength: '2', min: 0, max: 1000 %>
-                  </div>
-                </div>
+                  <!-- "Add item" link -->
+                  <div id="dynamic_wrapper" class="form-group"></div>
+                  <a id="dynamic_add_link" class="btn btn-link" href="#"><%= t('admin.add_item') %></a>
 
-                <!-- Categories -->
-                <div id="category-section" class="form-group hide">
-                  <%= f.label :category, t('ad.category'), class: 'control-label' %>
-                  <div class="form-inline">
-                    <%= select_tag :category, options_for_select(@categories, @ad.item.category.id), class: 'form-control help-message',
-                                   :data => {:content => t('ad.category_help'), :placement => 'right',
-                                             :toggle => 'popover', :trigger => 'hover'} %>
-                    <!-- Message that asks user to choose a category, when new item is entered in field above -->
-                    <div id="item_notification" style="display: inline-block"></div>
-                  </div>
                 </div>
 
                 <!-- Giving / Accepting items -->

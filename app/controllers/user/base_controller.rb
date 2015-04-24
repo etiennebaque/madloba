@@ -288,7 +288,7 @@ class User::BaseController < ApplicationController
   # Methods for regular user screens
   # --------------------------------
   def manageads
-    @ads = Ad.where(user: current_user)
+    @ads = Ad.includes(:items).where(user: current_user)
     @locations = Location.where(user: current_user)
   end
 

@@ -120,6 +120,7 @@ class User::AdsController < ApplicationController
     authorize @ad
     initialize_areas()
     @categories = Category.pluck(:name, :id)
+
     getMapSettings(@ad.location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
 
     render layout: 'admin'
@@ -136,19 +137,35 @@ class User::AdsController < ApplicationController
       params_to_use = ad_params
     end
 
-    item = Item.find_by_name(params['ad_item'])
-    if item
-      # this is an existing item. We just need to tie it to the ad
-      @ad.item = item
-      params_to_use[:item_id] = item.id
-    else
-      # we're dealing with a new item. We need to save it first, before tying it to the ad
-      new_item = Item.new
-      new_item.category = Category.find(params['category'])
-      new_item.name = params['ad_item']
-      new_item.save
-      @ad.item = new_item
-      params_to_use[:item_id] = new_item.id
+
+    # Saving items
+    items = params['items']
+    items.each do |item|
+      item_info = item[1].split('|') # item_name|category_id|quantity
+      item = Item.find_by_name(item_info[0])
+      if item
+        # this is an existing item. We just need to tie it to the ad.
+        # We check at this point if the relationship between this item and this ad currently exists
+        existing_ad_item = AdItem.where(item: item, ad: @ad)
+        if existing_ad_item.length > 0
+          # The relationship already exists, we update just the quantity
+          existing_ad_item[0].update_attributes(quantity: item_info[2])
+        else
+          # The relationship between the 2 entities does not exist. Let's create it.
+          ad_item = AdItem.new(item: item, ad: @ad, quantity: item_info[2])
+          ad_item.save
+          @ad.ad_items << ad_item
+        end
+      else
+        # We're dealing with a new item. We need to save it first, before tying it to the ad.
+        new_item = Item.new
+        new_item.category = Category.find(item_info[1])
+        new_item.name = item_info[0]
+        new_item.save
+        ad_item = AdItem.new(item: new_item, ad: @ad, quantity: item_info[2])
+        ad_item.save
+        @ad.ad_items << ad_item
+      end
     end
 
     if @ad.update(params_to_use)
@@ -190,11 +207,11 @@ class User::AdsController < ApplicationController
   end
 
   def ad_params
-    params.require(:ad).permit(:title, :number_of_items, :description, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image, :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :latitude, :longitude, :phone_number, :website, :description])
+    params.require(:ad).permit(:title, :description, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image, :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :latitude, :longitude, :phone_number, :website, :description])
   end
 
   def ad_params_update
-    params.require(:ad).permit(:title, :number_of_items, :description, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image)
+    params.require(:ad).permit(:title, :description, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image)
   end
 
   def ad_location_params

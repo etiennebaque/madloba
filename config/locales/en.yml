@@ -85,6 +85,7 @@ en:
     demo_sidebar_note_html: (Demo) As an administrator, you can change the colors and the icons of these categories in the %{link}.
     admin_panel: admin panel
     same_area: Ads related to a same area
+    update: Update
   errors:
     oops: "Oops!"
     not_found: 404 Page Not Found
@@ -139,7 +140,9 @@ en:
     has_expired: This ad has expired on %{expire_date}, and is not visible on the website any longer.
     title: "Ad title*:"
     title_help: e.g. 'Gives away 5 shirts' or 'I want to get rid of my old laptop'...
-    item: "Item*:"
+    item: "Item(s)*:"
+    item_name: Item name
+    category_header: Category
     item_help: Type the item you're giving away/looking for (choose it in the list, if it appears in it).
     number_item: Number of items
     location_website: "Location website:"
@@ -222,7 +225,6 @@ en:
     leave_blank: (leave blank if you don't want to change it)
     need_current: (we need your current password to confirm your changes)
     cancel_account: Cancel my account
-    update: Update
     unhappy: Unhappy?
     you_sure: Are you sure?
     back: Back
@@ -273,7 +275,7 @@ en:
     marker: Marker
     icon: Icon
     edit_delete: Edit details / Delete
-    item_quantity: Item (quantity)
+    items_quantity: Items (quantity)
     user: User
     website: Website
     created_by_user: Created by user
@@ -418,6 +420,9 @@ en:
       area_district: Area defined by a district
       map_description: Click on the 'Add district' link, type a name for this new district, and click on the map to define its location.
       error_update_district: An server error occurred while updating districts. Please try again later.
+      district_name: District name
+      latitude: Latitude
+      longitude: Longitude
     map_settings:
       title: Map settings
       type: "Map type:"

@@ -1,5 +1,6 @@
 class Ad < ActiveRecord::Base
-  belongs_to :item
+  has_many :ad_items
+  has_many :items, through: :ad_items
   belongs_to :location
   belongs_to :user
 
@@ -33,6 +34,14 @@ class Ad < ActiveRecord::Base
   def recreate_delayed_versions!
     self.image.is_processing_delayed = true
     self.image.recreate_versions!
+  end
+
+  def item_list
+    result = []
+    self.ad_items.each do |ad_item|
+      result << "#{ad_item.item.name} (#{ad_item.quantity})"
+    end
+    return result.join(', ')
   end
 
 end

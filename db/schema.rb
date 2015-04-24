@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150318132850) do
+ActiveRecord::Schema.define(version: 20150415160520) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "ad_items", force: true do |t|
+    t.integer  "ad_id"
+    t.integer  "item_id"
+    t.boolean  "is_quantifiable"
+    t.integer  "quantity"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "ad_items", ["ad_id"], name: "index_ad_items_on_ad_id", using: :btree
+  add_index "ad_items", ["item_id"], name: "index_ad_items_on_item_id", using: :btree
 
   create_table "ads", force: true do |t|
     t.string   "title"

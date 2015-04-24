@@ -43,4 +43,16 @@ module User::AdsHelper
     Setting.where(key: 'ad_max_expire').pluck(:value).first
   end
 
+  def new_item_name_tag
+    tag :input, id: 'ad_item', class: 'form-control ad_item', size: 30, type: 'text', autocomplete: 'off', data: {provide: 'typeahead'}
+  end
+
+  def new_item_category_tag
+    content_tag :select, options_for_select(@categories, nil), id: 'category', class: 'form-control'
+  end
+
+  def new_item_quantity_tag
+    tag 'input', id: 'new_quantity_text', class: 'form-control'
+  end
+
 end
