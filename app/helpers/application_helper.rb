@@ -104,12 +104,17 @@ module ApplicationHelper
 
   private
 
-
-  def getMapSettingsWithCategory(location, hasCenterMarker, clickableMapMarker, category)
+  # Info to display several markers on ads#show (1 marker per item)
+  def getMapSettingsWithSeveralItems(location, hasCenterMarker, clickableMapMarker, items)
     getMapSettings(location, hasCenterMarker, clickableMapMarker)
 
-    @mapSettings['category_icon'] = category.icon
-    @mapSettings['category_color'] = category.marker_color
+    @mapSettings['ad_show'] = []
+    items.each_with_index do |item, index|
+      @mapSettings['ad_show'][index] = {}
+      @mapSettings['ad_show'][index]['icon'] = item.category.icon
+      @mapSettings['ad_show'][index]['color'] = item.category.marker_color
+    end
+
   end
 
   # Map settings function that initialize hash to be used to create map tiles.

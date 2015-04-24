@@ -173,8 +173,8 @@ en:
     get_back_to: You can directly get back to %{first_name} by replying to this e-mail.
     success_sent: Your message has been sent successfully.
     summary: "Summary:"
-    giving_away: Giving away
-    accepting: Accepting
+    giving_away: Giving away item(s)
+    accepting: Accepting item(s)
     edit_current_location: Edit current location
     ad_create_expire: Your ad will expire in %{day_number} days, on %{expire_date}.
     ad_has_expired: Sorry, this ad has expired, and is not visible anymore.

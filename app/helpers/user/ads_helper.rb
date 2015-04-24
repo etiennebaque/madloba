@@ -2,7 +2,7 @@ module User::AdsHelper
 
   # All items linked to all ads needed for the type-ahead functionality, in the search bar. (it's not necessarily all the existing items)
   def all_ads_items
-    Ad.joins(:item).pluck(:name).uniq
+    Ad.joins(:items).pluck(:name).uniq
   end
 
   # All items from the database, for the item field, in the New ad form

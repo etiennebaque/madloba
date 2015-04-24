@@ -30,28 +30,46 @@ function initLeafletMap(map_settings_array){
 
 
     if (map_settings_array['hasCenterMarker'] == true){
-        // Center marker on the map
-        // Appearing only in admin map setting, and admin location page, on page load.
-        // Define first if it should be the area icon (for addresses based only on postal codes), or the default icon.
-        var icon_to_use = defaultIcon;
-        if (map_settings_array['is_area']){
-            icon_to_use = areaIcon;
-        }else if (map_settings_array['category_color'] && map_settings_array['category_icon']){
-            // Used on the ad detail page (ads#show)
-            icon_to_use = L.AwesomeMarkers.icon({
-                prefix: 'fa',
-                markerColor: map_settings_array['category_color'],
-                icon: map_settings_array['category_icon']
-            });
-        }
+        if (map_settings_array['ad_show']){
+            // Several Center marker on the map (on the ads#show page)
+            // Displays a marker for each item tied to the ad we're showing the details of.
 
+            // Using the Marker Cluster plugin to spiderfy this ad's item marker.
+            markers = new L.MarkerClusterGroup({spiderfyDistanceMultiplier : 2, zoomToBoundsOnClick: false});
 
-        // we are displaying the center point.
-        var center_marker = L.marker([ mylat, mylng ], {icon: icon_to_use});
-        if (map_settings_array['marker_message'] != ""){
-            center_marker.addTo(map).bindPopup(map_settings_array['marker_message']).openPopup();
+            for (var i= 0; i<map_settings_array['ad_show'].length; i++){
+                var item_category = map_settings_array['ad_show'][i];
+                icon_to_use = L.AwesomeMarkers.icon({
+                    prefix: 'fa',
+                    markerColor: item_category['color'],
+                    icon: item_category['icon']
+                });
+
+                var center_marker = L.marker([ mylat, mylng ], {icon: icon_to_use});
+                if (map_settings_array['marker_message'] != ""){
+                    center_marker.bindPopup(map_settings_array['marker_message']).openPopup();
+                }
+
+                markers.addLayer(center_marker);
+            }
+
+            map.addLayer(markers);
+
         }else{
-            center_marker.addTo(map);
+            // Center single marker on the map
+            // Appearing only in admin map setting, and admin location page, on page load.
+            // Define first if it should be the area icon (for addresses based only on postal codes), or the default icon.
+            var icon_to_use = defaultIcon;
+            if (map_settings_array['is_area']){
+                icon_to_use = areaIcon;
+            }
+            // we are displaying the center point.
+            var center_marker = L.marker([ mylat, mylng ], {icon: icon_to_use});
+            if (map_settings_array['marker_message'] != ""){
+                center_marker.addTo(map).bindPopup(map_settings_array['marker_message']).openPopup();
+            }else{
+                center_marker.addTo(map);
+            }
         }
 
     }

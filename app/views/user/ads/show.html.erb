@@ -6,6 +6,8 @@
     <!-- Specific map scripts loaded for this page -->
     <%= stylesheet_link_tag 'leaflet.awesome-markers' %>
     <%= stylesheet_link_tag 'font-awesome.min' %>
+    <%= stylesheet_link_tag 'MarkerCluster' %>
+    <%= stylesheet_link_tag 'MarkerCluster.Default' %>
 
     <style type="text/css">
         #map {
@@ -73,9 +75,22 @@
                 <% else %>
                     <%= t('ad.accepting') %>
                 <% end %>
-                <%= @ad.item.name.downcase %>
               </span>
             </div>
+
+            <!-- Left-hand side: Items -->
+            <div>
+              <label class="ad-label"><%= t('admin.items') %>:</label>
+              <span>
+                <ul>
+                <% @ad.ad_items.each do |ad_item| %>
+                    <li><i class="fa <%= ad_item.item.category.icon %>" style="color: <%= "#{MARKER_COLORS[ad_item.item.category.marker_color]}" %>;"></i>&nbsp;<%= ad_item.item.name %> (<%= ad_item.quantity %>)</li>
+                <% end %>
+                </ul>
+              </span>
+            </div>
+
+            <br />
 
             <!-- Left-hand side: Location -->
             <div>
@@ -89,11 +104,6 @@
               <span><%= @ad.location.name_and_or_full_address %></span>
             </div>
 
-            <!-- Left-hand side: Number of items -->
-            <div>
-              <label class="ad-label"><%= t('ad.number_item') %>:</label>
-              <span><%= @ad.number_of_items %></span>
-            </div>
 
             <% if @ad.location.loc_type == 'exact' %>
                 <!-- Left-hand side: Website -->
@@ -172,6 +182,8 @@
 </div>
 
 <%= render 'shared/footer' %>
+
+<%= javascript_include_tag 'leaflet.markercluster' %>
 
 <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initializeMap partial that create the actual map -->
 <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>

@@ -27,10 +27,7 @@ class User::AdsController < ApplicationController
     # This session variable will be read in the 'send_message' method below.
     session["ad_id_#{@ad.id}"] = true
 
-    # For the map settings, we use here the SHOW_AD_FLAG_FOR_MAP, and not the regular
-    # AD_FLAG_FOR_MAP. We differentiate here because we don't want a marker to show up
-    # on click on map.
-    getMapSettingsWithCategory(@ad.location, HAS_CENTER_MARKER, NOT_CLICKABLE_MAP, @ad.item.category)
+    getMapSettingsWithSeveralItems(@ad.location, HAS_CENTER_MARKER, NOT_CLICKABLE_MAP, @ad.items)
   end
 
   def new
