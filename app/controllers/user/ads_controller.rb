@@ -33,27 +33,12 @@ class User::AdsController < ApplicationController
   def new
     @ad = Ad.new
     authorize @ad
-    @ad.number_of_items = 1 # default number of items
     initializeNewForm()
   end
 
   def create
     @ad = Ad.new(ad_params)
     authorize @ad
-    item = Item.find_by_name(params['ad_item'])
-
-    if item
-      # this is an existing item. We just need to tie it to the ad
-      @ad.item = item
-    else
-      # we're dealing with a new item. We need to save it first, before tying it to the ad
-      new_item = Item.new
-      new_item.category = Category.find(params['category'])
-      new_item.name = params['ad_item']
-
-      new_item.save
-      @ad.item = new_item
-    end
 
     # we tie now the user to the ad
     @ad.user = current_user
@@ -82,6 +67,41 @@ class User::AdsController < ApplicationController
     end
 
     if @ad.save
+      # Now that the ad it saved, we're creating the links between this ad and the items (has_many through relationship)
+      items = params['items']
+      ad_items_to_save = []
+      items.each do |item|
+        item_info = item.split('|') # item_name|category_id|quantity
+        item = Item.find_by_name(item_info[0])
+        if item
+          # this is an existing item. We just need to tie it to the ad.
+          # We check at this point if the relationship between this item and this ad currently exists
+          existing_ad_item = AdItem.where(item: item, ad: @ad)
+          if existing_ad_item.length > 0
+            # The relationship already exists, we update just the quantity
+            existing_ad_item[0].update_attributes(quantity: item_info[2])
+          else
+            # The relationship between the 2 entities does not exist. Let's create it.
+            ad_item = AdItem.new(item: item, ad: @ad, quantity: item_info[2])
+            ad_item.save
+            ad_items_to_save << ad_item
+          end
+        else
+          # We're dealing with a new item. We need to save it first, before tying it to the ad.
+          new_item = Item.new
+          new_item.category = Category.find(item_info[1])
+          new_item.name = item_info[0]
+          new_item.save
+          ad_item = AdItem.new(item: new_item, ad: @ad, quantity: item_info[2])
+          ad_item.save
+          ad_items_to_save << ad_item
+        end
+      end
+      if ad_items_to_save.length > 0
+        @ad.ad_items = ad_items_to_save
+      end
+      @ad.save
+
       flash[:new_ad] = @ad.title
       # Letting the user know when their ad will expire.
       if (max_number_days_publish.to_i > 0)
@@ -94,7 +114,11 @@ class User::AdsController < ApplicationController
       full_admin_url = "http://#{request.env['HTTP_HOST']}/user/manageads"
       flatten_ad = @ad.as_json
       flatten_ad['location'] = @ad.location.name_and_or_full_address
-      flatten_ad['item_name'] = @ad.item.name
+      ad_items = []
+      @ad.ad_items.each do |ad_item|
+        ad_items << "#{ad_item.item.name} (#{ad_item.quantity})"
+      end
+      flatten_ad['items'] = ad_items
       if is_on_heroku
         UserMailer.created_ad(current_user.as_json, flatten_ad, full_admin_url).deliver
       else
@@ -134,7 +158,6 @@ class User::AdsController < ApplicationController
       params_to_use = ad_params
     end
 
-
     # Saving items
     items = params['items']
     items.each do |item|
@@ -165,6 +188,7 @@ class User::AdsController < ApplicationController
       end
     end
 
+    # Performing the update.
     if @ad.update(params_to_use)
       flash[:ad_updated] = @ad.title
       redirect_to edit_user_ad_path(@ad.id)

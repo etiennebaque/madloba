@@ -35,7 +35,7 @@ module User::AdsHelper
   # When an ad-related page loads, the associated image might still be processed, or being uploaded to S3.
   # This method checks if the normal image is available yet.
   def is_image_available(ad)
-    return (ad.image.versions)[:normal].file.exists?
+    return ad.image && (ad.image.versions)[:normal].file.present? && (ad.image.versions)[:normal].file.exists?
   end
 
   # Getting the maximum number of days of publication, before ad expires.

@@ -17,6 +17,10 @@
         var all_items = <%= raw all_items.to_json %>;
 
         var location_number = <%= user_locations_number %>;
+        var category_select = "<%= escape_javascript new_item_category_tag %>";
+        var item_name_field = "<%= escape_javascript new_item_name_tag %>";
+        var quantity_field = "<%= escape_javascript new_item_quantity_tag %>";
+        var item_index = <%= @ad.items.count %>;
     </script>
 
 
@@ -83,38 +87,48 @@
               </div>
             </div>
 
-            <!-- Item -->
+            <!-- Items -->
             <div class="form-group">
               <%= f.label :item, t('ad.item'), class: 'col-lg-2 control-label' %>
-              <div class="col-lg-6">
-                <%= text_field_tag 'ad_item', params['ad_item'], class: 'form-control help-message', autocomplete: 'off',
-                                   :data => {:provide => 'typeahead', :content => t('ad.item_help'), :placement => 'right',
-                                             :toggle => 'popover', :trigger => 'hover focus'} %>
+              <div class="col-lg-10" style="padding-top: 3px;">
+                <table id="dynamic-table" class="table table-striped" style="width: 80%;">
+                  <thead>
+                  <tr>
+                    <th><%= t('ad.item_name') %></th>
+                    <th><%= t('ad.category_header') %></th>
+                    <th><%= t('ad.number_item') %></th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody id="items_body">
+                  <% if @ad.ad_items.length > 0 %>
+                      <% @ad.ad_items.each_with_index do |ad_item, index| %>
+                          <tr>
+                            <td class="district_name vert-align"><%= ad_item.item.name %></td>
+                            <td class="vert-align"><%= ad_item.item.category.name %></td>
+                            <td class="vert-align"><%= ad_item.quantity %></td>
+                            <td class="vert-align">
+                              <button type="button" id="aditem_<%= index %>" class="dynamic_update btn btn-info btn-xs"><%= t('home.update') %></button>
+                            </td>
+                          </tr>
+                          <input type="hidden" name="items[]" value="<%= ad_item.item.name %>|<%= ad_item.item.category.id %>|<%= ad_item.quantity %>"/>
+                      <% end %>
+                  <% else %>
+                      <tr>
+                        <td class="district_name vert-align" colspan="4"><i><%= t('ad.no_item_added') %></i></td>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
               </div>
-            </div>
 
-            <!-- Message that asks user to choose a category underneath, when new item is entered in field above -->
-            <div class="form-group">
               <div class="col-lg-2"></div>
-              <div id="item_notification" class="col-lg-10"></div>
-            </div>
-
-            <!-- Categories -->
-            <div id="category-section" class="form-group hide">
-              <%= f.label :category, t('ad.category'), class: 'col-lg-2 control-label' %>
-              <div class="col-lg-6">
-                <%= select_tag :category, options_for_select(@categories), class: 'form-control help-message',
-                               :data => {:content => t('ad.category_help'), :placement => 'right',
-                                         :toggle => 'popover', :trigger => 'hover focus'} %>
+              <div class="col-lg-8">
+                <!-- "Add item" link -->
+                <div id="dynamic_wrapper" class="form-group"></div>
+                <a id="dynamic_add_link" class="btn btn-link" style="padding: 0px;" href="#"><%= t('admin.add_item') %></a>
               </div>
-            </div>
 
-            <!-- Number of items -->
-            <div class="form-group">
-              <%= f.label :number_of_items, t('ad.number_item')+'*:', class: 'col-lg-2 control-label' %>
-              <div class="col-lg-1">
-                <%= f.number_field :number_of_items, class: 'form-control', maxlength: '4', min: 1, max: 1000 %>
-              </div>
             </div>
 
             <!-- Giving / Accepting items -->
@@ -168,7 +182,7 @@
                                 <%= t('ad.remove_image') %>
                               </label>
                             </div>
-                        <% elsif @ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0) %>
+                        <% elsif @ad.image && (@ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0)) %>
                             <div class="ad-processing">
                               <%= t('ad.image_currently_processed') %><br />
                               <%= t('ad.will_show_up') %>

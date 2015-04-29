@@ -196,7 +196,7 @@ $(document).ready(function(){
         $("#dynamic_add_link").addClass('disabled');
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
-            var html_to_append = '<div class="form-inline">' + item_name_field +'&nbsp;'+ category_select + '&nbsp;'+
+            var html_to_append = '<div class="form-inline" style="padding-left: 14px;">' + item_name_field +'&nbsp;'+ category_select + '&nbsp;'+
                 quantity_field + '&nbsp;'+ '<button type="button" id="new_dynamic_button_add" class="btn btn-info btn-sm disabled">Add</button>&nbsp;<a href="#" class="remove_field">Remove</a></div>'
             //$(wrapper).append('<div class="form-group"><div class="form-inline"><input type="text" name="mytext[]" id="new_district_text" class="form-control" placeholder="Type a district name here..."/> <span class="latitude_text">(latitude)</span>, <span class="longitude_text">(longitude)</span>&nbsp;<button type="button" id="new_district_button_add" class="btn btn-info btn-sm disabled">Add</button>&nbsp;<a href="#" class="remove_field">Remove</a></div></div>'); //add input box
             $(wrapper).append(html_to_append); //add input box
@@ -236,7 +236,7 @@ $(document).ready(function(){
             var item_name_td = categories_td.prev();
 
             if (is_being_updated){
-                // User just clicked on 'OK' button.
+                // User just clicked on 'OK' button, the row is now updated.
                 $(this).removeClass('being-updated');
                 $(this).text("Update");
 
@@ -562,7 +562,12 @@ function add_item(e, index){
 
     // To each added item, we create the following hidden value: 'item_name|category_id|quatity'
     var hidden_value = $("#ad_item").val() + '|' + $("#category").val() + '|' + $("#new_quantity_text").val();
-    var hidden_field = '<input type="hidden" name="items['+index+']" value="'+hidden_value+'"/>';
+    var hidden_field = '<input type="hidden" name="items[]" value="'+hidden_value+'"/>';
+
+    if (index == 0){
+        $("#items_body").empty();
+    }
+
     $("#items_body").append(to_append).append(hidden_field);
 
     e.preventDefault();

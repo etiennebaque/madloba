@@ -141,7 +141,8 @@ en:
     title: "Ad title*:"
     title_help: e.g. 'Gives away 5 shirts' or 'I want to get rid of my old laptop'...
     item: "Item(s)*:"
-    item_name: Item name
+    no_item_added: No item added so far
+    item_name: Name
     category_header: Category
     item_help: Type the item you're giving away/looking for (choose it in the list, if it appears in it).
     number_item: Number of items
@@ -173,8 +174,8 @@ en:
     get_back_to: You can directly get back to %{first_name} by replying to this e-mail.
     success_sent: Your message has been sent successfully.
     summary: "Summary:"
-    giving_away: Giving away item(s)
-    accepting: Accepting item(s)
+    giving_away: "Giving away:"
+    accepting: "Searching for:"
     edit_current_location: Edit current location
     ad_create_expire: Your ad will expire in %{day_number} days, on %{expire_date}.
     ad_has_expired: Sorry, this ad has expired, and is not visible anymore.
@@ -196,7 +197,7 @@ en:
     dear: "Dear %{name}"
     ad_created: You have successfully created the following ad, on %{site_name}
     ad_title: Ad title
-    item: Item
+    item: Items
     description: Description
     where_pick_up: Where to pick up the item
     where_to_drop: Where to drop the item

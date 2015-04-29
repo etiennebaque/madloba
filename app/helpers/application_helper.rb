@@ -113,6 +113,7 @@ module ApplicationHelper
       @mapSettings['ad_show'][index] = {}
       @mapSettings['ad_show'][index]['icon'] = item.category.icon
       @mapSettings['ad_show'][index]['color'] = item.category.marker_color
+      @mapSettings['ad_show'][index]['item_name'] = item.name
     end
 
   end

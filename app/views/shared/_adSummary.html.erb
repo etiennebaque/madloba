@@ -1,0 +1,48 @@
+<!-- Left-hand side: Items -->
+<div>
+  <% if @ad.is_giving %>
+      <label class="ad-label"><%= t('ad.giving_away') %></label>
+  <% else %>
+      <label class="ad-label"><%= t('ad.accepting') %></label>
+  <% end %>
+  <span>
+    <ul>
+      <% @ad.ad_items.each do |ad_item| %>
+          <li><i class="fa <%= ad_item.item.category.icon %>" style="color: <%= "#{MARKER_COLORS[ad_item.item.category.marker_color]}" %>;"></i>&nbsp;<%= ad_item.item.name %> (<%= ad_item.quantity %>)</li>
+      <% end %>
+    </ul>
+    </span>
+</div>
+
+<br />
+
+<!-- Left-hand side: Location -->
+<div>
+  <label class="ad-label">
+    <% if @ad.is_giving %>
+        <%= t('ad.where_to_find') %>
+    <% else %>
+        <%= t('ad.where_to_bring') %>
+    <% end %>
+  </label>
+  <span><%= @ad.location.name_and_or_full_address %></span>
+</div>
+
+
+<% if @ad.location.loc_type == 'exact' %>
+    <!-- Left-hand side: Website -->
+    <% if @ad.location.website && @ad.location.website != '' %>
+        <div>
+          <label class="ad-label"><%= t('ad.location_website') %></label>
+          <span><a href="<%= @ad.location.full_website_url %>" target="_blank"><%= @ad.location.website %></a></span>
+        </div>
+    <% end %>
+
+    <!-- Location description -->
+    <% if @ad.location.description && @ad.location.description != '' %>
+        <div>
+          <label class="ad-label"><%= t('ad.location_description') %></label>
+          <span><%= @ad.location.description %></span>
+        </div>
+    <% end %>
+<% end %>

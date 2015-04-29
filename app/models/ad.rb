@@ -10,7 +10,7 @@ class Ad < ActiveRecord::Base
 
   accepts_nested_attributes_for :location
 
-  validates :title, :number_of_items, :location_id, :item_id, :user_id, :description, presence: true
+  validates :title, :location_id, :user_id, :description, presence: true
   validates :is_giving, inclusion: [true, false]
   validates :is_anonymous, inclusion: [true, false]
   validates_size_of :image, maximum: 5.megabytes

@@ -28,7 +28,6 @@ function initLeafletMap(map_settings_array){
     maptiles.addTo(map);
     map.setView([mylat, mylng], map_settings_array['zoom_level']);
 
-
     if (map_settings_array['hasCenterMarker'] == true){
         if (map_settings_array['ad_show']){
             // Several Center marker on the map (on the ads#show page)
@@ -47,12 +46,11 @@ function initLeafletMap(map_settings_array){
 
                 var center_marker = L.marker([ mylat, mylng ], {icon: icon_to_use});
                 if (map_settings_array['marker_message'] != ""){
-                    center_marker.bindPopup(map_settings_array['marker_message']).openPopup();
+                    center_marker.bindPopup(map_settings_array['marker_message'] + ' - ' + item_category['item_name']).openPopup();
                 }
 
                 markers.addLayer(center_marker);
             }
-
             map.addLayer(markers);
 
         }else{
@@ -113,24 +111,29 @@ function putLocationMarkers(){
 
             var ad = location['ads'][j];
 
-            var marker_icon = L.AwesomeMarkers.icon({
-                prefix: 'fa',
-                markerColor: ad['item']['category']['marker_color'],
-                icon: ad['item']['category']['icon']
-            });
+            for (var k=0; k<ad['items'].length; k++){
 
-            // HTML snippet for the popup
-            if (location['name'] != ''){
-                popup_html_text = createPopupHtml("<b>"+location['name']+"</b><br />" +location['street_number'] + " " + location['address'], ad);
-            }else{
-                popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'] + "</b>", ad);
+                var item = ad['items'][k];
+
+                var marker_icon = L.AwesomeMarkers.icon({
+                    prefix: 'fa',
+                    markerColor: item['category']['marker_color'],
+                    icon: item['category']['icon']
+                });
+
+                // HTML snippet for the popup
+                if (location['name'] != ''){
+                    popup_html_text = createPopupHtml("<b>"+location['name']+"</b><br />" +location['street_number'] + " " + location['address'], ad, k);
+                }else{
+                    popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'] + "</b>", ad, k);
+                }
+
+                marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address']})
+                var popup = L.popup({minWidth: 250}).setContent(popup_html_text);
+
+                marker.bindPopup(popup);
+                markers.addLayer(marker);
             }
-
-            marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address']})
-            var popup = L.popup({minWidth: 250}).setContent(popup_html_text);
-
-            marker.bindPopup(popup);
-            markers.addLayer(marker);
 
         }
     }
@@ -180,12 +183,13 @@ function putLocationMarkers(){
  * @param location
  * @returns Popup text content.
  */
-function createPopupHtml(first_sentence, ad){
+function createPopupHtml(first_sentence, ad, index){
     var second_sentence = '';
     var result = '';
+    var item = ad['items'][index];
 
     var popup_ad_link = "<a href='/ads/"+ad['id']+"/'>"+ad['title']+"</a>";
-    var popup_item_name = "<span style='color:" + marker_colors[ad['item']['category']['marker_color']] + "';><strong>" + ad['item']['name'] + "</strong></span>";
+    var popup_item_name = "<span style='color:" + marker_colors[item['category']['marker_color']] + "';><strong>" + item['name'] + "</strong></span>";
 
     if (ad['is_giving'] == true){
         second_sentence = "Item(s) being given away:<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
@@ -220,18 +224,22 @@ function createPopupHtmlArea(first_sentence, locations_from_same_area){
     var people_accept = "Item(s) being searched for:<br />";
     for (var i=0; i<locations_from_same_area.length; i++){
         var location = locations_from_same_area[i];
+
         for (var j= 0; j<location['ads'].length; j++){
             var ad = location['ads'][j];
 
-            var popup_item_name = "<span style='color:" + marker_colors[ad['item']['category']['marker_color']] + "';><strong>" + ad['item']['name'] + "</strong></span>";
-            var popup_ad_link = "<a href='/ads/"+ad['id']+"/'>"+ad['title']+"</a>";
+            for (var k=0; k<ad['items'].length; k++){
+                var item = ad['items'][k];
+                var popup_item_name = "<span style='color:" + marker_colors[item['category']['marker_color']] + "';><strong>" + item['name'] + "</strong></span>";
+                var popup_ad_link = "<a href='/ads/"+ad['id']+"/'>"+ad['title']+"</a>";
 
-            if (ad['is_giving'] == true){
-                is_giving_item = true;
-                people_give = people_give + popup_item_name + ': ' + popup_ad_link + '<br />';
-            }else{
-                is_accepting_item = true;
-                people_accept = people_accept + popup_item_name + ': ' + popup_ad_link + '<br />';
+                if (ad['is_giving'] == true){
+                    is_giving_item = true;
+                    people_give = people_give + popup_item_name + ': ' + popup_ad_link + '<br />';
+                }else{
+                    is_accepting_item = true;
+                    people_accept = people_accept + popup_item_name + ': ' + popup_ad_link + '<br />';
+                }
             }
         }
     }
