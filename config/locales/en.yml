@@ -21,6 +21,9 @@
 
 en:
   activerecord:
+    attributes:
+      ad:
+        number_of_items: ''
     errors:
       models:
         category:
@@ -35,6 +38,9 @@ en:
           attributes:
             image:
               too_long: must be less than 5MB.
+            number_of_items:
+              greater_than: "Please add at least 1 item to your ad"
+
   home:
     home: Home
     page: Home page

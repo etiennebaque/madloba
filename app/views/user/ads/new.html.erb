@@ -20,7 +20,8 @@
         var category_select = "<%= escape_javascript new_item_category_tag %>";
         var item_name_field = "<%= escape_javascript new_item_name_tag %>";
         var quantity_field = "<%= escape_javascript new_item_quantity_tag %>";
-        var item_index = <%= @ad.items.count %>;
+        var item_index = <%= @ad_items_info.count %>;
+        var number_of_item_lines = <%= @ad_items_info.count %>;
     </script>
 
 
@@ -101,17 +102,18 @@
                   </tr>
                   </thead>
                   <tbody id="items_body">
-                  <% if @ad.ad_items.length > 0 %>
-                      <% @ad.ad_items.each_with_index do |ad_item, index| %>
-                          <tr>
-                            <td class="district_name vert-align"><%= ad_item.item.name %></td>
-                            <td class="vert-align"><%= ad_item.item.category.name %></td>
-                            <td class="vert-align"><%= ad_item.quantity %></td>
-                            <td class="vert-align">
-                              <button type="button" id="aditem_<%= index %>" class="dynamic_update btn btn-info btn-xs"><%= t('home.update') %></button>
+                  <% if @ad_items_info.length > 0 %>
+                      <% @ad_items_info.each_with_index do |ad_item, index| %>
+                          <tr id="item_line_<%= index %>">
+                            <td class="district_name vert-align"><%= ad_item[0] %></td>
+                            <td class="vert-align"><%= @category_hash[ad_item[1].to_i] %></td>
+                            <td class="vert-align"><%= ad_item[2] %></td>
+                            <td class="update_align_link">
+                              <a href="#" id="aditem_<%= index %>" class="btn btn-link dynamic_update"><i class="glyphicon glyphicon-pencil align-cross"></i></a>
+                              <a href="#" id="aditem_remove_<%= index %>" class="btn btn-link dynamic_remove"><i class="glyphicon glyphicon-remove align-cross"></i></a>
+                              <input type="hidden" id="hidden_info_<%= index %>" name="items[]" value="<%= ad_item[0] %>|<%= ad_item[1] %>|<%= ad_item[2] %>"/>
                             </td>
                           </tr>
-                          <input type="hidden" name="items[]" value="<%= ad_item.item.name %>|<%= ad_item.item.category.id %>|<%= ad_item.quantity %>"/>
                       <% end %>
                   <% else %>
                       <tr>
@@ -130,6 +132,9 @@
               </div>
 
             </div>
+
+            <!-- Number of items (ie. number of rows in item table) added to the form -->
+            <%= f.hidden_field :number_of_items, value: @ad.number_of_items %>
 
             <!-- Giving / Accepting items -->
             <div class="form-group">

@@ -33,7 +33,7 @@ class User::AdsController < ApplicationController
   def new
     @ad = Ad.new
     authorize @ad
-    initializeNewForm()
+    initializeNewForm(nil)
   end
 
   def create
@@ -119,6 +119,7 @@ class User::AdsController < ApplicationController
         ad_items << "#{ad_item.item.name} (#{ad_item.quantity})"
       end
       flatten_ad['items'] = ad_items
+
       if is_on_heroku
         UserMailer.created_ad(current_user.as_json, flatten_ad, full_admin_url).deliver
       else
@@ -129,7 +130,7 @@ class User::AdsController < ApplicationController
     else
       # Saving the ad failed.
       flash[:error_new_ad] = @ad.title
-      initializeNewForm()
+      initializeNewForm(params)
 
       render action: 'new'
     end
@@ -228,11 +229,11 @@ class User::AdsController < ApplicationController
   end
 
   def ad_params
-    params.require(:ad).permit(:title, :description, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image, :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :latitude, :longitude, :phone_number, :website, :description])
+    params.require(:ad).permit(:title, :description, :number_of_items, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image, :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :latitude, :longitude, :phone_number, :website, :description])
   end
 
   def ad_params_update
-    params.require(:ad).permit(:title, :description, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image)
+    params.require(:ad).permit(:title, :description, :number_of_items, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image)
   end
 
   def ad_location_params
@@ -299,9 +300,28 @@ class User::AdsController < ApplicationController
 
   private
 
-  def initializeNewForm
-    # Initializing category list
+  def initializeNewForm(params)
+    # Initializing category list, for category frop down, when adding an item.
     @categories = Category.pluck(:name, :id)
+
+    # Creating a category hash for the item table.
+    @category_hash = {}
+    @categories.each{|cat| @category_hash[cat[1]] = cat[0]}
+
+    # In the ads#new form, it would have been good practice to have several nested form to manage the multiple items.
+    # However, given the information we need, 4 nested form would have been needed.
+    # We're taking here another route, where we manage ourselves the info we need, regardless of how "deep" this info is from the Ad model.
+    @ad_items_info = []
+    if params && params[:items]
+      params[:items].each do |ad_item|
+        @ad_items_info << ad_item.split('|')
+      end
+    else
+      @ad.ad_items.each do |ad_item|
+        @ad_items_info << [ad_item.item.name, ad_item.item.category.id, ad_item.quantity]
+      end
+    end
+
 
     # Initialize areas (ie districts), when opening the location form.
     initialize_areas()

@@ -9,11 +9,15 @@ class Ad < ActiveRecord::Base
   process_in_background :image
 
   accepts_nested_attributes_for :location
+  accepts_nested_attributes_for :ad_items
 
   validates :title, :location_id, :user_id, :description, presence: true
   validates :is_giving, inclusion: [true, false]
   validates :is_anonymous, inclusion: [true, false]
+  validates :number_of_items, numericality: { greater_than: 0 }
   validates_size_of :image, maximum: 5.megabytes
+
+  after_initialize :default_values
 
   def username_to_display
     if (self.is_anonymous)
@@ -42,6 +46,12 @@ class Ad < ActiveRecord::Base
       result << "#{ad_item.item.name} (#{ad_item.quantity})"
     end
     return result.join(', ')
+  end
+
+  private
+
+  def default_values
+    self.number_of_items ||= 0
   end
 
 end

@@ -44,7 +44,7 @@ module User::AdsHelper
   end
 
   def new_item_name_tag
-    tag :input, id: 'ad_item', class: 'form-control ad_item', size: 30, type: 'text', autocomplete: 'off', data: {provide: 'typeahead'}
+    tag :input, id: 'ad_item', class: 'form-control ad_item', size: 25, type: 'text', autocomplete: 'off', data: {provide: 'typeahead'}
   end
 
   def new_item_category_tag

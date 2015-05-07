@@ -105,8 +105,27 @@ body {
     background-color:rgba(255,255,255,0.75);
 }
 
+.ad_new_number_items_col{
+    width: 20%;
+}
+
 .align-cross{
     padding-top: 3px;
+    padding-right: 14px;
+}
+
+.update_align_link{
+    vertical-align: middle !important;
+    width: 25%;
+}
+
+.dynamic_update{
+    padding-right: 10px;
+    display: inline !important;
+}
+
+.dynamic_remove{
+    display: inline !important;
 }
 
 span.disabled { color:gray; }

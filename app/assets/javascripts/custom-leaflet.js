@@ -24,6 +24,7 @@ function initLeafletMap(map_settings_array){
         maptiles = MQ.mapLayer();
     }
 
+    // Map object initialization
     map = L.map('map');
     maptiles.addTo(map);
     map.setView([mylat, mylng], map_settings_array['zoom_level']);
