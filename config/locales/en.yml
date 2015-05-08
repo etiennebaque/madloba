@@ -106,9 +106,9 @@ en:
     name: "Location name:"
     name_help: Give a name to your new location (eg shop name, random name you give your workshop...). It will be shown publicly. Leave blank if you don't want to assign any name.
     name_to_use: "Which name would you like to use for this ad?*:"
-    ad_action: "What are you doing with your item?*:"
-    ad_action_giving: I'm giving it away
-    ad_action_accepting: I'm searching for/accepting it
+    ad_action: "What are you doing with your items?*:"
+    ad_action_giving: I'm giving them away
+    ad_action_accepting: I'm searching for/accepting them
     name_username: the username
     name_fullname: the full name
     definition: "Enter your location*:"
@@ -151,7 +151,7 @@ en:
     item_name: Name
     category_header: Category
     item_help: Type the item you're giving away/looking for (choose it in the list, if it appears in it).
-    number_item: Number of items
+    number_item: Quantity
     location_website: "Location website:"
     send_message: Send your message
     send_message_label: Send a message to %{name} about this ad

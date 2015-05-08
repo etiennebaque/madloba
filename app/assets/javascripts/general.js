@@ -34,40 +34,6 @@ $(document).ready(function(){
     // Create/Edit an ad pages
     // ***********************
 
-    function get_category_name() {
-        var item_name = $('#ad_item').val();
-        if (sendAjaxRequest){
-            sendAjaxRequest = false;
-            $.ajax({
-                url: "/checkItemExists",
-                global: false,
-                type: "GET",
-                data: { item_name: item_name },
-                cache: false,
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader("Accept", "application/json");
-                    xhr.setRequestHeader("Content-Type", "application/json");
-                },
-                success: function(data) {
-                    if (data['id'] != null && data['name'] != null){
-                        // It is an existing item. We select the associated category, in the drop down box, on the same page.
-                        $('#category').val(data.id)
-                        $('#category').prop ('disabled', true);
-                        $('#item_notification').html('');
-                        $('#category-section').addClass('hide');
-                    }else{
-                        // This is not an existing item. We make the "categories" drop down box appear,
-                        // so that the user can select the appropriate category from this item.
-                        $('#item_notification').html('<i>Choose a category for this new item you just entered</i>');
-                        $('#category').prop ('disabled', false);
-                        $('#category-section').removeClass('hide');
-                    }
-                }
-
-            });
-        }
-    }
-
     // Activates type-ahead on the "Create an Ad" page
     if (typeof all_items != 'undefined'){
         $('#ad_item').typeahead({source: all_items});
@@ -112,7 +78,7 @@ $(document).ready(function(){
                             $('#item_notification').html('<i>Choose a category for this new item you just entered</i>');
                             $('#category').prop ('disabled', false);
                             $('#category-section').removeClass('hide');
-                            }
+                        }
                     }
 
                 });
@@ -160,6 +126,7 @@ $(document).ready(function(){
     $(add_button).click(function(e){ //on add input button click
         e.preventDefault();
         $(".dynamic_update").addClass('disabled');
+        $(".dynamic_remove").addClass('disabled');
         $("#dynamic_add_link").addClass('disabled');
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
@@ -174,8 +141,9 @@ $(document).ready(function(){
 
             }else{
                 // Create and edit ad page, for list of items
+                // item_name_field, category_select and quantity_select are initialized in ads_helper.rb
                 html_to_append = '<div class="form-inline" style="padding-left: 14px;">' + item_name_field +'&nbsp;'+ category_select + '&nbsp;'+
-                quantity_field + '&nbsp;'+ '<button type="button" id="new_dynamic_button_add" class="btn btn-info btn-sm disabled">Add</button>&nbsp;<a href="#" class="remove_field"><i class="glyphicon glyphicon-remove align-cross"></i></a></div>';
+                quantity_select + '&nbsp;'+ '<button type="button" id="new_dynamic_button_add" class="btn btn-info btn-sm disabled">Add</button>&nbsp;<a href="#" class="remove_field"><i class="glyphicon glyphicon-remove align-cross" style="color: red;"></i></a></div>';
             }
 
             // Adding dynamically the fields to the page.
@@ -190,7 +158,10 @@ $(document).ready(function(){
                 $('#ad_item').on('focusout change', function(){
                     setTimeout(function() {
                         // Get category based on the item that was just typed.
-                        get_category_name();
+                        if (sendAjaxRequest) {
+                            sendAjaxRequest = false;
+                            get_category_name();
+                        }
                     }, 400);
                     if ($('#ad_item').val().replace(/ /g,'') != ''){
                         $("#new_dynamic_button_add").removeClass('disabled');
@@ -230,7 +201,7 @@ $(document).ready(function(){
         }
     });
 
-    // Event when user clicks on the "Remove" link, when about to add a district.
+    // Event when user clicks on the "Remove" link, when about to add a item/district.
     $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
         e.preventDefault(); $(this).parent('div').remove(); x--;
         $(".dynamic_update").removeClass('disabled');
@@ -422,12 +393,12 @@ $(document).ready(function(){
             global: false,
             type: "GET",
             data: { street_number: $(".location_streetnumber").val(),
-                    address: $(".location_streetname").val(),
-                    city: $(".location_city").val(),
-                    postal_code: $(".location_postal_code").val(),
-                    state: $(".location_state").val(),
-                    country: $(".location_country").val(),
-                    type: location_type
+                address: $(".location_streetname").val(),
+                city: $(".location_city").val(),
+                postal_code: $(".location_postal_code").val(),
+                state: $(".location_state").val(),
+                country: $(".location_country").val(),
+                type: location_type
             },
             cache: false,
             beforeSend: function(xhr) {
@@ -471,6 +442,42 @@ $(document).ready(function(){
 });
 
 /**
+ * Ajax call that returns the category of a typed item, if this item exists
+ */
+function get_category_name() {
+
+    var item_name = $('#ad_item').val();
+    $.ajax({
+        url: "/checkItemExists",
+        global: false,
+        type: "GET",
+        data: { item_name: item_name },
+        cache: false,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+        },
+        success: function(data) {
+            if (data['id'] != null && data['name'] != null){
+                // It is an existing item. We select the associated category, in the drop down box, on the same page.
+                $('#category').val(data.id)
+                $('#category').prop ('disabled', true);
+                $('#item_notification').html('');
+                $('#category-section').addClass('hide');
+            }else{
+                // This is not an existing item. We make the "categories" drop down box appear,
+                // so that the user can select the appropriate category from this item.
+                $('#item_notification').html('<i>Choose a category for this new item you just entered</i>');
+                $('#category').prop ('disabled', false);
+                $('#category-section').removeClass('hide');
+            }
+        }
+
+    });
+
+}
+
+/**
  * Function that adds a district to the list of districts, in the "Area settings" page (admin panel)
  * @param e
  */
@@ -490,6 +497,7 @@ function add_district(e){
 
     e.preventDefault(); $(this).parent('div').remove(); x--;
     $(".dynamic_update").removeClass('disabled');
+    $(".dynamic_remove").removeClass('disabled');
     $("#dynamic_add_link").removeClass('disabled');
 }
 
@@ -502,7 +510,7 @@ function add_item(e, index){
 
     // Update and delete links, to be added to the list (table) of items.
     var update_link = '<a href="#" id="aditem_'+index+'" class="btn btn-link dynamic_update"><i class="glyphicon glyphicon-pencil align-cross"></i></a>';
-    var delete_link = '<a href="#" id="aditem_remove_'+index+'" class="btn btn-link dynamic_remove"><i class="glyphicon glyphicon-remove align-cross"></i></a>';
+    var delete_link = '<a href="#" id="aditem_remove_'+index+'" class="btn btn-link dynamic_remove"><i class="glyphicon glyphicon-remove align-cross" style="color: red;"></i></a>';
 
     // To each added item, we create the following hidden value: 'item_name|category_id|quatity'
     var hidden_value = $("#ad_item").val() + '|' + $("#category").val() + '|' + $("#new_quantity_text").val();
@@ -524,6 +532,7 @@ function add_item(e, index){
     e.preventDefault();
     $('#dynamic_wrapper').empty();
     $(".dynamic_update").removeClass('disabled');
+    $(".dynamic_remove").removeClass('disabled');
     $("#dynamic_add_link").removeClass('disabled');
 
     // Increasing the row counter (f.number_of_items)
@@ -633,15 +642,15 @@ function update_item(e, is_being_updated, object){
     }else{
         // User just clicked on 'Update' button
         object.addClass('being-updated');
-        object.html('<i class="glyphicon glyphicon-ok align-cross"></i>');
+        object.html('<i class="glyphicon glyphicon-ok align-cross" style="color: green;"></i>');
 
-        // We're creating an input text field, in order to make update possible
-        var current_cat = categories_td.text();
-        var current_category_select = category_select.replace('>'+current_cat, 'selected >'+current_cat).replace('id="category"','id="category" disabled');
+        // We're creating an input text field and drop down boxes, in order to make update possible
+        var current_category_select = category_select.replace('>'+categories_td.text(), 'selected >'+categories_td.text()).replace('id="category"','id="category" disabled');
+        var current_quantity_select = quantity_select.replace('>'+quantity_td.text(), 'selected >'+quantity_td.text());
 
         item_name_td.html('<input autocomplete="off" class="form-control ad_item" data-provide="typeahead" id="ad_item" size="30" type="text" value="'+item_name_td.text()+'">');
         categories_td.html(current_category_select);
-        quantity_td.html('<input class="form-control" id="new_quantity_text" value="'+quantity_td.text()+'">');
+        quantity_td.html(current_quantity_select);
 
         $('#ad_item').typeahead({source: all_items});
         $('#ad_item').focusin(function(){
@@ -649,7 +658,10 @@ function update_item(e, is_being_updated, object){
         });
         $('#ad_item').on('focusout change', function(){
             setTimeout(function() {
-                get_category_name();
+                if (sendAjaxRequest) {
+                    sendAjaxRequest = false;
+                    get_category_name();
+                }
             }, 400);
         });
 

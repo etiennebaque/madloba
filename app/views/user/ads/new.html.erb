@@ -19,7 +19,7 @@
         var location_number = <%= user_locations_number %>;
         var category_select = "<%= escape_javascript new_item_category_tag %>";
         var item_name_field = "<%= escape_javascript new_item_name_tag %>";
-        var quantity_field = "<%= escape_javascript new_item_quantity_tag %>";
+        var quantity_select = "<%= escape_javascript new_item_quantity_tag %>";
         var item_index = <%= @ad_items_info.count %>;
         var number_of_item_lines = <%= @ad_items_info.count %>;
     </script>
@@ -106,11 +106,11 @@
                       <% @ad_items_info.each_with_index do |ad_item, index| %>
                           <tr id="item_line_<%= index %>">
                             <td class="district_name vert-align"><%= ad_item[0] %></td>
-                            <td class="vert-align"><%= @category_hash[ad_item[1].to_i] %></td>
+                            <td class="vert-align"><%= category_hash[ad_item[1].to_i] %></td>
                             <td class="vert-align"><%= ad_item[2] %></td>
                             <td class="update_align_link">
                               <a href="#" id="aditem_<%= index %>" class="btn btn-link dynamic_update"><i class="glyphicon glyphicon-pencil align-cross"></i></a>
-                              <a href="#" id="aditem_remove_<%= index %>" class="btn btn-link dynamic_remove"><i class="glyphicon glyphicon-remove align-cross"></i></a>
+                              <a href="#" id="aditem_remove_<%= index %>" class="btn btn-link dynamic_remove"><i class="glyphicon glyphicon-remove align-cross" style="color: red;"></i></a>
                               <input type="hidden" id="hidden_info_<%= index %>" name="items[]" value="<%= ad_item[0] %>|<%= ad_item[1] %>|<%= ad_item[2] %>"/>
                             </td>
                           </tr>
