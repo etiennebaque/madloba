@@ -9,7 +9,6 @@ class Ad < ActiveRecord::Base
   process_in_background :image
 
   accepts_nested_attributes_for :location
-  accepts_nested_attributes_for :ad_items
 
   validates :title, :location_id, :user_id, :description, presence: true
   validates :is_giving, inclusion: [true, false]

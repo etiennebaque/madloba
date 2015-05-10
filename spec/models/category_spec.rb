@@ -3,7 +3,7 @@ require 'shoulda/matchers'
 
 RSpec.describe Category, :type => :model do
   it 'has a valid factory' do
-    expect(FactoryGirl.create(:category)).to be_valid
+    expect(FactoryGirl.create(:first_category)).to be_valid
   end
 
   it 'is invalid without a name' do
