@@ -51,7 +51,7 @@
             <%= select_tag :q, options_for_select([[t('home.searching'),'searching'], [t('home.giving'),'giving']], params['q']), class: 'form-control selectpicker' %>
           </div>
           <div class="form-group">
-            <%= text_field_tag :item, params['item'], class:'form-control', placeholder: t('home.search_items'), autocomplete: 'off', :data => {:provide => 'typeahead'} %>
+            <%= text_field_tag :item, params['item'], class:'typeahead form-control', placeholder: t('home.search_items'), autocomplete: 'off' %>
           </div>
           <div class="form-group">
             <%= text_field_tag :location,'', class:'form-control', placeholder: t('home.location_example') %>

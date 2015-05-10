@@ -13,8 +13,20 @@
 
     <script>
         var current_page = "new_ad";
-        // array containing all the item names, used for the type-ahead, on the item field.
-        var all_items = <%= raw all_items.to_json %>;
+
+        // Initializing an object for the type-ahead functionality, to be used when adding up items to the ad
+        // (to be used in general.js)
+        var searched_in_all_items = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: {
+                url: '/getItems?type=prefetch_items'
+            },
+            remote: {
+                url: '/getItems?item=%QUERY&type=search_items',
+                wildcard: '%QUERY'
+            }
+        });
 
         var location_number = <%= user_locations_number %>;
         var category_select = "<%= escape_javascript new_item_category_tag %>";

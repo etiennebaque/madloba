@@ -66,3 +66,8 @@ IMAGE_NO_STORAGE = 'nostorage'
 IMAGE_AMAZON_S3 = 's3'
 IMAGE_ON_SERVER = 'server'
 
+# Constants used for type-ahead functionalities
+PREFETCH_AD_ITEMS = 'prefetch_ad_items'
+SEARCH_IN_AD_ITEMS = 'search_ad_items'
+PREFETCH_ALL_ITEMS = 'prefetch_items'
+SEARCH_IN_ALL_ITEMS = 'search_items'

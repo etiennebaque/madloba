@@ -12,9 +12,14 @@ $(document).ready(function(){
         }
     });
 
-    // Activates type-ahead functionality, in the item search bar, on the home page.
-    if (typeof all_ads_items != 'undefined'){
-        $('#item').typeahead({source: all_ads_items});
+
+    // Type-ahead for the item text field, in the main navigation bar.
+    // searched_ad_items object is initialized in home layout template.
+    if (typeof searched_ad_items != 'undefined') {
+        $('#item').typeahead(null, {
+            display: 'value',
+            source: searched_ad_items
+        });
     }
 
     // Navigation bar on device: closes the navigation menu, when click.
@@ -33,12 +38,6 @@ $(document).ready(function(){
     // ***********************
     // Create/Edit an ad pages
     // ***********************
-
-    // Activates type-ahead on the "Create an Ad" page
-    if (typeof all_items != 'undefined'){
-        $('#ad_item').typeahead({source: all_items});
-        $('.ad_item').typeahead({source: all_items});
-    }
 
     // When the focus is out of the item field, we check whether this item is already in the database.
     // If it is, the category for this item already exists. If it is not, the user has to choose a category for this new item.
@@ -142,7 +141,7 @@ $(document).ready(function(){
             }else{
                 // Create and edit ad page, for list of items
                 // item_name_field, category_select and quantity_select are initialized in ads_helper.rb
-                html_to_append = '<div class="form-inline" style="padding-left: 14px;">' + item_name_field +'&nbsp;'+ category_select + '&nbsp;'+
+                html_to_append = '<div class="form-inline" id="new_item_section" style="padding-left: 14px;">' + item_name_field +'&nbsp;'+ category_select + '&nbsp;'+
                 quantity_select + '&nbsp;'+ '<button type="button" id="new_dynamic_button_add" class="btn btn-info btn-sm disabled">Add</button>&nbsp;<a href="#" class="remove_field"><i class="glyphicon glyphicon-remove align-cross" style="color: red;"></i></a></div>';
             }
 
@@ -151,7 +150,13 @@ $(document).ready(function(){
 
             if (!is_district_page){
                 // Create / Edit ad pages: adding typeahead event to added text field.
-                $('#ad_item').typeahead({source: all_items});
+                if (typeof searched_in_all_items != 'undefined') {
+                    $('#ad_item').typeahead(null, {
+                        display: 'value',
+                        source: searched_in_all_items
+                    });
+                }
+
                 $('#ad_item').focusin(function(){
                     sendAjaxRequest = true;
                 });
@@ -520,7 +525,7 @@ function add_item(e, index){
         '<td class="vert-align">'+$("#ad_item").val()+'</td>' +
         '<td class="vert-align">'+$("#category option:selected").text()+'</td>' +
         '<td class="vert-align ad_new_number_items_col">'+$("#new_quantity_text").val()+'</td>' +
-        '<td class="center update_align_link">'+update_link+delete_link+hidden_field+'</td>' +
+        '<td class="vert-align update_align_link">'+update_link+delete_link+hidden_field+'</td>' +
         '</tr>';
 
     if (index == 0){
@@ -648,11 +653,18 @@ function update_item(e, is_being_updated, object){
         var current_category_select = category_select.replace('>'+categories_td.text(), 'selected >'+categories_td.text()).replace('id="category"','id="category" disabled');
         var current_quantity_select = quantity_select.replace('>'+quantity_td.text(), 'selected >'+quantity_td.text());
 
-        item_name_td.html('<input autocomplete="off" class="form-control ad_item" data-provide="typeahead" id="ad_item" size="30" type="text" value="'+item_name_td.text()+'">');
+        item_name_td.html('<input autocomplete="off" class="form-control ad_item typeahead" id="ad_item" size="30" type="text" value="'+item_name_td.text()+'">');
         categories_td.html(current_category_select);
         quantity_td.html(current_quantity_select);
 
-        $('#ad_item').typeahead({source: all_items});
+        // Adding the typeahead functionality to the item text field.
+        if (typeof searched_in_all_items != 'undefined') {
+            $('#ad_item').typeahead(null, {
+                display: 'value',
+                source: searched_in_all_items
+            });
+        }
+
         $('#ad_item').focusin(function(){
             sendAjaxRequest = true;
         });

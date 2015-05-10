@@ -64,6 +64,9 @@ Madloba::Application.routes.draw do
   get '/getCityGeocodes', to: 'application#getCityGeocodes'
   get '/getNominatimLocationResponses', to: 'application#getNominatimLocationResponses'
 
+  # Ajax call to get the list of items, for autocomplete, when searching for an item, or creating/editing an ad.
+  get '/getItems', to: 'application#get_items'
+
   root 'home#index'
 
 end

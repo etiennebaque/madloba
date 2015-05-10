@@ -61,7 +61,9 @@ en:
     password: Password
     record_not_exist: Sorry, this page does not exist!
     giving: "I'm giving away:"
+    giving_away: "Giving away:"
     searching: "I'm searching for:"
+    searching_for: "Searching for:"
     search_items: Type an item
     location_example: Street name, postal code...
     search: Search

@@ -45,7 +45,7 @@ module User::AdsHelper
 
   # Create / Edit ad: Tag used to generate the html code for the item name field, when adding up an item to the ad.
   def new_item_name_tag
-    tag :input, id: 'ad_item', class: 'form-control ad_item', size: 25, type: 'text', autocomplete: 'off', data: {provide: 'typeahead'}
+    tag :input, id: 'ad_item', class: 'form-control ad_item typeahead', size: 25, type: 'text', autocomplete: 'off'
   end
 
   # Create / Edit ad: Tag used to generate the html code for the item category drop down, when adding up an item to the ad.
