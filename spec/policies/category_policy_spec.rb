@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe CategoryPolicy do
+describe CategoryPolicy, type: :policy do
 
   let(:user) { FactoryGirl.create(:user) }
-  let(:category) { FactoryGirl.create(:category) }
+  let(:category) { FactoryGirl.create(:first_category) }
   let(:admin) { FactoryGirl.create(:admin) }
   let(:unsigned_user) { nil }
 

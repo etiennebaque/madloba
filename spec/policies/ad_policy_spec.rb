@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe AdPolicy do
+describe AdPolicy, type: :policy do
 
   let(:user) { FactoryGirl.create(:user) }
-  let(:ad) { FactoryGirl.create(:ad, user: user) }
+  let(:ad) { FactoryGirl.create(:ad_with_items, user: user) }
   let(:admin) { FactoryGirl.create(:admin) }
   let(:unsigned_user) { nil }
 

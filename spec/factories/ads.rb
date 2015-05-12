@@ -15,7 +15,7 @@ FactoryGirl.define do
 
   factory :ad_with_items, parent: :ad do |f|
     f.number_of_items {1}
-    after_create {|ad| create(:ad_with_first_item, ad: ad)}
+    #after_create {|ad| create(:ad_with_first_item, ad: ad)}
   end
 
   factory :invalid_ad_no_item, parent: :ad do |f|
