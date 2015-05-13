@@ -108,12 +108,23 @@ module ApplicationHelper
   def getMapSettingsWithSeveralItems(location, hasCenterMarker, clickableMapMarker, items)
     getMapSettings(location, hasCenterMarker, clickableMapMarker)
 
+    # Specific info related to ads#show
     @mapSettings['ad_show'] = []
-    items.each_with_index do |item, index|
-      @mapSettings['ad_show'][index] = {}
-      @mapSettings['ad_show'][index]['icon'] = item.category.icon
-      @mapSettings['ad_show'][index]['color'] = item.category.marker_color
-      @mapSettings['ad_show'][index]['item_name'] = item.name
+    if location.is_area
+      @mapSettings['ad_show_is_area'] = true
+      items_to_show = []
+      items.each do |item|
+        items_to_show << item.name
+      end
+      @mapSettings['popup_message'] = items_to_show.join(', ')
+    else
+      @mapSettings['ad_show_is_area'] = false
+      items.each_with_index do |item, index|
+        @mapSettings['ad_show'][index] = {}
+        @mapSettings['ad_show'][index]['icon'] = item.category.icon
+        @mapSettings['ad_show'][index]['color'] = item.category.marker_color
+        @mapSettings['ad_show'][index]['item_name'] = item.name
+      end
     end
 
   end

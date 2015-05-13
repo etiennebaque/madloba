@@ -134,6 +134,10 @@ span.disabled { color:gray; }
     color: #FFFFFF !important;
 }
 
+.area_link:hover{
+    font-weight: bold;
+}
+
 
 /*
  * Top navigation bar
@@ -289,10 +293,6 @@ body {
 
 .typeahead:focus {
     border: 2px solid #0097cf;
-}
-
-#new_item_section .twitter-typeahead{
-    display: inline !important;
 }
 
 .tt-query {

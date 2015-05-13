@@ -142,7 +142,7 @@ $(document).ready(function(){
                 // Create and edit ad page, for list of items
                 // item_name_field, category_select and quantity_select are initialized in ads_helper.rb
                 html_to_append = '<div class="form-inline" id="new_item_section" style="padding-left: 14px;">' + item_name_field +'&nbsp;'+ category_select + '&nbsp;'+
-                quantity_select + '&nbsp;'+ '<button type="button" id="new_dynamic_button_add" class="btn btn-info btn-sm disabled">Add</button>&nbsp;<a href="#" class="remove_field"><i class="glyphicon glyphicon-remove align-cross" style="color: red;"></i></a></div>';
+                quantity_select + '&nbsp;'+ '<button type="button" id="new_dynamic_button_add" class="btn btn-info btn-sm disabled" style="vertical-align: -10px;">Add</button>&nbsp;<a href="#" class="remove_field"><i class="glyphicon glyphicon-remove align-cross" style="color: red; vertical-align: -10px;"></i></a></div>';
             }
 
             // Adding dynamically the fields to the page.

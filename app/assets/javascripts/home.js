@@ -59,7 +59,7 @@ function getLocationsPropositions(){
                         var item = $('#item').val();
                         var search_action = $('#q').val();
 
-                        for (i = 0; i < data.length; i++) {
+                        for (var i = 0; i < data.length; i++) {
                             var proposed_location = data[i];
                             var url = "/search?lat="+proposed_location['lat']+"&lon="+proposed_location['lon'];
                             if (item != ''){

@@ -31,28 +31,38 @@ function initLeafletMap(map_settings_array){
 
     if (map_settings_array['hasCenterMarker'] == true){
         if (map_settings_array['ad_show']){
-            // Several Center marker on the map (on the ads#show page)
-            // Displays a marker for each item tied to the ad we're showing the details of.
 
-            // Using the Marker Cluster plugin to spiderfy this ad's item marker.
-            markers = new L.MarkerClusterGroup({spiderfyDistanceMultiplier : 2, zoomToBoundsOnClick: false});
+            if (map_settings_array['ad_show_is_area'] == true){
+                // Postal or district address (area type) on ads#show.
+                // Shows an area icon on the map of the ads show page.
+                marker = new L.marker(
+                    [ mylat, mylng ],
+                    {icon: areaIcon, title: map_settings_array['popup_message']}
+                );
+                marker.addTo(map).bindPopup(map_settings_array['popup_message']).openPopup();
 
-            for (var i= 0; i<map_settings_array['ad_show'].length; i++){
-                var item_category = map_settings_array['ad_show'][i];
-                icon_to_use = L.AwesomeMarkers.icon({
-                    prefix: 'fa',
-                    markerColor: item_category['color'],
-                    icon: item_category['icon']
-                });
+            }else{
+                // Exact address on ads#show. Potentially several center markers on the map.
+                // Displays a marker for each item tied to the ad we're showing the details of.
+                // Using the Marker Cluster plugin to spiderfy this ad's item marker.
+                markers = new L.MarkerClusterGroup({spiderfyDistanceMultiplier : 2, zoomToBoundsOnClick: false});
+                for (var i= 0; i<map_settings_array['ad_show'].length; i++){
+                    var item_category = map_settings_array['ad_show'][i];
+                    icon_to_use = L.AwesomeMarkers.icon({
+                        prefix: 'fa',
+                        markerColor: item_category['color'],
+                        icon: item_category['icon']
+                    });
 
-                var center_marker = L.marker([ mylat, mylng ], {icon: icon_to_use});
-                if (map_settings_array['marker_message'] != ""){
-                    center_marker.bindPopup(map_settings_array['marker_message'] + ' - ' + item_category['item_name']).openPopup();
+                    var center_marker = L.marker([ mylat, mylng ], {icon: icon_to_use});
+                    if (map_settings_array['marker_message'] != ""){
+                        center_marker.bindPopup(map_settings_array['marker_message'] + ' - ' + item_category['item_name']).openPopup();
+                    }
+
+                    markers.addLayer(center_marker);
                 }
-
-                markers.addLayer(center_marker);
+                map.addLayer(markers);
             }
-            map.addLayer(markers);
 
         }else{
             // Center single marker on the map
@@ -70,7 +80,6 @@ function initLeafletMap(map_settings_array){
                 center_marker.addTo(map);
             }
         }
-
     }
 
     if (map_settings_array['clickableMapMarker'] != 'none'){
@@ -144,7 +153,7 @@ function putLocationMarkers(){
         Object.keys(locations_postal).forEach(function (area_code) {
             var locations = locations_postal[area_code];
 
-            var popup_html_text = createPopupHtmlArea("In this area (<b>"+area_code+"</b>)<br /><br />", locations);
+            var popup_html_text = createPopupHtmlArea("In this area (<b>"+area_code+"</b>)<br /><br />", locations, 'postal', area_code, area_code);
 
             marker = new L.marker(
                 [area_geocodes[area_code]['latitude'],area_geocodes[area_code]['longitude']],
@@ -160,8 +169,9 @@ function putLocationMarkers(){
     if (locations_district != null && Object.keys(locations_district).length > 0){
         Object.keys(locations_district).forEach(function (district_id) {
             var locations = locations_district[district_id];
+            var district_name = area_geocodes[district_id]['name'];
 
-            var popup_html_text = createPopupHtmlArea("In this district (<b>"+area_geocodes[district_id]['name']+"</b>)<br /><br />", locations);
+            var popup_html_text = createPopupHtmlArea("In this district (<b>"+district_name+"</b>)<br /><br />", locations, 'district', district_id, district_name);
 
             marker = new L.marker(
                 [area_geocodes[district_id]['latitude'],area_geocodes[district_id]['longitude']],
@@ -173,6 +183,26 @@ function putLocationMarkers(){
         })
     }
 
+    // Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
+    $('#map').on('click', '.area_link', function(){
+        var input = $(this).attr('id').split('|');
+        $.get("/showSpecificAds", {item: input[0], type: input[1], area: input[2]}, function (data){
+            var html_to_append = '<ul>';
+            for (var i = 0; i < data.length; i++) {
+                html_to_append = html_to_append + '<li><a href="/ads/' + data[i]['id'] + '/">' +data[i]['title']+ '</a></li>';
+            }
+            html_to_append = html_to_append + '</ul>';
+            $('#ads-modal-body-id').html(html_to_append);
+            $('#adsModalTitle').html(input[0] + ' in ' + input[3] + ' area');
+            var options = {
+                "backdrop" : "static",
+                "show" : "true"
+            }
+            $('#adsModal').modal(options);
+        })
+    });
+
+    // Adding all the markers to the map.
     map.addLayer(markers);
 
 }
@@ -217,12 +247,23 @@ function createPopupHtml(first_sentence, ad, index){
  * @param location
  * @returns Popup text content.
  */
-function createPopupHtmlArea(first_sentence, locations_from_same_area){
+function createPopupHtmlArea(first_sentence, locations_from_same_area, area_type, area_id, area_name){
     var is_giving_item = false;
     var is_accepting_item = false;
 
+    // Adding a explanatory note, before listing items
+    var explanation = "<i>Select an item below for more details.</i><br /><br />"
+    first_sentence = first_sentence + explanation;
+
     var people_give = "Item(s) being given away:<br />";
     var people_accept = "Item(s) being searched for:<br />";
+
+    // This hash will count how many ads we have, per promoted item.
+    var ad_number_per_item = {};
+
+    // This array will be used to sort items alphabetically.
+    var sorted_items = [];
+
     for (var i=0; i<locations_from_same_area.length; i++){
         var location = locations_from_same_area[i];
 
@@ -231,20 +272,48 @@ function createPopupHtmlArea(first_sentence, locations_from_same_area){
 
             for (var k=0; k<ad['items'].length; k++){
                 var item = ad['items'][k];
-                var popup_item_name = "<span style='color:" + marker_colors[item['category']['marker_color']] + "';><strong>" + item['name'] + "</strong></span>";
-                var popup_ad_link = "<a href='/ads/"+ad['id']+"/'>"+ad['title']+"</a>";
 
-                if (ad['is_giving'] == true){
-                    is_giving_item = true;
-                    people_give = people_give + popup_item_name + ': ' + popup_ad_link + '<br />';
+                var item_marker_color = item['name'] + '|' + marker_colors[item['category']['marker_color']];
+
+                if (item_marker_color in ad_number_per_item){
+                    ad_number_per_item[item_marker_color]['number'] = ad_number_per_item[item_marker_color]['number'] + 1;
                 }else{
-                    is_accepting_item = true;
-                    people_accept = people_accept + popup_item_name + ': ' + popup_ad_link + '<br />';
+                    ad_number_per_item[item_marker_color] = {};
+                    ad_number_per_item[item_marker_color]['number'] = 1;
+                    ad_number_per_item[item_marker_color]['is_giving'] = ad['is_giving'];
+                    sorted_items.push(item_marker_color);
                 }
+
             }
         }
     }
 
+    // We now sort all the items we worked with right above (they are appended with marker colors, but still, items get sorted).
+    sorted_items = sorted_items.sort();
+
+    // Popup for this area is created here.
+    for (var i=0; i<sorted_items.length; i++){
+        var item_marker_color = sorted_items[i];
+
+        var item_info = item_marker_color.split('|');
+        var item_name = item_info[0];
+        var marker_color = item_info[1];
+        var number_of_ads = ad_number_per_item[item_marker_color]['number'];
+
+        var popup_item_name = "<span style='color:" + marker_color + "';>" + item_name + "</span>";
+        var link_id = item_name+'|'+area_type+'|'+area_id+'|'+area_name;
+        var popup_ad_link = "- <a href='#' class='area_link' id='"+link_id+"'>"+popup_item_name+" ("+number_of_ads+")</a>"
+
+        if (ad_number_per_item[item_marker_color]['is_giving'] == true){
+            is_giving_item = true;
+            people_give = people_give + popup_ad_link + '<br />';
+        }else{
+            is_accepting_item = true;
+            people_accept = people_accept + popup_ad_link + '<br />';
+        }
+    }
+
+    // Putting all the sections of the popup together.
     if (!is_giving_item && is_accepting_item){
         first_sentence = first_sentence + people_accept;
     }else if (!is_accepting_item && is_giving_item){

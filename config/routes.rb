@@ -67,6 +67,10 @@ Madloba::Application.routes.draw do
   # Ajax call to get the list of items, for autocomplete, when searching for an item, or creating/editing an ad.
   get '/getItems', to: 'application#get_items'
 
+  # Ajax call to show the ads related to 1 type of item and to 1 district/area.
+  get '/showSpecificAds', to: 'home#showSpecificAds'
+
+
   root 'home#index'
 
 end

@@ -56,6 +56,7 @@ en:
     delete_all: Delete all
     refine_location: Refine location
     cancel: Cancel
+    close: Close
     sign_register: Sign in / Register
     e-mail: E-mail
     password: Password
