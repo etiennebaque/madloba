@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/etiennebaque/madloba.svg)](https://travis-ci.org/etiennebaque/madloba)
+
 Madloba
 =======
 Madloba is a free, open-source solution that connects people who have things to exchange. Each Madloba website uses a map that allows users to visualize at a glance what their neighbours have to give away or what they are looking for.
