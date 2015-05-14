@@ -216,11 +216,30 @@
 
 </div>
 
+
+<!-- Modal popup that shows several ads promoting the same item, in a specific district/area -->
+<div class="modal fade" id="adsModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="adsModalTitle"></h4>
+      </div>
+      <div class="modal-body" id="ads-modal-body-id">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><%= t('home.close') %></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <%= render 'shared/footer' %>
 
 <!--  /.container -->
 
-<!-- Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and initializeMap partial that create the actual map)-->
+<!-- Includes all the Javascript related to map rendering, to be loaded after page
+(Leaflet, MapQuest, and initializeMap partial that create the actual map)-->
 <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
 
 <!-- Leaflet plug-ins and library used on the home page -->
@@ -231,9 +250,9 @@
 <script>
     // specific script to render map markers and initialize the sidebar.
 
-    var locations_exact = <%= raw @locations_exact.to_json(:include => { :ads => { :include =>  {:item => { :include => :category }}}}) %>;
-    var locations_postal = <%= raw @locations_postal.to_json(:include => { :ads => { :include =>  {:item => { :include => :category }}}}) %>;
-    var locations_district = <%= raw @locations_district.to_json(:include => { :ads => { :include =>  {:item => { :include => :category }}}}) %>;
+    var locations_exact = <%= raw @locations_exact.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}}) %>;
+    var locations_postal = <%= raw @locations_postal.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}}) %>;
+    var locations_district = <%= raw @locations_district.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}}) %>;
 
     var area_geocodes = <%= raw @area_geocodes.to_json %>;
     var marker_colors = <%= raw MARKER_COLORS.to_json %>;

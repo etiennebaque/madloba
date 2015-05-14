@@ -66,7 +66,7 @@
                       <tr>
                         <th><%= t('admin.title') %></th>
                         <th><%= t('admin.ad.giving_accepting_title') %></th>
-                        <th><%= t('admin.item_quantity') %></th>
+                        <th><%= t('admin.items_quantity') %></th>
                         <th><%= t('admin.location_tab') %></th>
                         <th><%= t('admin.expiration_date') %></th>
                         <th><%= t('admin.actions') %></th>
@@ -77,7 +77,7 @@
                           <tr>
                             <td class="vert-align"><%= ad.title %></td>
                             <td class="vert-align"><%= ad.is_giving ? t('admin.ad.giving_away') : t('admin.ad.accepting') %></td>
-                            <td class="vert-align"><%= "#{ad.item.name} (#{ad.number_of_items})" %></td>
+                            <td class="vert-align"><%= ad.item_list %></td>
                             <td class="vert-align"><a href="/user/locations/<%= ad.location.id %>/edit"><%= ad.location.location_full_name %></a></td>
                             <% if ad.expire_date.to_s != '2100-01-01' %>
                                 <td class="vert-align"><%= ad.expire_date %></td>

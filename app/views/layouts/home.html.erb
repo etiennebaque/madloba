@@ -14,11 +14,22 @@
   <!-- Javascript files to be included in all non-admin pages -->
   <%= javascript_include_tag 'jquery-1.11.1.js' %>
   <%= javascript_include_tag 'bootstrap.min', 'bootstrap-select.min' %>
-  <%= javascript_include_tag 'bootstrap3-typeahead.min', 'general' %>
+  <%= javascript_include_tag 'typeahead.bundle.min', 'general' %>
 
   <script>
-      // array containing all the item names, used for the type-ahead.
-      var all_ads_items = <%= raw all_ads_items.to_json %>;
+      // Initializing an object for the type-ahead functionality, in the main navigation bar.
+      // (to be used in general.js)
+      var searched_ad_items = new Bloodhound({
+          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          prefetch: {
+              url: '/getItems?type=prefetch_ad_items'
+          },
+          remote: {
+              url: '/getItems?item=%QUERY&type=search_ad_items',
+              wildcard: '%QUERY'
+          }
+      });
   </script>
   <%= javascript_include_tag 'home' %>
 

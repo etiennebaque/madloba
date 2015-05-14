@@ -5,7 +5,7 @@ RSpec.describe User::ItemsController, :type => :controller do
 
   before :each do
     # Making sure we're not redirected to the setup screens.
-    setting = Setting.find_or_create_by('setup_step')
+    setting = Setting.find_or_create_by(key: 'setup_step')
     setting.value = 0
     setting.save
 
@@ -19,26 +19,26 @@ RSpec.describe User::ItemsController, :type => :controller do
 
   describe 'GET #show' do
     it 'assigns the requested item to @item' do
-      item = FactoryGirl.create(:item)
+      item = FactoryGirl.create(:first_item)
       get :show, id: item
       expect(assigns(:item)).to eq(item)
     end
 
     it 'renders the right view' do
-      get :show, id: FactoryGirl.create(:item)
+      get :show, id: FactoryGirl.create(:first_item)
       expect(response).to render_template('item')
     end
   end
 
   describe 'GET #edit' do
     it 'assigns the requested item to @item' do
-      item = FactoryGirl.create(:item)
+      item = FactoryGirl.create(:first_item)
       get :edit, id: item
       expect(assigns(:item)).to eq(item)
     end
 
     it 'renders the right view' do
-      get :edit, id: FactoryGirl.create(:item)
+      get :edit, id: FactoryGirl.create(:first_item)
       expect(response).to render_template('item')
     end
   end
@@ -58,7 +58,7 @@ RSpec.describe User::ItemsController, :type => :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       before do
-        @item = FactoryGirl.attributes_for(:item, category_id: FactoryGirl.create(:category))
+        @item = FactoryGirl.attributes_for(:first_item, category_id: FactoryGirl.create(:first_category))
       end
 
       it 'creates a new item' do
@@ -90,7 +90,7 @@ RSpec.describe User::ItemsController, :type => :controller do
 
   describe 'PUT #update' do
     before :each do
-      @item = FactoryGirl.create(:item, name: 'old item name')
+      @item = FactoryGirl.create(:first_item, name: 'old item name')
     end
 
     context 'with valid attributes' do
@@ -133,7 +133,7 @@ RSpec.describe User::ItemsController, :type => :controller do
 
   describe 'DELETE #destroy' do
     before :each do
-      @item = FactoryGirl.create(:item)
+      @item = FactoryGirl.create(:first_item)
     end
 
     it 'deletes the item' do

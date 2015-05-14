@@ -21,6 +21,9 @@
 
 en:
   activerecord:
+    attributes:
+      ad:
+        number_of_items: ''
     errors:
       models:
         category:
@@ -35,6 +38,9 @@ en:
           attributes:
             image:
               too_long: must be less than 5MB.
+            number_of_items:
+              greater_than: "Please add at least 1 item to your ad"
+
   home:
     home: Home
     page: Home page
@@ -50,12 +56,15 @@ en:
     delete_all: Delete all
     refine_location: Refine location
     cancel: Cancel
+    close: Close
     sign_register: Sign in / Register
     e-mail: E-mail
     password: Password
     record_not_exist: Sorry, this page does not exist!
     giving: "I'm giving away:"
+    giving_away: "Giving away:"
     searching: "I'm searching for:"
+    searching_for: "Searching for:"
     search_items: Type an item
     location_example: Street name, postal code...
     search: Search
@@ -85,6 +94,7 @@ en:
     demo_sidebar_note_html: (Demo) As an administrator, you can change the colors and the icons of these categories in the %{link}.
     admin_panel: admin panel
     same_area: Ads related to a same area
+    update: Update
   errors:
     oops: "Oops!"
     not_found: 404 Page Not Found
@@ -99,9 +109,9 @@ en:
     name: "Location name:"
     name_help: Give a name to your new location (eg shop name, random name you give your workshop...). It will be shown publicly. Leave blank if you don't want to assign any name.
     name_to_use: "Which name would you like to use for this ad?*:"
-    ad_action: "What are you doing with your item?*:"
-    ad_action_giving: I'm giving it away
-    ad_action_accepting: I'm searching for/accepting it
+    ad_action: "What are you doing with your items?*:"
+    ad_action_giving: I'm giving them away
+    ad_action_accepting: I'm searching for/accepting them
     name_username: the username
     name_fullname: the full name
     definition: "Enter your location*:"
@@ -139,9 +149,12 @@ en:
     has_expired: This ad has expired on %{expire_date}, and is not visible on the website any longer.
     title: "Ad title*:"
     title_help: e.g. 'Gives away 5 shirts' or 'I want to get rid of my old laptop'...
-    item: "Item*:"
+    item: "Item(s)*:"
+    no_item_added: No item added so far
+    item_name: Name
+    category_header: Category
     item_help: Type the item you're giving away/looking for (choose it in the list, if it appears in it).
-    number_item: Number of items
+    number_item: Quantity
     location_website: "Location website:"
     send_message: Send your message
     send_message_label: Send a message to %{name} about this ad
@@ -170,8 +183,8 @@ en:
     get_back_to: You can directly get back to %{first_name} by replying to this e-mail.
     success_sent: Your message has been sent successfully.
     summary: "Summary:"
-    giving_away: Giving away
-    accepting: Accepting
+    giving_away: "Giving away:"
+    accepting: "Searching for:"
     edit_current_location: Edit current location
     ad_create_expire: Your ad will expire in %{day_number} days, on %{expire_date}.
     ad_has_expired: Sorry, this ad has expired, and is not visible anymore.
@@ -193,7 +206,7 @@ en:
     dear: "Dear %{name}"
     ad_created: You have successfully created the following ad, on %{site_name}
     ad_title: Ad title
-    item: Item
+    item: Items
     description: Description
     where_pick_up: Where to pick up the item
     where_to_drop: Where to drop the item
@@ -222,7 +235,6 @@ en:
     leave_blank: (leave blank if you don't want to change it)
     need_current: (we need your current password to confirm your changes)
     cancel_account: Cancel my account
-    update: Update
     unhappy: Unhappy?
     you_sure: Are you sure?
     back: Back
@@ -273,7 +285,7 @@ en:
     marker: Marker
     icon: Icon
     edit_delete: Edit details / Delete
-    item_quantity: Item (quantity)
+    items_quantity: Items (quantity)
     user: User
     website: Website
     created_by_user: Created by user
@@ -418,6 +430,9 @@ en:
       area_district: Area defined by a district
       map_description: Click on the 'Add district' link, type a name for this new district, and click on the map to define its location.
       error_update_district: An server error occurred while updating districts. Please try again later.
+      district_name: District name
+      latitude: Latitude
+      longitude: Longitude
     map_settings:
       title: Map settings
       type: "Map type:"

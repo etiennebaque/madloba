@@ -118,6 +118,27 @@ class HomeController < ApplicationController
     render 'home/about'
   end
 
+  # Ajax call to show the ads related to 1 type of item and to 1 district/area.
+  # Call made when click on link, in area marker popup.
+  def showSpecificAds
+    item = params['item']
+    location_type = params['type'] # 'postal', or 'district'
+    area_value = params['area'] # code postal area code, or district id
+    ads = Ad.joins(:location, :items).where('expire_date >= ? AND locations.loc_type = ? AND items.name = ?', Date.today, location_type, item)
+
+    if location_type == 'postal'
+      ads = ads.where("locations.postal_code LIKE '#{area_value}%'")
+    elsif location_type == 'district'
+      ads = ads.where('locations.district_id = ?', area_value)
+    end
+
+    result = []
+    ads.each do |ad|
+      result << {id: ad.id, title: ad.title, is_giving: ad.is_giving}
+    end
+
+    render json: result
+  end
 
   private
 

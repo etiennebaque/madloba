@@ -13,7 +13,7 @@ class Location < ActiveRecord::Base
   # This method returns the right query to display relevant markers, on the home page.
   def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action )
 
-    locations = Location.includes(ads: {item: :category}).type(location_type).references(:ads)
+    locations = Location.includes(ads: {items: :category}).type(location_type).references(:ads)
 
     if cat_nav_state || searched_item
       if cat_nav_state

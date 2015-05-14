@@ -134,9 +134,9 @@
                       <table class="table table-striped">
                         <thead>
                         <tr>
-                          <th>District name</th>
-                          <th>Latitude</th>
-                          <th>Longitude</th>
+                          <th><%= t('admin.area_settings.district_name') %></th>
+                          <th><%= t('admin.area_settings.latitude') %></th>
+                          <th><%= t('admin.area_settings.longitude') %></th>
                           <th></th>
                         </tr>
                         </thead>
@@ -147,7 +147,7 @@
                               <td class="vert-align"><%= district.latitude %></td>
                               <td class="vert-align"><%= district.longitude %></td>
                               <td class="vert-align">
-                                <button type="button" id="<%= district.id %>" class="district-update btn btn-info btn-xs">Update</button>
+                                <button type="button" id="<%= district.id %>" class="district_update btn btn-info btn-xs"><%= t('home.update') %></button>
                               </td>
                             </tr>
                         <% end %>

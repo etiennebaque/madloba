@@ -13,10 +13,27 @@
 
     <script>
         var current_page = "new_ad";
-        // array containing all the item names, used for the type-ahead, on the item field.
-        var all_items = <%= raw all_items.to_json %>;
+
+        // Initializing an object for the type-ahead functionality, to be used when adding up items to the ad
+        // (to be used in general.js)
+        var searched_in_all_items = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: {
+                url: '/getItems?type=prefetch_items'
+            },
+            remote: {
+                url: '/getItems?item=%QUERY&type=search_items',
+                wildcard: '%QUERY'
+            }
+        });
 
         var location_number = <%= user_locations_number %>;
+        var category_select = "<%= escape_javascript new_item_category_tag %>";
+        var item_name_field = "<%= escape_javascript new_item_name_tag %>";
+        var quantity_select = "<%= escape_javascript new_item_quantity_tag %>";
+        var item_index = <%= @ad_items_info.count %>;
+        var number_of_item_lines = <%= @ad_items_info.count %>;
     </script>
 
 
@@ -83,39 +100,53 @@
               </div>
             </div>
 
-            <!-- Item -->
+            <!-- Items -->
             <div class="form-group">
               <%= f.label :item, t('ad.item'), class: 'col-lg-2 control-label' %>
-              <div class="col-lg-6">
-                <%= text_field_tag 'ad_item', params['ad_item'], class: 'form-control help-message', autocomplete: 'off',
-                                   :data => {:provide => 'typeahead', :content => t('ad.item_help'), :placement => 'right',
-                                             :toggle => 'popover', :trigger => 'hover focus'} %>
+              <div class="col-lg-10" style="padding-top: 3px;">
+                <table id="dynamic-table" class="table table-striped" style="width: 80%;">
+                  <thead>
+                  <tr>
+                    <th><%= t('ad.item_name') %></th>
+                    <th><%= t('ad.category_header') %></th>
+                    <th><%= t('ad.number_item') %></th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody id="items_body">
+                  <% if @ad_items_info.length > 0 %>
+                      <% @ad_items_info.each_with_index do |ad_item, index| %>
+                          <tr id="item_line_<%= index %>">
+                            <td class="district_name vert-align"><%= ad_item[0] %></td>
+                            <td class="vert-align"><%= category_hash[ad_item[1].to_i] %></td>
+                            <td class="vert-align"><%= ad_item[2] %></td>
+                            <td class="update_align_link">
+                              <a href="#" id="aditem_<%= index %>" class="btn btn-link dynamic_update"><i class="glyphicon glyphicon-pencil align-cross"></i></a>
+                              <a href="#" id="aditem_remove_<%= index %>" class="btn btn-link dynamic_remove"><i class="glyphicon glyphicon-remove align-cross" style="color: red;"></i></a>
+                              <input type="hidden" id="hidden_info_<%= index %>" name="items[]" value="<%= ad_item[0] %>|<%= ad_item[1] %>|<%= ad_item[2] %>"/>
+                            </td>
+                          </tr>
+                      <% end %>
+                  <% else %>
+                      <tr>
+                        <td class="district_name vert-align" colspan="4"><i><%= t('ad.no_item_added') %></i></td>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
               </div>
-            </div>
 
-            <!-- Message that asks user to choose a category underneath, when new item is entered in field above -->
-            <div class="form-group">
               <div class="col-lg-2"></div>
-              <div id="item_notification" class="col-lg-10"></div>
+              <div class="col-lg-8">
+                <!-- "Add item" link -->
+                <div id="dynamic_wrapper" class="form-group"></div>
+                <a id="dynamic_add_link" class="btn btn-link" style="padding: 0px;" href="#"><%= t('admin.add_item') %></a>
+              </div>
+
             </div>
 
-            <!-- Categories -->
-            <div id="category-section" class="form-group hide">
-              <%= f.label :category, t('ad.category'), class: 'col-lg-2 control-label' %>
-              <div class="col-lg-6">
-                <%= select_tag :category, options_for_select(@categories), class: 'form-control help-message',
-                               :data => {:content => t('ad.category_help'), :placement => 'right',
-                                         :toggle => 'popover', :trigger => 'hover focus'} %>
-              </div>
-            </div>
-
-            <!-- Number of items -->
-            <div class="form-group">
-              <%= f.label :number_of_items, t('ad.number_item')+'*:', class: 'col-lg-2 control-label' %>
-              <div class="col-lg-1">
-                <%= f.number_field :number_of_items, class: 'form-control', maxlength: '4', min: 1, max: 1000 %>
-              </div>
-            </div>
+            <!-- Number of items (ie. number of rows in item table) added to the form -->
+            <%= f.hidden_field :number_of_items, value: @ad.number_of_items %>
 
             <!-- Giving / Accepting items -->
             <div class="form-group">
@@ -168,7 +199,7 @@
                                 <%= t('ad.remove_image') %>
                               </label>
                             </div>
-                        <% elsif @ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0) %>
+                        <% elsif @ad.image && (@ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0)) %>
                             <div class="ad-processing">
                               <%= t('ad.image_currently_processed') %><br />
                               <%= t('ad.will_show_up') %>

@@ -4,7 +4,7 @@ RSpec.describe User::UsersController, :type => :controller do
 
   before :each do
     # Making sure we're not redirected to the setup screens.
-    setting = Setting.find_or_create_by('setup_step')
+    setting = Setting.find_or_create_by(key: 'setup_step')
     setting.value = 0
     setting.save
 

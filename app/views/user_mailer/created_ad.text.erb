@@ -3,7 +3,10 @@
 <%= t('mailer.ad_created', site_name: @site_name) %>:
 
 - <%= t('mailer.ad_title') %>: <%= @ad['title'] %>
-- <%= t('mailer.item') %>: <%= @ad['item_name'] %>
+- <%= t('mailer.item') %>:
+  <% @ad['items'].each do |item| %>
+      - <%= item %>
+<% end %>
 <% if @ad['is_giving'] %>
     - <%= t('mailer.where_pick_up') %>: <%= @ad['location'] %>
 <% else %>

@@ -104,12 +104,29 @@ module ApplicationHelper
 
   private
 
-
-  def getMapSettingsWithCategory(location, hasCenterMarker, clickableMapMarker, category)
+  # Info to display several markers on ads#show (1 marker per item)
+  def getMapSettingsWithSeveralItems(location, hasCenterMarker, clickableMapMarker, items)
     getMapSettings(location, hasCenterMarker, clickableMapMarker)
 
-    @mapSettings['category_icon'] = category.icon
-    @mapSettings['category_color'] = category.marker_color
+    # Specific info related to ads#show
+    @mapSettings['ad_show'] = []
+    if location.is_area
+      @mapSettings['ad_show_is_area'] = true
+      items_to_show = []
+      items.each do |item|
+        items_to_show << item.name
+      end
+      @mapSettings['popup_message'] = items_to_show.join(', ')
+    else
+      @mapSettings['ad_show_is_area'] = false
+      items.each_with_index do |item, index|
+        @mapSettings['ad_show'][index] = {}
+        @mapSettings['ad_show'][index]['icon'] = item.category.icon
+        @mapSettings['ad_show'][index]['color'] = item.category.marker_color
+        @mapSettings['ad_show'][index]['item_name'] = item.name
+      end
+    end
+
   end
 
   # Map settings function that initialize hash to be used to create map tiles.
@@ -133,10 +150,12 @@ module ApplicationHelper
   # Initializes the existing list of districts.
   def initialize_areas
     all_district = District.all
-    @districts = all_district.collect{|d| [d.name, d.id] }
-    @districts_geocodes = {}
-    all_district.each do |d|
-      @districts_geocodes[d.id] = [d.latitude, d.longitude]
+    if all_district
+      @districts = all_district.collect{|d| [d.name, d.id] }
+      @districts_geocodes = {}
+      all_district.each do |d|
+        @districts_geocodes[d.id] = [d.latitude, d.longitude]
+      end
     end
 
     @area_type = Setting.find_by_key('area_type').value
