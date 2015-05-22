@@ -39,51 +39,48 @@ $(document).ready(function(){
     // Create/Edit an ad pages
     // ***********************
 
-    // When the focus is out of the item field, we check whether this item is already in the database.
-    // If it is, the category for this item already exists. If it is not, the user has to choose a category for this new item.
-    // Also, the 'sendAjaxRequest' variable is used to make sure that we make only 1 Ajax call - using timeout was making multiple
-    // unnecessary ajax calls (timeout is needed in order to make sure the item field is populated after onclick on typeahead, before making ajax call).
-    var sendAjaxRequest = false;
-    $('#ad_item').focusin(function(){
-        sendAjaxRequest = true;
-    });
-
-
-    $('#ad_item').on('focusout change', function(){
-        setTimeout(function() {
-            var item_name = $('#ad_item').val();
-            if (sendAjaxRequest){
-                sendAjaxRequest = false;
-                $.ajax({
-                    url: "/checkItemExists",
-                    global: false,
+    function bindTypeaheadToItemSelect(object){
+        object.selectpicker({
+                liveSearch: true
+            })
+            .ajaxSelectPicker({
+                ajax: {
+                    url: '/getItems',
                     type: "GET",
-                    data: { item_name: item_name },
-                    cache: false,
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader("Accept", "application/json");
-                        xhr.setRequestHeader("Content-Type", "application/json");
-                    },
-                    success: function(data) {
-                        if (data['id'] != null && data['name'] != null){
-                            // It is an existing item. We select the associated category, in the drop down box, on the same page.
-                            $('#category').val(data.id)
-                            $('#category').prop ('disabled', true);
-                            $('#item_notification').html('');
-                            $('#category-section').addClass('hide');
-                        }else{
-                            // This is not an existing item. We make the "categories" drop down box appear,
-                            // so that the user can select the appropriate category from this item.
-                            $('#item_notification').html('<i>Choose a category for this new item you just entered</i>');
-                            $('#category').prop ('disabled', false);
-                            $('#category-section').removeClass('hide');
-                        }
+                    dataType: 'json',
+                    data: function () {
+                        var params = {
+                            item: '{{{q}}}',
+                            type: 'search_items'
+                        };
+                        return params;
                     }
+                },
+                locale: {
+                    emptyTitle: 'Search for items...',
+                    statusInitialized: 'Start typing an item',
+                    statusNoResults: "No results. Select 'Create a new item'."
+                },
+                preprocessData: function(data){
+                    var items = [];
+                    var len = data.length;
+                    for(var i = 0; i < len; i++){
+                        var item = data[i];
+                        items.push(
+                            {
+                                'value': item.id,
+                                'text': item.value,
+                                'disable': false
+                            }
+                        );
+                    }
+                    return items;
+                },
+                preserveSelected: false
+            });
+    }
 
-                });
-            }
-        }, 400);
-    });
+    bindTypeaheadToItemSelect($('#items .selectpicker'));
 
     // "Create ad" form: when "New location" radio button is selected, or is already checked.
     if($('#new_location_radio').is(':checked')) {
@@ -114,12 +111,39 @@ $(document).ready(function(){
         }
     });
 
-    // Create/Edit ad page and Area settings page: JQuery snippet to add text fields dynamically, when "Add district..." link is clicked.
+
+    $("#items a.add_fields").
+        data("association-insertion-position", 'before').
+        data("association-insertion-node", 'this');
+
+    $('#items').on('cocoon:after-insert',
+        function() {
+            $(".ad-item-fields a.add_fields").
+                data("association-insertion-position", 'before').
+                data("association-insertion-node", 'this');
+                $('.selectpicker').selectpicker('refresh');
+                bindTypeaheadToItemSelect($('#items .selectpicker'));
+
+            $('.ad-item-fields').on('cocoon:after-insert',
+                function() {
+                    $(this).children(".item_from_list").remove();
+                    $(this).children("a.add_fields").hide();
+                });
+        });
+
+    $('.ad-item-fields').bind('cocoon:after-insert',
+        function(e) {
+            e.stopPropagation();
+            $(this).find(".item_from_list").remove();
+            $(this).find("a.add_fields").hide();
+            $('.selectpicker').selectpicker('refresh');
+        });
+
+
+    // Area settings page: JQuery snippet to add text fields dynamically, when "Add district..." link is clicked.
     var max_fields      = 10; //maximum input boxes allowed
     var wrapper         = $("#dynamic_wrapper"); //Fields wrapper
     var add_button      = $("#dynamic_add_link"); //Add button ID
-
-    var is_district_page = (window.location.href.indexOf("areasettings") > -1);
 
     var x = 1; //initial text box count
     $(add_button).click(function(e){ //on add input button click
@@ -130,80 +154,25 @@ $(document).ready(function(){
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
             var html_to_append = ''
-            if (is_district_page){
-                // Area setting page, for list of districts
-                html_to_append = '<div class="form-group"><div class="form-inline">' +
-                '<input type="text" name="mytext[]" id="new_district_text" class="form-control" placeholder="Type a district name here..."/> ' +
-                '<span class="latitude_text">(latitude)</span>, <span class="longitude_text">(longitude)</span>&nbsp;' +
-                '<button type="button" id="new_district_button_add" class="btn btn-info btn-sm disabled">Add</button>&nbsp;<a href="#" class="remove_field">Remove</a>' +
-                '</div></div>';
-
-            }else{
-                // Create and edit ad page, for list of items
-                // item_name_field, category_select and quantity_select are initialized in ads_helper.rb
-                html_to_append = '<div class="form-inline" id="new_item_section" style="padding-left: 14px;">' + item_name_field +'&nbsp;'+ category_select + '&nbsp;'+
-                quantity_select + '&nbsp;'+ '<button type="button" id="new_dynamic_button_add" class="btn btn-info btn-sm disabled" style="vertical-align: -10px;">Add</button>&nbsp;<a href="#" class="remove_field"><i class="glyphicon glyphicon-remove align-cross" style="color: red; vertical-align: -10px;"></i></a></div>';
-            }
+            // Area setting page, for list of districts
+            html_to_append = '<div class="form-group"><div class="form-inline">' +
+            '<input type="text" name="mytext[]" id="new_district_text" class="form-control" placeholder="Type a district name here..."/> ' +
+            '<span class="latitude_text">(latitude)</span>, <span class="longitude_text">(longitude)</span>&nbsp;' +
+            '<button type="button" id="new_district_button_add" class="btn btn-info btn-sm disabled">Add</button>&nbsp;<a href="#" class="remove_field">Remove</a>' +
+            '</div></div>';
 
             // Adding dynamically the fields to the page.
             $(wrapper).append(html_to_append); //add input box
-
-            if (!is_district_page){
-                // Create / Edit ad pages: adding typeahead event to added text field.
-                if (typeof searched_in_all_items != 'undefined') {
-                    $('#ad_item').typeahead(null, {
-                        display: 'value',
-                        source: searched_in_all_items
-                    });
-                }
-
-                $('#ad_item').focusin(function(){
-                    sendAjaxRequest = true;
-                });
-                $('#ad_item').on('focusout change', function(){
-                    setTimeout(function() {
-                        // Get category based on the item that was just typed.
-                        if (sendAjaxRequest) {
-                            sendAjaxRequest = false;
-                            get_category_name();
-                        }
-                    }, 400);
-                    if ($('#ad_item').val().replace(/ /g,'') != ''){
-                        $("#new_dynamic_button_add").removeClass('disabled');
-                    }
-                });
-            }
 
         }
     });
 
     var is_being_updated = false;
 
-    // Create / Edit an ad: Event to fire, when "Delete" link (cross icon) is clicked, when deleting an item.
-    $('#dynamic-table').on("click",".dynamic_remove", function(e){
-        var updated_item_index = $(this).attr('id').split('aditem_remove_')[1];
-        $('#item_line_'+updated_item_index).remove();
-        number_of_item_lines = number_of_item_lines - 1;
-
-        // If we delete the only item from the table, we have to write the default message back ("No item added so far")
-        if (number_of_item_lines == 0){
-            $("#items_body").html('<tr><td class="vert-align" colspan="4"><i>No item added so far</i></td></tr>');
-        }
-
-        // Decreasing the row counter (f.number_of_items)
-        var current_item_number = $('#ad_number_of_items').val();
-        $('#ad_number_of_items').val(parseInt(current_item_number) - 1);
-    });
-
     // Event to fire, when "Update"/"OK" links (pencil/tick icons) are clicked, when updating an existing district
     $('#dynamic-table').on("click",".dynamic_update", function(e){
-        if (is_district_page){
-            // We are on the "Manage area" admin page.
-            is_being_updated = update_district(e, is_being_updated);
-        }else{
-            // We are on the ad edit or the ad new pages.
-            is_being_updated = update_item(e, is_being_updated, $(this));
-        }
+        // We are on the "Manage area" admin page.
+        is_being_updated = update_district(e, is_being_updated);
     });
 
     // Event when user clicks on the "Remove" link, when about to add a item/district.
@@ -215,16 +184,8 @@ $(document).ready(function(){
 
     // Event fired when "Add" button is clicked, when adding a new district to the district list.
     $(wrapper).on("click","#new_dynamic_button_add", function (e) {
-        if (is_district_page){
-            // We are on the "Manage area" admin page.
-            add_district(e);
-        }else{
-            // We are on the ad edit or the ad new pages.
-            add_item(e, item_index);
-            item_index = item_index + 1;
-            number_of_item_lines = item_index;
-        }
-
+        // We are on the "Manage area" admin page.
+        add_district(e);
     });
 
     // Area setting page - submit button.
@@ -390,6 +351,8 @@ $(document).ready(function(){
             location_type = 'area';
         }
 
+
+
         // Ajax call to get geocodes (latitude, longitude) of an exact location defined by address, postal code, city...
         // This call is triggered by "Find this city", "Find this general location" buttons,
         // on Map settings page, location edit page, map setup page...
@@ -446,41 +409,6 @@ $(document).ready(function(){
 
 });
 
-/**
- * Ajax call that returns the category of a typed item, if this item exists
- */
-function get_category_name() {
-
-    var item_name = $('#ad_item').val();
-    $.ajax({
-        url: "/checkItemExists",
-        global: false,
-        type: "GET",
-        data: { item_name: item_name },
-        cache: false,
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("Accept", "application/json");
-            xhr.setRequestHeader("Content-Type", "application/json");
-        },
-        success: function(data) {
-            if (data['id'] != null && data['name'] != null){
-                // It is an existing item. We select the associated category, in the drop down box, on the same page.
-                $('#category').val(data.id)
-                $('#category').prop ('disabled', true);
-                $('#item_notification').html('');
-                $('#category-section').addClass('hide');
-            }else{
-                // This is not an existing item. We make the "categories" drop down box appear,
-                // so that the user can select the appropriate category from this item.
-                $('#item_notification').html('<i>Choose a category for this new item you just entered</i>');
-                $('#category').prop ('disabled', false);
-                $('#category-section').removeClass('hide');
-            }
-        }
-
-    });
-
-}
 
 /**
  * Function that adds a district to the list of districts, in the "Area settings" page (admin panel)
@@ -506,44 +434,6 @@ function add_district(e){
     $("#dynamic_add_link").removeClass('disabled');
 }
 
-/**
- * When creating or editing an ad, this function adds up an item to the current list of items, tied to this ad.
- * @param e
- * @param index
- */
-function add_item(e, index){
-
-    // Update and delete links, to be added to the list (table) of items.
-    var update_link = '<a href="#" id="aditem_'+index+'" class="btn btn-link dynamic_update"><i class="glyphicon glyphicon-pencil align-cross"></i></a>';
-    var delete_link = '<a href="#" id="aditem_remove_'+index+'" class="btn btn-link dynamic_remove"><i class="glyphicon glyphicon-remove align-cross" style="color: red;"></i></a>';
-
-    // To each added item, we create the following hidden value: 'item_name|category_id|quatity'
-    var hidden_value = $("#ad_item").val() + '|' + $("#category").val() + '|' + $("#new_quantity_text").val();
-    var hidden_field = '<input type="hidden" id="hidden_info_'+index+'" name="items[]" value="'+hidden_value+'"/>';
-
-    var to_append = '<tr id="item_line_'+index+'">' +
-        '<td class="vert-align">'+$("#ad_item").val()+'</td>' +
-        '<td class="vert-align">'+$("#category option:selected").text()+'</td>' +
-        '<td class="vert-align ad_new_number_items_col">'+$("#new_quantity_text").val()+'</td>' +
-        '<td class="vert-align update_align_link">'+update_link+delete_link+hidden_field+'</td>' +
-        '</tr>';
-
-    if (index == 0){
-        $("#items_body").empty();
-    }
-
-    $("#items_body").append(to_append);
-
-    e.preventDefault();
-    $('#dynamic_wrapper').empty();
-    $(".dynamic_update").removeClass('disabled');
-    $(".dynamic_remove").removeClass('disabled');
-    $("#dynamic_add_link").removeClass('disabled');
-
-    // Increasing the row counter (f.number_of_items)
-    var current_item_number = $('#ad_number_of_items').val();
-    $('#ad_number_of_items').val(parseInt(current_item_number) + 1);
-}
 
 /**
  * Function that updates an existing district, and put the changes back to the district table ("Area settings" page - admin panel).
@@ -602,87 +492,6 @@ function update_district(e, is_being_updated){
         $('.dynamic_update').addClass('disabled');
         $('.being-updated').removeClass('disabled');
         $("#area_settings_submit").addClass('disabled');
-
-        is_being_updated = true;
-    }
-
-    return is_being_updated;
-}
-
-/**
- * Function that updates an existing item, and put the changes back to the item table (Create ad/Edit ad page).
- * @param e
- * @param is_being_updated
- * @param object
- * @returns {*}
- */
-function update_item(e, is_being_updated, object){
-    e.preventDefault();
-
-    var updated_item_index = object.attr('id').split('aditem_')[1];
-    var quantity_td = object.parent().prev();
-    var categories_td = quantity_td.prev();
-    var item_name_td = categories_td.prev();
-
-    if (is_being_updated){
-        // User just clicked on 'OK' link (tick icon), the row is now updated.
-        object.removeClass('being-updated');
-        object.html('<i class="glyphicon glyphicon-pencil align-cross"></i>');
-
-        // Updating here the hidden value.
-        var updated_hidden_value = $("#ad_item").val() + '|' + $("#category").val() + '|' + $("#new_quantity_text").val();
-        $("#hidden_info_"+updated_item_index).val(updated_hidden_value);
-
-        item_name_td.html($('#ad_item').val());
-        categories_td.html($('#category option:selected').text());
-        quantity_td.html($('#new_quantity_text').val());
-
-        $("#dynamic_add_link").removeClass('disabled');
-        $(".dynamic_update").removeClass('disabled');
-        $(".dynamic_remove").removeClass('disabled');
-        $("#area_settings_submit").removeClass('disabled');
-
-        is_being_updated = false;
-
-    }else{
-        // User just clicked on 'Update' button
-        object.addClass('being-updated');
-        object.html('<i class="glyphicon glyphicon-ok align-cross" style="color: green;"></i>');
-
-        // We're creating an input text field and drop down boxes, in order to make update possible
-        var current_category_select = category_select.replace('>'+categories_td.text(), 'selected >'+categories_td.text()).replace('id="category"','id="category" disabled');
-        var current_quantity_select = quantity_select.replace('>'+quantity_td.text(), 'selected >'+quantity_td.text());
-
-        item_name_td.html('<input autocomplete="off" class="form-control ad_item typeahead" id="ad_item" size="30" type="text" value="'+item_name_td.text()+'">');
-        categories_td.html(current_category_select);
-        quantity_td.html(current_quantity_select);
-
-        // Adding the typeahead functionality to the item text field.
-        if (typeof searched_in_all_items != 'undefined') {
-            $('#ad_item').typeahead(null, {
-                display: 'value',
-                source: searched_in_all_items
-            });
-        }
-
-        $('#ad_item').focusin(function(){
-            sendAjaxRequest = true;
-        });
-        $('#ad_item').on('focusout change', function(){
-            setTimeout(function() {
-                if (sendAjaxRequest) {
-                    sendAjaxRequest = false;
-                    get_category_name();
-                }
-            }, 400);
-        });
-
-        $("#dynamic_add_link").addClass('disabled');
-
-        // we're disabling all links from the item table, except the ones which are on the line being updated.
-        $('.dynamic_update').addClass('disabled');
-        $('.dynamic_remove').addClass('disabled');
-        $('.being-updated').removeClass('disabled');
 
         is_being_updated = true;
     }

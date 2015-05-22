@@ -11,28 +11,7 @@
         }
     </style>
 
-    <script>
-
-        // Initializing an object for the type-ahead functionality, to be used when adding up items to the ad
-        // (to be used in general.js)
-        var searched_in_all_items = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: {
-                url: '/getItems?type=prefetch_items'
-            },
-            remote: {
-                url: '/getItems?item=%QUERY&type=search_items',
-                wildcard: '%QUERY'
-            }
-        });
-
-        var category_select = "<%= escape_javascript new_item_category_tag %>";
-        var item_name_field = "<%= escape_javascript new_item_name_tag %>";
-        var quantity_select = "<%= escape_javascript new_item_quantity_tag %>";
-        var item_index = <%= @ad.items.count %>;
-        var number_of_item_lines = <%= @ad_items_info.count %>;
-    </script>
+    <%= javascript_include_tag :cocoon %>
 
 <% end %>
 
@@ -99,11 +78,15 @@
           <div class="box-content">
             <%= form_for [:user, @ad], html: { id: 'ad-edit-form', role: 'form', multipart: true } do |f| %>
 
-
+                <!-- "Delete Ad" and "See published ad" buttons -->
                 <div class="form-group">
-                  <a href="#" class="btn btn-danger btn-delete-right btn-setting"><%= t('admin.ad.delete') %></a>
+                  <a href="#" class="btn btn-danger btn-delete-right btn-setting" style="margin-right: 10px;"><%= t('admin.ad.delete') %></a>
+                  <%= link_to t('ad.see_published'), ad_path(@ad.id), {target: '_blank', class: 'btn btn-info'} %>
                 </div>
 
+                <hr />
+
+                <!-- "Mandatory fields" note -->
                 <div class="form-group">
                   <%= label_tag :field, t('admin.mandatory'), class:'control-label' %>
                 </div>
@@ -152,50 +135,18 @@
                   </div>
                 </div>
 
-                <!-- Items table-->
+                <!-- Items -->
                 <div class="form-group">
                   <%= f.label :item, t('ad.item'), class: 'control-label' %>
                   <div class="form-inline">
-                    <table id="dynamic-table" class="table table-striped" style="width: 80%;">
-                      <thead>
-                      <tr>
-                        <th><%= t('ad.item_name') %></th>
-                        <th><%= t('ad.category_header') %></th>
-                        <th><%= t('ad.number_item') %></th>
-                        <th></th>
-                      </tr>
-                      </thead>
-                      <tbody id="items_body">
-                      <% if @ad_items_info.length > 0 %>
-                          <% @ad_items_info.each_with_index do |ad_item, index| %>
-                              <tr id="item_line_<%= index %>">
-                                <td class="vert-align"><%= ad_item[0] %></td>
-                                <td class="vert-align"><%= category_hash[ad_item[1].to_i] %></td>
-                                <td class="vert-align"><%= ad_item[2] %></td>
-                                <td class="vert-align update_align_link">
-                                  <a href="#" id="aditem_<%= index %>" class="btn btn-link dynamic_update"><i class="glyphicon glyphicon-pencil align-cross"></i></a>
-                                  <a href="#" id="aditem_remove_<%= index %>" class="btn btn-link dynamic_remove"><i class="glyphicon glyphicon-remove align-cross" style="color: red;"></i></a>
-                                  <input type="hidden" id="hidden_info_<%= index %>" name="items[]" value="<%= ad_item[0] %>|<%= ad_item[1] %>|<%= ad_item[2] %>"/>
-                                </td>
-                              </tr>
-                          <% end %>
-                      <% else %>
-                          <tr>
-                            <td class="district_name vert-align" colspan="4"><i><%= t('ad.no_item_added') %></i></td>
-                          </tr>
+                    <div id="items">
+                      <%= f.fields_for :ad_items do |ad_item| %>
+                          <%= render 'shared/ad_item_fields', f: ad_item %>
                       <% end %>
-                      </tbody>
-                    </table>
+                      <%= link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success ad-add-item' %>
+                    </div>
                   </div>
-
-                  <!-- "Add item" link -->
-                  <div id="dynamic_wrapper" class="form-group"></div>
-                  <a id="dynamic_add_link" class="btn btn-link" href="#"><%= t('admin.add_item') %></a>
-
                 </div>
-
-                <!-- Number of items (ie. number of rows in item table) added to the form -->
-                <%= f.hidden_field :number_of_items, value: @ad.number_of_items %>
 
                 <!-- Giving / Accepting items -->
                 <div class="form-group">
@@ -247,7 +198,7 @@
 
                 <!-- Ad description -->
                 <div class="form-group">
-                  <%= f.label :description, t('ad.description'), class: 'control-label' %>
+                  <%= f.label :description, t('ad.description')+'*:', class: 'control-label' %>
                   <div class="form-inline">
                     <%= f.text_area :description, class: 'form-control help-message', rows: 6, cols: 40,
                                     :data => {:content => t('ad.description_help'), :placement => 'right',
@@ -258,9 +209,6 @@
                 <hr />
 
                 <h4><%= t('location.location') %></h4>
-
-
-
                 <!-- List of all the different locations previously entered by the current user -->
                 <div class="form-group">
                   <% if current_user == @ad.user %>
@@ -365,4 +313,5 @@
 <% content_for :scripts do %>
     <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initializeMap partial that create the actual map -->
     <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
+
 <% end %>

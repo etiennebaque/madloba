@@ -63,6 +63,9 @@ gem 'daemons'
 gem 'dalli'
 gem 'memcachier'
 
+# For neested forms
+gem 'cocoon'
+
 group :development, :test do
 
   # Mailcatcher

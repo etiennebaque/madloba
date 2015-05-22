@@ -43,30 +43,4 @@ module User::AdsHelper
     Setting.where(key: 'ad_max_expire').pluck(:value).first
   end
 
-  # Create / Edit ad: Tag used to generate the html code for the item name field, when adding up an item to the ad.
-  def new_item_name_tag
-    tag :input, id: 'ad_item', class: 'form-control ad_item typeahead', style: 'vertical-align: bottom;', size: 25, type: 'text', autocomplete: 'off'
-  end
-
-  # Create / Edit ad: Tag used to generate the html code for the item category drop down, when adding up an item to the ad.
-  def new_item_category_tag
-    categories = Category.pluck(:name, :id)
-    return content_tag :select, options_for_select(categories, nil), id: 'category', class: 'form-control', style: 'vertical-align: bottom;'
-  end
-
-  # Create / Edit ad: Tag used to generate the html code for the quantity text field, when adding up an item to the ad.
-  def new_item_quantity_tag
-    quantities = [['-', '-']]
-    (1..10).each {|n| quantities << [n.to_s,n.to_s]}
-    quantities << ['10+', '10+']
-    return content_tag :select, options_for_select(quantities, nil), id: 'new_quantity_text', class: 'form-control', style: 'vertical-align: bottom;'
-  end
-
-  # Create / Edit ad: Creates a hash of categories, for the item table
-  def category_hash
-    result = {}
-    Category.pluck(:name, :id).each{|cat| result[cat[1]] = cat[0]}
-    return result
-  end
-
 end

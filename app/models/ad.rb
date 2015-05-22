@@ -9,14 +9,18 @@ class Ad < ActiveRecord::Base
   process_in_background :image
 
   accepts_nested_attributes_for :location
+  accepts_nested_attributes_for :ad_items, :reject_if => :all_blank, :allow_destroy => true
+  accepts_nested_attributes_for :items
 
   validates :title, :location_id, :user_id, :description, presence: true
   validates :is_giving, inclusion: [true, false]
   validates :is_anonymous, inclusion: [true, false]
-  validates :number_of_items, numericality: { greater_than: 0 }
+  validate :has_items
   validates_size_of :image, maximum: 5.megabytes
 
-  after_initialize :default_values
+  def has_items
+    errors.add(:base, I18n.t('ad.error_ad_must_have_item')) if (self.ad_items.blank? || self.ad_items.empty?)
+  end
 
   def username_to_display
     if (self.is_anonymous)
@@ -42,15 +46,9 @@ class Ad < ActiveRecord::Base
   def item_list
     result = []
     self.ad_items.each do |ad_item|
-      result << "#{ad_item.item.name} (#{ad_item.quantity})"
+      result << ad_item.item.name
     end
     return result.join(', ')
-  end
-
-  private
-
-  def default_values
-    self.number_of_items ||= 0
   end
 
 end

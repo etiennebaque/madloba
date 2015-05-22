@@ -176,18 +176,18 @@ class ApplicationController < ActionController::Base
     typeahead_type = params[:type]
 
     if typeahead_type == PREFETCH_AD_ITEMS
-      matched_items = Ad.joins(:items).pluck(:name).uniq
+      matched_items = Ad.joins(:items).pluck(:id, :name).uniq
     elsif typeahead_type == PREFETCH_ALL_ITEMS
-      matched_items = Item.all.pluck(:name)
+      matched_items = Item.all.pluck(:id, :name)
     elsif typeahead_type == SEARCH_IN_AD_ITEMS
-      matched_items = Ad.joins(:items).where("name LIKE '%#{params[:item]}%'").pluck(:name).uniq
+      matched_items = Ad.joins(:items).where("name LIKE '%#{params[:item]}%'").pluck(:id, :name).uniq
     elsif typeahead_type == SEARCH_IN_ALL_ITEMS
-      matched_items = Item.where("name LIKE '%#{params[:item]}%'").pluck(:name)
+      matched_items = Item.where("name LIKE '%#{params[:item]}%'").pluck(:id, :name)
     end
 
     result = []
     matched_items.each do |match|
-      result << {value: match}
+      result << {id: match[0].to_s, value: match[1]}
     end
     render json: result
   end

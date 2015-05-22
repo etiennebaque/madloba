@@ -67,12 +67,6 @@ class User::AdsController < ApplicationController
     end
 
     if @ad.save
-      # Now that the ad it saved, we're creating the links between this ad and the items (has_many through relationship)
-      ad_items_to_save = save_items_to_ad(@ad, params)
-      if ad_items_to_save.length > 0
-        @ad.ad_items = ad_items_to_save
-      end
-      @ad.save
 
       flash[:new_ad] = @ad.title
       # Letting the user know when their ad will expire.
@@ -87,9 +81,9 @@ class User::AdsController < ApplicationController
       flatten_ad = @ad.as_json
       flatten_ad['location'] = @ad.location.name_and_or_full_address
       ad_items = []
-      @ad.ad_items.each do |ad_item|
-        ad_items << "#{ad_item.item.name} (#{ad_item.quantity})"
-      end
+      #@ad.ad_items.each do |ad_item|
+        #ad_items << ad_item.item.name
+      #end
       flatten_ad['items'] = ad_items
 
       if is_on_heroku
@@ -114,8 +108,6 @@ class User::AdsController < ApplicationController
     authorize @ad
     initialize_areas
 
-    @ad_items_info = get_ad_items(@ad, params)
-
     getMapSettings(@ad.location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
 
     render layout: 'admin'
@@ -125,30 +117,14 @@ class User::AdsController < ApplicationController
     @ad = Ad.find(params[:id])
     authorize @ad
 
-    params_to_use = nil
-    if params['location_id'] != '0'
-      params_to_use = ad_params_update
-    else
-      params_to_use = ad_params
-    end
-
     # Performing the update.
-    if @ad.update(params_to_use)
-
-      # Now that the ad it saved, we're creating the links between this ad and the items (has_many through relationship)
-      ad_items_to_save = save_items_to_ad(@ad, params)
-      if ad_items_to_save.length > 0
-        ad_items_to_save.each {|ai| @ad.ad_items << ai }
-      end
-      @ad.save
+    if @ad.update(ad_params)
 
       flash[:ad_updated] = @ad.title
       redirect_to edit_user_ad_path(@ad.id)
     else
       # Saving the ad failed.
       flash[:error_ad] = @ad.title
-
-      @ad_items_info = get_ad_items(@ad, params)
 
       initialize_areas
       getMapSettings(@ad.location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
@@ -177,11 +153,10 @@ class User::AdsController < ApplicationController
   end
 
   def ad_params
-    params.require(:ad).permit(:title, :description, :number_of_items, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image, :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :latitude, :longitude, :phone_number, :website, :description])
-  end
-
-  def ad_params_update
-    params.require(:ad).permit(:title, :description, :number_of_items, :is_anonymous, :location_id, :is_giving, :image, :image_cache, :remove_image)
+    params.require(:ad).permit(:title, :description, :is_anonymous, :location_id, :is_giving,
+                               :image, :image_cache, :remove_image,
+                               :ad_items_attributes => [:id, :item_id, :_destroy, :item_attributes => [:id, :name, :category_id, :_destroy] ],
+                               :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :latitude, :longitude, :phone_number, :website, :description])
   end
 
   def ad_location_params
@@ -249,11 +224,6 @@ class User::AdsController < ApplicationController
   private
 
   def initializeNewForm(params)
-    # In the ads#new form, it would have been good practice to have several nested form to manage the multiple items.
-    # However, given the information we need, 4 nested form would have been needed.
-    # We're taking here another route, where we manage ourselves the info we need, regardless of how "deep" this info is from the Ad model.
-    @ad_items_info = get_ad_items(@ad, params)
-
     # Initialize areas (ie districts), when opening the location form.
     initialize_areas
 
@@ -261,76 +231,6 @@ class User::AdsController < ApplicationController
 
     # Initializing the map (when creating a new location)
     getMapSettings(@ad.location, HAS_NOT_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
-  end
-
-  def get_ad_items(ad, params)
-    ad_items_info = []
-    if params && params[:items]
-      params[:items].each do |ad_item|
-        ad_items_info << ad_item.split('|')
-      end
-    else
-      ad.ad_items.each do |ad_item|
-        ad_items_info << [ad_item.item.name, ad_item.item.category.id, ad_item.quantity]
-      end
-    end
-    return ad_items_info
-  end
-
-  # After saving an ad, save_items_to_ad save the relationship between items and this ad.
-  #
-  # This could have been avoided by having a nested form in the ads#edit / ads#new page, but the nature of the information
-  # available in the item table in these forms makes it actually easier to manage these associations manually, via this function underneath.
-  def save_items_to_ad(ad, params)
-    items = params['items']
-    ad_items_to_save = []
-
-    # current_ad_items and future_ad_items are used later in this method,
-    # to check if we have to delete some associations.
-    current_ad_items = []
-    future_ad_items = []
-    if @ad.ad_items
-      current_ad_items = @ad.ad_items.map{|ai| ai.item_id}
-    end
-
-    items.each do |item|
-      item_info = item.split('|') # item_name|category_id|quantity
-      item = Item.find_by_name(item_info[0])
-      if item
-        # this is an existing item. We just need to tie it to the ad.
-        # We check at this point if the relationship between this item and this ad currently exists
-        existing_ad_item = AdItem.where(item: item, ad: @ad)
-        future_ad_items << item.id
-        if existing_ad_item.length > 0
-          # The relationship already exists, we update just the quantity
-          existing_ad_item[0].update_attributes(quantity: item_info[2])
-        else
-          # The relationship between the 2 entities does not exist. Let's create it.
-          ad_item = AdItem.new(item: item, ad: @ad, quantity: item_info[2])
-          ad_item.save
-          ad_items_to_save << ad_item
-        end
-      else
-        # We're dealing with a new item. We need to save it first, before tying it to the ad.
-        new_item = Item.new(category: Category.find(item_info[1]), name: item_info[0])
-        new_item.save
-        future_ad_items << new_item.id
-        ad_item = AdItem.new(item: new_item, ad: @ad, quantity: item_info[2])
-        ad_item.save
-        ad_items_to_save << ad_item
-      end
-    end
-
-    # We're now dealing with the items that have been deleted, by checking that they are in current_ad_items, and not in future_ad_items anymore.
-    puts current_ad_items
-    current_ad_items.each do |item_id|
-      if !future_ad_items.include?item_id
-        aditem_to_delete = AdItem.where(ad: @ad, item_id: item_id).first
-        aditem_to_delete.delete
-      end
-    end
-
-    return ad_items_to_save
   end
 
 end

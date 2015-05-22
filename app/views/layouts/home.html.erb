@@ -9,12 +9,13 @@
   <title><%= site_name %></title>
 
   <!-- CSS files to be included in all non-admin pages -->
-  <%= stylesheet_link_tag 'bootstrap','general', 'bootstrap-select.min' %>
+  <%= stylesheet_link_tag 'bootstrap','general', 'bootstrap-select.min', 'ajax-bootstrap-select' %>
 
   <!-- Javascript files to be included in all non-admin pages -->
   <%= javascript_include_tag 'jquery-1.11.1.js' %>
-  <%= javascript_include_tag 'bootstrap.min', 'bootstrap-select.min' %>
+  <%= javascript_include_tag 'bootstrap.min' %>
   <%= javascript_include_tag 'typeahead.bundle.min', 'general' %>
+  <%= javascript_include_tag 'bootstrap-select.min', 'ajax-bootstrap-select.min' %>
 
   <script>
       // Initializing an object for the type-ahead functionality, in the main navigation bar.
@@ -35,27 +36,28 @@
 
   <%= csrf_meta_tags %>
 
-  <% if notice && !(request.original_url.include? 'setup')%>
-      <!-- We're not displaying any Devise notification during the setup screens -->
-      <div class="alert alert-dismissable alert-success no-margin-bottom">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <%= notice %>
-      </div>
-  <% elsif alert %>
-      <div class="alert alert-dismissable alert-danger no-margin-bottom">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <%= alert %>
-      </div>
-  <% elsif flash[:error] %>
-      <div class="alert alert-dismissable alert-danger no-margin-bottom">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <%= flash[:error] %>
-      </div>
-  <% end %>
-
   <%= yield :head %>
 </head>
 <body>
+
+<% if notice && !(request.original_url.include? 'setup')%>
+    <!-- We're not displaying any Devise notification during the setup screens -->
+    <div class="alert alert-dismissable alert-success no-margin-bottom">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <%= notice %>
+    </div>
+<% elsif alert %>
+    <div class="alert alert-dismissable alert-danger no-margin-bottom">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <%= alert %>
+    </div>
+<% elsif flash[:error] %>
+    <div class="alert alert-dismissable alert-danger no-margin-bottom">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <%= flash[:error] %>
+    </div>
+<% end %>
+
 
 <%= yield %>
 

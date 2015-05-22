@@ -14,12 +14,12 @@ FactoryGirl.define do
   end
 
   factory :ad_with_items, parent: :ad do |f|
-    f.number_of_items {1}
+    f.items item
     #after_create {|ad| create(:ad_with_first_item, ad: ad)}
   end
 
   factory :invalid_ad_no_item, parent: :ad do |f|
-    f.number_of_items {0}
+    #f.number_of_items {0}
   end
 
   factory :invalid_ad_image_too_big, parent: :ad do |f|
