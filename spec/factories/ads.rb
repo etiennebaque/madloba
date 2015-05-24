@@ -7,29 +7,31 @@ FactoryGirl.define do
     f.description { Faker::Lorem.sentence }
     f.is_giving { [true, false].sample}
     f.is_anonymous { [true, false].sample}
-    f.expire_date { DateTime.strptime('2020-02-02', '%Y-%m-%d') }
+    f.expire_date { Date.new(2100,1,1) }
 
     location
     user
+
   end
 
-  factory :ad_with_items, parent: :ad do |f|
-    f.items item
-    #after_create {|ad| create(:ad_with_first_item, ad: ad)}
+  factory :ad_with_items, parent: :ad do
+    ad_items {[build(:ad_with_first_item)]}
+  end
+
+  factory :ad_with_other_items, parent: :ad do
+    ad_items {[build(:ad_with_second_item)]}
   end
 
   factory :invalid_ad_no_item, parent: :ad do |f|
-    #f.number_of_items {0}
+    ad_items {[]}
   end
 
   factory :invalid_ad_image_too_big, parent: :ad do |f|
-    f.image {  }
+    f.image {}
   end
 
   factory :invalid_ad, parent: :ad do |f|
     f.title nil
-    f.location nil
-    f.item nil
   end
 
 end
