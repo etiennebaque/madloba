@@ -90,7 +90,7 @@
                   <%= f.fields_for :ad_items do |ad_item| %>
                       <%= render 'shared/ad_item_fields', f: ad_item %>
                   <% end %>
-                  <%= link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success ad-add-item' %>
+                  <%= link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success' %>
                 </div>
               </div>
             </div>

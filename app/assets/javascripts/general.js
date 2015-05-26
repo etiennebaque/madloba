@@ -39,6 +39,9 @@ $(document).ready(function(){
     // Create/Edit an ad pages
     // ***********************
 
+    // Function that binds events to the item drop down list (in ads#new and ads#edit pages)
+    // These events consists of making ajax call to check what items exists, in order to
+    // create a type-ahead for the search bar of that drop drown box.
     function bindTypeaheadToItemSelect(object){
         object.selectpicker({
                 liveSearch: true
@@ -80,7 +83,7 @@ $(document).ready(function(){
             });
     }
 
-    bindTypeaheadToItemSelect($('#items .selectpicker'));
+    bindTypeaheadToItemSelect($('#items .selectpicker-items'));
 
     // "Create ad" form: when "New location" radio button is selected, or is already checked.
     if($('#new_location_radio').is(':checked')) {
@@ -122,7 +125,7 @@ $(document).ready(function(){
                 data("association-insertion-position", 'before').
                 data("association-insertion-node", 'this');
                 $('.selectpicker').selectpicker('refresh');
-                bindTypeaheadToItemSelect($('#items .selectpicker'));
+                bindTypeaheadToItemSelect($('#items .selectpicker-items'));
 
             $('.ad-item-fields').on('cocoon:after-insert',
                 function() {

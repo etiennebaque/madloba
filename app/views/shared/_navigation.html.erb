@@ -22,9 +22,9 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> <%= current_user.first_name %> <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <% if current_user.user? %>
-                <li><%= link_to 'Your profile', user_index_path %></li>
+                  <li><%= link_to 'Your profile', user_index_path %></li>
               <% elsif current_user.admin? %>
-                <li><%= link_to 'Admin panel', user_index_path %></li>
+                  <li><%= link_to 'Admin panel', user_index_path %></li>
               <% end %>
               <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
             </ul>
@@ -45,23 +45,21 @@
     <!-- Sign in/Register/User drop down menu - end -->
 
     <!-- Search form - start -->
-    <% if all_ads_items %>
-        <form action="/search" method="get" role="search" class="navbar-form navbar-left" id="searchFormId">
-          <div class="form-group">
-            <%= select_tag :q, options_for_select([[t('home.searching'),'searching'], [t('home.giving'),'giving']], params['q']), class: 'form-control selectpicker' %>
-          </div>
-          <div class="form-group">
-            <%= text_field_tag :item, params['item'], class:'typeahead form-control', placeholder: t('home.search_items'), autocomplete: 'off' %>
-          </div>
-          <div class="form-group">
-            <%= text_field_tag :location,'', class:'form-control', placeholder: t('home.location_example') %>
-          </div>
-          <div class="form-group">
-            <%= button_tag t('home.search'), :id => 'btn-form-search', :type => 'button',:class => 'btn btn-default' %>
-          </div>
-          <div class="form-group">\t<span style="color: #d9534f" id="search_error_message"></span></div>
-        </form>
-    <% end %>
+    <form action="/search" method="get" role="search" class="navbar-form navbar-left" id="searchFormId">
+      <div class="form-group">
+        <%= select_tag :q, options_for_select([[t('home.searching'),'searching'], [t('home.giving'),'giving']], params['q']), class: 'form-control selectpicker' %>
+      </div>
+      <div class="form-group">
+        <%= text_field_tag :item, params['item'], class:'typeahead form-control', placeholder: t('home.search_items'), autocomplete: 'off' %>
+      </div>
+      <div class="form-group">
+        <%= text_field_tag :location,'', class:'form-control', placeholder: t('home.location_example') %>
+      </div>
+      <div class="form-group">
+        <%= button_tag t('home.search'), :id => 'btn-form-search', :type => 'button',:class => 'btn btn-default' %>
+      </div>
+      <div class="form-group">\t<span style="color: #d9534f" id="search_error_message"></span></div>
+    </form>
     <!-- Search form - end -->
   </div>
   <!-- /.nav-collapse -->

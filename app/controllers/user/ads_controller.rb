@@ -2,7 +2,7 @@ class User::AdsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   before_action :authenticate_user!, except: [:show]
   before_action :requires_user, except: [:show]
-  after_action :verify_authorized, except: [:checkItemExists, :send_message]
+  after_action :verify_authorized, except: [:send_message]
 
   layout 'home'
 
@@ -21,11 +21,6 @@ class User::AdsController < ApplicationController
         @your_ad_has_expired = true
       end
     end
-
-    # We create a session variable, as a security measure, to make sure that we'll be sending the right message
-    # to the right person, if the user chose to do so.
-    # This session variable will be read in the 'send_message' method below.
-    session["ad_id_#{@ad.id}"] = true
 
     getMapSettingsWithSeveralItems(@ad.location, HAS_CENTER_MARKER, NOT_CLICKABLE_MAP, @ad.items)
   end
@@ -78,19 +73,14 @@ class User::AdsController < ApplicationController
 
       # Sending email confirmation, about the creation of the ad.
       full_admin_url = "http://#{request.env['HTTP_HOST']}/user/manageads"
-      flatten_ad = @ad.as_json
-      flatten_ad['location'] = @ad.location.name_and_or_full_address
-      ad_items = []
-      #@ad.ad_items.each do |ad_item|
-        #ad_items << ad_item.item.name
-      #end
-      flatten_ad['items'] = ad_items
+      # Reloading the now-created ad, with associated items.
+      @ad = Ad.includes(:items).where(id: @ad.id).first
 
       if is_on_heroku
-        UserMailer.created_ad(current_user.as_json, flatten_ad, full_admin_url).deliver
+        UserMailer.created_ad(current_user, @ad, full_admin_url).deliver
       else
         # Queueing email sending, when not on heroku.
-        UserMailer.delay.created_ad(current_user.as_json, flatten_ad, full_admin_url)
+        UserMailer.delay.created_ad(current_user, @ad, full_admin_url)
       end
 
     else
@@ -140,14 +130,12 @@ class User::AdsController < ApplicationController
     deleted_ad_title = @ad.title
 
     if @ad.destroy
-      flash[:success] = "The ad '#{deleted_ad_title}' has been deleted"
+      flash[:success] = t('ad.ad_is_deleted', deleted_ad_title: deleted_ad_title)
       redirect_to user_manageads_path
     else
-      # Saving the ad failed.
+      # Deleting the ad failed.
       flash[:error_delete_ad] = @ad.title
-
       getMapSettings(@ad.location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
-
       render layout: 'admin', action: 'edit'
     end
   end
@@ -163,59 +151,23 @@ class User::AdsController < ApplicationController
     params.require(:ad).require(:location_attributes).permit(:id, :name, :street_number, :address, :postal_code, :province, :city, :loc_type, :latitude, :longitude, :phone_number, :website, :description)
   end
 
-  # Ajax call that checked whether a typed item exist in the database. If it does, we send back the attached category.
-  # Otherwise, it'll be a new item, and the category will have to be chosen by the user.
-  def checkItemExists
-    item_name = params['item_name']
-    result = {}
-
-    if item_name && item_name != ''
-      # An item is being searched.
-      item = Item.where(name: item_name).first
-      if item
-        # The item already exists in the database
-        result['id'] = item.category.id
-        result['name'] = item.category.name
-      end
-    end
-
-    render json: result
-  end
 
   # This method is called when a user replies and sends a message to another user, who posted an ad.
   # It sends the reply to the user who published this ad.
   def send_message
-    # We're making sure that we're sending the right message to the right publisher.
-    ad_url = request.headers['HTTP_REFERER']
-    ad_url_array = ad_url.split('/')
-    i = 0
-    ad_url_array.each do |url|
-      if url == 'ads'
-        i += 1
-        break
-      end
-      i += 1
-    end
+    message = params[:message]
+    ad = Ad.find(params['id'])
 
-    ad_id = ad_url_array[i]
-    if session["ad_id_#{ad_id}"]
-      message = params[:message]
-      ad = Ad.find(params['id'])
-
-      if message && message.gsub(/\s+/, '') != ''
-        ad_info = {'title' => ad.title, 'first_name' => ad.user.first_name, 'email' => ad.user.email}
-        if is_on_heroku
-          UserMailer.send_message_for_ad(current_user.as_json, message, ad_info).deliver
-        else
-          UserMailer.delay.send_message_for_ad(current_user.as_json, message, ad_info)
-        end
-        flash[:success] = t('ad.success_sent')
-        session["ad_id_#{ad_id}"] = false
+    if message && message.gsub(/\s+/, '') != ''
+      ad_info = {'title' => ad.title, 'first_name' => ad.user.first_name, 'email' => ad.user.email}
+      if is_on_heroku
+        UserMailer.send_message_for_ad(current_user, message, ad_info).deliver
       else
-        flash[:error] = t('ad.error_empty_message')
+        UserMailer.delay.send_message_for_ad(current_user, message, ad_info)
       end
+      flash[:success] = t('ad.success_sent')
     else
-      flash[:error] = t('ad.error_refresh')
+      flash[:error] = t('ad.error_empty_message')
     end
 
     redirect_to ad_path(params['id'])

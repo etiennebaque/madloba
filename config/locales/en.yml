@@ -155,6 +155,7 @@ en:
     category_header: Category
     item_help: Type the item you're giving away/looking for (choose it in the list, if it appears in it).
     number_item: Quantity
+    ad_is_deleted: The ad '%{deleted_ad_title}' has been deleted.
     location_website: "Location website:"
     send_message: Send your message
     send_message_label: Send a message to %{name} about this ad

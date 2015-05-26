@@ -28,6 +28,7 @@ CLICKABLE_MAP_AREA_MARKER = 'area'
 
 GENERAL_AREA_ZOOM_LEVEL = 14
 CLOSER_ZOOM_LEVEL = 16
+MAX_ZOOM_LEVEL = 18
 
 # Marker colors name and hexa-codes
 MARKER_COLORS = {

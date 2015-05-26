@@ -73,10 +73,10 @@ class HomeController < ApplicationController
     # Defining all the categories attached to an item.
     if selected_item_ids
       # We select here only the categories, based on the items found after a search.
-      @categories = Category.joins(items: :ads).where("items.id IN (?)", selected_item_ids).uniq
+      @categories = Category.joins(items: :ads).where("items.id IN (?)", selected_item_ids).order('name asc').uniq
     else
       # We select the categories related to all available items
-      @categories = Category.joins(items: :ads).uniq
+      @categories = Category.joins(items: :ads).order('name asc').uniq
     end
 
     # Queries to get ads to be displayed on the map, based on their locations

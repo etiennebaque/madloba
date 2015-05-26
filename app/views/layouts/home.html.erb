@@ -27,10 +27,12 @@
               url: '/getItems?type=prefetch_ad_items'
           },
           remote: {
-              url: '/getItems?item=%QUERY&type=search_ad_items',
-              wildcard: '%QUERY'
+              url: '/getItems?item=QUERY&type=search_ad_items',
+              wildcard: 'QUERY'
           }
       });
+      searched_ad_items.clearPrefetchCache();
+      searched_ad_items.initialize(true);
   </script>
   <%= javascript_include_tag 'home' %>
 

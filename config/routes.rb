@@ -58,8 +58,6 @@ Madloba::Application.routes.draw do
   resources :ads, :only => [:show, :index, :new, :create], :controller => 'user/ads'
   post 'ads/send_message', to: 'user/ads#send_message'
 
-  get 'checkItemExists', to: 'user/ads#checkItemExists'
-
   # Ajax calls to get details about a location (geocodes, exact address)
   get '/getCityGeocodes', to: 'application#getCityGeocodes'
   get '/getNominatimLocationResponses', to: 'application#getNominatimLocationResponses'

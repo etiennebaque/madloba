@@ -14,7 +14,6 @@ module ApplicationHelper
   end
 
   # Regardless of what the current navigation state is, we need store all the item names into an array, in order to make the type-ahead of the item search bar work.
-  # (TODO: make Ajax calls instead)
   def all_ads_items
     Ad.joins(:item).pluck(:name).uniq
   end
@@ -125,6 +124,9 @@ module ApplicationHelper
         @mapSettings['ad_show'][index]['color'] = item.category.marker_color
         @mapSettings['ad_show'][index]['item_name'] = item.name
       end
+      # Overriding 'zoom_level' data from the database with the max zoom level,
+      # only for the ads@show page and if we're showing an exact address.
+      @mapSettings['zoom_level'] = MAX_ZOOM_LEVEL;
     end
 
   end
@@ -235,7 +237,6 @@ module ApplicationHelper
     @mapSettings['areas'] = areas.as_json
 
     return @mapSettings
-
   end
 
   # Define whether the app is deployed on Heroku or not.

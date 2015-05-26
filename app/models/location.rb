@@ -7,7 +7,7 @@ class Location < ActiveRecord::Base
   validates :latitude , numericality: { greater_than:  -90, less_than:  90 }
   validates :longitude, numericality: { greater_than: -180, less_than: 180 }
 
-  scope :type, -> (location_type) { where('ads.expire_date >= ? AND ads.number_of_items > 0 AND loc_type = ?', Date.today, location_type)}
+  scope :type, -> (location_type) { where('ads.expire_date >= ? AND loc_type = ?', Date.today, location_type)}
 
 
   # This method returns the right query to display relevant markers, on the home page.
