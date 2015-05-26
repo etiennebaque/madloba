@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/etiennebaque/madloba.svg)](https://travis-ci.org/etiennebaque/madloba)
+# Madloba [![Release Version](https://img.shields.io/github/release/etiennebaque/madloba.svg)](https://github.com/etiennebaque/madloba/releases) [![Build Status](https://img.shields.io/travis/etiennebaque/madloba/master.svg)](https://travis-ci.org/etiennebaque/madloba)
 
 Madloba
 =======
@@ -6,7 +6,7 @@ Madloba is a free, open-source solution that connects people who have things to 
 
 More information on [madloba.org](http://madloba.org).
 
-### Deployment of Madloba onto a server
+### Deployment
 
 To deploy your Madloba instance, follow the steps in [the installation guide](https://github.com/etiennebaque/madloba/wiki/Madloba-installation-guide).
 

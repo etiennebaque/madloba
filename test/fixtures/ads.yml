@@ -3,15 +3,13 @@
 one:
   title: MyString
   description: MyString
-  number_of_items: 1
-  item_id: 
+  item_id:
   location_id: 
   user_id: 
 
 two:
   title: MyString
   description: MyString
-  number_of_items: 1
-  item_id: 
+  item_id:
   location_id: 
   user_id: 

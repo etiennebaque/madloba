@@ -35,10 +35,6 @@ RSpec.describe Ad, :type => :model do
     expect(FactoryGirl.build(:ad, title: nil)).not_to be_valid
   end
 
-  it 'is invalid without a number of items' do
-    expect(FactoryGirl.build(:ad, number_of_items: nil)).not_to be_valid
-  end
-
   it 'is invalid without a linked location' do
     expect(FactoryGirl.build(:ad, location: nil)).not_to be_valid
   end

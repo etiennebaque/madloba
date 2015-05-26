@@ -21,9 +21,6 @@
 
 en:
   activerecord:
-    attributes:
-      ad:
-        number_of_items: ''
     errors:
       models:
         category:
@@ -407,7 +404,6 @@ en:
       category: Category
       ads_promoting: Ads promoting this item
       ad_title: Ad title
-      remaining_quantity: Remaining quantity
       no_ad: There is no ad where this item is currently promoted.
       item_deleted: the item '%{deleted_item_name}' has been deleted.
     general_settings:
@@ -438,6 +434,7 @@ en:
       district_name: District name
       latitude: Latitude
       longitude: Longitude
+      add_district: Add district
     map_settings:
       title: Map settings
       type: "Map type:"

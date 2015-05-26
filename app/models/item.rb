@@ -5,4 +5,6 @@ class Item < ActiveRecord::Base
 
   validates :name, :category, presence: true
 
+  before_save { |item| item.name.downcase! }
+
 end

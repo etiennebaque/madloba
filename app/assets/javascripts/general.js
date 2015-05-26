@@ -144,38 +144,90 @@ $(document).ready(function(){
 
 
     // Area settings page: JQuery snippet to add text fields dynamically, when "Add district..." link is clicked.
-    var max_fields      = 10; //maximum input boxes allowed
     var wrapper         = $("#dynamic_wrapper"); //Fields wrapper
     var add_button      = $("#dynamic_add_link"); //Add button ID
 
-    var x = 1; //initial text box count
     $(add_button).click(function(e){ //on add input button click
         e.preventDefault();
         $(".dynamic_update").addClass('disabled');
         $(".dynamic_remove").addClass('disabled');
         $("#dynamic_add_link").addClass('disabled');
-        if(x < max_fields){ //max input box allowed
-            x++; //text box increment
-            var html_to_append = ''
-            // Area setting page, for list of districts
-            html_to_append = '<div class="form-group"><div class="form-inline">' +
-            '<input type="text" name="mytext[]" id="new_district_text" class="form-control" placeholder="Type a district name here..."/> ' +
-            '<span class="latitude_text">(latitude)</span>, <span class="longitude_text">(longitude)</span>&nbsp;' +
-            '<button type="button" id="new_district_button_add" class="btn btn-info btn-sm disabled">Add</button>&nbsp;<a href="#" class="remove_field">Remove</a>' +
-            '</div></div>';
+        $('.remove-existing-district').addClass('disabled');
 
-            // Adding dynamically the fields to the page.
-            $(wrapper).append(html_to_append); //add input box
+        // Area setting page, for list of districts
+        var html_to_append = '<div class="form-group"><div class="form-inline">' +
+        '<input type="text" name="mytext[]" id="new_district_text" class="form-control" placeholder="Type a district name here..."/> ' +
+        '<span class="latitude_text">(latitude)</span>, <span class="longitude_text">(longitude)</span>&nbsp;' +
+        '<button type="button" id="new_dynamic_button_add" class="btn btn-info btn-sm disabled">Add</button>&nbsp;' +
+            '<a href="#" class="remove_field"><i class="glyphicon glyphicon-remove" style="color: red;"></i></a>' +
+        '</div></div>';
 
-        }
+        // Adding dynamically the fields to the page.
+        $(wrapper).append(html_to_append); //add input box
+
     });
 
     var is_being_updated = false;
 
-    // Event to fire, when "Update"/"OK" links (pencil/tick icons) are clicked, when updating an existing district
+    // Event to fire, when "Update"/"OK" links are clicked, when updating an existing district
     $('#dynamic-table').on("click",".dynamic_update", function(e){
         // We are on the "Manage area" admin page.
-        is_being_updated = update_district(e, is_being_updated);
+        e.preventDefault();
+
+        var district_id = $(this).attr('id');
+        var longitude_td = $(this).parent().prev();
+        var latitude_td = longitude_td.prev();
+        var name_td = latitude_td.prev();
+
+        if (is_being_updated){
+            // User just clicked on 'OK' button.
+            $(this).removeClass('being-updated');
+            $(this).text("Update");
+
+            var district_name = name_td.val();
+            var new_name = $('#district_name_update').val();
+
+            // We update the json object that will be sent to server, on form submit.
+            districts[district_id]['name'] = new_name;
+            districts[district_id]['latitude'] = latitude_td.text();
+            districts[district_id]['longitude'] = longitude_td.text();
+
+            name_td.html(new_name);
+            latitude_td.removeClass('latitude_text');
+            longitude_td.removeClass('longitude_text');
+
+            $("#dynamic_add_link").removeClass('disabled');
+            $(".dynamic_update").removeClass('disabled');
+            $("#area_settings_submit").removeClass('disabled');
+            $('.remove-existing-district').removeClass('disabled');
+
+            is_being_updated = false;
+
+            // We remove the marker from the map for this district, as we're done updating.
+            map.removeLayer(newmarker);
+
+        }else{
+            // User just clicked on 'Update' button
+            $(this).addClass('being-updated');
+            $(this).text("OK");
+
+            // We're creating an input text field, in order to make update possible
+            var district_name = name_td.text();
+            name_td.html('<input id="district_name_update" type="text" class="form-control" value="'+district_name+'" />');
+            latitude_td.addClass('latitude_text');
+            longitude_td.addClass('longitude_text');
+
+            putSingleMarker(latitude_td.text(), longitude_td.text(), 'area', district_name);
+
+            // Disabling a few actions in the district table, while we update the current district.
+            $("#dynamic_add_link").addClass('disabled');
+            $('.dynamic_update').addClass('disabled');
+            $('.remove-existing-district').addClass('disabled');
+            $('.being-updated').removeClass('disabled');
+            $("#area_settings_submit").addClass('disabled');
+
+            is_being_updated = true;
+        }
     });
 
     // Event when user clicks on the "Remove" link, when about to add a item/district.
@@ -214,6 +266,14 @@ $(document).ready(function(){
             // We're on the postal code page. We just need to submit the page
             $( "form:first" ).submit();
         }
+    });
+
+    // Area setting page - Delete an existing district
+    $('.remove-existing-district').click(function(){
+        var line_to_remove = $(this).closest('tr');
+        var index_to_remove = line_to_remove.attr('id');
+        districts[index_to_remove]['to_delete'] = true;
+        line_to_remove.remove();
     });
 
 
@@ -354,8 +414,6 @@ $(document).ready(function(){
             location_type = 'area';
         }
 
-
-
         // Ajax call to get geocodes (latitude, longitude) of an exact location defined by address, postal code, city...
         // This call is triggered by "Find this city", "Find this general location" buttons,
         // on Map settings page, location edit page, map setup page...
@@ -430,74 +488,13 @@ function add_district(e){
     districts[new_district_index]['longitude'] = longitude_text;
     new_district_index = new_district_index + 1;
 
-
-    e.preventDefault(); $(this).parent('div').remove(); x--;
-    $(".dynamic_update").removeClass('disabled');
-    $(".dynamic_remove").removeClass('disabled');
-    $("#dynamic_add_link").removeClass('disabled');
-}
-
-
-/**
- * Function that updates an existing district, and put the changes back to the district table ("Area settings" page - admin panel).
- * @param e
- * @param is_being_updated
- * @returns {*}
- */
-function update_district(e, is_being_updated){
     e.preventDefault();
 
-    var district_id = $(this).attr('id');
-    var longitude_td = $(this).parent().prev();
-    var latitude_td = longitude_td.prev();
-    var name_td = latitude_td.prev();
+    // Removing the input field we used to add a district.
+    $('#dynamic_wrapper').empty();
 
-    if (is_being_updated){
-        // User just clicked on 'OK' button.
-        $(this).removeClass('being-updated');
-        $(this).text("Update");
-
-        var district_name = name_td.val();
-        var new_name = $('#district_name_update').val();
-
-        // We update the json object that will be sent to server, on form submit.
-        districts[district_id]['name'] = new_name;
-        districts[district_id]['latitude'] = latitude_td.text();
-        districts[district_id]['longitude'] = longitude_td.text();
-
-        name_td.html(new_name);
-        latitude_td.attr('id','');
-        longitude_td.attr('id','');
-
-        $("#dynamic_add_link").removeClass('disabled');
-        $(".dynamic_update").removeClass('disabled');
-        $("#area_settings_submit").removeClass('disabled');
-
-        is_being_updated = false;
-
-        // We remove the marker from the map for this district, as we're done updating.
-        map.removeLayer(newmarker);
-
-    }else{
-        // User just clicked on 'Update' button
-        $(this).addClass('being-updated');
-        $(this).text("OK");
-
-        // We're creating an input text field, in order to make update possible
-        var district_name = name_td.text();
-        name_td.html('<input id="district_name_update" type="text" class="form-control" value="'+district_name+'" />');
-        latitude_td.attr('class','latitude_text');
-        longitude_td.attr('class','longitude_text');
-
-        putSingleMarker(latitude_td.text(), longitude_td.text(), 'area', district_name);
-
-        $("#dynamic_add_link").addClass('disabled');
-        $('.dynamic_update').addClass('disabled');
-        $('.being-updated').removeClass('disabled');
-        $("#area_settings_submit").addClass('disabled');
-
-        is_being_updated = true;
-    }
-
-    return is_being_updated;
+    $(".dynamic_update").removeClass('disabled');
+    $(".dynamic_remove").removeClass('disabled');
+    $('.remove-existing-district').removeClass('disabled');
+    $("#dynamic_add_link").removeClass('disabled');
 }

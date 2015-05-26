@@ -412,7 +412,7 @@ function onMapClickLocation(e) {
     // latitude_text and longitude_text are classes used on area settings page.
     $(".latitude_text").text(geocodeSplit[0]);
     $(".longitude_text").text(geocodeSplit[1]);
-    $("#new_district_button_add").removeClass('disabled');
+    $("#new_dynamic_button_add").removeClass('disabled');
 
 
     $(".latitude_hidden").val(geocodeSplit[0]);

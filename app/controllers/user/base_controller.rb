@@ -217,7 +217,7 @@ class User::BaseController < ApplicationController
 
     @mapSettings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, CLICKABLE_MAP_AREA_MARKER)
 
-    @districts = District.all
+    @districts = District.all.order('name asc')
     @districts_hash = {}
     @district_index = 0
     @districts.each do |district|
@@ -257,8 +257,13 @@ class User::BaseController < ApplicationController
     districts.each do |id,district|
       this_district = District.find_by_id(id)
       if (this_district)
-        # We update an existing district
-        this_district.update_attributes(name: district['name'], latitude: district['latitude'], longitude: district['longitude'])
+        if district['to_delete']
+          # We delete this district
+          this_district.delete
+        else
+          # We update an existing district
+          this_district.update_attributes(name: district['name'], latitude: district['latitude'], longitude: district['longitude'])
+        end
       else
         this_district = District.new(district)
       end
