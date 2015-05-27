@@ -67,6 +67,14 @@ body {
     text-align: center;
 }
 
+.blocking-notification{
+    position: fixed;
+    top: 150px;
+    left: 10px;
+    font-size: 13px;
+    padding-top: 4px;
+}
+
 /*
  * Home page
  * ---------

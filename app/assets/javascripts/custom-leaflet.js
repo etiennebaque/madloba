@@ -228,7 +228,7 @@ function createPopupHtml(first_sentence, ad, index){
     var item = ad['items'][index];
 
     var popup_ad_link = "<a href='/ads/"+ad['id']+"/'>"+ad['title']+"</a>";
-    var popup_item_name = "<span style='color:" + marker_colors[item['category']['marker_color']] + "';><strong>" + item['name'] + "</strong></span>";
+    var popup_item_name = "<span style='color:" + marker_colors[item['category']['marker_color']] + "';><strong>" + item['name'].capitalizeFirstLetter() + "</strong></span>";
 
     if (ad['is_giving'] == true){
         second_sentence = "Item(s) being given away:<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';

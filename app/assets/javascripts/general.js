@@ -1,4 +1,18 @@
-$(document).ready(function(){
+$(document).ready(function() {
+
+    // This is a test to see if the user is using clients like AdBlock.
+    // The use of AdBlock blocks a lot of markups on this website, unfortunately (eg. everything that has 'ad' in the class name)
+    // When AdBlock is detected, we display a popup indicating that AdBlock should be deactivated for this Madloba website.
+    if ($('#ad-block').length && !$('#ad-block').height()) {
+        $('#wrap').append('<div class="blocking-notification alert alert-dismissible alert-warning" role="alert">' +
+        '<button type="button" class="close" data-dismiss="alert">×</button>' +
+        '<h5>Warning! Use of AdBlock</h5>' +
+        '<p>Your browser is currently using AdBlock.<br />It\'s affecting this Madloba website\'s ability to work well.</p>' +
+        '<p>Turn off AdBlock for this website, and reload the page.</p>' +
+        '</div>');
+    }
+    // Initially created in 'home.html.erb' layout, this test div is now removed.
+    $("#ad-block").remove();
 
     // Popover when "Sign in / Register" link is clicked, in the navigation bar.
     $('#popover').popover({
@@ -467,6 +481,12 @@ $(document).ready(function(){
             map.fitBounds(bounds);
         });
     }
+
+    // This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel, in the home page, the page would scroll down.
+    // When clicking on zoom in/zoom out, this will force to be at the top of the page
+    $('.home-page .leaflet-control-zoom-out, .home-page .leaflet-control-zoom-in').click(function(){
+        $("html, body").animate({ scrollTop: 0 }, 0);
+    });
 
 });
 

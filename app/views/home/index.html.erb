@@ -13,8 +13,8 @@
     <style type="text/css">
         #map {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 0px;
+            left: 0px;
             width: 100% !important;
             height: 100% !important;
         }
@@ -22,7 +22,7 @@
 
 <% end %>
 
-<div id="wrap">
+<div id="wrap" class="home-page">
 
   <%= render 'shared/navigation' %>
 
@@ -233,6 +233,9 @@
   </div>
 </div>
 
+<!-- This div is to check whether or not the user has AdBlock on in their browser.
+If they do, it will affect the website's ability to work well (test carried out in general.js) -->
+<div id="ad-block" style="position: absolute; opacity: 1; top: 0; left: 0;">adblock</div>
 
 <%= render 'shared/footer' %>
 
