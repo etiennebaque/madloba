@@ -159,7 +159,7 @@
               <% Item.all.each do |item| %>
                   <tr>
                     <td class="vert-align"><%= item.id %></td>
-                    <td class="vert-align"><%= item.name %></td>
+                    <td class="vert-align"><%= item.capitalized_name %></td>
                     <td class="vert-align"><i class="fa <%= item.category.icon %>" style="color: <%= "#{MARKER_COLORS[item.category.marker_color]}" %>;"></i>&nbsp;<%= item.category.name %></td>
                     <td class="center"><a class="btn btn-info" href="/user/items/<%= item.id %>/edit"> <i class="glyphicon glyphicon-pencil"></i> Edit / Show details </a></td>
                   </tr>

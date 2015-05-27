@@ -153,7 +153,7 @@ function putLocationMarkers(){
         Object.keys(locations_postal).forEach(function (area_code) {
             var locations = locations_postal[area_code];
 
-            var popup_html_text = createPopupHtmlArea("In this area (<b>"+area_code+"</b>)<br /><br />", locations, 'postal', area_code, area_code);
+            var popup_html_text = createPopupHtmlArea("In this area (<b>"+area_code+"</b>)<br /><br />", locations, 'postal', area_code);
 
             marker = new L.marker(
                 [area_geocodes[area_code]['latitude'],area_geocodes[area_code]['longitude']],
@@ -171,7 +171,7 @@ function putLocationMarkers(){
             var locations = locations_district[district_id];
             var district_name = area_geocodes[district_id]['name'];
 
-            var popup_html_text = createPopupHtmlArea("In this district (<b>"+district_name+"</b>)<br /><br />", locations, 'district', district_id, district_name);
+            var popup_html_text = createPopupHtmlArea("In this district (<b>"+district_name+"</b>)<br /><br />", locations, 'district', district_id);
 
             marker = new L.marker(
                 [area_geocodes[district_id]['latitude'],area_geocodes[district_id]['longitude']],
@@ -184,20 +184,28 @@ function putLocationMarkers(){
     }
 
     // Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
+    // Server side is in home_controller, method showSpecificAds.
     $('#map').on('click', '.area_link', function(){
         var input = $(this).attr('id').split('|');
         $.get("/showSpecificAds", {item: input[0], type: input[1], area: input[2]}, function (data){
             var html_to_append = '<ul>';
-            for (var i = 0; i < data.length; i++) {
-                html_to_append = html_to_append + '<li><a href="/ads/' + data[i]['id'] + '/">' +data[i]['title']+ '</a></li>';
+            for (var i = 0; i < data['ads'].length; i++) {
+                var ad = data['ads'][i];
+                html_to_append = html_to_append + '<li><a href="/ads/' + ad['id'] + '/">' + ad['title']+ '</a></li>';
             }
             html_to_append = html_to_append + '</ul>';
             $('#ads-modal-body-id').html(html_to_append);
-            $('#adsModalTitle').html(input[0] + ' in ' + input[3] + ' area');
+            var icon = '';
+            if (typeof data['icon'] != 'undefined'){
+                icon = '<i class="fa '+ data['icon'] +'" style="color: '+ data['hexa_color'] +'; padding-right: 10px;"></i>';
+            }
+
+            $('#adsModalTitle').html(icon + ' Ads for \'' + input[0].capitalizeFirstLetter() + '\' - ' + data['area_name'] + ' area');
             var options = {
                 "backdrop" : "static",
                 "show" : "true"
             }
+
             $('#adsModal').modal(options);
         })
     });
@@ -247,7 +255,7 @@ function createPopupHtml(first_sentence, ad, index){
  * @param location
  * @returns Popup text content.
  */
-function createPopupHtmlArea(first_sentence, locations_from_same_area, area_type, area_id, area_name){
+function createPopupHtmlArea(first_sentence, locations_from_same_area, area_type, area_id){
     var is_giving_item = false;
     var is_accepting_item = false;
 
@@ -300,8 +308,8 @@ function createPopupHtmlArea(first_sentence, locations_from_same_area, area_type
         var marker_color = item_info[1];
         var number_of_ads = ad_number_per_item[item_marker_color]['number'];
 
-        var popup_item_name = "<span style='color:" + marker_color + "';>" + item_name + "</span>";
-        var link_id = item_name+'|'+area_type+'|'+area_id+'|'+area_name;
+        var popup_item_name = "<span style='color:" + marker_color + ";' >" + item_name.capitalizeFirstLetter() + "</span>";
+        var link_id = item_name+'|'+area_type+'|'+area_id;
         var popup_ad_link = "- <a href='#' class='area_link' id='"+link_id+"'>"+popup_item_name+" ("+number_of_ads+")</a>"
 
         if (ad_number_per_item[item_marker_color]['is_giving'] == true){
@@ -470,4 +478,10 @@ function putSingleMarker(lat, lng, location_marker_type, name){
     map.addLayer(newmarker);
 
     newmarker.bindPopup(name).openPopup();
+}
+
+// Adding capitalization of first word of a string to String prototype.
+// Used to capitalize item names, in marker popup and area modal windows.
+String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
 }

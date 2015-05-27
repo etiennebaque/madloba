@@ -7,4 +7,9 @@ class Item < ActiveRecord::Base
 
   before_save { |item| item.name.downcase! }
 
+  # Capitalized only the first letter of the item name
+  def capitalized_name
+    self.name.slice(0,1).capitalize + self.name.slice(1..-1)
+  end
+
 end

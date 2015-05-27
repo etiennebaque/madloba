@@ -113,7 +113,7 @@ module ApplicationHelper
       @mapSettings['ad_show_is_area'] = true
       items_to_show = []
       items.each do |item|
-        items_to_show << item.name
+        items_to_show << item.capitalized_name
       end
       @mapSettings['popup_message'] = items_to_show.join(', ')
     else

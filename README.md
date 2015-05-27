@@ -1,6 +1,8 @@
 # Madloba [![Release Version](https://img.shields.io/github/release/etiennebaque/madloba.svg)](https://github.com/etiennebaque/madloba/releases) [![Build Status](https://img.shields.io/travis/etiennebaque/madloba/master.svg)](https://travis-ci.org/etiennebaque/madloba)
 
-Madloba is a free, open-source solution that connects people who have things to exchange. Each Madloba website uses a map that allows users to visualize at a glance what their neighbours have to give away or what they are looking for.
+Madloba (beta) is a free, open-source solution that connects people who have things to exchange.
+
+Each Madloba website uses a map that allows users to visualize at a glance what their neighbours have to give away or what they are looking for.
 
 More information on [madloba.org](http://madloba.org).
 

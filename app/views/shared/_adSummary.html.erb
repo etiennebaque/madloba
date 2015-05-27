@@ -8,7 +8,7 @@
   <span>
     <ul>
       <% @ad.ad_items.each do |ad_item| %>
-          <li style="list-style-type: none;"><i class="fa <%= ad_item.item.category.icon %>" style="color: <%= "#{MARKER_COLORS[ad_item.item.category.marker_color]}" %>;"></i>&nbsp;<%= ad_item.item.name %></li>
+          <li style="list-style-type: none;"><i class="fa <%= ad_item.item.category.icon %>" style="color: <%= "#{MARKER_COLORS[ad_item.item.category.marker_color]}" %>;"></i>&nbsp;<%= ad_item.item.capitalized_name %></li>
       <% end %>
     </ul>
     </span>

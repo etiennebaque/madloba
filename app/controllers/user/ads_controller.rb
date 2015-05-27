@@ -144,11 +144,11 @@ class User::AdsController < ApplicationController
     params.require(:ad).permit(:title, :description, :is_anonymous, :location_id, :is_giving,
                                :image, :image_cache, :remove_image,
                                :ad_items_attributes => [:id, :item_id, :_destroy, :item_attributes => [:id, :name, :category_id, :_destroy] ],
-                               :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :latitude, :longitude, :phone_number, :website, :description])
+                               :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :loc_type, :latitude, :longitude, :phone_number, :website, :description])
   end
 
   def ad_location_params
-    params.require(:ad).require(:location_attributes).permit(:id, :name, :street_number, :address, :postal_code, :province, :city, :loc_type, :latitude, :longitude, :phone_number, :website, :description)
+    params.require(:ad).require(:location_attributes).permit(:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :loc_type, :latitude, :longitude, :phone_number, :website, :description)
   end
 
 

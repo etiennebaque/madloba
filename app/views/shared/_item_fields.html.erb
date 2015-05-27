@@ -3,5 +3,5 @@
 </div>
 <div class="nested-fields" style="display:inline-flex;">
   <%= f.text_field :name, class: 'form-control ad_item ad-create-item-field' %>
-  <%= f.select :category_id, options_from_collection_for_select(Category.all, :id, :name), {}, {class: 'selectpicker ad-select-category form-control'} %>
+  <%= f.select :category_id, options_from_collection_for_select(Category.all, :id, :name), {}, {class: 'selectpicker ad-select-category form-control', data: {header: t('ad.select_category') }} %>
 </div>

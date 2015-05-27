@@ -22,6 +22,8 @@ class Ad < ActiveRecord::Base
     errors.add(:base, I18n.t('ad.error_ad_must_have_item')) if (self.ad_items.blank? || self.ad_items.empty?)
   end
 
+  # The publisher of an ad might not want to have their full name publicly displayed.
+  # This method defines whether to show the username or the full name.
   def username_to_display
     if (self.is_anonymous)
       self.user.username
@@ -43,10 +45,11 @@ class Ad < ActiveRecord::Base
     self.image.recreate_versions!
   end
 
+  # To be used in the map popup, on ads#show page.
   def item_list
     result = []
     self.ad_items.each do |ad_item|
-      result << ad_item.item.name
+      result << ad_item.item.capitalized_name
     end
     return result.join(', ')
   end

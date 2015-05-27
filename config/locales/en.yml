@@ -195,10 +195,11 @@ en:
     show_ad_image_processed: The image of this ad is currently being processed.
     will_show_up: It will show up in a moment after you refresh the page.
     create_item: Create a new item
-    write_new_item: Write a new item, and select its category
+    write_new_item: Write a new item and select its category
     add_item: Add an item
     see_published: See this published ad
     error_ad_must_have_item: Please add at least 1 item.
+    select_category: Available categories
   mailer:
     welcome: "Welcome to %{name}!"
     confirmation_descr1: You received this message because an account, based on your e-mail address, was created on this website.
