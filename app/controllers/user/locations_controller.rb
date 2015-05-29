@@ -2,20 +2,14 @@ class User::LocationsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   before_action :authenticate_user!
   before_action :requires_user
-  before_action :get_city_name
   after_action :verify_authorized
 
   layout 'admin'
 
   include ApplicationHelper
 
-  def get_city_name
-    @state = Setting.where(key: 'state').pluck('value').first
-  end
-
   def show
     @location = Location.includes(:ads => :item).includes(:district).where(id: params[:id]).first!
-
     authorize @location
 
     initialize_areas()
@@ -52,7 +46,7 @@ class User::LocationsController < ApplicationController
   end
 
   def edit
-    @location = Location.includes(:ads => :item).includes(:district).where(id: params[:id]).first!
+    @location = Location.includes(ads: :items).includes(:district).where(id: params[:id]).first!
 
     authorize @location
 

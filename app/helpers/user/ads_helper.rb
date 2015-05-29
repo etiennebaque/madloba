@@ -1,10 +1,5 @@
 module User::AdsHelper
 
-  # All items linked to all ads needed for the type-ahead functionality, in the search bar. (it's not necessarily all the existing items)
-  def all_ads_items
-    Ad.joins(:item).pluck(:name).uniq
-  end
-
   # All items from the database, for the item field, in the New ad form
   def all_items
     Item.pluck(:name)
@@ -35,7 +30,7 @@ module User::AdsHelper
   # When an ad-related page loads, the associated image might still be processed, or being uploaded to S3.
   # This method checks if the normal image is available yet.
   def is_image_available(ad)
-    return (ad.image.versions)[:normal].file.exists?
+    return ad.image && (ad.image.versions)[:normal].file.present? && (ad.image.versions)[:normal].file.exists?
   end
 
   # Getting the maximum number of days of publication, before ad expires.

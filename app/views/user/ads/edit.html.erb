@@ -11,10 +11,7 @@
         }
     </style>
 
-    <script>
-        // array containing all the item names, used for the type-ahead, on the item field.
-        var all_items = <%= raw all_items.to_json %>;
-    </script>
+    <%= javascript_include_tag :cocoon %>
 
 <% end %>
 
@@ -81,11 +78,15 @@
           <div class="box-content">
             <%= form_for [:user, @ad], html: { id: 'ad-edit-form', role: 'form', multipart: true } do |f| %>
 
-
+                <!-- "Delete Ad" and "See published ad" buttons -->
                 <div class="form-group">
-                  <a href="#" class="btn btn-danger btn-delete-right btn-setting"><%= t('admin.ad.delete') %></a>
+                  <a href="#" class="btn btn-danger btn-delete-right btn-setting" style="margin-right: 10px;"><%= t('admin.ad.delete') %></a>
+                  <%= link_to t('ad.see_published'), ad_path(@ad.id), {target: '_blank', class: 'btn btn-info'} %>
                 </div>
 
+                <hr />
+
+                <!-- "Mandatory fields" note -->
                 <div class="form-group">
                   <%= label_tag :field, t('admin.mandatory'), class:'control-label' %>
                 </div>
@@ -134,33 +135,16 @@
                   </div>
                 </div>
 
-                <!-- Item -->
+                <!-- Items -->
                 <div class="form-group">
                   <%= f.label :item, t('ad.item'), class: 'control-label' %>
                   <div class="form-inline">
-                    <%= text_field_tag 'ad_item', @ad.item.name, class: 'form-control help-message', autocomplete: 'off',
-                                       :data => {:provide => 'typeahead', :content => t('ad.item_help'), :placement => 'right',
-                                                 :toggle => 'popover', :trigger => 'hover'}, size: 30 %>
-                  </div>
-                </div>
-
-                <!-- Number of items -->
-                <div class="form-group">
-                  <%= f.label :number_of_items, t('ad.number_item'), class: 'control-label' %>
-                  <div class="form-inline">
-                    <%= f.number_field :number_of_items, class: 'form-control', maxlength: '2', min: 0, max: 1000 %>
-                  </div>
-                </div>
-
-                <!-- Categories -->
-                <div id="category-section" class="form-group hide">
-                  <%= f.label :category, t('ad.category'), class: 'control-label' %>
-                  <div class="form-inline">
-                    <%= select_tag :category, options_for_select(@categories, @ad.item.category.id), class: 'form-control help-message',
-                                   :data => {:content => t('ad.category_help'), :placement => 'right',
-                                             :toggle => 'popover', :trigger => 'hover'} %>
-                    <!-- Message that asks user to choose a category, when new item is entered in field above -->
-                    <div id="item_notification" style="display: inline-block"></div>
+                    <div id="items">
+                      <%= f.fields_for :ad_items do |ad_item| %>
+                          <%= render 'shared/ad_item_fields', f: ad_item %>
+                      <% end %>
+                      <%= link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success ad-add-item' %>
+                    </div>
                   </div>
                 </div>
 
@@ -214,7 +198,7 @@
 
                 <!-- Ad description -->
                 <div class="form-group">
-                  <%= f.label :description, t('ad.description'), class: 'control-label' %>
+                  <%= f.label :description, t('ad.description')+'*:', class: 'control-label' %>
                   <div class="form-inline">
                     <%= f.text_area :description, class: 'form-control help-message', rows: 6, cols: 40,
                                     :data => {:content => t('ad.description_help'), :placement => 'right',
@@ -225,9 +209,6 @@
                 <hr />
 
                 <h4><%= t('location.location') %></h4>
-
-
-
                 <!-- List of all the different locations previously entered by the current user -->
                 <div class="form-group">
                   <% if current_user == @ad.user %>
@@ -332,4 +313,5 @@
 <% content_for :scripts do %>
     <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initializeMap partial that create the actual map -->
     <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
+
 <% end %>

@@ -14,7 +14,6 @@ module ApplicationHelper
   end
 
   # Regardless of what the current navigation state is, we need store all the item names into an array, in order to make the type-ahead of the item search bar work.
-  # (TODO: make Ajax calls instead)
   def all_ads_items
     Ad.joins(:item).pluck(:name).uniq
   end
@@ -104,12 +103,32 @@ module ApplicationHelper
 
   private
 
-
-  def getMapSettingsWithCategory(location, hasCenterMarker, clickableMapMarker, category)
+  # Info to display several markers on ads#show (1 marker per item)
+  def getMapSettingsWithSeveralItems(location, hasCenterMarker, clickableMapMarker, items)
     getMapSettings(location, hasCenterMarker, clickableMapMarker)
 
-    @mapSettings['category_icon'] = category.icon
-    @mapSettings['category_color'] = category.marker_color
+    # Specific info related to ads#show
+    @mapSettings['ad_show'] = []
+    if location.is_area
+      @mapSettings['ad_show_is_area'] = true
+      items_to_show = []
+      items.each do |item|
+        items_to_show << item.capitalized_name
+      end
+      @mapSettings['popup_message'] = items_to_show.join(', ')
+    else
+      @mapSettings['ad_show_is_area'] = false
+      items.each_with_index do |item, index|
+        @mapSettings['ad_show'][index] = {}
+        @mapSettings['ad_show'][index]['icon'] = item.category.icon
+        @mapSettings['ad_show'][index]['color'] = item.category.marker_color
+        @mapSettings['ad_show'][index]['item_name'] = item.name
+      end
+      # Overriding 'zoom_level' data from the database with the max zoom level,
+      # only for the ads@show page and if we're showing an exact address.
+      @mapSettings['zoom_level'] = MAX_ZOOM_LEVEL;
+    end
+
   end
 
   # Map settings function that initialize hash to be used to create map tiles.
@@ -133,10 +152,12 @@ module ApplicationHelper
   # Initializes the existing list of districts.
   def initialize_areas
     all_district = District.all
-    @districts = all_district.collect{|d| [d.name, d.id] }
-    @districts_geocodes = {}
-    all_district.each do |d|
-      @districts_geocodes[d.id] = [d.latitude, d.longitude]
+    if all_district
+      @districts = all_district.collect{|d| [d.name, d.id] }
+      @districts_geocodes = {}
+      all_district.each do |d|
+        @districts_geocodes[d.id] = [d.latitude, d.longitude]
+      end
     end
 
     @area_type = Setting.find_by_key('area_type').value
@@ -216,7 +237,6 @@ module ApplicationHelper
     @mapSettings['areas'] = areas.as_json
 
     return @mapSettings
-
   end
 
   # Define whether the app is deployed on Heroku or not.

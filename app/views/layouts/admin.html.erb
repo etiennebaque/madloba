@@ -8,7 +8,9 @@
 
   <%= render 'shared/charismaIncludedCss' %>
   <%= stylesheet_link_tag 'admin' %>
-  <%= javascript_include_tag 'admin/jquery.min', 'bootstrap3-typeahead.min', 'general' %>
+  <%= stylesheet_link_tag 'bootstrap-select.min', 'ajax-bootstrap-select' %>
+
+  <%= javascript_include_tag 'admin/jquery.min', 'typeahead.bundle.min', 'general' %>
 
   <%= csrf_meta_tag %>
 
@@ -32,5 +34,9 @@
     <%= render 'shared/charismaIncludedJs' %>
 
     <%= yield :scripts %>
+
+    <%= javascript_include_tag 'bootstrap-select.min' %>
+    <%= javascript_include_tag 'ajax-bootstrap-select.min' %>
+
 </body>
 </html>

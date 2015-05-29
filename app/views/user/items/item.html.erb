@@ -122,7 +122,6 @@
                         <tr>
                           <th>ID</th>
                           <th><%= t('admin.item.ad_title') %></th>
-                          <th><%= t('admin.item.remaining_quantity') %></th>
                           <th><%= t('admin.description') %></th>
                         </tr>
                         </tr>
@@ -132,7 +131,6 @@
                             <tr>
                               <td><%= ad.id %></td>
                               <td><a href="/user/ads/<%= ad.id %>/edit"><%= ad.title %></a></td>
-                              <td><%= ad.number_of_items %></td>
                               <td><%= ad.description %></td>
                             </tr>
                         <% end %>

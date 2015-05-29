@@ -4,7 +4,7 @@ RSpec.describe User::CategoriesController, :type => :controller do
 
   before :each do
     # Making sure we're not redirected to the setup screens.
-    setting = Setting.find_or_create_by('setup_step')
+    setting = Setting.find_or_create_by(key: 'setup_step')
     setting.value = 0
     setting.save
 
@@ -19,26 +19,26 @@ RSpec.describe User::CategoriesController, :type => :controller do
 
   describe 'GET #show' do
     it 'assigns the requested category to @category' do
-      category = FactoryGirl.create(:category)
+      category = FactoryGirl.create(:first_category)
       get :show, id: category.id
       expect(assigns(:category)).to eq(category)
     end
 
     it 'renders the right view' do
-      get :show, id: FactoryGirl.create(:category)
+      get :show, id: FactoryGirl.create(:first_category)
       expect(response).to render_template('category')
     end
   end
 
   describe 'GET #edit' do
     it 'assigns the requested category to @category' do
-      category = FactoryGirl.create(:category)
+      category = FactoryGirl.create(:first_category)
       get :edit, id: category.id
       expect(assigns(:category)).to eq(category)
     end
 
     it 'renders the right view' do
-      get :edit, id: FactoryGirl.create(:category)
+      get :edit, id: FactoryGirl.create(:first_category)
       expect(response).to render_template('category')
     end
   end
@@ -58,7 +58,7 @@ RSpec.describe User::CategoriesController, :type => :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       before do
-        @category = FactoryGirl.attributes_for(:category)
+        @category = FactoryGirl.attributes_for(:first_category)
       end
 
       it 'creates a new category' do
@@ -90,7 +90,7 @@ RSpec.describe User::CategoriesController, :type => :controller do
 
   describe 'PUT #update' do
     before :each do
-      @category = FactoryGirl.create(:category, name: 'old category name')
+      @category = FactoryGirl.create(:first_category, name: 'old category name')
     end
 
     context 'with valid attributes' do
@@ -133,13 +133,13 @@ RSpec.describe User::CategoriesController, :type => :controller do
 
   describe 'DELETE #destroy' do
     before :each do
-      @category = FactoryGirl.create(:category)
+      @category = FactoryGirl.create(:first_category)
     end
 
     it 'deletes the category' do
       expect{
         delete :destroy, id: @category
-      }.to change(Category,:count).by(-1)
+      }.to change(Category, :count).by(-1)
     end
 
     it 'redirects to the record page' do

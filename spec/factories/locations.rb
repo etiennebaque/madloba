@@ -17,8 +17,6 @@ FactoryGirl.define do
       end
     end
 
-    # Temporary solution, until I investigate Rspec interaction with Devise.
-    f.user_id { Faker::Number.number(1) }
   end
 
   factory :invalid_location, parent: :location do |f|

@@ -11,11 +11,10 @@
         }
     </style>
 
+    <%= javascript_include_tag :cocoon %>
+
     <script>
         var current_page = "new_ad";
-        // array containing all the item names, used for the type-ahead, on the item field.
-        var all_items = <%= raw all_items.to_json %>;
-
         var location_number = <%= user_locations_number %>;
     </script>
 
@@ -83,37 +82,16 @@
               </div>
             </div>
 
-            <!-- Item -->
+            <!-- Items -->
             <div class="form-group">
-              <%= f.label :item, t('ad.item'), class: 'col-lg-2 control-label' %>
+              <%= f.label :ad_items, t('ad.item'), class: 'col-lg-2 control-label' %>
               <div class="col-lg-6">
-                <%= text_field_tag 'ad_item', params['ad_item'], class: 'form-control help-message', autocomplete: 'off',
-                                   :data => {:provide => 'typeahead', :content => t('ad.item_help'), :placement => 'right',
-                                             :toggle => 'popover', :trigger => 'hover focus'} %>
-              </div>
-            </div>
-
-            <!-- Message that asks user to choose a category underneath, when new item is entered in field above -->
-            <div class="form-group">
-              <div class="col-lg-2"></div>
-              <div id="item_notification" class="col-lg-10"></div>
-            </div>
-
-            <!-- Categories -->
-            <div id="category-section" class="form-group hide">
-              <%= f.label :category, t('ad.category'), class: 'col-lg-2 control-label' %>
-              <div class="col-lg-6">
-                <%= select_tag :category, options_for_select(@categories), class: 'form-control help-message',
-                               :data => {:content => t('ad.category_help'), :placement => 'right',
-                                         :toggle => 'popover', :trigger => 'hover focus'} %>
-              </div>
-            </div>
-
-            <!-- Number of items -->
-            <div class="form-group">
-              <%= f.label :number_of_items, t('ad.number_item')+'*:', class: 'col-lg-2 control-label' %>
-              <div class="col-lg-1">
-                <%= f.number_field :number_of_items, class: 'form-control', maxlength: '4', min: 1, max: 1000 %>
+                <div id="items">
+                  <%= f.fields_for :ad_items do |ad_item| %>
+                      <%= render 'shared/ad_item_fields', f: ad_item %>
+                  <% end %>
+                  <%= link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success' %>
+                </div>
               </div>
             </div>
 
@@ -168,7 +146,7 @@
                                 <%= t('ad.remove_image') %>
                               </label>
                             </div>
-                        <% elsif @ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0) %>
+                        <% elsif @ad.image && (@ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0)) %>
                             <div class="ad-processing">
                               <%= t('ad.image_currently_processed') %><br />
                               <%= t('ad.will_show_up') %>

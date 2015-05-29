@@ -58,11 +58,16 @@ Madloba::Application.routes.draw do
   resources :ads, :only => [:show, :index, :new, :create], :controller => 'user/ads'
   post 'ads/send_message', to: 'user/ads#send_message'
 
-  get 'checkItemExists', to: 'user/ads#checkItemExists'
-
   # Ajax calls to get details about a location (geocodes, exact address)
   get '/getCityGeocodes', to: 'application#getCityGeocodes'
   get '/getNominatimLocationResponses', to: 'application#getNominatimLocationResponses'
+
+  # Ajax call to get the list of items, for autocomplete, when searching for an item, or creating/editing an ad.
+  get '/getItems', to: 'application#get_items'
+
+  # Ajax call to show the ads related to 1 type of item and to 1 district/area.
+  get '/showSpecificAds', to: 'home#showSpecificAds'
+
 
   root 'home#index'
 

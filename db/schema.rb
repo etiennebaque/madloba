@@ -11,16 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150318132850) do
+ActiveRecord::Schema.define(version: 20150527052946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "ad_items", force: true do |t|
+    t.integer  "ad_id"
+    t.integer  "item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "ad_items", ["ad_id"], name: "index_ad_items_on_ad_id", using: :btree
+  add_index "ad_items", ["item_id"], name: "index_ad_items_on_item_id", using: :btree
+
   create_table "ads", force: true do |t|
     t.string   "title"
-    t.string   "description"
-    t.integer  "number_of_items"
-    t.integer  "item_id"
+    t.text     "description"
     t.integer  "location_id"
     t.integer  "user_id"
     t.datetime "created_at"
@@ -31,7 +39,6 @@ ActiveRecord::Schema.define(version: 20150318132850) do
     t.string   "image"
   end
 
-  add_index "ads", ["item_id"], name: "index_ads_on_item_id", using: :btree
   add_index "ads", ["location_id"], name: "index_ads_on_location_id", using: :btree
   add_index "ads", ["user_id"], name: "index_ads_on_user_id", using: :btree
 

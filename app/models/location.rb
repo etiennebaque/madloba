@@ -3,17 +3,19 @@ class Location < ActiveRecord::Base
   belongs_to :user
   belongs_to :district
 
-  validates :postal_code, :latitude, :longitude, presence: true
+  validates :latitude, :longitude, presence: true
+  # 'Postal code' field is not necessary only if user chooses a district name instead.
+  validates_presence_of :postal_code, if: lambda { self.district == nil}
   validates :latitude , numericality: { greater_than:  -90, less_than:  90 }
   validates :longitude, numericality: { greater_than: -180, less_than: 180 }
 
-  scope :type, -> (location_type) { where('ads.expire_date >= ? AND ads.number_of_items > 0 AND loc_type = ?', Date.today, location_type)}
+  scope :type, -> (location_type) { where('ads.expire_date >= ? AND loc_type = ?', Date.today, location_type)}
 
 
   # This method returns the right query to display relevant markers, on the home page.
   def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action )
 
-    locations = Location.includes(ads: {item: :category}).type(location_type).references(:ads)
+    locations = Location.includes(ads: {items: :category}).type(location_type).references(:ads)
 
     if cat_nav_state || searched_item
       if cat_nav_state
@@ -91,11 +93,12 @@ class Location < ActiveRecord::Base
     end
   end
 
+  # On the ads/show page, we're not necessarily showing the full address,
+  # depending of how the location type.
   def location_type_address_public
     if self.loc_type == 'exact'
       full_address
     elsif self.loc_type == 'postal'
-      # if action is ads#show, we don't display the full postal code
       I18n.t('admin.location.area_name', area: self.area)
     elsif self.loc_type == 'district'
       self.district.name

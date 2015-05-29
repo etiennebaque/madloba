@@ -64,18 +64,18 @@
                 <th>ID </th>
                 <th><%= t('admin.title') %></th>
                 <th><%= t('admin.ad.giving_accepting_title') %></th>
-                <th><%= t('admin.item_quantity') %></th>
+                <th><%= t('admin.items') %></th>
                 <th><%= t('admin.created_by_user') %></th>
                 <th><%= t('admin.actions') %></th>
               </tr>
               </thead>
               <tbody>
-              <% Ad.all.each do |ad| %>
+              <% Ad.includes(:items).all.each do |ad| %>
                   <tr>
                     <td class="vert-align"><%= ad.id %></td>
                     <td class="vert-align"><%= ad.title %></td>
                     <td class="vert-align"><%= ad.is_giving ? t('admin.ad.giving_away') : t('admin.ad.accepting') %></td>
-                    <td class="vert-align"><%= "#{ad.item.name} (#{ad.number_of_items})" %></td>
+                    <td class="vert-align"><%= ad.item_list %></td>
                     <td class="vert-align"><%= ad.user.email %></td>
                     <td class="center"><a class="btn btn-info" href="/user/ads/<%= ad.id %>/edit"> <i class="glyphicon glyphicon-pencil"></i> <%= t('admin.edit_delete') %> </a>
                     </td>
@@ -159,7 +159,7 @@
               <% Item.all.each do |item| %>
                   <tr>
                     <td class="vert-align"><%= item.id %></td>
-                    <td class="vert-align"><%= item.name %></td>
+                    <td class="vert-align"><%= item.capitalized_name %></td>
                     <td class="vert-align"><i class="fa <%= item.category.icon %>" style="color: <%= "#{MARKER_COLORS[item.category.marker_color]}" %>;"></i>&nbsp;<%= item.category.name %></td>
                     <td class="center"><a class="btn btn-info" href="/user/items/<%= item.id %>/edit"> <i class="glyphicon glyphicon-pencil"></i> Edit / Show details </a></td>
                   </tr>

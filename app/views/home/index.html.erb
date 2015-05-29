@@ -13,8 +13,8 @@
     <style type="text/css">
         #map {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 0px;
+            left: 0px;
             width: 100% !important;
             height: 100% !important;
         }
@@ -22,7 +22,7 @@
 
 <% end %>
 
-<div id="wrap">
+<div id="wrap" class="home-page">
 
   <%= render 'shared/navigation' %>
 
@@ -216,11 +216,33 @@
 
 </div>
 
+
+<!-- Modal popup that shows several ads promoting the same item, in a specific district/area -->
+<div class="modal fade" id="adsModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="adsModalTitle"></h4>
+      </div>
+      <div class="modal-body" id="ads-modal-body-id">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><%= t('home.close') %></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- This div is to check whether or not the user has AdBlock on in their browser.
+If they do, it will affect the website's ability to work well (test carried out in general.js) -->
+<div id="ad-block" style="position: absolute; opacity: 1; top: 0; left: 0;">adblock</div>
+
 <%= render 'shared/footer' %>
 
 <!--  /.container -->
 
-<!-- Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and initializeMap partial that create the actual map)-->
+<!-- Includes all the Javascript related to map rendering, to be loaded after page
+(Leaflet, MapQuest, and initializeMap partial that create the actual map)-->
 <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
 
 <!-- Leaflet plug-ins and library used on the home page -->
@@ -231,9 +253,9 @@
 <script>
     // specific script to render map markers and initialize the sidebar.
 
-    var locations_exact = <%= raw @locations_exact.to_json(:include => { :ads => { :include =>  {:item => { :include => :category }}}}) %>;
-    var locations_postal = <%= raw @locations_postal.to_json(:include => { :ads => { :include =>  {:item => { :include => :category }}}}) %>;
-    var locations_district = <%= raw @locations_district.to_json(:include => { :ads => { :include =>  {:item => { :include => :category }}}}) %>;
+    var locations_exact = <%= raw @locations_exact.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}}) %>;
+    var locations_postal = <%= raw @locations_postal.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}}) %>;
+    var locations_district = <%= raw @locations_district.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}}) %>;
 
     var area_geocodes = <%= raw @area_geocodes.to_json %>;
     var marker_colors = <%= raw MARKER_COLORS.to_json %>;

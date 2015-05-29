@@ -124,7 +124,7 @@
                             <tr>
                               <th>ID</th>
                               <th><%= t('ad.title') %></th>
-                              <th><%= t('admin.item.remaining_quantity') %></th>
+                              <th><%= t('admin.items') %></th>
                               <th><%= t('ad.description') %></th>
                             </tr>
                             </thead>
@@ -133,7 +133,7 @@
                                 <tr>
                                   <td><%= ad.id %></td>
                                   <td><a href="/user/ads/<%= ad.id %>/edit"><%= ad.title %></a></td>
-                                  <td><%= ad.item.name %> (<%= ad.number_of_items %>)</td>
+                                  <td><%= ad.items.map{|i| i.name}.join(', ') %></td>
                                   <td><%= ad.description %></td>
                                 </tr>
                             <% end %>

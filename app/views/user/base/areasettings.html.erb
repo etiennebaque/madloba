@@ -130,24 +130,25 @@
 
                   <!-- District table -->
                   <div class="form-group col-xs-12">
-                    <div id="district-table" class="col-lg-9 col-md-12">
+                    <div id="dynamic-table" class="col-lg-9 col-md-12">
                       <table class="table table-striped">
                         <thead>
                         <tr>
-                          <th>District name</th>
-                          <th>Latitude</th>
-                          <th>Longitude</th>
+                          <th><%= t('admin.area_settings.district_name') %></th>
+                          <th><%= t('admin.area_settings.latitude') %></th>
+                          <th><%= t('admin.area_settings.longitude') %></th>
                           <th></th>
                         </tr>
                         </thead>
                         <tbody id="district_body">
                         <% @districts.each do |district| %>
-                            <tr>
+                            <tr id="<%= district.id %>">
                               <td class="district_name vert-align"><%= district.name %></td>
                               <td class="vert-align"><%= district.latitude %></td>
                               <td class="vert-align"><%= district.longitude %></td>
                               <td class="vert-align">
-                                <button type="button" id="<%= district.id %>" class="district-update btn btn-info btn-xs">Update</button>
+                                <button type="button" id="<%= district.id %>" class="dynamic_update btn btn-info btn-xs"><%= t('home.update') %></button>
+                                <a href="#" class="btn remove-existing-district"><i class="glyphicon glyphicon-remove" style="color: red;"></i></a>
                               </td>
                             </tr>
                         <% end %>
@@ -158,9 +159,9 @@
 
                   <!-- "Add district" link -->
                   <div class="form-group">
-                    <div class="district_wrapper"></div>
+                    <div id="dynamic_wrapper"></div>
                     <div class="form-inline">
-                      <a id="add_district_link" class="btn btn-link" href="#">Add district...</a>
+                      <a id="dynamic_add_link" class="btn btn-info" href="#"><i class="glyphicon glyphicon-plus"></i> <%= t('admin.area_settings.add_district') %></a>
                     </div>
                   </div>
 
