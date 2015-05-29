@@ -121,6 +121,7 @@ class User::BaseController < ApplicationController
         app_name_settings = Setting.find_by_key(key)
         cleaned_data = params[key]
         if %w(_url facebook pinterest).any? {|word| key.include?(word) }
+          # Cleaning up the urls
           if (params[key] != '') && (!params[key].include? 'http')
             cleaned_data = "http://#{params[key]}"
           end
@@ -251,6 +252,7 @@ class User::BaseController < ApplicationController
 
   end
 
+  # Called via Ajax, when updating district values, in the area setting page.
   def update_districts
     districts = params[:data]
     message = ''

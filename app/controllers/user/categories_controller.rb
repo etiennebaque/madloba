@@ -98,5 +98,4 @@ class User::CategoriesController < ApplicationController
     end
   end
 
-
 end
