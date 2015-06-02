@@ -66,6 +66,9 @@ gem 'memcachier'
 # For neested forms
 gem 'cocoon'
 
+# Text in Javascript file
+gem 'gon'
+
 group :development, :test do
 
   # Mailcatcher

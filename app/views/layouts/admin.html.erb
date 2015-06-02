@@ -12,6 +12,9 @@
 
   <%= javascript_include_tag 'admin/jquery.min', 'typeahead.bundle.min', 'general' %>
 
+  <!-- Gon gem - managing text in JS files -->
+  <%= include_gon %>
+
   <%= csrf_meta_tag %>
 
   <%= yield :head %>

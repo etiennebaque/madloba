@@ -196,6 +196,9 @@ GEM
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
     formatador (0.2.5)
+    gon (5.0.4)
+      actionpack (>= 2.3.0)
+      json
     guard (2.6.1)
       formatador (>= 0.2.4)
       listen (~> 2.7)
@@ -399,6 +402,7 @@ DEPENDENCIES
   factory_girl_rails
   faker
   fog
+  gon
   guard-rspec
   httparty (~> 0.13.1)
   jbuilder (~> 1.2)
