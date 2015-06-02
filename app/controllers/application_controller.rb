@@ -5,7 +5,8 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
   before_action :check_if_setup
-  before_filter :allow_iframe_requests
+  before_action :load_javascript_text
+  before_action :allow_iframe_requests
 
   include ApplicationHelper
   include Pundit
@@ -33,6 +34,12 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
+  # Uses the 'gon' gem to load the text that appears in javascript files.
+  def load_javascript_text
+    gon.vars = t('general_js')
+  end
+
 
   # Allows the website to be embedded in an iframe.
   def allow_iframe_requests
