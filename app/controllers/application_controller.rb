@@ -10,11 +10,14 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
   include Pundit
+  include SimpleCaptcha::ControllerHelpers
 
-  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  helper :'user/location_form'
 
   unless Rails.application.config.consider_all_requests_local
     rescue_from Exception,
+                :with => :render_error
+    rescue_from StandardError,
                 :with => :render_error
     rescue_from ActiveRecord::RecordNotFound,
                 :with => :render_not_found
@@ -22,6 +25,8 @@ class ApplicationController < ActionController::Base
                 :with => :render_not_found
     rescue_from ActionController::UnknownController,
                 :with => :render_not_found
+    rescue_from Pundit::NotAuthorizedError,
+                with: :user_not_authorized
   end
 
   # If 'setup_step' key, in Settings table, is set to '1', it means that the installation process

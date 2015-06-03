@@ -4,7 +4,7 @@
   <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
 </head>
 <body>
-<strong><%= t('mailer.dear', name: @user.first_name) %></strong>
+<strong><%= t('mailer.dear', name: @user[:name]) %></strong>
 
 <p>
   <%= t('mailer.ad_created', site_name: @site_name) %>

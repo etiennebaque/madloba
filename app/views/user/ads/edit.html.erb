@@ -120,16 +120,16 @@
 
                 <!-- Name to use -->
                 <div class="form-group">
-                  <%= f.label :is_anonymous, t('location.name_to_use'), class: 'control-label' %>
+                  <%= f.label :is_username_used, t('location.name_to_use'), class: 'control-label' %>
                   <div class="radio">
                     <label>
-                      <%= f.radio_button :is_anonymous, true, value: true %>
+                      <%= f.radio_button :is_username_used, true, value: true %>
                       <%= t('location.name_username') %> (<%= @ad.user.username %>)
                     </label>
                   </div>
                   <div class="radio">
                     <label>
-                      <%= f.radio_button :is_anonymous, false, value: false %>
+                      <%= f.radio_button :is_username_used, false, value: false %>
                       <%= t('location.name_fullname') %> (<%= @ad.user.first_name %> <%= @ad.user.last_name %>)
                     </label>
                   </div>
@@ -241,7 +241,7 @@
                       <h4><%= t('ad.edit_current_location') %></h4>
 
                       <!-- Partial that contains the location form -->
-                      <%= render 'shared/locationForm', form: loc, location: @ad.location,
+                      <%= render 'shared/location_form', form: loc, location: @ad.location,
                                  label_class: 'control-label', col10: 'form-inline', col6: 'form-inline',
                                  col4: 'form-inline', col3: 'form-inline',
                                  col2: 'form-inline', col_radio: '' %>

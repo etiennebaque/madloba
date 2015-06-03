@@ -1,6 +1,6 @@
 <% content_for :head do %>
     <script>
-        var districts_geocodes = <%= raw @districts_geocodes.to_json %>;
+        var districts_geocodes = <%= raw districts_geocodes.to_json %>;
     </script>
 <% end %>
 
@@ -25,7 +25,7 @@
             <%= t('location.definition_exact') %>
           </label>
         </div>
-        <% if (@area_type) && (@area_type.include?'postal') %>
+        <% if (area_type) && (area_type.include?'postal') %>
             <div class="radio">
               <label>
                 <%= form.radio_button :loc_type, 'postal', {class: 'location_type_postal_code'} %>
@@ -33,7 +33,7 @@
               </label>
             </div>
         <% end %>
-        <% if (@area_type) && (@area_type.include?'district') %>
+        <% if (area_type) && (area_type.include?'district') %>
             <div class="radio">
               <label>
                 <%= form.radio_button :loc_type, 'district', {class: 'location_type_district'} %>
@@ -77,6 +77,11 @@
   <!-- Geocode (latitude and longitude hidden fields) -->
   <%= form.hidden_field :latitude, value: @mapSettings['lat'], class: 'latitude_hidden' %>
   <%= form.hidden_field :longitude, value: @mapSettings['lng'], class: 'longitude_hidden' %>
+
+  <% if location.id %>
+      <%= hidden_field_tag 'location_to_update', location.id %>
+  <% end %>
+
 </div>
 
 <div class="exact_location_section">
@@ -102,7 +107,7 @@
   <div class="form-group">
     <%= form.label :district_id, t('location.district'), class: label_class %>
     <div class='<%= col3 %>'>
-      <%= form.select :district_id, options_for_select(@districts, location.district_id), {}, {class: 'form-control help-message district_dropdown',
+      <%= form.select :district_id, options_for_select(districts, location.district_id), {}, {class: 'form-control help-message district_dropdown',
                                                                          :data => {:content => t('location.district_help'), :placement => 'right',
                                                                                    :toggle => 'popover', :trigger => 'hover focus'}} %>
       <%= form.hidden_field :latitude, value: @mapSettings['lat'], class: 'latitude_hidden' %>

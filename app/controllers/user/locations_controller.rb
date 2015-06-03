@@ -11,9 +11,6 @@ class User::LocationsController < ApplicationController
   def show
     @location = Location.includes(:ads => :item).includes(:district).where(id: params[:id]).first!
     authorize @location
-
-    initialize_areas()
-
     getMapSettings(@location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
     render 'location'
   end
@@ -21,9 +18,6 @@ class User::LocationsController < ApplicationController
   def new
     @location = Location.new
     authorize @location
-
-    initialize_areas()
-
     getMapSettings(@location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
 
     render 'location'
@@ -50,7 +44,6 @@ class User::LocationsController < ApplicationController
 
     authorize @location
 
-    initialize_areas()
     if @location.is_area
       getMapSettings(@location, HAS_CENTER_MARKER, CLICKABLE_MAP_AREA_MARKER)
     else

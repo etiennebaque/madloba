@@ -76,7 +76,7 @@
                     <td class="vert-align"><%= ad.title %></td>
                     <td class="vert-align"><%= ad.is_giving ? t('admin.ad.giving_away') : t('admin.ad.accepting') %></td>
                     <td class="vert-align"><%= ad.item_list %></td>
-                    <td class="vert-align"><%= ad.user.email %></td>
+                    <td class="vert-align"><%= ad.email_to_display %></td>
                     <td class="center"><a class="btn btn-info" href="/user/ads/<%= ad.id %>/edit"> <i class="glyphicon glyphicon-pencil"></i> <%= t('admin.edit_delete') %> </a>
                     </td>
                   </tr>
@@ -123,7 +123,7 @@
                     <% else %>
                         <td class="vert-align"><%= location.postal_code %></td>
                     <% end %>
-                    <td class="vert-align"><%= location.user.email %></td>
+                    <td class="vert-align"><%= location.user ? location.user.email : t('admin.location.anonymous_user') %></td>
                     <td class="center"><a class="btn btn-info" href="/user/locations/<%= location.id %>/edit"> <i class="glyphicon glyphicon-pencil"></i> <%= t('admin.edit_delete') %> </a>
                     </td>
                   </tr>

@@ -147,25 +147,7 @@ module ApplicationHelper
     result['osm']['attribution'] = OSM_ATTRIBUTION
 
     return result
-  end
-
-  # Initializes the existing list of districts.
-  def initialize_areas
-    all_district = District.all
-    if all_district
-      @districts = all_district.collect{|d| [d.name, d.id] }
-      @districts_geocodes = {}
-      all_district.each do |d|
-        @districts_geocodes[d.id] = [d.latitude, d.longitude]
-      end
     end
-
-    @area_type = Setting.find_by_key('area_type').value
-    if @area_type
-      @area_type = @area_type.split(',')
-    end
-  end
-
 
   # ---------------------------------------------------
   # Global function to get settings to initialize a map

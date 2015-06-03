@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150527052946) do
+ActiveRecord::Schema.define(version: 20150602142707) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,10 +33,12 @@ ActiveRecord::Schema.define(version: 20150527052946) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "is_anonymous"
+    t.boolean  "is_username_used"
     t.boolean  "is_giving"
     t.date     "expire_date"
     t.string   "image"
+    t.string   "anon_name"
+    t.string   "anon_email"
   end
 
   add_index "ads", ["location_id"], name: "index_ads_on_location_id", using: :btree
@@ -113,6 +115,15 @@ ActiveRecord::Schema.define(version: 20150527052946) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "simple_captcha_data", force: true do |t|
+    t.string   "key",        limit: 40
+    t.string   "value",      limit: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "simple_captcha_data", ["key"], name: "idx_key", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                              null: false

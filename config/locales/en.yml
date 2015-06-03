@@ -20,6 +20,13 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  simple_captcha:
+    placeholder: ""
+    label: "Enter the text in this field"
+    refresh_button_text: "Can't see? Refresh!"
+    message:
+      default: "The Captcha code did not match with the image"
+      user: "The secret Image and code were different"
   activerecord:
     errors:
       models:
@@ -42,7 +49,6 @@ en:
     home: Home
     page: Home page
     create_new_ad: Create a new ad
-    post_ad_please_html: To post an ad, please %{signin} or %{createaccount}.
     reply_ad_please_html: To reply to an ad, please %{signin} or %{createaccount}.
     sign_in: sign in
     sign_up: Sign up here
@@ -147,6 +153,12 @@ en:
     title: "Ad title*:"
     title_help: e.g. 'Gives away 5 shirts' or 'I want to get rid of my old laptop'...
     item: "Item(s)*:"
+    about_you: "About you"
+    name: "Your name*:"
+    name_help: Please enter your name or a nickname here. It will appear publicly as it is, in the published ad.
+    your_email: "Your email*:"
+    captcha: "Captcha*:"
+    email_help: Providing your email is not mandatory (make sure you've at least put a phone number in the ad description). If you give an email address, it won't be published publicly and users will still be able to write a message to you.
     no_item_added: No item added so far
     item_name: Name
     category_header: Category
@@ -154,8 +166,9 @@ en:
     number_item: Quantity
     ad_is_deleted: The ad '%{deleted_ad_title}' has been deleted.
     location_website: "Location website:"
+    your_message: "Your message*:"
     send_message: Send your message
-    send_message_label: Send a message to %{name} about this ad
+    send_message_label: "Send a message to %{name} about this ad:"
     category: "Category*:"
     category_help: Choose the category this new item belongs to.
     description: Description
@@ -200,6 +213,7 @@ en:
     see_published: See this published ad
     error_ad_must_have_item: Please add at least 1 item.
     select_category: Available categories
+    captcha_not_valid: The captcha text you entered is not valid.
   mailer:
     welcome: "Welcome to %{name}!"
     confirmation_descr1: You received this message because an account, based on your e-mail address, was created on this website.
@@ -370,6 +384,7 @@ en:
       unnamed: unnamed location
       area_name: "%{area} area"
       no_ad_tied: No ads are currently tied to this location.
+      anonymous_user: (Anonymous user)
     category:
       update_success: The category '%{name}' has been updated.
       created_success: The category '%{name}' has been created.
@@ -471,7 +486,7 @@ en:
       title: Manage users
       description: From here, you can manage user accounts (admin and regular users).
       add: Create user
-      email: E=mail
+      email: E-mail
       full_name: Full name
       role: Role
       error_occurred: "%{errors} occurred while saving this user"

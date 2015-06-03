@@ -23,213 +23,251 @@
 
 <div id="wrap">
 
-<%= render 'shared/navigation' %>
+  <%= render 'shared/navigation' %>
 
-<div class="container">
+  <div class="container">
 
-  <% if @ad && @ad.errors.any? %>
-      <div class="alert alert-dismissable alert-danger">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong><%= t('ad.error_occurred', errors: pluralize(@ad.errors.count, 'error')) %>:</strong>
-        <ul>
-          <% @ad.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-          <% end %>
-        </ul>
-      </div>
-  <% end %>
+    <% if @ad && @ad.errors.any? %>
+        <div class="alert alert-dismissable alert-danger" style="margin-top: 21px;">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <strong><%= t('ad.error_occurred', errors: pluralize(@ad.errors.count, 'error')) %>:</strong>
+          <ul>
+            <% @ad.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
 
-  <div class="row">
-    <div class="col-lg-12">
-      <%= form_for @ad, html: { class: 'form-horizontal', role: 'form', multipart: true } do |f| %>
-          <fieldset>
-            <h3><%= t('ad.new_ad') %></h3>
+    <div class="row">
+      <div class="col-lg-12">
+        <%= form_for @ad, html: { class: 'form-horizontal', role: 'form', multipart: true } do |f| %>
+            <fieldset>
+              <h3><%= t('ad.new_ad') %></h3>
 
-            <% if max_expire_days.to_i > 0 %>
-                <div class="form-group">
+              <% if max_expire_days.to_i > 0 %>
+                  <div class="form-group">
                     <div class="col-lg-2"></div>
                     <div class="col-lg-6"><i><%= t('ad.once_created_expire', max_expire_days: max_expire_days) %></i></div>
-                </div>
-            <% end %>
+                  </div>
+              <% end %>
 
 
-            <!-- Ad title -->
-            <div class="form-group">
-              <%= f.label :title, t('ad.title'), class: 'col-lg-2 control-label' %>
-              <div class="col-lg-6">
-                <%= f.text_field :title, class: 'form-control help-message', autofocus: true,
-                                 :data => {:content => t('ad.title_help'), :placement => 'right',
-                                           :toggle => 'popover', :trigger => 'hover focus'} %>
-              </div>
-            </div>
-
-            <!-- Name to use -->
-            <div class="form-group">
-              <%= f.label :is_anonymous, t('location.name_to_use'), class: 'col-lg-2 control-label' %>
-              <div class='col-lg-6'>
-                <div class="radio">
-                  <label>
-                    <%= f.radio_button :is_anonymous, true, checked: true, value: true %>
-                    <%= t('location.name_username') %> (<%= current_user.username %>)
-                  </label>
-                </div>
-                <div class="radio">
-                  <label>
-                    <%= f.radio_button :is_anonymous, false, value: false %>
-                    <%= t('location.name_fullname') %> (<%= current_user.first_name %> <%= current_user.last_name %>)
-                  </label>
+              <!-- Ad title -->
+              <div class="form-group">
+                <%= f.label :title, t('ad.title'), class: 'col-lg-2 control-label' %>
+                <div class="col-lg-6">
+                  <%= f.text_field :title, class: 'form-control help-message', autofocus: true,
+                                   :data => {:content => t('ad.title_help'), :placement => 'right',
+                                             :toggle => 'popover', :trigger => 'hover focus'} %>
                 </div>
               </div>
-            </div>
 
-            <!-- Items -->
-            <div class="form-group">
-              <%= f.label :ad_items, t('ad.item'), class: 'col-lg-2 control-label' %>
-              <div class="col-lg-6">
-                <div id="items">
-                  <%= f.fields_for :ad_items do |ad_item| %>
-                      <%= render 'shared/ad_item_fields', f: ad_item %>
-                  <% end %>
-                  <%= link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success' %>
-                </div>
-              </div>
-            </div>
+              <!-- Name to use (it user is not anonymous) -->
+              <% if user_signed_in? %>
+                  <div class="form-group">
+                    <%= f.label :is_username_used, t('location.name_to_use'), class: 'col-lg-2 control-label' %>
+                    <div class='col-lg-6'>
+                      <div class="radio">
+                        <label>
+                          <%= f.radio_button :is_username_used, true, checked: true, value: true %>
+                          <%= t('location.name_username') %> (<%= current_user.username %>)
+                        </label>
+                      </div>
+                      <div class="radio">
+                        <label>
+                          <%= f.radio_button :is_username_used, false, value: false %>
+                          <%= t('location.name_fullname') %> (<%= current_user.first_name %> <%= current_user.last_name %>)
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+              <% end %>
 
-            <!-- Giving / Accepting items -->
-            <div class="form-group">
-              <%= f.label :is_giving, t('location.ad_action'), class: 'col-lg-2 control-label' %>
-              <div class='col-lg-6'>
-                <div class="radio">
-                  <label>
-                    <%= f.radio_button :is_giving, true, checked: true %><%= t('location.ad_action_giving') %>
-                  </label>
-                </div>
-                <div class="radio">
-                  <label>
-                    <%= f.radio_button :is_giving, false %><%= t('location.ad_action_accepting') %>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <!-- Ad description -->
-            <div class="form-group">
-              <%= f.label :description, t('ad.description')+'*:', class: 'col-lg-2 control-label' %>
-              <div class="col-lg-6">
-                <%= f.text_area :description, class: 'form-control help-message', rows: 6,
-                                :data => {:content => t('ad.description_help'), :placement => 'right',
-                                          :toggle => 'popover', :trigger => 'hover focus'} %>
-              </div>
-            </div>
-
-            <!-- Image upload - only possible when app deployed on server, for now -->
-            <% if !is_on_heroku && can_upload_image %>
-                <div class="form-group">
-                  <%= f.label :description, t('ad.upload_image'), class: 'col-lg-2 control-label' %>
-                  <div class="col-lg-6">
-                    <%= f.file_field :image, class: 'form-control', style: 'border: 0px; height: auto;' %>
-                    <%= f.hidden_field :image_cache, value: params[:image_cache] %>
-                    <span id="message"><%= t('ad.less_than_limit') %></span>
+              <!-- Items -->
+              <div class="form-group">
+                <%= f.label :ad_items, t('ad.item'), class: 'col-lg-2 control-label' %>
+                <div class="col-lg-6">
+                  <div id="items">
+                    <%= f.fields_for :ad_items do |ad_item| %>
+                        <%= render 'shared/ad_item_fields', f: ad_item %>
+                    <% end %>
+                    <%= link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success' %>
                   </div>
                 </div>
-                <div class="form-group">
-                  <div class="col-lg-2"></div>
-                  <div class="col-lg-10">
-                    <% if @ad.image? %>
-                        <% if is_image_available(@ad) %>
-                            <div id="image-section">
+              </div>
+
+              <!-- Giving / Accepting items -->
+              <div class="form-group">
+                <%= f.label :is_giving, t('location.ad_action'), class: 'col-lg-2 control-label' %>
+                <div class='col-lg-6'>
+                  <div class="radio">
+                    <label>
+                      <%= f.radio_button :is_giving, true, checked: true %><%= t('location.ad_action_giving') %>
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label>
+                      <%= f.radio_button :is_giving, false %><%= t('location.ad_action_accepting') %>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ad description -->
+              <div class="form-group">
+                <%= f.label :description, t('ad.description')+'*:', class: 'col-lg-2 control-label' %>
+                <div class="col-lg-6">
+                  <%= f.text_area :description, class: 'form-control help-message', rows: 6,
+                                  :data => {:content => t('ad.description_help'), :placement => 'right',
+                                            :toggle => 'popover', :trigger => 'hover focus'} %>
+                </div>
+              </div>
+
+              <!-- Image upload - only possible when app deployed on server, for now -->
+              <% if !is_on_heroku && can_upload_image %>
+                  <div class="form-group">
+                    <%= f.label :description, t('ad.upload_image'), class: 'col-lg-2 control-label' %>
+                    <div class="col-lg-6">
+                      <%= f.file_field :image, class: 'form-control', style: 'border: 0px; height: auto;' %>
+                      <%= f.hidden_field :image_cache, value: params[:image_cache] %>
+                      <span id="message"><%= t('ad.less_than_limit') %></span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-10">
+                      <% if @ad.image? %>
+                          <% if is_image_available(@ad) %>
+                              <div id="image-section">
                                 <%= image_tag @ad.image_url(:normal).to_s %>
-                            </div>
-                            <div class="checkbox">
-                              <label>
-                                <%= f.check_box :remove_image %>
-                                <%= t('ad.remove_image') %>
-                              </label>
-                            </div>
-                        <% elsif @ad.image && (@ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0)) %>
-                            <div class="ad-processing">
-                              <%= t('ad.image_currently_processed') %><br />
-                              <%= t('ad.will_show_up') %>
-                            </div>
-                        <% end %>
-                    <% else %>
-                        <div id="image-section"></div>
-                    <% end %>
-                  </div>
-                </div>
-            <% end %>
-
-            <!-- "Choose a location" section -->
-            <% if user_locations_number > 0 %>
-                <!-- List of all the different locations previously entered by the current user -->
-                <div class="form-group">
-                  <%= f.label :location_id, t('location.location'), class: 'col-lg-2 control-label' %>
-                  <div class="col-lg-6">
-                    <% current_user.locations.each_with_index do |loc, index| %>
-                        <div class='radio existing_location'>
-                          <label>
-                            <%= radio_button_tag 'location_id', loc.id, index == 0 %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
-                          </label>
-                        </div>
-                    <% end %>
-                    <div class='radio'>
-                      <%= t('home.or') %>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input id="new_location_radio" type="radio" name="location_id" value=0>
-                        <%= t('ad.new_location') %>
-                      </label>
+                              </div>
+                              <div class="checkbox">
+                                <label>
+                                  <%= f.check_box :remove_image %>
+                                  <%= t('ad.remove_image') %>
+                                </label>
+                              </div>
+                          <% elsif @ad.image && (@ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0)) %>
+                              <div class="ad-processing">
+                                <%= t('ad.image_currently_processed') %><br />
+                                <%= t('ad.will_show_up') %>
+                              </div>
+                          <% end %>
+                      <% else %>
+                          <div id="image-section"></div>
+                      <% end %>
                     </div>
                   </div>
-                </div>
-            <% else %>
-                <!-- No locations tied to this user yet: opening the "New Location" form underneath. -->
-                <%= hidden_field_tag 'location_id', 0 %>
-            <% end %>
+              <% end %>
 
-            <!-- "New Location" form - start -->
-            <%= f.fields_for :location, :html => {:class => 'form-horizontal'} do |loc| %>
+              <!-- "Choose a location" section -->
+              <% if user_locations_number > 0 %>
+                  <!-- List of all the different locations previously entered by the current user -->
+                  <div class="form-group">
+                    <%= f.label :location_id, t('location.location'), class: 'col-lg-2 control-label' %>
+                    <div class="col-lg-6">
+                      <% current_user.locations.each_with_index do |loc, index| %>
+                          <div class='radio existing_location'>
+                            <label>
+                              <%= radio_button_tag 'location_id', loc.id, index == 0 %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                            </label>
+                          </div>
+                      <% end %>
+                      <div class='radio'>
+                        <%= t('home.or') %>
+                      </div>
+                      <div class='radio'>
+                        <label>
+                          <input id="new_location_radio" type="radio" name="location_id" value=0>
+                          <%= t('ad.new_location') %>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+              <% else %>
+                  <!-- No locations tied to this user yet: opening the "New Location" form underneath. -->
+                  <%= hidden_field_tag 'location_id', 0 %>
+              <% end %>
 
-                <div id="new_location_section" class="hide">
+              <!-- "New Location" form - start -->
+              <%= f.fields_for :location, :html => {:class => 'form-horizontal'} do |loc| %>
+
+                  <div id="new_location_section" class="hide">
+                    <hr />
+
+                    <h4><%= t('location.new_location') %></h4>
+
+                    <!-- Partial that contains the creation form for a location -->
+                    <%= render 'shared/location_form', form: loc, location: @ad.location,
+                               label_class: 'col-lg-2 control-label',
+                               col10: 'col-lg-10', col6: 'col-lg-6', col4: 'col-lg-4', col3: 'col-lg-3',
+                               col2: 'col-lg-2', col_radio: 'col-lg-6' %>
+
+                    <hr />
+                  </div>
+              <% end %>
+              <!-- "New Location" form - end -->
+
+              <!-- if anonymous user creates an ad, we need to ask for their name and email -->
+              <!-- They need to provide a response to a captche -->
+              <% if !user_signed_in? %>
+
+                  <h4><%= t('ad.about_you') %></h4>
+
+                  <!-- Anonymous user's name -->
+                  <div class="form-group">
+                    <%= f.label :anon_name, t('ad.name'), class: 'col-lg-2 control-label' %>
+                    <div class="col-lg-6">
+                      <%= f.text_field :anon_name, class: 'form-control help-message',
+                                       :data => {:content => t('ad.name_help'), :placement => 'right',
+                                                 :toggle => 'popover', :trigger => 'hover focus'} %>
+                    </div>
+                  </div>
+
+                  <!-- Anonymous user's email -->
+                  <div class="form-group">
+                    <%= f.label :anon_email, t('admin.users.email')+'*:', class: 'col-lg-2 control-label' %>
+                    <div class="col-lg-6">
+                      <%= f.email_field :anon_email, class: 'form-control help-message', autofocus: true,
+                                        :data => {:content => t('ad.email_help'), :placement => 'right',
+                                                  :toggle => 'popover', :trigger => 'hover focus'} %>
+                    </div>
+                  </div>
+
+                  <!-- Captcha for anonymous user -->
+                  <div class="form-group">
+                    <%= f.label :anon_captcha, t('ad.captcha'), class: 'col-lg-2 control-label' %>
+                    <div class="col-lg-6">
+                      <%= f.show_simple_captcha %>
+                    </div>
+                  </div>
+
                   <hr />
+              <% end %>
 
-                  <h4><%= t('location.new_location') %></h4>
-
-                  <!-- Partial that contains the creation form for a location -->
-                  <%= render 'shared/locationForm', form: loc, location: @ad.location,
-                             label_class: 'col-lg-2 control-label',
-                             col10: 'col-lg-10', col6: 'col-lg-6', col4: 'col-lg-4', col3: 'col-lg-3',
-                             col2: 'col-lg-2', col_radio: 'col-lg-6' %>
-
-                  <hr />
+              <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                  <%= f.submit t('ad.submit'), class: 'btn btn-primary' %>
+                  <a href="/" class="btn"><%= t('ad.cancel') %></a>
                 </div>
-            <% end %>
-            <!-- "New Location" form - end -->
-
-
-            <div class="form-group">
-              <div class="col-lg-10 col-lg-offset-2">
-                <%= f.submit t('ad.submit'), class: 'btn btn-primary' %>
-                <a href="/" class="btn"><%= t('ad.cancel') %></a>
               </div>
-            </div>
 
-            <!-- After submit, a notification shows up here, if a new image is being uploaded -->
-            <div class="form-group">
-              <div class="col-lg-10 col-lg-offset-2">
-                <span id="upload-in-progress"></span>
+              <!-- After submit, a notification shows up here, if a new image is being uploaded -->
+              <div class="form-group">
+                <div class="col-lg-10 col-lg-offset-2">
+                  <span id="upload-in-progress"></span>
+                </div>
               </div>
-            </div>
 
-          </fieldset>
-      <% end %>
+            </fieldset>
+        <% end %>
+      </div>
     </div>
+
   </div>
 
-</div>
-
-<div id="push"></div>
+  <div id="push"></div>
 
 </div>
 
