@@ -9,6 +9,7 @@ module ApplicationHelper
     Rails.cache.fetch(CACHE_CITY_NAME) {Setting.find_by_key(:city).value}
   end
 
+  # Maximum number of days an ad can be published for.
   def max_number_days_publish
     Rails.cache.fetch(CACHE_MAX_DAYS_EXPIRE) {Setting.find_by_key(:ad_max_expire).value}
   end

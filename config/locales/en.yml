@@ -108,7 +108,7 @@ en:
     not_authorized: You are not allowed go to that page.
   location:
     location: "Location:*"
-    new_location: New location for this ad
+    new_location: Enter a new location for this ad
     name: "Location name:"
     name_help: Give a name to your new location (eg shop name, random name you give your workshop...). It will be shown publicly. Leave blank if you don't want to assign any name.
     name_to_use: "Which name would you like to use for this ad?*:"
@@ -179,7 +179,9 @@ en:
     anonymous: Anonymous ad?
     anonymous_help: Check this box if you want to publicly show your username, instead of your real name, when publishing this ad.
     new_location: Enter a new location
+    choose_existing: Choose existing location instead
     submit: Submit
+    create_this_ad: Create this ad!
     cancel: Cancel
     create_success: The ad '%{title}' has been created. You will shortly receive an e-mail, with the new ad details.
     your_new: Your new ad
@@ -214,6 +216,7 @@ en:
     error_ad_must_have_item: Please add at least 1 item.
     select_category: Available categories
     captcha_not_valid: The captcha text you entered is not valid.
+    create_account_first_html: "%{create_account} now before publishing your ad, if you want to be able to edit it later."
   mailer:
     welcome: "Welcome to %{name}!"
     confirmation_descr1: You received this message because an account, based on your e-mail address, was created on this website.

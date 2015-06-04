@@ -37,9 +37,11 @@
   <%= t('mailer.ad_will_expire', day_number: @max_expire_days , expire_date: @ad.expire_date ) %>
 </p>
 
+<% if !@user[:is_anon] %>
 <p>
   <%= t('mailer.manage_ad_html', :href => link_to(t('mailer.admin_panel'), @full_admin_url)) %>
 </p>
+<% end %>
 
 <p><%= t('mailer.thanks') %><br />
   <%= t('mailer.signature', name: @site_name) %>

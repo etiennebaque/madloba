@@ -106,12 +106,7 @@
               <div class="list-group">
                 <div class="list-group-item smaller-no-border-no-background">
                   <p><%= t('home.no_ad') %></p>
-                  <% if user_signed_in? %>
-                      <p><%= t('home.create_an_ad_now_html', createad: (link_to t('home.create_new_ad'), new_ad_url) )%></p>
-                  <% else %>
-                      <hr/>
-                      <p><%= t('home.signin_now_html', signin: (link_to t('home.sign_in').capitalize, new_session_path(resource_name)) )%></p>
-                  <% end %>
+                  <p><%= t('home.create_an_ad_now_html', createad: (link_to t('home.create_new_ad'), new_ad_url) )%></p>
                 </div>
               </div>
 

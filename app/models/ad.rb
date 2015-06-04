@@ -4,17 +4,18 @@ class Ad < ActiveRecord::Base
   belongs_to :location
   belongs_to :user
 
+  include ApplicationHelper
   after_initialize :default_values
 
   # Ad image
   mount_uploader :image, ImageUploader
   process_in_background :image
 
-  accepts_nested_attributes_for :location
+  accepts_nested_attributes_for :location, :reject_if => :all_blank
   accepts_nested_attributes_for :ad_items, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :items
 
-  validates_presence_of :title, :location_id, :description
+  validates_presence_of :title, :description
   validates :is_giving, inclusion: [true, false]
   validates :is_username_used, inclusion: [true, false]
   validates_presence_of :anon_email, :anon_name, unless: :user_id?
@@ -88,8 +89,18 @@ class Ad < ActiveRecord::Base
 
   private
 
+  # Setting default values after initialization.
   def default_values
     self.is_username_used = false
+
+    # we define the date when the ad won't be published any longer (see maximum number of days, in Settings table)
+    if max_number_days_publish == '0'
+      # No limit set for ad expiration. Let's use 2100-01-01 as a default date value
+      self.expire_date = Date.new(2100,1,1)
+    else
+      d = Date.today
+      self.expire_date = d + max_number_days_publish.to_i
+    end
   end
 
 end

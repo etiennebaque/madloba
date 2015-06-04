@@ -28,8 +28,6 @@ class User::AdsController < ApplicationController
   def new
     @ad = Ad.new
     authorize @ad
-
-    @ad.build_location()
     get_map_settings_for_ad
   end
 
@@ -40,38 +38,9 @@ class User::AdsController < ApplicationController
     # we tie now the user to the ad (if it is not an anonymous user)
     @ad.user = current_user
 
-    # we tie the chosen location
-    if params['location_id'] == '0'
-      if params['location_to_update']
-        location_to_update = Location.update(params['location_to_update'], ad_location_params)
-        @ad.location = location_to_update
-      else
-        # this is a new location. We need to add it to the database, before tying it to the ad
-        new_location = Location.new(ad_location_params, user: current_user, city: site_city)
-        new_location.user = current_user
-        new_location.city = site_city
-        new_location.province = Setting.where(key: 'state').pluck('value').first
-        new_location.save
-        @ad.location = new_location
-      end
-      if @ad.location && current_user
-        @ad.location.user = current_user
-      end
-    else
-      @ad.location = Location.find(params['location_id'])
-    end
-
-    # we define the date when the ad won't be published any longer (see maximum number of days, in Settings table)
-    if max_number_days_publish == '0'
-      # No limit set for ad expiration. Let's use 2100-01-01 as a default date value
-      @ad.expire_date = Date.new(2100,1,1)
-    else
-      d = Date.today
-      @ad.expire_date = d + max_number_days_publish.to_i
-    end
-
     if @ad.save_with_or_without_captcha(current_user)
       flash[:new_ad] = @ad.title
+
       # Letting the user know when their ad will expire.
       if (max_number_days_publish.to_i > 0)
         flash[:ad_expire] = t('ad.ad_create_expire', day_number: max_number_days_publish, expire_date: @ad.expire_date)
@@ -85,9 +54,9 @@ class User::AdsController < ApplicationController
       @ad = Ad.includes(:items).where(id: @ad.id).first
       user_info = {}
       if current_user
-        user_info = {email: current_user.email, name: current_user.first_name}
+        user_info = {email: current_user.email, name: current_user.first_name, is_anon: false}
       else
-        user_info = {email: @ad.anon_email, name: @ad.anon_name}
+        user_info = {email: @ad.anon_email, name: @ad.anon_name, is_anon: true}
       end
 
       if is_on_heroku
@@ -99,12 +68,9 @@ class User::AdsController < ApplicationController
 
     else
       # Saving the ad failed.
-      flash[:error_new_ad] = @ad.title
       get_map_settings_for_ad
-
       render action: 'new'
     end
-
   end
 
   def edit
@@ -129,7 +95,6 @@ class User::AdsController < ApplicationController
       get_map_settings_for_ad
       render layout: 'admin', action: 'edit'
     end
-
   end
 
   def destroy
@@ -152,11 +117,7 @@ class User::AdsController < ApplicationController
     params.require(:ad).permit(:title, :description, :is_username_used, :location_id, :is_giving,
                                :image, :image_cache, :remove_image, :anon_name, :anon_email, :captcha, :captcha_key,
                                :ad_items_attributes => [:id, :item_id, :_destroy, :item_attributes => [:id, :name, :category_id, :_destroy] ],
-                               :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :loc_type, :latitude, :longitude, :phone_number, :website, :description])
-  end
-
-  def ad_location_params
-    params.require(:ad).require(:location_attributes).permit(:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :loc_type, :latitude, :longitude, :phone_number, :website, :description)
+                               :location_attributes => [:id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :loc_type, :latitude, :longitude, :phone_number, :website, :description, :_destroy])
   end
 
   # This method is called when a user replies and sends a message to another user, who posted an ad.
@@ -207,6 +168,8 @@ class User::AdsController < ApplicationController
   def get_map_settings_for_ad
     if %w(show send_message).include?(action_name)
       getMapSettingsWithSeveralItems(@ad.location, HAS_CENTER_MARKER, NOT_CLICKABLE_MAP, @ad.items)
+    elsif %w(create update).include?(action_name)
+      getMapSettings(@ad.location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
     else
       getMapSettings(@ad.location, HAS_NOT_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
     end

@@ -16,7 +16,6 @@ module User::AdsHelper
     current_user == nil && ad.anon_email != nil
   end
 
-
   # Checks if image upload is allowed
   def can_upload_image
     image_storage = Rails.cache.fetch(CACHE_IMAGE_STORAGE) {Setting.find_or_create_by(key: 'image_storage').value}
@@ -47,6 +46,12 @@ module User::AdsHelper
   # Getting the maximum number of days of publication, before ad expires.
   def max_expire_days
     Setting.where(key: 'ad_max_expire').pluck(:value).first
+  end
+
+  # If a signed-in user is creating an ad, they will have the choice to create a new location
+  # or to choose one of their existing location (registered when creating other ads before).
+  def can_choose_existing_locations(current_user)
+    current_user != nil && current_user.locations.length > 0
   end
 
 end

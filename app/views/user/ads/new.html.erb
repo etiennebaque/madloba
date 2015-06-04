@@ -16,6 +16,7 @@
     <script>
         var current_page = "new_ad";
         var location_number = <%= user_locations_number %>;
+        var can_choose_existing_locations = <%= can_choose_existing_locations(current_user) %>;
     </script>
 
 
@@ -24,6 +25,14 @@
 <div id="wrap">
 
   <%= render 'shared/navigation' %>
+
+  <!-- For anonymous user creating ads, we'rr adding a note saying that they can modify their ad, if they create an account. -->
+  <% if current_user.nil? %>
+      <div class="col-lg-12 ad-non-signed-warning alert alert-dismissible alert-warning" role="alert">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <p><%= t('ad.create_account_first_html', create_account: (link_to t('home.create_account').capitalize, new_registration_path(resource_name), class: 'alert-link')) %></p>
+      </div>
+  <% end %>
 
   <div class="container">
 
@@ -161,56 +170,46 @@
                   </div>
               <% end %>
 
-              <!-- "Choose a location" section -->
-              <% if user_locations_number > 0 %>
-                  <!-- List of all the different locations previously entered by the current user -->
-                  <div class="form-group">
-                    <%= f.label :location_id, t('location.location'), class: 'col-lg-2 control-label' %>
-                    <div class="col-lg-6">
-                      <% current_user.locations.each_with_index do |loc, index| %>
-                          <div class='radio existing_location'>
-                            <label>
-                              <%= radio_button_tag 'location_id', loc.id, index == 0 %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
-                            </label>
-                          </div>
-                      <% end %>
-                      <div class='radio'>
-                        <%= t('home.or') %>
-                      </div>
-                      <div class='radio'>
-                        <label>
-                          <input id="new_location_radio" type="radio" name="location_id" value=0>
-                          <%= t('ad.new_location') %>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
+              <% if params['ad'] && params['ad']['location_attributes'] %>
+
+                  <%= f.fields_for :location, :html => {:class => 'form-horizontal'} do |loc| %>
+                      <%= render 'shared/location_form', form: loc, location: @ad.location,
+                                 label_class: 'col-lg-2 control-label',
+                                 col10: 'col-lg-10', col6: 'col-lg-6', col4: 'col-lg-4', col3: 'col-lg-3',
+                                 col2: 'col-lg-2', col_radio: 'col-lg-6', can_choose_existing_location: can_choose_existing_locations(current_user) %>
+                  <% end %>
+
               <% else %>
-                  <!-- No locations tied to this user yet: opening the "New Location" form underneath. -->
-                  <%= hidden_field_tag 'location_id', 0 %>
-              <% end %>
+                  <!-- "Choose a location" section -->
+                  <div id="new_location_form">
+                    <% if user_locations_number > 0 %>
+                        <!-- List of all the different locations previously entered by the current user -->
+                        <div id="locations_from_list" class="form-group">
+                          <%= f.label :location, t('location.location'), class: 'col-lg-2 control-label' %>
+                          <div class="col-lg-6">
+                            <% current_user.locations.each_with_index do |loc, index| %>
+                                <div class='radio existing_location'>
+                                  <label>
+                                    <%= f.radio_button :location, loc.id, checked: index == 0 %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                                  </label>
+                                </div>
+                            <% end %>
+                          </div>
+                        </div>
+                    <% end %>
 
-              <!-- "New Location" form - start -->
-              <%= f.fields_for :location, :html => {:class => 'form-horizontal'} do |loc| %>
+                    <div class="col-lg-2" style="display: inline-block">&nbsp;</div>
 
-                  <div id="new_location_section" class="hide">
-                    <hr />
-
-                    <h4><%= t('location.new_location') %></h4>
-
-                    <!-- Partial that contains the creation form for a location -->
-                    <%= render 'shared/location_form', form: loc, location: @ad.location,
-                               label_class: 'col-lg-2 control-label',
-                               col10: 'col-lg-10', col6: 'col-lg-6', col4: 'col-lg-4', col3: 'col-lg-3',
-                               col2: 'col-lg-2', col_radio: 'col-lg-6' %>
-
-                    <hr />
+                    <%= link_to_add_association t('ad.new_location'), f, :location, partial: 'shared/location_form', class: 'btn btn-sm btn-info', style: 'margin-bottom: 30px;', form_name: 'form',
+                                                render_options: {locals: {label_class: 'col-lg-2 control-label', col10: 'col-lg-10', col6: 'col-lg-6', col4: 'col-lg-4', col3: 'col-lg-3',
+                                                                          col2: 'col-lg-2', col_radio: 'col-lg-6', can_choose_existing_location: (current_user != nil && current_user.locations.length > 0)}} %>
                   </div>
               <% end %>
-              <!-- "New Location" form - end -->
+
+
 
               <!-- if anonymous user creates an ad, we need to ask for their name and email -->
-              <!-- They need to provide a response to a captche -->
+              <!-- They need to provide a response to a captcha -->
               <% if !user_signed_in? %>
 
                   <h4><%= t('ad.about_you') %></h4>
@@ -248,7 +247,7 @@
 
               <div class="form-group">
                 <div class="col-lg-10 col-lg-offset-2">
-                  <%= f.submit t('ad.submit'), class: 'btn btn-primary' %>
+                  <%= f.submit t('ad.create_this_ad'), class: 'btn btn-success' %>
                   <a href="/" class="btn"><%= t('ad.cancel') %></a>
                 </div>
               </div>
