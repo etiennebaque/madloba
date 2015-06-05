@@ -201,7 +201,9 @@
                         </div>
                     <% end %>
 
-                    <div class="col-lg-2" style="display: inline-block">&nbsp;</div>
+                    <% if can_choose_existing_locations(current_user) %>
+                        <div class="col-lg-2" style="display: inline-block">&nbsp;</div>
+                    <% end %>
 
                     <!-- "Enter a new location" link -->
                     <%= link_to_add_association t('ad.new_location'), f, :location, partial: 'shared/location_form', class: 'btn btn-sm btn-info', style: 'margin-bottom: 30px;', form_name: 'form',
