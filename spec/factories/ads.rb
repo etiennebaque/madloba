@@ -34,4 +34,15 @@ FactoryGirl.define do
     f.title nil
   end
 
+  factory :ad_with_no_user_at_all, parent: :ad do |f|
+    f.user nil
+    f.anon_name nil
+    f.anon_email nil
+  end
+
+  factory :ad_with_anon_user_only, parent: :ad do |f|
+    f.user nil
+    f.anon_name { Faker::Name.name }
+    f.anon_email { Faker::Internet.email }
+  end
 end

@@ -35,7 +35,7 @@ class User::AdsController < ApplicationController
     @ad = Ad.new(ad_params)
     authorize @ad
 
-    # we tie now the user to the ad (if it is not an anonymous user)
+    # we tie now the user to the ad (if it is an anonymous user, current_user is nil)
     @ad.user = current_user
 
     if @ad.save_with_or_without_captcha(current_user)

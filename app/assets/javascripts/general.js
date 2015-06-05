@@ -167,7 +167,11 @@ $(document).ready(function() {
 
 
     // Function call to initialize the location form (Location edit form, all Ad forms).
-    init_location_form(districts_geocodes, map);
+    if (typeof can_choose_existing_locations != "undefined" && can_choose_existing_locations == false) {
+        init_location_form(districts_geocodes, map);
+    }else{
+        init_location_form("", map);
+    }
 
 
     // This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,

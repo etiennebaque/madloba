@@ -61,4 +61,12 @@ RSpec.describe Ad, :type => :model do
     expect(FactoryGirl.build(:ad, image: File.open(Rails.root.join('tmp.txt')))).not_to be_valid
   end
 
+  it 'is invalid if it has neither user tied to it nor anonymous user' do
+    expect(FactoryGirl.build(:ad_with_no_user_at_all)).not_to be_valid
+  end
+
+  it 'is valid if it has anonymous name and anonymous email only, no user' do
+    expect(FactoryGirl.build(:ad_with_anon_user_only)).not_to be_valid
+  end
+
 end
