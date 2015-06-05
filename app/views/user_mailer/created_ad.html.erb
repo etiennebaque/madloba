@@ -11,17 +11,23 @@
 <ul>
   <li><%= t('mailer.ad_title') %>: <%= @ad.title %></li>
 
-  <li><%= t('mailer.item') %>:
-    <ul>
-      <% @ad.items.each do |item| %>
-          <li><%= item.name %></li>
-      <% end %>
-    </ul>
-  </li>
-
   <% if @ad['is_giving'] %>
+      <li><%= t('ad.giving_away') %>
+        <ul>
+          <% @ad.items.each do |item| %>
+              <li><%= item.name %></li>
+          <% end %>
+        </ul>
+      </li>
       <li><%= t('mailer.where_pick_up') %>: <%= @ad.location.name_and_or_full_address %></li>
   <% else %>
+      <li><%= t('ad.accepting') %>
+        <ul>
+          <% @ad.items.each do |item| %>
+              <li><%= item.name %></li>
+          <% end %>
+        </ul>
+      </li>
       <li><%= t('mailer.where_to_drop') %>: <%= @ad.location.name_and_or_full_address %></li>
   <% end %>
 </ul>

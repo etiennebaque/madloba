@@ -17,11 +17,9 @@ RSpec.describe Ad, :type => :model do
 
   BUFFER = ('a' * 1024).freeze
 
-  # TODO: try to see again why this test fails
-  #       (it has to do with the after_create in the ads factory)
-  #it 'has a valid factory' do
-    #expect(FactoryGirl.build(:ad_with_items)).to be_valid
-  #end
+  it 'has a valid factory' do
+    expect(FactoryGirl.build(:ad_with_items)).to be_valid
+  end
 
   it 'is linked to a location' do
     Ad.reflect_on_association(:location).macro == :belongs_to

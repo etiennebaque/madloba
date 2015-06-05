@@ -26,7 +26,7 @@
 
   <%= render 'shared/navigation' %>
 
-  <!-- For anonymous user creating ads, we'rr adding a note saying that they can modify their ad, if they create an account. -->
+  <!-- For anonymous user creating ads, we're adding a note saying that they can modify their ad, if they create an account. -->
   <% if current_user.nil? %>
       <div class="col-lg-12 ad-non-signed-warning alert alert-dismissible alert-warning" role="alert">
         <button type="button" class="close" data-dismiss="alert">×</button>
@@ -93,19 +93,6 @@
                   </div>
               <% end %>
 
-              <!-- Items -->
-              <div class="form-group">
-                <%= f.label :ad_items, t('ad.item'), class: 'col-lg-2 control-label' %>
-                <div class="col-lg-6">
-                  <div id="items">
-                    <%= f.fields_for :ad_items do |ad_item| %>
-                        <%= render 'shared/ad_item_fields', f: ad_item %>
-                    <% end %>
-                    <%= link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success' %>
-                  </div>
-                </div>
-              </div>
-
               <!-- Giving / Accepting items -->
               <div class="form-group">
                 <%= f.label :is_giving, t('location.ad_action'), class: 'col-lg-2 control-label' %>
@@ -119,6 +106,19 @@
                     <label>
                       <%= f.radio_button :is_giving, false %><%= t('location.ad_action_accepting') %>
                     </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Items -->
+              <div class="form-group">
+                <%= f.label :ad_items, t('ad.item'), class: 'col-lg-2 control-label' %>
+                <div class="col-lg-6">
+                  <div id="items">
+                    <%= f.fields_for :ad_items do |ad_item| %>
+                        <%= render 'shared/ad_item_fields', f: ad_item %>
+                    <% end %>
+                    <%= link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success' %>
                   </div>
                 </div>
               </div>
@@ -170,15 +170,16 @@
                   </div>
               <% end %>
 
-              <% if params['ad'] && params['ad']['location_attributes'] %>
 
+              <!-- Ad location section -->
+              <% if params['ad'] && params['ad']['location_attributes'] %>
+                  <!-- if location params already exists, we render directly the form they were created in. -->
                   <%= f.fields_for :location, :html => {:class => 'form-horizontal'} do |loc| %>
                       <%= render 'shared/location_form', form: loc, location: @ad.location,
                                  label_class: 'col-lg-2 control-label',
-                                 col10: 'col-lg-10', col6: 'col-lg-6', col4: 'col-lg-4', col3: 'col-lg-3',
+                                 col10: 'col-lg-10', col8: 'col-lg-8', col6: 'col-lg-6', col4: 'col-lg-4', col3: 'col-lg-3',
                                  col2: 'col-lg-2', col_radio: 'col-lg-6', can_choose_existing_location: can_choose_existing_locations(current_user) %>
                   <% end %>
-
               <% else %>
                   <!-- "Choose a location" section -->
                   <div id="new_location_form">
@@ -190,7 +191,7 @@
                             <% current_user.locations.each_with_index do |loc, index| %>
                                 <div class='radio existing_location'>
                                   <label>
-                                    <%= f.radio_button :location, loc.id, checked: index == 0 %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                                    <%= f.radio_button :location_id, loc.id, checked: index == 0 %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
                                   </label>
                                 </div>
                             <% end %>
@@ -200,13 +201,12 @@
 
                     <div class="col-lg-2" style="display: inline-block">&nbsp;</div>
 
+                    <!-- "Enter a new location" link -->
                     <%= link_to_add_association t('ad.new_location'), f, :location, partial: 'shared/location_form', class: 'btn btn-sm btn-info', style: 'margin-bottom: 30px;', form_name: 'form',
-                                                render_options: {locals: {label_class: 'col-lg-2 control-label', col10: 'col-lg-10', col6: 'col-lg-6', col4: 'col-lg-4', col3: 'col-lg-3',
+                                                render_options: {locals: {label_class: 'col-lg-2 control-label', col10: 'col-lg-10', col8: 'col-lg-8', col6: 'col-lg-6', col4: 'col-lg-4', col3: 'col-lg-3',
                                                                           col2: 'col-lg-2', col_radio: 'col-lg-6', can_choose_existing_location: (current_user != nil && current_user.locations.length > 0)}} %>
                   </div>
               <% end %>
-
-
 
               <!-- if anonymous user creates an ad, we need to ask for their name and email -->
               <!-- They need to provide a response to a captcha -->
@@ -270,6 +270,8 @@
 
 </div>
 
+
+<!-- Modal window to show, when a location is not found on the map, in the location form -->
 <div class="modal" id="myErrorModal">
   <div class="modal-dialog">
     <div class="modal-content">

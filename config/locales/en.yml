@@ -111,10 +111,10 @@ en:
     new_location: Enter a new location for this ad
     name: "Location name:"
     name_help: Give a name to your new location (eg shop name, random name you give your workshop...). It will be shown publicly. Leave blank if you don't want to assign any name.
-    name_to_use: "Which name would you like to use for this ad?*:"
-    ad_action: "What are you doing with your items?*:"
-    ad_action_giving: I'm giving them away
-    ad_action_accepting: I'm searching for/accepting them
+    name_to_use: "Which name would you like to use?*"
+    ad_action: "Action:*"
+    ad_action_giving: I'm giving away items.
+    ad_action_accepting: I'm searching for items.
     name_username: the username
     name_fullname: the full name
     definition: "Enter your location*:"
@@ -152,7 +152,7 @@ en:
     has_expired: This ad has expired on %{expire_date}, and is not visible on the website any longer.
     title: "Ad title*:"
     title_help: e.g. 'Gives away 5 shirts' or 'I want to get rid of my old laptop'...
-    item: "Item(s)*:"
+    item: "Which item(s)?*:"
     about_you: "About you"
     name: "Your name*:"
     name_help: Please enter your name or a nickname here. It will appear publicly as it is, in the published ad.

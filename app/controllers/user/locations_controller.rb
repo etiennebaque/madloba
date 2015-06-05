@@ -60,9 +60,9 @@ class User::LocationsController < ApplicationController
     # Reformating latitude and longitude, if needed, so they match the required scale (ie latitude{7,5} and longitude{8,5})
     if location_params['latitude'] && location_params['longitude']
       newLat = BigDecimal.new(location_params['latitude'])
-      location_params['latitude'] = newLat.round(5)
+      location_params['latitude'] = newLat.round(5, :up)
       newLon = BigDecimal.new(location_params['longitude'])
-      location_params['longitude'] = newLon.round(5)
+      location_params['longitude'] = newLon.round(5, :up)
     end
 
     if @location.is_area
@@ -81,7 +81,6 @@ class User::LocationsController < ApplicationController
       flash[:name] = @location.name
       redirect_to edit_user_location_path
     else
-      @location = Location.includes(:ads => :item).where(id: params[:id]).first!
       render 'location'
     end
   end

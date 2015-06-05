@@ -82,16 +82,14 @@ RSpec.describe User::AdsController, :type => :controller do
       end
 
       it 'creates a new ad' do
-        # TODO: check why this test fails (no usage of cocoon for nested location form in ads#new ??)
-        #expect{
-          #post :create, ad: @valid_ad_attributes
-        #}.to change(Ad,:count).by(1)
+        expect{
+          post :create, ad: @valid_ad_attributes
+        }.to change(Ad,:count).by(1)
       end
 
       it 'redirects to the new ad' do
         post :create, ad: @valid_ad_attributes
-        # TODO: check why this test fails (no usage of cocoon for nested location form in ads#new ??)
-        #expect(response).to redirect_to :action => :show, :id => assigns(:ad).id
+        expect(response).to redirect_to :action => :show, :id => assigns(:ad).id
       end
     end
 
@@ -105,8 +103,7 @@ RSpec.describe User::AdsController, :type => :controller do
 
       it 're-renders the new method' do
         post :create, ad: FactoryGirl.attributes_for(:invalid_ad)
-        # TODO: check why this test fails (no usage of cocoon for nested location form in ads#new ??)
-        #expect(response).to render_template('new')
+        expect(response).to render_template('new')
       end
 
     end

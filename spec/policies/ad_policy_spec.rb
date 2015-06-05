@@ -66,8 +66,8 @@ describe AdPolicy, type: :policy do
     it 'grants access to regular user' do
       expect(subject).to permit(user, ad)
     end
-    it 'does not grant access to unsigned user' do
-      expect(subject).not_to permit(unsigned_user, ad)
+    it 'grants access to unsigned user' do
+      expect(subject).to permit(unsigned_user, ad)
     end
   end
 
@@ -78,8 +78,8 @@ describe AdPolicy, type: :policy do
     it 'grants creation to regular user' do
       expect(subject).to permit(user, Ad.new)
     end
-    it 'does not grant creation to unsigned user' do
-      expect(subject).not_to permit(unsigned_user, Ad.new)
+    it 'grants creation to unsigned user' do
+      expect(subject).to permit(unsigned_user, Ad.new)
     end
   end
 
