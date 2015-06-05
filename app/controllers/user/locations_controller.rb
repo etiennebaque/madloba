@@ -2,6 +2,7 @@ class User::LocationsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   before_action :authenticate_user!
   before_action :requires_user
+  before_action :is_location_controller
   after_action :verify_authorized
 
   layout 'admin'
@@ -103,6 +104,12 @@ class User::LocationsController < ApplicationController
 
   def location_params
     params.require(:location).permit(:name, :street_number, :address, :postal_code, :province, :city, :latitude, :longitude, :phone_number, :website, :description, :loc_type, :district_id)
+  end
+
+  # This boolean is to be used on the location form partial. We don't want the "Enter new location" header to appear,
+  # when page loaded from a location controller action.
+  def is_location_controller
+    @is_location_edit = true
   end
 
 end
