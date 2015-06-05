@@ -9,6 +9,7 @@ module ApplicationHelper
     Rails.cache.fetch(CACHE_CITY_NAME) {Setting.find_by_key(:city).value}
   end
 
+  # Maximum number of days an ad can be published for.
   def max_number_days_publish
     Rails.cache.fetch(CACHE_MAX_DAYS_EXPIRE) {Setting.find_by_key(:ad_max_expire).value}
   end
@@ -147,25 +148,7 @@ module ApplicationHelper
     result['osm']['attribution'] = OSM_ATTRIBUTION
 
     return result
-  end
-
-  # Initializes the existing list of districts.
-  def initialize_areas
-    all_district = District.all
-    if all_district
-      @districts = all_district.collect{|d| [d.name, d.id] }
-      @districts_geocodes = {}
-      all_district.each do |d|
-        @districts_geocodes[d.id] = [d.latitude, d.longitude]
-      end
     end
-
-    @area_type = Setting.find_by_key('area_type').value
-    if @area_type
-      @area_type = @area_type.split(',')
-    end
-  end
-
 
   # ---------------------------------------------------
   # Global function to get settings to initialize a map

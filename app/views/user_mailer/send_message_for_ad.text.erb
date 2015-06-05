@@ -1,15 +1,15 @@
-<%= t('mailer.dear', name: @ad['first_name']) %>
+<%= t('mailer.dear', name: @ad[:first_name]) %>
 
-<%= t('mailer.received_message', ad_title: @ad['title'], site_name: @site_name) %>
+<%= t('mailer.received_message', ad_title: @ad[:title], site_name: @site_name) %>
 
 ------------------------------------------------
 
-<%= t('ad.from') %>: <%= "#{@sender.first_name} #{@sender.last_name} (#{@sender.email})" %>
+<%= t('ad.from') %>: <%= "#{@sender[:full_name]} (#{@sender[:email]})" %>
 <%= simple_format(@message) %>
 
 ------------------------------------------------
 
-<%= t('ad.get_back_to', first_name: @sender.first_name) %>
+<%= t('ad.get_back_to', first_name: @sender[:full_name]) %>
 
 <%= t('mailer.thanks') %>
 <%= t('mailer.signature', name: @site_name) %>

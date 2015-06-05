@@ -26,7 +26,7 @@
   <div class="container">
 
     <% if flash[:new_ad] %>
-        <div class="alert alert-dismissable alert-success">
+        <div class="alert alert-dismissable alert-success" style="margin-top: 21px;">
           <button data-dismiss="alert" class="close" type="button">×</button>
           <%= t('ad.create_success', title: flash[:new_ad]) %>
         </div>
@@ -38,7 +38,7 @@
         <% end %>
     <% end %>
     <% if flash[:success] %>
-        <div class="alert alert-dismissable alert-success">
+        <div class="alert alert-dismissable alert-success" style="margin-top: 21px;">
           <button data-dismiss="alert" class="close" type="button">×</button>
           <%= flash[:success] %>
         </div>

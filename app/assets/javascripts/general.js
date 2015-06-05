@@ -26,7 +26,6 @@ $(document).ready(function() {
         }
     });
 
-
     // Type-ahead for the item text field, in the main navigation bar.
     // searched_ad_items object is initialized in home layout template.
     if (typeof searched_ad_items != 'undefined') {
@@ -52,7 +51,6 @@ $(document).ready(function() {
     // ***********************
     // Create/Edit an ad pages
     // ***********************
-
     // Function that binds events to the item drop down list (in ads#new and ads#edit pages)
     // These events consists of making ajax call to check what items exists, in order to
     // create a type-ahead for the search bar of that drop drown box.
@@ -99,27 +97,6 @@ $(document).ready(function() {
 
     bindTypeaheadToItemSelect($('#items .selectpicker-items'));
 
-    // "Create ad" form: when "New location" radio button is selected, or is already checked.
-    if($('#new_location_radio').is(':checked')) {
-        $("#new_location_section").removeClass('hide');
-        initLeafletMap(map_settings_array);
-    }
-    $("#new_location_radio").click(function(){
-        $("#new_location_section").removeClass('hide');
-        initLeafletMap(map_settings_array);
-    });
-
-    // "Create ad" form: if the user has no existing location yet, open automatically the "New location" form
-    if (typeof location_number != 'undefined' && location_number == 0){
-        $("#new_location_section").removeClass('hide');
-        initLeafletMap(map_settings_array);
-    }
-
-    // "Create ad" form: when "New location" radio button is not selected.
-    $(".existing_location").click(function(){
-        $("#new_location_section").addClass('hide');
-    });
-
     // "Create ad" form: create message when image needs to be uploaded.
     $('#new_ad').submit(function() {
         var image_path = $('#ad_image').val();
@@ -128,7 +105,7 @@ $(document).ready(function() {
         }
     });
 
-
+    // Events to be triggered when item field added or removed, in the ad form.
     $("#items a.add_fields").
         data("association-insertion-position", 'before').
         data("association-insertion-node", 'this');
@@ -157,73 +134,103 @@ $(document).ready(function() {
         });
 
 
-    // Location form: show appropriate section when entering an exact address
-    function show_exact_address_section(){
-        $("#postal_code_section").removeClass('hide');
-        $("#district_section").addClass('hide');
-        $(".exact_location_section").removeClass('hide');
-        location_marker_type = 'exact';
-        map.on('click', onMapClickLocation);
-        $('#map_notification_postal_code_only').addClass('hide');
-        $('#map_notification_exact').removeClass('hide');
+    // On the "New ad" form, open automatically the new location form, if the user is anonymous,
+    // or never created any location as a signed in user.
+    if (typeof current_page != "undefined" && current_page == "new_ad"
+         && typeof can_choose_existing_locations != "undefined" && can_choose_existing_locations == false){
+        setTimeout(function() {
+            $("#new_location_form a.add_fields").trigger('click');
+            $("#locations_from_list").hide();
+            $("#location a.add_fields").hide();
+            initLeafletMap(map_settings_array);
+            init_location_form(districts_geocodes, map);
+        },20);
     }
 
-    $(".location_type_exact").click(function(){
-        show_exact_address_section();
-        if (newmarker != null){
-            map.removeLayer(newmarker);
-        }
+    // Create an ad: adding the location form dynamically, via Cocoon
+    $("#new_location_form a.add_fields").
+        data("association-insertion-position", 'before').
+        data("association-insertion-node", 'this');
+
+    $('#new_location_form').bind('cocoon:after-insert',
+        function() {
+            $("#locations_from_list").hide();
+            $("#new_location_form a.add_fields").hide();
+            // Call to the JS functions that will initialize the new location form and the map.
+            initLeafletMap(map_settings_array);
+            init_location_form(districts_geocodes, map);
+        });
+    $('#new_location_form').bind("cocoon:after-remove", function() {
+            $("#locations_from_list").show();
+            $("#new_location_form a.add_fields").show();
     });
 
-    if($('.location_type_exact').is(':checked')) {
-        show_exact_address_section();
+
+    // Function call to initialize the location form (Location edit form, all Ad forms).
+    if (typeof can_choose_existing_locations != "undefined" && can_choose_existing_locations == false) {
+        init_location_form(districts_geocodes, map);
+    }else{
+        init_location_form("", map);
     }
 
 
-    // Location form: show appropriate section when choosing a postal code-based area
-    function show_postal_code_section(){
-        $(".exact_location_section").addClass('hide');
-        $("#district_section").addClass('hide');
-        $("#postal_code_section").removeClass('hide');
-        location_marker_type = 'area';
-        map.on('click', onMapClickLocation);
-        $('#map_notification_postal_code_only').removeClass('hide');
-        $('#map_notification_exact').addClass('hide');
+    // This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,
+    // 'zoomToBoundsOnClick' would zoom in too much, and push the markers to the edge of the screen.
+    // This event underneath fixes this behaviour, the markers are not pushed to the boundaries of the map anymore.
+    if(typeof markers != 'undefined'){
+        markers.on('clusterclick', function (a) {
+            var bounds = a.layer.getBounds().pad(0.5);
+            map.fitBounds(bounds);
+        });
     }
 
-    $(".location_type_postal_code").click(function(){
-        show_postal_code_section();
-        if (newmarker != null){
-            map.removeLayer(newmarker);
-        }
+    // This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel, in the home page, the page would scroll down.
+    // When clicking on zoom in/zoom out, this will force to be at the top of the page
+    $('.home-page .leaflet-control-zoom-out, .home-page .leaflet-control-zoom-in').click(function(){
+        $("html, body").animate({ scrollTop: 0 }, 0);
     });
 
-    if($('.location_type_postal_code').is(':checked')) {
-        show_postal_code_section();
-    }
+});
 
+/**
+ * This critical function initializes the location form (Location edit form, Ad forms)
+ * as well as all the events tied to its relevant elements.
+ */
+function init_location_form(districts_geocodes, map){
 
-    // Location form: show appropriate section when choosing a district-based area
-    function show_district_section(){
-        $(".exact_location_section").addClass('hide');
-        $("#postal_code_section").addClass('hide');
-        $("#district_section").removeClass('hide');
-        $('#map_notification_postal_code_only').addClass('hide');
-        $('#map_notification_exact').addClass('hide');
-        location_marker_type = 'area';
-        map.off('click', onMapClickLocation);
-        $("#map_notification").addClass('hide');
-    }
-    $(".location_type_district").click(function(){
-        show_district_section();
-        if (newmarker != null){
-            map.removeLayer(newmarker);
+    if ($('#map').length > 0){
+        $(".location_type_exact").click(function(){
+            show_exact_address_section(map);
+            if (newmarker != null){
+                map.removeLayer(newmarker);
+            }
+        });
+
+        if($('.location_type_exact').is(':checked')) {
+            show_exact_address_section(map);
         }
-    });
-    if($('.location_type_district').is(':checked')) {
-        show_district_section();
-    }
 
+        $(".location_type_postal_code").click(function(){
+            show_postal_code_section(map);
+            if (newmarker != null){
+                map.removeLayer(newmarker);
+            }
+        });
+
+        if($('.location_type_postal_code').is(':checked')) {
+            show_postal_code_section(map);
+        }
+
+        $(".location_type_district").click(function(){
+            show_district_section(map);
+            if (newmarker != null){
+                map.removeLayer(newmarker);
+            }
+        });
+        if($('.location_type_district').is(':checked')) {
+            show_district_section(map);
+        }
+    }
 
     // "Postal code" functionality: display a help message to inform about what the area will be named,
     // after the postal code is entered.
@@ -275,22 +282,30 @@ $(document).ready(function() {
     // Help messages for fields on "Create ad" form
     $('.help-message').popover();
 
+    // Initializing onclick event on button, when looking for location on map, based on user input.
+    find_geocodes();
 
-    // Event triggered when click on "Define geocodes & find address on the map" button,
-    // on the "Create ad" form, and on the Ad edit form.
+}
+
+
+/**
+ * Event triggered when click on "Define geocodes & find address on the map" button,
+ * on the "Create ad" form, and on the Ad edit form.
+ */
+function find_geocodes(){
     $('#findGeocodeAddressMapBtnId').button().click(function () {
 
         var location_type = 'exact';
 
-        if (typeof current_page != "undefined" && current_page == "new_ad"){
+        /*if (typeof current_page != "undefined" && current_page == "new_ad"){
             // We are on the "Create ads" page
             if ($('#location_type_area_id').is(':checked')){
                 location_type = 'area';
             }
-        }
+        }*/
 
         if ($('.location_type_postal_code').is(':checked')){
-            // We're on the location edit page, and 'Postal code' location type is checked.
+            // We're on the location edit page, and 'Postal code' or 'District' location type is checked.
             location_type = 'area';
         }
 
@@ -337,21 +352,46 @@ $(document).ready(function() {
         });
 
     });
+}
 
-    // This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,
-    // 'zoomToBoundsOnClick' would zoom in too much, and push the markers to the edge of the screen.
-    // This event underneath fixes this behaviour, the markers are not pushed to the boundaries of the map anymore.
-    if(typeof markers != 'undefined'){
-        markers.on('clusterclick', function (a) {
-            var bounds = a.layer.getBounds().pad(0.5);
-            map.fitBounds(bounds);
-        });
-    }
+/**
+ * Function used in the location form - show appropriate section when entering an exact address
+ */
+function show_exact_address_section(map){
+    $("#postal_code_section").removeClass('hide');
+    $("#district_section").addClass('hide');
+    $(".exact_location_section").removeClass('hide');
+    location_marker_type = 'exact';
+    map.on('click', onMapClickLocation);
+    $('#map_notification_postal_code_only').addClass('hide');
+    $('#map_notification_exact').removeClass('hide');
+}
 
-    // This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel, in the home page, the page would scroll down.
-    // When clicking on zoom in/zoom out, this will force to be at the top of the page
-    $('.home-page .leaflet-control-zoom-out, .home-page .leaflet-control-zoom-in').click(function(){
-        $("html, body").animate({ scrollTop: 0 }, 0);
-    });
 
-});
+/**
+ * Function used in the location form - show appropriate section when choosing a postal code-based area
+ */
+function show_postal_code_section(map){
+    $(".exact_location_section").addClass('hide');
+    $("#district_section").addClass('hide');
+    $("#postal_code_section").removeClass('hide');
+    location_marker_type = 'area';
+    map.on('click', onMapClickLocation);
+    $('#map_notification_postal_code_only').removeClass('hide');
+    $('#map_notification_exact').addClass('hide');
+}
+
+
+/**
+ * Function used in the location form - show appropriate section when choosing a district-based area
+ */
+function show_district_section(map){
+    $(".exact_location_section").addClass('hide');
+    $("#postal_code_section").addClass('hide');
+    $("#district_section").removeClass('hide');
+    $('#map_notification_postal_code_only').addClass('hide');
+    $('#map_notification_exact').addClass('hide');
+    location_marker_type = 'area';
+    map.off('click', onMapClickLocation);
+    $("#map_notification").addClass('hide');
+}

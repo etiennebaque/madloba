@@ -10,6 +10,12 @@ module User::AdsHelper
     current_user && current_user.owns_ad(ad)
   end
 
+  # Checks if anonymous user who posted an ad added their email address.
+  # If they did, users will be able to send them a message about this ad.
+  def anon_user_puts_email(ad)
+    current_user == nil && ad.anon_email != nil
+  end
+
   # Checks if image upload is allowed
   def can_upload_image
     image_storage = Rails.cache.fetch(CACHE_IMAGE_STORAGE) {Setting.find_or_create_by(key: 'image_storage').value}
@@ -18,11 +24,15 @@ module User::AdsHelper
 
   def publisher_name(ad)
     publisher_name = ''
-    ad_user = ad.user
     if ad.is_anonymous
-      publisher_name = ad_user.username
+      publisher_name = ad.anon_name
     else
-      publisher_name = "#{ad_user.first_name} #{ad_user.last_name}"
+      ad_user = ad.user
+      if ad.is_username_used
+        publisher_name = ad_user.username
+      else
+        publisher_name = "#{ad_user.first_name} #{ad_user.last_name}"
+      end
     end
     return publisher_name
   end
@@ -36,6 +46,12 @@ module User::AdsHelper
   # Getting the maximum number of days of publication, before ad expires.
   def max_expire_days
     Setting.where(key: 'ad_max_expire').pluck(:value).first
+  end
+
+  # If a signed-in user is creating an ad, they will have the choice to create a new location
+  # or to choose one of their existing location (registered when creating other ads before).
+  def can_choose_existing_locations(current_user)
+    current_user != nil && current_user.locations.length > 0
   end
 
 end

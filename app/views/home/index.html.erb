@@ -33,19 +33,9 @@
       <div id="sidebar" class="semi-transparent hide">
         <!-- Sidebar - 'Create ad' section -->
         <div class="list-group">
-            <% if user_signed_in? %>
               <div class="list-group-item smaller-no-border-no-background">
                  <a class="btn btn-success no-color" href="/ads/new"><i class="fa fa-plus"></i> <%= t('home.create_new_ad') %></a>
               </div>
-            <% else %>
-              <div class="list-group-item smaller-no-border-no-background">
-                <button type="button" class="btn btn-default disabled"><i class="fa fa-plus"></i> <%= t('home.create_new_ad') %></button>
-              </div>
-              <div class="list-group-item smaller-no-border-no-background">
-                <span><%= t('home.post_ad_please_html', signin: (link_to t('home.sign_in'), new_session_path(resource_name)), createaccount: (link_to t('home.create_account'), new_registration_path(resource_name)) )%>
-                </span>
-               </div>
-            <% end %>
         </div>
 
         <!-- Sidebar - Refinements section -->
@@ -116,12 +106,7 @@
               <div class="list-group">
                 <div class="list-group-item smaller-no-border-no-background">
                   <p><%= t('home.no_ad') %></p>
-                  <% if user_signed_in? %>
-                      <p><%= t('home.create_an_ad_now_html', createad: (link_to t('home.create_new_ad'), new_ad_url) )%></p>
-                  <% else %>
-                      <hr/>
-                      <p><%= t('home.signin_now_html', signin: (link_to t('home.sign_in').capitalize, new_session_path(resource_name)) )%></p>
-                  <% end %>
+                  <p><%= t('home.create_an_ad_now_html', createad: (link_to t('home.create_new_ad'), new_ad_url) )%></p>
                 </div>
               </div>
 
@@ -135,7 +120,7 @@
                 <i><%= t('home.demo_sidebar_note_html', link: link_to(t('home.admin_panel'), '/user/managerecords#categories')) %></i>
             </div>
         <% end %>
-        
+
       </div>
       <!-- Leaflet sidebar section, with guided navigation - end -->
 

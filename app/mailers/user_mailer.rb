@@ -4,13 +4,13 @@ class UserMailer < ActionMailer::Base
   include ApplicationHelper
 
   # When an ad is created, this method sends an e-mail to the user who just created it.
-  def created_ad(current_user, ad, url)
+  def created_ad(user_info, ad, url)
     @ad = ad
     @full_admin_url = url
     @max_expire_days = max_number_days_publish
-    @user = current_user
+    @user = user_info
     @site_name = site_name
-    mail(to: current_user.email, subject: t('mailer.new_ad_object', site_name: site_name, ad_title: ad.title))
+    mail(to: user_info[:email], subject: t('mailer.new_ad_object', site_name: site_name, ad_title: ad.title))
   end
 
   # Sends an e-mail to a user, when another user replied to their ad, to be in touch with them.
@@ -19,7 +19,7 @@ class UserMailer < ActionMailer::Base
     @ad = ad_info
     @site_name = site_name
     @message = message
-    mail(to: ad_info['email'], reply_to: sender.email, subject: t('mailer.reply_ad_object', ad_title: ad_info['title'], site_name: site_name))
+    mail(to: ad_info[:email], reply_to: sender[:email], subject: t('mailer.reply_ad_object', ad_title: ad_info[:title], site_name: site_name))
   end
 
 end

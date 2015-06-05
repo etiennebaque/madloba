@@ -120,31 +120,18 @@
 
                 <!-- Name to use -->
                 <div class="form-group">
-                  <%= f.label :is_anonymous, t('location.name_to_use'), class: 'control-label' %>
+                  <%= f.label :is_username_used, t('location.name_to_use'), class: 'control-label' %>
                   <div class="radio">
                     <label>
-                      <%= f.radio_button :is_anonymous, true, value: true %>
+                      <%= f.radio_button :is_username_used, true, value: true %>
                       <%= t('location.name_username') %> (<%= @ad.user.username %>)
                     </label>
                   </div>
                   <div class="radio">
                     <label>
-                      <%= f.radio_button :is_anonymous, false, value: false %>
+                      <%= f.radio_button :is_username_used, false, value: false %>
                       <%= t('location.name_fullname') %> (<%= @ad.user.first_name %> <%= @ad.user.last_name %>)
                     </label>
-                  </div>
-                </div>
-
-                <!-- Items -->
-                <div class="form-group">
-                  <%= f.label :item, t('ad.item'), class: 'control-label' %>
-                  <div class="form-inline">
-                    <div id="items">
-                      <%= f.fields_for :ad_items do |ad_item| %>
-                          <%= render 'shared/ad_item_fields', f: ad_item %>
-                      <% end %>
-                      <%= link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success ad-add-item' %>
-                    </div>
                   </div>
                 </div>
 
@@ -160,6 +147,19 @@
                     <label>
                       <%= f.radio_button :is_giving, false %><%= t('location.ad_action_accepting') %>
                     </label>
+                  </div>
+                </div>
+
+                <!-- Items -->
+                <div class="form-group">
+                  <%= f.label :item, t('ad.item'), class: 'control-label' %>
+                  <div class="form-inline">
+                    <div id="items">
+                      <%= f.fields_for :ad_items do |ad_item| %>
+                          <%= render 'shared/ad_item_fields', f: ad_item %>
+                      <% end %>
+                      <%= link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success ad-add-item' %>
+                    </div>
                   </div>
                 </div>
 
@@ -206,50 +206,53 @@
                   </div>
                 </div>
 
-                <hr />
-
-                <h4><%= t('location.location') %></h4>
                 <!-- List of all the different locations previously entered by the current user -->
                 <div class="form-group">
                   <% if current_user == @ad.user %>
-                      <%= f.label :location_id, t('admin.ad.your_locations'), class: 'control-label' %>
-                  <% else %>
-                      <%= f.label :location_id, t('admin.ad.this_user_locations'), class: 'control-label' %>
-                  <% end %>
+                      <!-- Case where a user edits their own ad -->
+                      <!-- "Choose a location" section -->
+                      <div id="new_location_form">
+                        <% if user_locations_number > 0 %>
+                            <!-- List of all the different locations previously entered by the current user -->
+                            <div id="locations_from_list" class="form-group">
+                              <%= f.label :location, t('location.location'), class: 'control-label' %>
+                              <% current_user.locations.each_with_index do |loc, index| %>
+                                  <div class='radio existing_location'>
+                                    <label>
+                                      <%= f.radio_button :location, loc.id, checked: @ad.location_id == loc.id, class: 'radio no-min-height' %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                                    </label>
+                                  </div>
+                              <% end %>
+                            </div>
+                        <% end %>
 
-                  <% @ad.user.locations.each do |loc| %>
-                      <div class='radio existing_location'>
-                        <label>
-                          <%= f.radio_button :location_id, loc.id , checked: @ad.location_id == loc.id, class: 'radio no-min-height' %>
-                          <%= loc.location_type_address %> - <a href="/user/locations/<%= loc.id %>/edit"><%= loc.location_full_name %></a>
-                        </label>
+                        <!-- "Enter a new location" link -->
+                        <%= link_to_add_association t('ad.new_location'), f, :location, partial: 'shared/location_form', class: 'btn btn-sm btn-info', style: 'margin-bottom: 30px;', form_name: 'form',
+                                                    render_options: {locals: {label_class: 'control-label', col10: 'form-inline', col8: 'form-inline', col6: 'form-inline', col4: 'form-inline', col3: 'form-inline',
+                                                                              col2: 'form-inline', col_radio: '', can_choose_existing_location: (current_user != nil && current_user.locations.length > 0)}} %>
+
+                      </div>
+                  <% else %>
+                      <!-- Case where an admin edits someone else's ad. We don't let admin create a new location for them -->
+                      <div id="new_location_form">
+                        <% if user_locations_number > 0 %>
+                            <!-- List of all the different locations previously entered by the current user -->
+                            <div id="locations_from_list" class="form-group">
+                              <%= f.label :location, t('location.location'), class: 'control-label' %>
+                              <% current_user.locations.each_with_index do |loc, index| %>
+                                  <div class='radio existing_location'>
+                                    <label>
+                                      <%= f.radio_button :location, loc.id, checked: index == 0, class: 'radio no-min-height' %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                                    </label>
+                                  </div>
+                              <% end %>
+                            </div>
+                        <% end %>
                       </div>
                   <% end %>
-                  <label style="font-weight: normal;"><%= t('home.or') %></label>
-                  <div class='radio'>
-                    <label>
-                      <input id="new_location_radio" type="radio" name="location_id" value=0>
-                      <%= t('admin.ad.location_new_edit', current_location: "#{@ad.location.location_full_name} - #{@ad.location.location_type_address}") %>
-                    </label>
-                  </div>
                 </div>
 
-                <div id="new_location_section" class="hide">
-
-                  <%= f.fields_for :location, :html => {:class => 'form-horizontal'} do |loc| %>
-
-                      <h4><%= t('ad.edit_current_location') %></h4>
-
-                      <!-- Partial that contains the location form -->
-                      <%= render 'shared/locationForm', form: loc, location: @ad.location,
-                                 label_class: 'control-label', col10: 'form-inline', col6: 'form-inline',
-                                 col4: 'form-inline', col3: 'form-inline',
-                                 col2: 'form-inline', col_radio: '' %>
-
-                  <% end %>
-
-                </div>
-
+                <!-- Submit form -->
                 <%= render 'user/shared/submitSection' %>
 
                 <!-- After submit, a notification shows up here, if a new image is being uploaded -->
@@ -272,8 +275,6 @@
   <!--/#content.span10-->
 
 </div><!--/fluid-row-->
-
-<hr>
 
 <!-- "Delete ad" - modal window -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
