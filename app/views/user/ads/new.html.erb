@@ -30,7 +30,9 @@
   <% if current_user.nil? %>
       <div class="col-lg-12 ad-non-signed-warning alert alert-dismissible alert-warning" role="alert">
         <button type="button" class="close" data-dismiss="alert">×</button>
-        <p><%= t('ad.create_account_first_html', create_account: (link_to t('home.create_account').capitalize, new_registration_path(resource_name), class: 'alert-link')) %></p>
+        <p><%= t('ad.create_account_first_html',
+                 create_account: (link_to t('home.create_account').capitalize, new_registration_path(resource_name), class: 'alert-link'),
+                 sign_in: (link_to t('home.sign_in'), new_session_path(resource_name), class: 'alert-link')) %></p>
       </div>
   <% end %>
 

@@ -18,8 +18,8 @@ class Ad < ActiveRecord::Base
   validates_presence_of :title, :description
   validates :is_giving, inclusion: [true, false]
   validates :is_username_used, inclusion: [true, false]
-  validates_presence_of :anon_email, :anon_name, unless: :user_id?
   validate :has_items
+  validate :has_anon_name_and_email
   validates_size_of :image, maximum: 5.megabytes
 
   apply_simple_captcha
@@ -37,6 +37,13 @@ class Ad < ActiveRecord::Base
   def has_items
     errors.add(:base, I18n.t('ad.error_ad_must_have_item')) if (self.ad_items.blank? || self.ad_items.empty?)
   end
+
+  def has_anon_name_and_email
+    errors.add(:base, I18n.t('ad.provide_anon_name')) if (self.user_id.nil? && self.anon_name.blank?)
+    errors.add(:base, I18n.t('ad.provide_anon_email')) if (self.user_id.nil? && self.anon_email.blank?)
+  end
+
+
 
   # The publisher of an ad might not want to have their full name publicly displayed.
   # This method defines whether to show the username or the full name (whether it is anonymous or registered user)

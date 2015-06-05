@@ -25,7 +25,7 @@ en:
     label: "Enter the text in this field"
     refresh_button_text: "Can't see? Refresh!"
     message:
-      default: "The Captcha code did not match with the image"
+      default: "code did not match with the image"
       user: "The secret Image and code were different"
   activerecord:
     errors:
@@ -213,10 +213,12 @@ en:
     write_new_item: Write a new item and select its category
     add_item: Add an item
     see_published: See this published ad
-    error_ad_must_have_item: Please add at least 1 item.
+    error_ad_must_have_item: Please add at least 1 item
+    provide_anon_name: Please enter your name
+    provide_anon_email: Please enter your email address
     select_category: Available categories
     captcha_not_valid: The captcha text you entered is not valid.
-    create_account_first_html: "%{create_account} now before publishing your ad, if you want to be able to edit it later."
+    create_account_first_html: "%{create_account} or %{sign_in} now before publishing your ad, if you want to be able to edit it later."
   mailer:
     welcome: "Welcome to %{name}!"
     confirmation_descr1: You received this message because an account, based on your e-mail address, was created on this website.
