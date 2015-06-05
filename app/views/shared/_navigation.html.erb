@@ -13,7 +13,7 @@
       <% if current_page?(root_url) || current_page?('/search') %>
           <li><%= link_to t('home.about'), '#', id: 'about-nav-link' %></li>
       <% else %>
-          <li><%= link_to t('home.about'), about_path %></li>
+          <li><%= link_to t('home.about'), about_path, id: 'about-nav-link' %></li>
       <% end %>
 
       <!-- Sign in/Register/User drop down menu - start -->

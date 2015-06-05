@@ -36,7 +36,7 @@ $(document).ready(function() {
     }
 
     // Navigation bar on device: closes the navigation menu, when click.
-    $('.nav a').on('click', function(){
+    $('#about-nav-link').on('click', function(){
         if($('.navbar-toggle').css('display') !='none'){
             $(".navbar-toggle").click()
         }

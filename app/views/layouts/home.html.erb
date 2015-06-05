@@ -21,6 +21,9 @@
   <%= include_gon %>
 
   <script>
+      // Initializing map.
+      var map = null;
+
       // Initializing an object for the type-ahead functionality, in the main navigation bar.
       // (to be used in general.js)
       var searched_ad_items = new Bloodhound({
