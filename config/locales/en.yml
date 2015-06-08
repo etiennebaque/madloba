@@ -108,10 +108,12 @@ en:
     not_authorized: You are not allowed go to that page.
   location:
     location: "Location:*"
+    user_location: "This user's locations:*"
     new_location: Enter a new location for this ad
     name: "Location name:"
     name_help: Give a name to your new location (eg shop name, random name you give your workshop...). It will be shown publicly. Leave blank if you don't want to assign any name.
     name_to_use: "Which name would you like to use?*"
+    anon_publisher_name_note: "This is an ad posted by an anonymous user:"
     ad_action: "Action:*"
     ad_action_giving: I'm giving away items.
     ad_action_accepting: I'm searching for items.
@@ -345,7 +347,8 @@ en:
     social_media: Social media
     useful_links: Useful links
     delete_sure: Are you sure you want to delete this %{entity}?
-    warning_ads_before_delete: "WARNING: some ads are still tied to this %{entity}. Deleting this %{entity} will permanently delete these ads."
+    warning_ads_before_delete_item: "WARNING: some ads are still tied to this item. Deleting this item will permanently remove it from these ads."
+    warning_ads_before_delete_location: "WARNING: some ads are still tied to this location. Deleting this location will permanently delete these ads."
     delete_confirm: Yes, delete this %{entity}
     save_not_possible: "Demo - Update not possible for this page"
     left_menu:
@@ -491,7 +494,7 @@ en:
       title: Manage users
       description: From here, you can manage user accounts (admin and regular users).
       add: Create user
-      email: E-mail
+      email: Email
       full_name: Full name
       role: Role
       error_occurred: "%{errors} occurred while saving this user"
