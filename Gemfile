@@ -66,6 +66,12 @@ gem 'memcachier'
 # For neested forms
 gem 'cocoon'
 
+# Text in Javascript file
+gem 'gon'
+
+# Simple captcha - used when anonymous users create new ads, or reply to existing ones.
+gem 'simple_captcha2', require: 'simple_captcha'
+
 group :development, :test do
 
   # Mailcatcher

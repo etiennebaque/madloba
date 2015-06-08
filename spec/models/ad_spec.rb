@@ -17,11 +17,9 @@ RSpec.describe Ad, :type => :model do
 
   BUFFER = ('a' * 1024).freeze
 
-  # TODO: try to see again why this test fails
-  #       (it has to do with the after_create in the ads factory)
-  #it 'has a valid factory' do
-    #expect(FactoryGirl.build(:ad_with_items)).to be_valid
-  #end
+  it 'has a valid factory' do
+    expect(FactoryGirl.build(:ad_with_items)).to be_valid
+  end
 
   it 'is linked to a location' do
     Ad.reflect_on_association(:location).macro == :belongs_to
@@ -61,6 +59,14 @@ RSpec.describe Ad, :type => :model do
     # Generating a simple text file
     File.open('tmp.txt', 'wb') { |f| f.write BUFFER }
     expect(FactoryGirl.build(:ad, image: File.open(Rails.root.join('tmp.txt')))).not_to be_valid
+  end
+
+  it 'is invalid if it has neither user tied to it nor anonymous user' do
+    expect(FactoryGirl.build(:ad_with_no_user_at_all)).not_to be_valid
+  end
+
+  it 'is valid if it has anonymous name and anonymous email only, no user' do
+    expect(FactoryGirl.build(:ad_with_anon_user_only)).not_to be_valid
   end
 
 end

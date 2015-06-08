@@ -68,7 +68,7 @@ Madloba::Application.routes.draw do
   # Ajax call to show the ads related to 1 type of item and to 1 district/area.
   get '/showSpecificAds', to: 'home#showSpecificAds'
 
-
+  # Root
   root 'home#index'
 
 end

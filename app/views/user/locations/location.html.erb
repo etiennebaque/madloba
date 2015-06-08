@@ -54,7 +54,7 @@
           <% if @location && @location.errors.any? %>
               <div class="alert alert-danger">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong><%= t('admin.location.error_occurred', name: pluralize(@location.errors.count, 'error')) %>:</strong>
+                <strong><%= t('admin.location.error_occurred', errors: pluralize(@location.errors.count, 'error')) %>:</strong>
                 <ul>
                   <% @location.errors.full_messages.each do |msg| %>
                       <li><%= msg %></li>
@@ -108,8 +108,8 @@
                 <% end %>
 
                 <!-- Partial that contains the location form -->
-                <%= render 'shared/locationForm', form: f, location: @location,
-                           label_class: 'control-label', col10: 'form-inline', col6: 'form-inline',
+                <%= render 'shared/location_form', form: f, location: @location,
+                           label_class: 'control-label', col10: 'form-inline', col8: 'form-inline', col6: 'form-inline',
                            col4: 'form-inline', col3: 'form-inline',
                            col2: 'form-inline', col_radio: ''%>
 

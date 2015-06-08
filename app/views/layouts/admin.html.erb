@@ -12,6 +12,14 @@
 
   <%= javascript_include_tag 'admin/jquery.min', 'typeahead.bundle.min', 'general' %>
 
+  <!-- Gon gem - managing text in JS files -->
+  <%= include_gon %>
+
+  <script>
+      // Initializing map.
+      var map = null;
+  </script>
+
   <%= csrf_meta_tag %>
 
   <%= yield :head %>

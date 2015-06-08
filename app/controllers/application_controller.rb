@@ -5,15 +5,19 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
   before_action :check_if_setup
-  before_filter :allow_iframe_requests
+  before_action :load_javascript_text
+  before_action :allow_iframe_requests
 
   include ApplicationHelper
   include Pundit
+  include SimpleCaptcha::ControllerHelpers
 
-  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  helper :'user/location_form'
 
   unless Rails.application.config.consider_all_requests_local
     rescue_from Exception,
+                :with => :render_error
+    rescue_from StandardError,
                 :with => :render_error
     rescue_from ActiveRecord::RecordNotFound,
                 :with => :render_not_found
@@ -21,6 +25,8 @@ class ApplicationController < ActionController::Base
                 :with => :render_not_found
     rescue_from ActionController::UnknownController,
                 :with => :render_not_found
+    rescue_from Pundit::NotAuthorizedError,
+                with: :user_not_authorized
   end
 
   # If 'setup_step' key, in Settings table, is set to '1', it means that the installation process
@@ -33,6 +39,12 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
+  # Uses the 'gon' gem to load the text that appears in javascript files.
+  def load_javascript_text
+    gon.vars = t('general_js')
+  end
+
 
   # Allows the website to be embedded in an iframe.
   def allow_iframe_requests

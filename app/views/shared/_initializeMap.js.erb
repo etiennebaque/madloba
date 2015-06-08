@@ -1,6 +1,5 @@
 var map_settings_array = <%= raw @mapSettings.to_json %>;
 
-var map = null;
 var newmarker;
 var markers;
 
@@ -31,4 +30,6 @@ var location_marker_type = map_settings_array['clickableMapMarker'];
 var center_marker;
 
 // Call to the JS function that will initialize the map.
-initLeafletMap(map_settings_array);
+if ($("#map").length > 0){
+    initLeafletMap(map_settings_array);
+}

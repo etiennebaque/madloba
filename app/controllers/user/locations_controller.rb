@@ -2,6 +2,7 @@ class User::LocationsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   before_action :authenticate_user!
   before_action :requires_user
+  before_action :is_location_controller
   after_action :verify_authorized
 
   layout 'admin'
@@ -11,9 +12,6 @@ class User::LocationsController < ApplicationController
   def show
     @location = Location.includes(:ads => :item).includes(:district).where(id: params[:id]).first!
     authorize @location
-
-    initialize_areas()
-
     getMapSettings(@location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
     render 'location'
   end
@@ -21,9 +19,6 @@ class User::LocationsController < ApplicationController
   def new
     @location = Location.new
     authorize @location
-
-    initialize_areas()
-
     getMapSettings(@location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
 
     render 'location'
@@ -50,7 +45,6 @@ class User::LocationsController < ApplicationController
 
     authorize @location
 
-    initialize_areas()
     if @location.is_area
       getMapSettings(@location, HAS_CENTER_MARKER, CLICKABLE_MAP_AREA_MARKER)
     else
@@ -67,9 +61,9 @@ class User::LocationsController < ApplicationController
     # Reformating latitude and longitude, if needed, so they match the required scale (ie latitude{7,5} and longitude{8,5})
     if location_params['latitude'] && location_params['longitude']
       newLat = BigDecimal.new(location_params['latitude'])
-      location_params['latitude'] = newLat.round(5)
+      location_params['latitude'] = newLat.round(5, :up)
       newLon = BigDecimal.new(location_params['longitude'])
-      location_params['longitude'] = newLon.round(5)
+      location_params['longitude'] = newLon.round(5, :up)
     end
 
     if @location.is_area
@@ -88,7 +82,6 @@ class User::LocationsController < ApplicationController
       flash[:name] = @location.name
       redirect_to edit_user_location_path
     else
-      @location = Location.includes(:ads => :item).where(id: params[:id]).first!
       render 'location'
     end
   end
@@ -111,6 +104,12 @@ class User::LocationsController < ApplicationController
 
   def location_params
     params.require(:location).permit(:name, :street_number, :address, :postal_code, :province, :city, :latitude, :longitude, :phone_number, :website, :description, :loc_type, :district_id)
+  end
+
+  # This boolean is to be used on the location form partial. We don't want the "Enter new location" header to appear,
+  # when page loaded from a location controller action.
+  def is_location_controller
+    @is_location_edit = true
   end
 
 end

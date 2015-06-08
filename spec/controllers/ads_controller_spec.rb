@@ -65,33 +65,46 @@ RSpec.describe User::AdsController, :type => :controller do
       before do
         @item_1 = FactoryGirl.create(:first_item)
         @item_2 = FactoryGirl.create(:second_item)
-        @valid_ad_attributes = FactoryGirl.attributes_for(:ad).merge(
+        @valid_ad_attributes_with_signed_in_user = FactoryGirl.attributes_for(:ad).merge(
             user_id: @user.id,
             :ad_items_attributes => {
-                '0' => FactoryGirl.attributes_for(
-                    :ad_item,
-                    :item_id => @item_1.id.to_s,
-                    :_destroy => 'false'),
-                '1' => FactoryGirl.attributes_for(
-                    :ad_item,
-                    :item_id => @item_2.id.to_s,
-                    :_destroy => 'false') },
+                '0' => FactoryGirl.attributes_for(:ad_item, :item_id => @item_1.id.to_s, :_destroy => 'false'),
+                '1' => FactoryGirl.attributes_for(:ad_item, :item_id => @item_2.id.to_s, :_destroy => 'false') },
+            :location_attributes => FactoryGirl.attributes_for(:location, user_id: @user.id)
+        )
+
+        @valid_ad_attributes_with_anonymous_user = FactoryGirl.attributes_for(:ad_with_anon_user_only).merge(
+            user_id: nil,
+            :ad_items_attributes => {
+                '0' => FactoryGirl.attributes_for(:ad_item, :item_id => @item_1.id.to_s, :_destroy => 'false'),
+                '1' => FactoryGirl.attributes_for(:ad_item, :item_id => @item_2.id.to_s, :_destroy => 'false') },
             :location_attributes => FactoryGirl.attributes_for(:location, user_id: @user.id)
         )
 
       end
 
-      it 'creates a new ad' do
-        # TODO: check why this test fails (no usage of cocoon for nested location form in ads#new ??)
-        #expect{
-          #post :create, ad: @valid_ad_attributes
-        #}.to change(Ad,:count).by(1)
+      it 'creates a new ad, with signed-in user' do
+        expect{
+          post :create, ad: @valid_ad_attributes_with_signed_in_user
+        }.to change(Ad,:count).by(1)
       end
 
-      it 'redirects to the new ad' do
-        post :create, ad: @valid_ad_attributes
-        # TODO: check why this test fails (no usage of cocoon for nested location form in ads#new ??)
-        #expect(response).to redirect_to :action => :show, :id => assigns(:ad).id
+      it 'redirects to the new ad, after creation of ad with signed-in user' do
+        post :create, ad: @valid_ad_attributes_with_signed_in_user
+        expect(response).to redirect_to :action => :show, :id => assigns(:ad).id
+      end
+
+      it 'creates a new ad, with an anonymous user (not signed-in)' do
+        sign_out @user
+        expect{
+          post :create, ad: @valid_ad_attributes_with_anonymous_user
+        }.to change(Ad,:count).by(1)
+      end
+
+      it 'redirects to the new ad, after creation of ad with anonymous user' do
+        sign_out @user
+        post :create, ad: @valid_ad_attributes_with_anonymous_user
+        expect(response).to redirect_to :action => :show, :id => assigns(:ad).id
       end
     end
 
@@ -105,8 +118,7 @@ RSpec.describe User::AdsController, :type => :controller do
 
       it 're-renders the new method' do
         post :create, ad: FactoryGirl.attributes_for(:invalid_ad)
-        # TODO: check why this test fails (no usage of cocoon for nested location form in ads#new ??)
-        #expect(response).to render_template('new')
+        expect(response).to render_template('new')
       end
 
     end

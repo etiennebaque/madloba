@@ -1,6 +1,6 @@
 class User::BaseController < ApplicationController
-  before_action :authenticate_user!
-  before_filter :requires_user
+  before_action :authenticate_user!, except: [:getAreaSettings]
+  before_filter :requires_user, except: [:getAreaSettings]
 
   before_action :latitude_longitude_should_be_numeric, only: [:update_mapsettings]
   before_action :postal_code_greater_than_area_code, only: [:update_areasettings]

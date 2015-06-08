@@ -196,6 +196,9 @@ GEM
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
     formatador (0.2.5)
+    gon (5.0.4)
+      actionpack (>= 2.3.0)
+      json
     guard (2.6.1)
       formatador (>= 0.2.4)
       listen (~> 2.7)
@@ -326,6 +329,8 @@ GEM
       rdoc (~> 4.0)
     shoulda-matchers (2.7.0)
       activesupport (>= 3.0.0)
+    simple_captcha2 (0.3.4)
+      rails (>= 4.1)
     sinatra (1.4.5)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -399,6 +404,7 @@ DEPENDENCIES
   factory_girl_rails
   faker
   fog
+  gon
   guard-rspec
   httparty (~> 0.13.1)
   jbuilder (~> 1.2)
@@ -415,6 +421,7 @@ DEPENDENCIES
   sass-rails (~> 4.0.2)
   sdoc
   shoulda-matchers
+  simple_captcha2
   turbolinks
   uglifier (>= 1.3.0)
   unicorn
