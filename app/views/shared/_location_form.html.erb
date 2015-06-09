@@ -6,7 +6,7 @@
 
 <div class="nested-fields location-fields" style="padding-bottom: 10px;">
 
-  <% if can_choose_existing_locations(current_user) && %w(new create edit update).include?(action_name) %>
+  <% if can_choose_existing_locations(current_user) && %w(new create edit update).include?(action_name) && !@is_location_edit %>
 
       <div class="form-group">
         <hr />
