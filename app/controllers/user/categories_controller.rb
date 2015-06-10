@@ -2,7 +2,7 @@ class User::CategoriesController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   before_action :init_icons_to_propose
   after_action :verify_authorized
-  layout 'admin'
+  layout 'home'
 
   def show
     @category = Category.find(params[:id])

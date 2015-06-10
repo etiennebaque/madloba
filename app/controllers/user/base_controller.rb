@@ -5,7 +5,7 @@ class User::BaseController < ApplicationController
   before_action :latitude_longitude_should_be_numeric, only: [:update_mapsettings]
   before_action :postal_code_greater_than_area_code, only: [:update_areasettings]
 
-  layout 'admin'
+  layout 'home'
 
   include ApplicationHelper
 

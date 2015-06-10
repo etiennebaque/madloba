@@ -1,12 +1,20 @@
-<div class="navbar navbar-fixed-top navbar-default no-margin-bottom" role="navigation">
+<div class="<%= is_in_admin_panel ? 'navbar' : 'navbar-inverse' %> navbar-fixed-top navbar-default nav-margin-bottom" role="navigation">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <%= link_to site_name, root_path, :class => 'navbar-brand' %>
+    <% if is_in_admin_panel %>
+        <%= link_to "#{image_tag 'madloba_logo_green_40.png', class: 'madloba-img'} Madloba".html_safe, setup_path, :class => 'navbar-brand' %>
+    <% elsif is_in_admin_panel %>
+        <%= link_to "#{image_tag 'madloba_logo_green_40.png', class: 'madloba-img'} #{site_name}".html_safe, root_path, :class => 'navbar-brand' %>
+    <% else %>
+        <%= link_to "#{image_tag 'madloba_logo_50.png', class: 'madloba-img'} #{site_name}".html_safe, root_path, :class => 'navbar-brand' %>
+    <% end %>
   </div>
+
+  <% if !is_in_setup_mode %>
   <div id="navbarCollapse" class="navbar-collapse collapse navbar-responsive-collapse">
     <ul class="nav navbar-nav">
       <!-- "About" link -->
@@ -21,10 +29,12 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> <%= current_user.first_name %> <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <% if current_user.user? %>
-                  <li><%= link_to 'Your profile', user_index_path %></li>
+              <% if is_in_admin_panel %>
+                  <li><%= link_to t('home.page'), root_path %></li>
+              <% elsif current_user.user? %>
+                  <li><%= link_to t('home.user_panel'), user_index_path %></li>
               <% elsif current_user.admin? %>
-                  <li><%= link_to 'Admin panel', user_index_path %></li>
+                  <li><%= link_to t('home.admin_panel').capitalize, user_index_path %></li>
               <% end %>
               <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
             </ul>
@@ -33,10 +43,10 @@
           <li><a href="#" id="popover"><%= t('home.sign_register')%></a>
             <div id="popover-content" class="hide popover-larger">
               <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-horizontal'}) do |f| %>
-                  <%= t('home.e-mail') %>: <%= f.email_field :email %><br />
-                  <%= t('home.password') %>: <%= f.password_field :password %><br />
-                  <%= f.submit t('home.sign_in').capitalize, class: 'btn btn-primary btn-xs', style: 'margin-top: 5px' %><br />
-                  <%= t('home.not_have_account_yet_html', signup: "<strong>#{link_to t('home.sign_up'), new_registration_path(resource_name)}</strong>".html_safe ) %>.<br />
+                  <%= t('home.e-mail') %>: <%= f.email_field :email, {} %><br />
+                  <%= t('home.password') %>: <%= f.password_field :password, {} %><br />
+                  <%= f.submit t('home.sign_in').capitalize, class: 'btn btn-primary btn-xs', style: 'margin-top: 5px' %><br /><br />
+                  <%= t('home.not_have_account_yet_html', signup: "#{link_to t('home.sign_up'), new_registration_path(resource_name)}".html_safe ) %><br />
               <% end %>
             </div>
           </li>
@@ -58,11 +68,12 @@
       <div class="form-group">
         <%= button_tag t('home.search'), :id => 'btn-form-search', :type => 'button',:class => 'btn btn-default' %>
       </div>
-      <div class="form-group">\t<span style="color: #d9534f" id="search_error_message"></span></div>
+      <div class="form-group"><span style="color: #d9534f; margin-left: 5px;" id="search_error_message"></span></div>
     </form>
     <!-- Search form - end -->
   </div>
   <!-- /.nav-collapse -->
+  <% end %>
 
   <!-- /.container -->
 </div>

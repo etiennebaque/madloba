@@ -9,38 +9,12 @@
   <title><%= site_name %></title>
 
   <!-- CSS files to be included in all non-admin pages -->
-  <%= stylesheet_link_tag 'bootstrap','general', 'bootstrap-select.min', 'ajax-bootstrap-select' %>
-
-  <!-- Javascript files to be included in all non-admin pages -->
-  <%= javascript_include_tag 'jquery-1.11.1.js' %>
-  <%= javascript_include_tag 'bootstrap.min' %>
-  <%= javascript_include_tag 'typeahead.bundle.min', 'general' %>
-  <%= javascript_include_tag 'bootstrap-select.min', 'ajax-bootstrap-select.min' %>
+  <%= render 'shared/charismaIncludedCss' %>
+  <%= stylesheet_link_tag 'general', 'bootstrap-select.min', 'ajax-bootstrap-select' %>
+  <%= javascript_include_tag 'final/jquery.min' %>
 
   <!-- Gon gem - managing text in JS files -->
   <%= include_gon %>
-
-  <script>
-      // Initializing map.
-      var map = null;
-
-      // Initializing an object for the type-ahead functionality, in the main navigation bar.
-      // (to be used in general.js)
-      var searched_ad_items = new Bloodhound({
-          datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-          queryTokenizer: Bloodhound.tokenizers.whitespace,
-          prefetch: {
-              url: '/getItems?type=prefetch_ad_items'
-          },
-          remote: {
-              url: '/getItems?item=QUERY&type=search_ad_items',
-              wildcard: 'QUERY'
-          }
-      });
-      searched_ad_items.clearPrefetchCache();
-      searched_ad_items.initialize(true);
-  </script>
-  <%= javascript_include_tag 'home' %>
 
   <%= csrf_meta_tags %>
 
@@ -66,8 +40,28 @@
     </div>
 <% end %>
 
+<!-- Main part of the body -->
+<div id="<%= is_in_admin_panel ? 'wrap-admin' : 'wrap' %>">
 
-<%= yield %>
+  <%= render 'shared/navigation' %>
+
+  <% if is_in_admin_panel %>
+      <!-- Rendering admin panel and its footer -->
+      <div class="ch-container">
+        <%= yield %>
+        <%= render 'shared/charismaFooter' %>
+      </div>
+  <% else %>
+      <!-- Rendering regular pages (home page, show ad...) -->
+      <%= yield %>
+  <% end %>
+
+</div>
+
+<% if !is_in_admin_panel %>
+    <!-- Rendering footer for regular pages -->
+    <%= render 'shared/footer' %>
+<% end %>
 
 <!-- Modal popup that appears with OpenStreetMap address suggestions -->
 <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -85,9 +79,37 @@
   </div>
 </div>
 
-<!-- jquery_ujs is already included in application.js. However, some Bootstrap themes might override it, causing
- functionalities like Devise sign out no to work. Therefore, we include jquery_ujs after loading all scripts -->
-<%= javascript_include_tag 'jquery_ujs' %>
+
+<!-- Javascript files to be included -->
+<%= javascript_include_tag 'typeahead.bundle.min', 'general' %>
+<%= javascript_include_tag 'bootstrap-select.min', 'ajax-bootstrap-select.min' %>
+
+<script>
+    // Initializing map.
+    var map = null;
+
+    // Initializing an object for the type-ahead functionality, in the main navigation bar.
+    // (to be used in general.js)
+    var searched_ad_items = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        prefetch: {
+            url: '/getItems?type=prefetch_ad_items'
+        },
+        remote: {
+            url: '/getItems?item=QUERY&type=search_ad_items',
+            wildcard: 'QUERY'
+        }
+    });
+    searched_ad_items.clearPrefetchCache();
+    searched_ad_items.initialize(true);
+</script>
+<%= javascript_include_tag 'home' %>
+
+<!-- Javascript files specific to some pages, to be included here. -->
+<%= yield :scripts %>
+
+<%= render 'shared/charismaIncludedJs' %>
 
 </body>
 </html>

@@ -186,7 +186,7 @@ $(document).ready(function() {
 
     // This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel, in the home page, the page would scroll down.
     // When clicking on zoom in/zoom out, this will force to be at the top of the page
-    $('.home-page .leaflet-control-zoom-out, .home-page .leaflet-control-zoom-in').click(function(){
+    $('#home-map-canvas-wrapper .leaflet-control-zoom-out, #home-map-canvas-wrapper .leaflet-control-zoom-in').click(function(){
         $("html, body").animate({ scrollTop: 0 }, 0);
     });
 

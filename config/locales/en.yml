@@ -48,6 +48,8 @@ en:
   home:
     home: Home
     page: Home page
+    user_panel: User panel
+    admin_panel: Admin panel
     create_new_ad: Create a new ad
     reply_ad_please_html: To reply to an ad, please %{signin} or %{createaccount}.
     sign_in: sign in

@@ -5,7 +5,7 @@ class User::LocationsController < ApplicationController
   before_action :is_location_controller
   after_action :verify_authorized
 
-  layout 'admin'
+  layout 'home'
 
   include ApplicationHelper
 
@@ -35,7 +35,6 @@ class User::LocationsController < ApplicationController
       flash[:new_name] = @location.name
       redirect_to edit_user_location_path(@location.id)
     else
-
       render 'location'
     end
   end

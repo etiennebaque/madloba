@@ -1,5 +1,11 @@
 <footer id="footer">
   <div class="container-fluid lower-footer">
-    <p class="muted footer-message"><%= site_name %> - Powered by <a href="http://madloba.org" target="_blank">Madloba</a></p>
+    <% if is_in_setup_mode %>
+        <!-- Footer for setup pages -->
+        <p class="muted footer-message">New website powered by <a href="http://madloba.org" target="_blank">Madloba</a></p>
+    <% else %>
+        <!-- Footer for regular pages -->
+        <p class="muted footer-message"><%= site_name %> - Powered by <a href="http://madloba.org" target="_blank">Madloba</a></p>
+    <% end %>
   </div>
 </footer>
