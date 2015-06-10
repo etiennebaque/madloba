@@ -1,11 +1,9 @@
-class User::BaseController < ApplicationController
+class User::AdminPanelController < ApplicationController
   before_action :authenticate_user!, except: [:getAreaSettings]
   before_filter :requires_user, except: [:getAreaSettings]
 
   before_action :latitude_longitude_should_be_numeric, only: [:update_mapsettings]
   before_action :postal_code_greater_than_area_code, only: [:update_areasettings]
-
-  layout 'home'
 
   include ApplicationHelper
 

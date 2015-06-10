@@ -4,8 +4,6 @@ class User::AdsController < ApplicationController
   before_action :requires_user, except: [:new, :create, :send_message, :show]
   after_action :verify_authorized, except: [:new, :create, :send_message, :send_message]
 
-  layout 'home'
-
   include ApplicationHelper
 
   def show

@@ -5,8 +5,6 @@ class User::LocationsController < ApplicationController
   before_action :is_location_controller
   after_action :verify_authorized
 
-  layout 'home'
-
   include ApplicationHelper
 
   def show

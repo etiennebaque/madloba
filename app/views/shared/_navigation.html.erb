@@ -77,3 +77,20 @@
 
   <!-- /.container -->
 </div>
+
+
+<!-- Modal popup that appears with OpenStreetMap address suggestions -->
+<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel"><%= t('home.refine_location') %></h4>
+      </div>
+      <div class="modal-body" id="modal-body-id">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><%= t('home.cancel') %></button>
+      </div>
+    </div>
+  </div>
+</div>

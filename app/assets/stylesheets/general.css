@@ -36,6 +36,10 @@ body {
     background-color: #f5f5f5;
 }
 
+.devise-section {
+    padding: 20px 0px;
+}
+
 /* responsive CSS fixes as necessary, for the footer */
 @media (max-width: 767px) {
     #footer {

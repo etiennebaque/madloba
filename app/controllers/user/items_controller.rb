@@ -4,8 +4,6 @@ class User::ItemsController < ApplicationController
   before_action :requires_user
   after_action :verify_authorized
 
-  layout 'home'
-
   def show
     @item = Item.includes(:ads).where(id: params[:id]).first!
     authorize @item

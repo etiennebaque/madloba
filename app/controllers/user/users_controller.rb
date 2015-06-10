@@ -4,8 +4,6 @@ class User::UsersController < ApplicationController
   before_action :requires_user
   after_action :verify_authorized
 
-  layout 'home'
-
   include ApplicationHelper
 
   def show
