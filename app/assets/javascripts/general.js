@@ -11,8 +11,33 @@ $(document).ready(function() {
         '<p>'+gon.vars["adblock_turnoff"]+'</p>' +
         '</div>');
     }
-    // Initially created in 'home.html.erb' layout, this test div is now removed.
+    // Initially created in 'application.html.erb' layout, this test div is now removed.
     $("#ad-block").remove();
+
+    // Navigation bar: press Enter to valid form.
+    $("#searchFormId input").keypress(function(event) {
+        if (event.which == 13) {
+            event.preventDefault();
+            getLocationsPropositions();
+        }
+    });
+
+    // Navigation - Search form: Ajax call to get locations proposition, based on user input in this form.
+    $("#btn-form-search").bind("click", getLocationsPropositions);
+
+    // Navigation bar on device: closes the navigation menu, when click.
+    $('#about-nav-link').on('click', function(){
+        if($('.navbar-toggle').css('display') !='none'){
+            $(".navbar-toggle").click()
+        }
+    });
+
+    // Home page: When clicking on about, scroll to the home page upper footer.
+    $("#about-nav-link").click(function(){
+        $('html, body').animate({
+            scrollTop: $("#upper-footer-id").offset().top
+        }, 2000);
+    });
 
     // Popover when "Sign in / Register" link is clicked, in the navigation bar.
     $('#popover').popover({
@@ -35,12 +60,6 @@ $(document).ready(function() {
         });
     }
 
-    // Navigation bar on device: closes the navigation menu, when click.
-    $('#about-nav-link').on('click', function(){
-        if($('.navbar-toggle').css('display') !='none'){
-            $(".navbar-toggle").click()
-        }
-    });
 
     // Offcanvas related scripts
     $('[data-toggle=offcanvas]').click(function() {
@@ -167,10 +186,8 @@ $(document).ready(function() {
 
 
     // Function call to initialize the location form (Location edit form, all Ad forms).
-    if (typeof can_choose_existing_locations != "undefined" && can_choose_existing_locations == false) {
+    if (typeof districts_geocodes != "undefined") {
         init_location_form(districts_geocodes, map);
-    }else{
-        init_location_form("", map);
     }
 
 
@@ -186,7 +203,7 @@ $(document).ready(function() {
 
     // This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel, in the home page, the page would scroll down.
     // When clicking on zoom in/zoom out, this will force to be at the top of the page
-    $('.home-page .leaflet-control-zoom-out, .home-page .leaflet-control-zoom-in').click(function(){
+    $('#home-map-canvas-wrapper .leaflet-control-zoom-out, #home-map-canvas-wrapper .leaflet-control-zoom-in').click(function(){
         $("html, body").animate({ scrollTop: 0 }, 0);
     });
 
@@ -297,13 +314,6 @@ function find_geocodes(){
 
         var location_type = 'exact';
 
-        /*if (typeof current_page != "undefined" && current_page == "new_ad"){
-            // We are on the "Create ads" page
-            if ($('#location_type_area_id').is(':checked')){
-                location_type = 'area';
-            }
-        }*/
-
         if ($('.location_type_postal_code').is(':checked')){
             // We're on the location edit page, and 'Postal code' or 'District' location type is checked.
             location_type = 'area';
@@ -394,4 +404,76 @@ function show_district_section(map){
     location_marker_type = 'area';
     map.off('click', onMapClickLocation);
     $("#map_notification").addClass('hide');
+}
+
+/**
+ * Before submitting the form with the location, we first do an Ajax call to see
+ * if the Nominatim webservice comes back with several addresses.
+ *
+ * if it does, we show a modal window with this list of addresses. Once one is chosen,
+ * the form is submitted.
+ */
+function getLocationsPropositions(){
+    if ($('#location').val() != ''){
+        // A location has been entered, let's use the Nominatim web service
+        var locationInput = $('#location').val();
+        $.ajax({
+            url: "/getNominatimLocationResponses",
+            global: false,
+            type: "GET",
+            data: { location: locationInput },
+            cache: false,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-Type", "application/json");
+                $("#btn-form-search").html("Loading...");
+            },
+            success: function(data) {
+
+                var modalHtmlText = "";
+                if (data != null && data.length > 0){
+                    if (typeof data[0]['error_key'] != 'undefined'){
+                        // There's been an error while retrieving info from Nominatim,
+                        // or there is no result found for this address.
+                        $('#search_error_message').html('<strong>'+data[0]['error_key']+'</strong>');
+                    }else{
+                        // Address suggestions were found.
+                        // We need to create the HTML body of the modal window, based on the location proposition from OpenStreetMap.
+                        modalHtmlText = "<p>Choose one of the following available locations</p><ul></ul>";
+
+                        // We also need to consider whether an item is being searched/given at the same time.
+                        var item = $('#item').val();
+                        var search_action = $('#q').val();
+
+                        for (var i = 0; i < data.length; i++) {
+                            var proposed_location = data[i];
+                            var url = "/search?lat="+proposed_location['lat']+"&lon="+proposed_location['lon'];
+                            if (item != ''){
+                                url = url + "&item=" + item;
+                            }
+                            if (search_action != ''){
+                                url = url + "&q=" + search_action;
+                            }
+
+                            modalHtmlText = modalHtmlText + "<li><a href='"+url+"'>"+proposed_location['display_name']+"</a></li>";
+                        }
+                        modalHtmlText = modalHtmlText + "</ul>";
+                        $('#modal-body-id').html(modalHtmlText);
+                        var options = {
+                            "backdrop" : "static",
+                            "show" : "true"
+                        }
+                        $('#basicModal').modal(options);
+                    }
+
+                }
+
+                $("#btn-form-search").html("Search");
+
+            }
+        });
+    }else if (($('#item').val() != '') || ($('#user_action').val() != '')){
+        // no location is being searched, but an item is. We need to submit the form with this information.
+        $("#searchFormId").submit();
+    }
 }

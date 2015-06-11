@@ -21,6 +21,11 @@ body {
     padding-bottom:60px;
 }
 
+#wrap-admin {
+    min-height: 100%;
+    overflow:auto;
+}
+
 #footer {
     height: 60px;
     position: relative;
@@ -29,6 +34,10 @@ body {
 }
 #footer {
     background-color: #f5f5f5;
+}
+
+.devise-section {
+    padding: 20px 0px;
 }
 
 /* responsive CSS fixes as necessary, for the footer */
@@ -56,13 +65,17 @@ body {
 }
 
 .upper-footer{
-    background-color: #2c3e50;
+    background-color: #0C5A2E;
     color: white;
     min-height: 200px;
 }
 
+.upper-footer h2{
+    color: white;
+}
+
 .lower-footer{
-    background-color: #2c3e50;
+    background-color: #0C5A2E;
     color: white;
     text-align: center;
 }
@@ -164,6 +177,18 @@ span.disabled { color:gray; }
     margin-bottom: 0px;
 }
 
+.nav-margin-bottom{
+    margin-bottom: 20px;
+    padding: 3px 0px;
+}
+
+.navbar-brand .madloba-img {
+    margin-top: -9px;
+    margin-right: 9px;
+    height: 40px;
+    width: 32px;
+}
+
 /*
  * Off canvas and style tweaks
  * ---------------------------
@@ -172,7 +197,7 @@ html {
     overflow-x: hidden; /* Prevent scroll on narrow devices */
 }
 body {
-    padding-top: 60px;
+    padding-top: 58px;
 }
 
 @media screen and (max-width: 767px) {

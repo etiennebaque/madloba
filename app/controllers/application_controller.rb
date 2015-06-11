@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  layout :layout_by_resource
 
   before_action :check_if_setup
   before_action :load_javascript_text
@@ -184,6 +183,7 @@ class ApplicationController < ActionController::Base
     render json: locations_results
   end
 
+  # Returns a list of items, to appear in popup when using autocompletion.
   def get_items
     typeahead_type = params[:type]
 
@@ -223,14 +223,6 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-
-  def layout_by_resource
-    if devise_controller?
-      'admin'
-    else
-      'application'
-    end
-  end
 
   # Method to render 404 page
   def render_not_found(exception)

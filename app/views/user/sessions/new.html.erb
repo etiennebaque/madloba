@@ -1,63 +1,54 @@
-<div id="wrap">
+<div class="container devise-section">
 
-  <%= render 'shared/navigation' %>
+  <div class="row">
 
-  <div class="container">
+    <div class="col-lg-6">
 
-    <div class="row">
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-horizontal'}) do |f| %>
+          <fieldset>
+            <legend><%= t('session.sign_in') %></legend>
 
-      <div class="col-lg-6">
-
-        <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-horizontal'}) do |f| %>
-            <fieldset>
-              <legend><%= t('session.sign_in') %></legend>
-
-              <!-- E-mail field -->
-              <div class="form-group">
-                <%= f.label :email, 'E-mail:', class: 'col-lg-2 control-label' %>
-                <div class="col-lg-10">
-                  <%= f.email_field :email, class: 'form-control', autofocus: true %>
-                </div>
+            <!-- E-mail field -->
+            <div class="form-group">
+              <%= f.label :email, 'E-mail:', class: 'col-lg-2 control-label' %>
+              <div class="col-lg-10">
+                <%= f.email_field :email, class: 'form-control', autofocus: true %>
               </div>
+            </div>
 
-              <!-- Password field -->
-              <div class="form-group">
-                <%= f.label :password, 'Password:', class:'col-lg-2 control-label' %>
-                <div class="col-lg-10">
-                  <%= f.password_field :password, class: 'form-control', autocomplete: "off" %>
-                  <% if devise_mapping.rememberable? %>
-                      <div class="checkbox">
-                        <label>
-                          <%= f.check_box :remember_me %> <%= f.label :remember_me %>
-                        </label>
-                      </div>
+            <!-- Password field -->
+            <div class="form-group">
+              <%= f.label :password, 'Password:', class:'col-lg-2 control-label' %>
+              <div class="col-lg-10">
+                <%= f.password_field :password, class: 'form-control', autocomplete: "off" %>
+                <% if devise_mapping.rememberable? %>
+                    <div class="checkbox">
+                      <label>
+                        <%= f.check_box :remember_me %> <%= f.label :remember_me %>
+                      </label>
+                    </div>
 
-                  <% end %>
-                </div>
+                <% end %>
               </div>
+            </div>
 
-              <div class="form-group">
-                <div class="col-lg-10 col-lg-offset-2">
-                  <%= f.submit 'Sign in', class: 'btn btn-primary' %>
-                </div>
+            <div class="form-group">
+              <div class="col-lg-10 col-lg-offset-2">
+                <%= f.submit 'Sign in', class: 'btn btn-primary' %>
               </div>
+            </div>
 
-            </fieldset>
+          </fieldset>
 
 
-        <% end %>
+      <% end %>
 
-      </div>
     </div>
-
-    <%= render 'user/shared/links' %>
-
   </div>
 
-  <div id="push"></div>
+  <%= render 'shared/links' %>
 
 </div>
 
-<%= render 'shared/footer' %>
-
+<div id="push"></div>
 <!--  /.container -->

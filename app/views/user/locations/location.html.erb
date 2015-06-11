@@ -15,7 +15,7 @@
 
 <div class="row">
 
-  <%= render 'user/shared/leftMenu' %>
+  <%= render 'shared/admin_left_menu' %>
 
 
   <div id="content" class="col-lg-10 col-sm-10">
@@ -146,7 +146,7 @@
                 <% end %>
 
                 <!-- Submit button and cancel link -->
-                <%= render 'user/shared/submitSection' %>
+                <%= render 'shared/submit_section' %>
 
             <% end %>
           </div>
@@ -190,6 +190,6 @@
 
 
 <% content_for :scripts do %>
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initializeMap partial that create the actual map -->
-    <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>

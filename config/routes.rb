@@ -1,7 +1,7 @@
 Madloba::Application.routes.draw do
 
   devise_for :user, path: 'user', path_names: { sign_in: 'login', sign_out: 'logout', password: 'secret', confirmation: 'verification', unlock: 'unblock', registration: 'register', sign_up: 'new' },
-             controllers: { registrations: 'user/registrations', sessions: 'user/sessions', passwords: 'user/passwords', confirmations: 'user/confirmations' }
+             controllers: { registrations: 'user/registrations'}
 
   # Home page
   get 'home/index'
@@ -27,26 +27,26 @@ Madloba::Application.routes.draw do
   match '/500' => 'errors#error500', via: [ :get, :post, :patch, :delete ]
 
   namespace :user do
-    get '/', to: 'base#index'
+    get '/', to: 'admin_panel#index'
 
     resources :locations, :categories, :items, :users
     resources :ads, :only => [:edit, :update, :destroy]
 
-    get 'index', 'home', to: 'base#index'
-    get 'managerecords', to: 'base#managerecords'
-    get 'manageusers', to: 'base#manageusers'
-    get 'manageads', to: 'base#manageads'
+    get 'index', 'home', to: 'admin_panel#index'
+    get 'managerecords', to: 'admin_panel#managerecords'
+    get 'manageusers', to: 'admin_panel#manageusers'
+    get 'manageads', to: 'admin_panel#manageads'
     get 'manageprofile', to: 'users#edit'
-    get 'generalsettings', to: 'base#generalsettings'
-    get 'mapsettings', to: 'base#mapsettings'
-    get 'areasettings', to: 'base#areasettings'
+    get 'generalsettings', to: 'admin_panel#generalsettings'
+    get 'mapsettings', to: 'admin_panel#mapsettings'
+    get 'areasettings', to: 'admin_panel#areasettings'
 
-    post 'mapsettings/update', to: 'base#update_mapsettings'
-    post 'generalsettings/update', to: 'base#update_generalsettings'
-    post 'areasettings/update', to: 'base#update_areasettings'
-    post 'areasettings/update_districts', to: 'base#update_districts'
+    post 'mapsettings/update', to: 'admin_panel#update_mapsettings'
+    post 'generalsettings/update', to: 'admin_panel#update_generalsettings'
+    post 'areasettings/update', to: 'admin_panel#update_areasettings'
+    post 'areasettings/update_districts', to: 'admin_panel#update_districts'
 
-    get 'getAreaSettings', to: 'base#getAreaSettings'
+    get 'getAreaSettings', to: 'admin_panel#getAreaSettings'
 
     get 'ads/:id/edit', to: 'ads#edit'
 

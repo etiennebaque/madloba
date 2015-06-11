@@ -1,95 +1,86 @@
-<div id="wrap">
+<div class="container devise-section">
 
-  <%= render 'shared/navigation' %>
+  <div class="row">
 
-  <div class="container">
+    <div class="col-lg-8">
 
-    <div class="row">
+      <%= devise_error_messages! %>
 
-      <div class="col-lg-8">
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), :html => {:class => 'form-horizontal'}) do |f| %>
+          <fieldset>
+            <legend>Sign up</legend>
 
-        <%= devise_error_messages! %>
-
-        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), :html => {:class => 'form-horizontal'}) do |f| %>
-            <fieldset>
-              <legend>Sign up</legend>
-
-              <div class="form-group">
-                <div class="col-lg-9 col-lg-offset-3">
-                  <%= t('registration.all_mandatory') %>
-                </div>
+            <div class="form-group">
+              <div class="col-lg-9 col-lg-offset-3">
+                <%= t('registration.all_mandatory') %>
               </div>
+            </div>
 
-              <!-- First name -->
-              <div class="form-group">
-                <%= f.label :first_name, t('registration.first_name')+':', class: 'col-lg-3 control-label' %>
-                <div class="col-lg-9">
-                  <%= f.text_field :first_name, class: 'form-control', autofocus: true %>
-                </div>
+            <!-- First name -->
+            <div class="form-group">
+              <%= f.label :first_name, t('registration.first_name')+':', class: 'col-lg-3 control-label' %>
+              <div class="col-lg-9">
+                <%= f.text_field :first_name, class: 'form-control', autofocus: true %>
               </div>
+            </div>
 
-              <!-- Last name -->
-              <div class="form-group">
-                <%= f.label :last_name, t('registration.last_name')+':', class: 'col-lg-3 control-label' %>
-                <div class="col-lg-9">
-                  <%= f.text_field :last_name, class: 'form-control' %>
-                </div>
+            <!-- Last name -->
+            <div class="form-group">
+              <%= f.label :last_name, t('registration.last_name')+':', class: 'col-lg-3 control-label' %>
+              <div class="col-lg-9">
+                <%= f.text_field :last_name, class: 'form-control' %>
               </div>
+            </div>
 
-              <!-- Username -->
-              <div class="form-group">
-                <%= f.label :username,t('registration.username')+':', class: 'col-lg-3 control-label' %>
-                <div class="col-lg-9">
-                  <%= f.text_field :username, class: 'form-control help-message',
-                                   :data => {:content => t('registration.username_help'), :placement => 'right',
-                                             :toggle => 'popover', :trigger => 'hover focus'} %>
-                </div>
+            <!-- Username -->
+            <div class="form-group">
+              <%= f.label :username,t('registration.username')+':', class: 'col-lg-3 control-label' %>
+              <div class="col-lg-9">
+                <%= f.text_field :username, class: 'form-control help-message',
+                                 :data => {:content => t('registration.username_help'), :placement => 'right',
+                                           :toggle => 'popover', :trigger => 'hover focus'} %>
               </div>
+            </div>
 
-              <!-- E-mail -->
-              <div class="form-group">
-                <%= f.label :email, t('registration.email')+':', class: 'col-lg-3 control-label' %>
-                <div class="col-lg-9">
-                  <%= f.email_field :email, class: 'form-control' %>
-                </div>
+            <!-- E-mail -->
+            <div class="form-group">
+              <%= f.label :email, t('registration.email')+':', class: 'col-lg-3 control-label' %>
+              <div class="col-lg-9">
+                <%= f.email_field :email, class: 'form-control' %>
               </div>
+            </div>
 
-              <!-- Password -->
-              <div class="form-group">
-                <%= f.label :password, t('registration.password')+':', class:'col-lg-3 control-label' %>
-                <div class="col-lg-9">
-                  <%= f.password_field :password, class: 'form-control', autocomplete: "off" %>
-                </div>
+            <!-- Password -->
+            <div class="form-group">
+              <%= f.label :password, t('registration.password')+':', class:'col-lg-3 control-label' %>
+              <div class="col-lg-9">
+                <%= f.password_field :password, class: 'form-control', autocomplete: "off" %>
               </div>
+            </div>
 
-              <!-- Confirm password -->
-              <div class="form-group">
-                <%= f.label :password_confirmation, t('registration.password_confirm')+':', class: 'col-lg-3 control-label' %>
-                <div class="col-lg-9">
-                  <%= f.password_field :password_confirmation, class: 'form-control', autocomplete: "off" %>
-                </div>
+            <!-- Confirm password -->
+            <div class="form-group">
+              <%= f.label :password_confirmation, t('registration.password_confirm')+':', class: 'col-lg-3 control-label' %>
+              <div class="col-lg-9">
+                <%= f.password_field :password_confirmation, class: 'form-control', autocomplete: "off" %>
               </div>
+            </div>
 
-              <div class="form-group">
-                <div class="col-lg-9 col-lg-offset-3">
-                  <%= f.submit t('registration.sign_up'), class: 'btn btn-primary' %>
-                </div>
+            <div class="form-group">
+              <div class="col-lg-9 col-lg-offset-3">
+                <%= f.submit t('registration.sign_up'), class: 'btn btn-primary' %>
               </div>
+            </div>
 
-            </fieldset>
+          </fieldset>
 
-        <% end %>
-      </div>
+      <% end %>
     </div>
-
-    <%= render 'user/shared/links' %>
-
   </div>
 
-  <div id="push"></div>
+  <%= render 'shared/links' %>
 
 </div>
 
-<%= render 'shared/footer' %>
-
+<div id="push"></div>
 <!--  /.container -->

@@ -1,6 +1,4 @@
 class User::SessionsController < Devise::SessionsController
-  layout 'home'
-
   def new
     super
   end

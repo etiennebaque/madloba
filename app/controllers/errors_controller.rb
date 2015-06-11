@@ -1,7 +1,5 @@
 class ErrorsController < ApplicationController
 
-  layout 'home'
-
   # Redirect to the custom 404 page (error404.html.erb)
   def error404
     render status: :not_found

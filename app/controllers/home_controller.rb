@@ -1,8 +1,5 @@
 class HomeController < ApplicationController
-  layout 'home'
-
   include ApplicationHelper
-
 
   # --------------------------------------
   # Method for the main screen (home page)

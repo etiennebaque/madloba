@@ -1,0 +1,154 @@
+<div class="row">
+
+  <%= render 'shared/admin_left_menu' %>
+
+  <div id="content" class="col-lg-10 col-sm-10">
+    <!-- content starts -->
+
+    <!-- Success/Error flash messages -->
+    <% if flash[:success] %>
+        <div class="box-content alerts">
+          <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%=flash[:success]%>
+          </div>
+        </div>
+    <% end %>
+
+    <div>
+      <ul class="breadcrumb">
+        <li>
+          <a href="#"><%= t('admin.dashboard') %></a> <span class="divider">/</span>
+        </li>
+      </ul>
+    </div>
+
+    <% if current_user.admin? %>
+
+        <!-- Admin dashboard -->
+
+        <div class="row">
+          <!-- Ad count -->
+          <div class="col-md-3 col-sm-3 col-xs-3">
+            <a data-toggle="tooltip" title="<%= t('admin.ads') %>" class="well top-block" href="/user/managerecords#ads">
+              <i class="glyphicon glyphicon-comment blue"></i>
+              <div><%= t('admin.ads') %></div>
+              <div><%= Ad.count %></div>
+            </a>
+          </div>
+
+          <!-- Location count -->
+          <div class="col-md-3 col-sm-3 col-xs-3">
+            <a data-toggle="tooltip" title="<%= t('admin.locations') %>" class="well top-block" href="/user/managerecords#locations">
+              <i class="glyphicon glyphicon-home red"></i>
+              <div><%= t('admin.locations') %></div>
+              <div><%= Location.count %></div>
+            </a>
+          </div>
+
+          <!-- Item count -->
+          <div class="col-md-3 col-sm-3 col-xs-3">
+            <a data-toggle="tooltip" title="<%= t('admin.items') %>" class="well top-block" href="/user/managerecords#items">
+              <i class="glyphicon glyphicon-paperclip green"></i>
+              <div><%= t('admin.items') %></div>
+              <div><%= Item.count %></div>
+            </a>
+          </div>
+
+          <!-- Category count -->
+          <div class="col-md-3 col-sm-3 col-xs-3">
+            <a data-toggle="tooltip" title="<%= t('admin.categories') %>" class="well top-block" href="/user/managerecords#categories">
+              <i class="glyphicon glyphicon-folder-open yellow"></i>
+              <div><%= t('admin.categories') %></div>
+              <div><%= Category.count %></div>
+            </a>
+          </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+          <!-- Dashboard - start -->
+          <div class="box col-sm-12 col-md-6">
+            <div class="box-inner">
+              <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-home"></i> <%= t('admin.dashboard') %></h2>
+              </div>
+              <div class="box-content row">
+                <div class="col-xs-12">
+                  <h3><%= t('session.hello') %> <%= current_user.first_name %>!</h3>
+                  <p><%= t('admin.you_admin') %></p>
+                  <p><%= t('admin.use_left_hand') %>:
+                  <ul>
+                    <li><%= t('admin.admin_descr1') %></li>
+                    <li><%= t('admin.admin_descr2') %></li>
+                    <li><%= t('admin.admin_descr3') %></li>
+                    <li><%= t('admin.admin_descr4') %></li>
+                    <li><%= t('admin.admin_descr5') %></li>
+                  </ul>
+                  </p>
+                  <p><%= t('admin.regular_actions') %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Dashboard - end -->
+
+          <!-- To-do list - start -->
+          <div class="box col-sm-12 col-md-6">
+            <div class="box-inner">
+              <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-ok"></i> <%= t('admin.todo_list') %></h2>
+              </div>
+              <div class="box-content row">
+                <div class="col-xs-12">
+                  <h3>To-do list</h3>
+                  <% if @messages.length == 0 %>
+                      <p><%= t('admin.nothing_to_do') %></p>
+                  <% else %>
+                      <% @messages.each do |message| %>
+                          <div class="alert alert-<%= message[:type] %>">
+                            <%= message[:text].html_safe %>
+                          </div>
+                      <% end %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- To-do list - end -->
+
+        </div>
+
+    <% else %>
+
+        <!-- Regular user dashboard -->
+
+        <!-- Main section - start -->
+        <div class="row">
+          <div class="box col-md-12">
+            <div class="box-inner">
+              <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-home"></i> <%= t('admin.dashboard') %></h2>
+              </div>
+              <div class="box-content row">
+                <div class="col-lg-7 col-md-12">
+                  <h3><%= t('session.hello') %> <%= current_user.first_name %>!</h3>
+                  <p><%= t('admin.welcome_user', site_name: site_name) %>:
+                  <ul>
+                    <li><%= t('admin.user_descr1') %></li>
+                    <li><%= t('admin.user_descr2') %></li>
+                  </ul>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Main section - end -->
+
+    <% end %>
+
+    <!-- content ends -->
+  </div><!--/#content.span10-->
+</div><!--/row-->
