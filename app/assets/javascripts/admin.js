@@ -23,7 +23,7 @@ $(document).ready(function(){
         $("#postal_code_section").css('display', 'block');
     }
 
-    // "Create ad" form: show appropriate section when choosing an area
+    // Area settings page: show appropriate section when choosing an area
     $(".area_district").click(function(){
         $("#district_section").toggle(0, function(){});
         initLeafletMap(map_settings_array);
@@ -34,7 +34,7 @@ $(document).ready(function(){
         initLeafletMap(map_settings_array);
     }
 
-    // "Create ad" form: create message when image needs to be uploaded.
+    // "Edit ad" form: create message when image needs to be uploaded.
     $('#ad-edit-form').submit(function() {
         var image_path = $('#ad_image').val();
         if (image_path != null && image_path != ''){
@@ -155,7 +155,7 @@ $(document).ready(function(){
                 if (status == 'ok'){
                     // Districts were updated via
                     $('#district_message_notification').html('');
-                    $( "form:first" ).submit();
+                    $("#areaSettingFormId").submit();
                 }else{
                     // Something bad happened. We're not submitting the page.
                     $('#district_message_notification').html(status);

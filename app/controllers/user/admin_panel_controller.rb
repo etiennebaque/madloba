@@ -245,7 +245,7 @@ class User::AdminPanelController < ApplicationController
       setting_record.update_attribute(:value, value)
     }
 
-    flash[:setting_success] = t('admin.map_settings.update_success')
+    flash[:setting_success] = t('admin.map_settings.area_update_success')
     redirect_to user_areasettings_path
 
   end

@@ -1,7 +1,7 @@
 <% content_for :head do %>
 
     <!-- Includes the main Leaflet CSS and JS files, as well as Mapbox files -->
-    <%= render 'shared/mapScriptsBeforeBody', include_all_scripts: false %>
+    <%= render 'shared/map_scripts_before_body', include_all_scripts: false %>
 
     <!-- Specific Leaflet files (plugins) to be loaded for this page -->
     <%= stylesheet_link_tag 'leaflet.awesome-markers' %>
@@ -30,7 +30,7 @@
       <!-- Sidebar - 'Create ad' section -->
       <div class="list-group">
         <div class="list-group-item smaller-no-border-no-background">
-          <a class="btn btn-info no-color" href="/ads/new"><i class="fa fa-plus"></i> <%= t('home.create_new_ad') %></a>
+          <a class="btn btn-success no-color" href="/ads/new"><i class="fa fa-plus"></i> <%= t('home.create_new_ad') %></a>
         </div>
       </div>
 
@@ -220,8 +220,8 @@ If they do, it will affect the website's ability to work well (test carried out 
 <!-- Loading JS scripts -->
 <% content_for :scripts do %>
     <!-- Includes all the Javascript related to map rendering, to be loaded after page
-    (Leaflet, MapQuest, and initializeMap partial that create the actual map)-->
-    <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
+    (Leaflet, MapQuest, and initialize_map partial that create the actual map)-->
+    <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 
     <!-- Leaflet plug-ins and library used on the home page -->
     <%= javascript_include_tag 'leaflet-sidebar', 'leaflet-function-button' %>

@@ -1,7 +1,7 @@
 <% content_for :head do %>
 
     <!-- Includes the main Leaflet CSS and JS files, as well as Mapbox files -->
-    <%= render 'shared/mapScriptsBeforeBody', include_all_scripts: true %>
+    <%= render 'shared/map_scripts_before_body', include_all_scripts: true %>
 
     <style type="text/css">
         #map {
@@ -105,6 +105,6 @@
 
 <!-- Loading JS scripts -->
 <% content_for :scripts do %>
-    <!-- Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and initializeMap partial that create the actual map)-->
-    <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
+    <!-- Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and initialize_map partial that create the actual map)-->
+    <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>

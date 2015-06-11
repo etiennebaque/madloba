@@ -49,7 +49,6 @@ en:
     home: Home
     page: Home page
     user_panel: User panel
-    admin_panel: Admin panel
     create_new_ad: Create a new ad
     reply_ad_please_html: To reply to an ad, please %{signin} or %{createaccount}.
     sign_in: sign in
@@ -490,6 +489,7 @@ en:
       cannot_be_empty: Latitude or longitude cannot be empty.
       postal_area_error: The postal code length should be greater or equals to the area code.
       update_success: The map settings have been updated.
+      area_update_success: The area settings have been updated.
       update_success_demo: Only the map type has been updated (demo).
       demo_message: For demo purposes, you are able to update only the "Map type" on this screen.
     users:

@@ -35,12 +35,12 @@ class Ad < ActiveRecord::Base
   end
 
   def has_items
-    errors.add(:admin_panel, I18n.t('ad.error_ad_must_have_item')) if (self.ad_items.blank? || self.ad_items.empty?)
+    errors.add(:base, I18n.t('ad.error_ad_must_have_item')) if (self.ad_items.blank? || self.ad_items.empty?)
   end
 
   def has_anon_name_and_email
-    errors.add(:admin_panel, I18n.t('ad.provide_anon_name')) if (self.user_id.nil? && self.anon_name.blank?)
-    errors.add(:admin_panel, I18n.t('ad.provide_anon_email')) if (self.user_id.nil? && self.anon_email.blank?)
+    errors.add(:base, I18n.t('ad.provide_anon_name')) if (self.user_id.nil? && self.anon_name.blank?)
+    errors.add(:base, I18n.t('ad.provide_anon_email')) if (self.user_id.nil? && self.anon_email.blank?)
   end
 
 

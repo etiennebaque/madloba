@@ -1,12 +1,14 @@
 <% content_for :head do %>
 
     <%= stylesheet_link_tag 'font-awesome.min' %>
+    <!-- CSS file used on admin pages -->
+    <%= stylesheet_link_tag 'admin' %>
 
 <% end %>
 
 <div class="row">
 
-<%= render 'user/shared/leftMenu' %>
+<%= render 'shared/admin_left_menu' %>
 
 <div id="content" class="col-lg-10 col-sm-10">
 <!-- content starts -->

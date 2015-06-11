@@ -1,6 +1,11 @@
+<% content_for :head do %>
+    <!-- CSS file used on admin pages -->
+    <%= stylesheet_link_tag 'admin' %>
+<% end %>    
+
 <div class="row">
 
-  <%= render 'user/shared/leftMenu' %>
+  <%= render 'shared/admin_left_menu' %>
 
   <div id="content" class="col-lg-10 col-sm-10">
     <!-- content starts -->
@@ -159,7 +164,7 @@
                 <hr>
 
                 <!-- Submit button and cancel link -->
-                <%= render 'user/shared/submitSection' %>
+                <%= render 'shared/submit_section' %>
 
             <% end %>
 
@@ -175,3 +180,8 @@
   <!--/#content.span10-->
 
 </div><!--/fluid-row-->
+
+<% content_for :scripts do %>
+    <!-- Admin screen related scripts -->
+    <%= javascript_include_tag 'admin' %>
+<% end %>

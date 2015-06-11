@@ -183,6 +183,7 @@ class ApplicationController < ActionController::Base
     render json: locations_results
   end
 
+  # Returns a list of items, to appear in popup when using autocompletion.
   def get_items
     typeahead_type = params[:type]
 

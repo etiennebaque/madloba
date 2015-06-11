@@ -1,7 +1,8 @@
 <% content_for :head do %>
 
     <!-- Includes the main Leaflet CSS and JS files, as well as Mapbox files -->
-    <%= render 'shared/mapScriptsBeforeBody', include_all_scripts: false %>
+    <%= render 'shared/map_scripts_before_body', include_all_scripts: false %>
+    <%= stylesheet_link_tag 'admin' %>
 
     <style type="text/css">
         #map {
@@ -21,7 +22,7 @@
 
 <div class="row">
 
-  <%= render 'user/shared/leftMenu' %>
+  <%= render 'shared/admin_left_menu' %>
 
   <div id="content" class="col-lg-10 col-sm-10">
     <!-- content starts -->
@@ -66,7 +67,7 @@
 
 
           <div class="box-content">
-            <%= form_tag '/user/areasettings/update', method: :post, html: { id: 'areaSettingFormId', role: 'form' } do %>
+            <%= form_tag '/user/areasettings/update', method: :post, id: 'areaSettingFormId', role: 'form' do %>
 
                 <!-- Choose between 'postal code' or 'district' type of area -->
                 <div class="form-group">
@@ -199,6 +200,9 @@
 <hr>
 
 <% content_for :scripts do %>
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initializeMap partial that create the actual map -->
-    <%= render 'shared/mapScriptsAfterBody', include_all_scripts: false %>
+
+    <%= javascript_include_tag 'admin' %>
+
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>

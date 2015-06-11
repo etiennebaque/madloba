@@ -8,7 +8,7 @@
       <ul class="nav nav-pills nav-stacked main-menu">
         <% if current_user.admin? %>
             <li class="nav-header"><%= t('admin.left_menu.admin_task') %></li>
-            <li><a class="ajax-link" href="/user"><i class="glyphicon glyphicon-home"></i><span> <%= t('admin.dashboard') %></span></a></li>
+            <li><a class="ajax-link" href="/user/index"><i class="glyphicon glyphicon-home"></i><span> <%= t('admin.dashboard') %></span></a></li>
             <li><a class="ajax-link" href="/user/managerecords"><i class="glyphicon glyphicon-align-justify"></i><span> <%= t('admin.manage_records') %></span></a></li>
             <li><a class="ajax-link" href="/user/manageusers"><i class="glyphicon glyphicon-user"></i><span> <%= t('admin.left_menu.manage_users') %></span></a></li>
             <li><a class="ajax-link" href="/user/generalsettings"><i class="glyphicon glyphicon-wrench"></i><span> <%= t('admin.general_settings_menu') %></span></a></li>

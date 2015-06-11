@@ -1,6 +1,10 @@
+<% content_for :head do %>
+    <!-- CSS file used on admin pages -->
+    <%= stylesheet_link_tag 'admin' %>
+<% end %>
 <div class="row">
 
-  <%= render 'user/shared/leftMenu' %>
+  <%= render 'shared/admin_left_menu' %>
 
   <div id="content" class="col-lg-10 col-sm-10">
     <!-- content starts -->
@@ -66,10 +70,10 @@
               <tbody>
               <% User.all.each do |user| %>
                   <tr>
-                    <td><%= user.id %></td>
-                    <td><%= user.email %></td>
-                    <td><%= user.first_name %> <%= user.last_name %></td>
-                    <td><%= user.role %></td>
+                    <td class="vert-align"><%= user.id %></td>
+                    <td class="vert-align"><%= user.email %></td>
+                    <td class="vert-align"><%= user.first_name %> <%= user.last_name %></td>
+                    <td class="vert-align"><%= user.role %></td>
                     <td class="center"><a class="btn btn-info" href="/user/users/<%= user.id %>/edit"> <i class="glyphicon glyphicon-edit"></i> Edit details / Delete </a>
                     </td>
                   </tr>
