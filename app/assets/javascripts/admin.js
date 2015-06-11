@@ -190,6 +190,10 @@ $(document).ready(function(){
         $(".remaining_characters").html(maxlength - textlength);
     });
 
+    // Category edit page: opening up the icon modal window.
+    $(".btn-icon-modal").click(function (){
+        $('#myModalIcon').modal('show');
+    });
 
     // Onclick event triggered when Icon clicked in modal window, in Category edit page.
     $(".icon-for-category").click(function (){
