@@ -1,0 +1,208 @@
+<% content_for :head do %>
+
+    <!-- Includes the main Leaflet CSS and JS files, as well as Mapbox files -->
+    <%= render 'shared/map_scripts_before_body', include_all_scripts: false %>
+    <%= stylesheet_link_tag 'admin' %>
+
+    <style type="text/css">
+        #map {
+            width: 100%;
+            height: 350px;
+            margin: 0;
+        }
+    </style>
+
+    <script>
+        var districts = <%= raw @districts_hash.to_json %>
+        var new_district_index = <%= @district_index %>
+    </script>
+
+
+<% end %>
+
+<div class="row">
+
+  <%= render 'shared/admin_left_menu' %>
+
+  <div id="content" class="col-lg-10 col-sm-10">
+    <!-- content starts -->
+
+    <div>
+      <ul class="breadcrumb">
+        <li>
+          <a href="/user"><%= t('admin.dashboard') %></a>
+        </li>
+        <li>
+          <%= t('admin.area_settings.title') %>
+        </li>
+      </ul>
+    </div>
+
+    <div class="row">
+      <div class="box col-md-12">
+        <div class="box-inner">
+          <div class="box-header well" data-original-title="">
+            <h2>
+              <i class="glyphicon glyphicon-globe"></i> <%= t('admin.area_settings.title') %>
+            </h2>
+          </div>
+
+          <!-- Success/Error flash messages -->
+          <% if flash[:page_error] %>
+              <div class="box-content alerts">
+                <div class="alert alert-danger">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  <%=flash[:page_error]%>
+                </div>
+              </div>
+          <% end %>
+          <% if flash[:setting_success] %>
+              <div class="box-content alerts">
+                <div class="alert alert-success">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  <%=flash[:setting_success]%>
+                </div>
+              </div>
+          <% end %>
+
+
+          <div class="box-content">
+            <%= form_tag '/user/areasettings/update', method: :post, id: 'areaSettingFormId', role: 'form' do %>
+
+                <!-- Choose between 'postal code' or 'district' type of area -->
+                <div class="form-group">
+                  <%= label 'area_type', t('admin.area_settings.define_area')+':', class: 'control-label' %>
+                  <div class="checkbox">
+                    <label>
+                      <%= check_box_tag 'area_type[]', 'postal', (@area_types.include?'postal'), class: 'area_postal_code' %>
+                      <%= t('admin.area_settings.by_postal_code') %>
+                    </label>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <%= check_box_tag 'area_type[]', 'district', (@area_types.include?'district'), class: 'area_district' %>
+                      <%= t('admin.area_settings.by_district') %>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- "Postal code" area section - start -->
+                <div id="postal_code_section" style="display: none;">
+
+                  <hr />
+
+                  <h4><%= t('admin.area_settings.area_postal_code') %></h4>
+
+                  <!-- Postal code format and what to consider in it to define an area (for anonymous ads) -->
+                  <div class="form-group">
+                    <%= label_tag 'postal_code_length', t('admin.map_settings.postal_code_field1')+':', class:'control-label' %>
+                    <div class="form-inline">
+                      <%= number_field_tag 'postal_code_length', @mapSettings['postal_code_length'], class: 'form-control', min: 1 %>
+                      <i><%= t('admin.map_settings.postal_code_help1') %></i>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <%= label_tag 'area_length', t('admin.map_settings.postal_code_field2')+':', class:'control-label' %>
+                    <div class="form-inline">
+                      <%= number_field_tag 'area_length', @mapSettings['area_length'], class: 'form-control', min: 1 %>
+                      <i><%= t('admin.map_settings.postal_code_help2') %></i>
+                    </div>
+                  </div>
+                </div>
+                <!-- "Postal code" area section - end -->
+
+                <!-- "District" area section - start -->
+                <div id="district_section" style="display: none;">
+
+                  <hr />
+
+                  <h4><%= t('admin.area_settings.area_district') %></h4>
+
+                  <!-- Map canvas -->
+                  <div class="form-group">
+                    <%= label_tag 'map-canvas-wrapper', t('admin.area_settings.map_description'), class:'control-label' %>
+                    <div class="form-inline">
+                      <div id="map-canvas-wrapper">
+                        <div id="map"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- District table -->
+                  <div class="form-group col-xs-12">
+                    <div id="dynamic-table" class="col-lg-9 col-md-12">
+                      <table class="table table-striped">
+                        <thead>
+                        <tr>
+                          <th><%= t('admin.area_settings.district_name') %></th>
+                          <th><%= t('admin.area_settings.latitude') %></th>
+                          <th><%= t('admin.area_settings.longitude') %></th>
+                          <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="district_body">
+                        <% @districts.each do |district| %>
+                            <tr id="<%= district.id %>">
+                              <td class="district_name vert-align"><%= district.name %></td>
+                              <td class="vert-align"><%= district.latitude %></td>
+                              <td class="vert-align"><%= district.longitude %></td>
+                              <td class="vert-align">
+                                <button type="button" id="<%= district.id %>" class="dynamic_update btn btn-info btn-xs"><%= t('home.update') %></button>
+                                <a href="#" class="btn remove-existing-district"><i class="glyphicon glyphicon-remove" style="color: red;"></i></a>
+                              </td>
+                            </tr>
+                        <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  <!-- "Add district" link -->
+                  <div class="form-group">
+                    <div id="dynamic_wrapper"></div>
+                    <div class="form-inline">
+                      <a id="dynamic_add_link" class="btn btn-info" href="#"><i class="glyphicon glyphicon-plus"></i> <%= t('admin.area_settings.add_district') %></a>
+                    </div>
+                  </div>
+
+                </div>
+                <!-- "District" area section - end -->
+
+                <hr />
+
+                <!-- Submit button -->
+                <div class="form-actions">
+                  <button id="area_settings_submit" type="button" class="btn btn-success"><%= t('admin.save') %></button>
+                  <% if current_user.admin? %>
+                      <a href="/user/managerecords" class="btn"><%= t('admin.cancel') %></a>
+                  <% else %>
+                      <a href="/user/manageads" class="btn"><%= t('admin.cancel') %></a>
+                  <% end %>
+                  <span id="district_message_notification"></span>
+                </div>
+
+            <% end %>
+
+          </div>
+        </div>
+      </div>
+      <!--/span-->
+
+    </div>
+
+    <!-- content ends -->
+  </div>
+  <!--/#content.span10-->
+
+</div><!--/fluid-row-->
+
+<hr>
+
+<% content_for :scripts do %>
+
+    <%= javascript_include_tag 'admin' %>
+
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
+<% end %>

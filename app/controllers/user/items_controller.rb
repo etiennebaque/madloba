@@ -4,12 +4,9 @@ class User::ItemsController < ApplicationController
   before_action :requires_user
   after_action :verify_authorized
 
-  layout 'admin'
-
   def show
     @item = Item.includes(:ads).where(id: params[:id]).first!
     authorize @item
-
     render 'item'
   end
 
@@ -17,7 +14,6 @@ class User::ItemsController < ApplicationController
     @isAdding = true
     @item = Item.new
     authorize @item
-
     render 'item'
   end
 
@@ -37,7 +33,6 @@ class User::ItemsController < ApplicationController
   def edit
     @item = Item.includes(:ads).where(id: params[:id]).first!
     authorize @item
-
     render 'item'
   end
 

@@ -51,6 +51,18 @@ module ApplicationHelper
     end
   end
 
+  # Defines whether or not the user is on the admin panel.
+  # That will have an impact on the bootstrap class used for the navigation, for example
+  def is_in_admin_panel
+    (request.original_url.include? ('/user')) && (current_user)
+  end
+
+  # Defines whether or not the user is going through the setup pages.
+  # That will have an impact on the content of the navigation bar.
+  def is_in_setup_mode
+    request.original_url.include? ('/setup')
+  end
+
 
   # Geocoding methods
   # -----------------

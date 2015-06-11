@@ -4,8 +4,6 @@ class User::AdsController < ApplicationController
   before_action :requires_user, except: [:new, :create, :send_message, :show]
   after_action :verify_authorized, except: [:new, :create, :send_message, :send_message]
 
-  layout 'home'
-
   include ApplicationHelper
 
   def show
@@ -77,8 +75,6 @@ class User::AdsController < ApplicationController
     @ad = Ad.includes(:location => :district).where(id: params[:id]).first!
     authorize @ad
     get_map_settings_for_ad
-
-    render layout: 'admin'
   end
 
   def update
@@ -93,7 +89,7 @@ class User::AdsController < ApplicationController
       # Saving the ad failed.
       flash[:error_ad] = @ad.title
       get_map_settings_for_ad
-      render layout: 'admin', action: 'edit'
+      render action: 'edit'
     end
   end
 
@@ -109,7 +105,7 @@ class User::AdsController < ApplicationController
       # Deleting the ad failed.
       flash[:error_delete_ad] = @ad.title
       get_map_settings_for_ad
-      render layout: 'admin', action: 'edit'
+      render action: 'edit'
     end
   end
 
@@ -127,7 +123,7 @@ class User::AdsController < ApplicationController
     @ad = Ad.find(params['id'])
 
     if current_user == nil && !simple_captcha_valid?
-      flash.now[:error] = t('ad.captcha_not_valid')
+      flash.now[:error_message] = t('ad.captcha_not_valid')
       get_map_settings_for_ad
       render action: 'show'
     else

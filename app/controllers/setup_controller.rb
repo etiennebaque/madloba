@@ -1,5 +1,4 @@
 class SetupController < ApplicationController
-  layout 'home'
   before_action :check_setup_step
 
   include ApplicationHelper

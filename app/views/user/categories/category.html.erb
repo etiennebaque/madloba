@@ -6,7 +6,7 @@
 
 <div class="row">
 
-  <%= render 'user/shared/leftMenu' %>
+  <%= render 'shared/admin_left_menu' %>
 
 
   <div id="content" class="col-lg-10 col-sm-10">
@@ -183,7 +183,7 @@
                 <hr />
 
                 <!-- Submit button and cancel link -->
-                <%= render 'user/shared/submitSection' %>
+                <%= render 'shared/submit_section' %>
 
             <% end %>
 
@@ -211,4 +211,9 @@
 
 <!-- Category icon list - modal window -->
 <%= render 'icon_list_modal_window' %>
+
+<% content_for :scripts do %>
+    <!-- Admin screen related scripts -->
+    <%= javascript_include_tag 'admin' %>
+<% end %>
 
