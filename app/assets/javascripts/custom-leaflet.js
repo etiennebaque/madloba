@@ -348,7 +348,7 @@ function initializeSideBar(sidebar){
     });
 
     // Navigation toggle button
-    var btn = L.functionButtons([{ content: '<strong>Categories</strong>' }]);
+    var btn = L.functionButtons([{ content: '<strong>Categories / Create ad</strong>' }]);
 
     map.addControl(sidebar);
 
@@ -390,12 +390,18 @@ function initializeSideBar(sidebar){
     // By default, we hide the navigation bar on phones and tablets (width < 992).
     // We should only see the map, when home page loads on mobile device.
     $(window).resize(function() {
+        var old_window_width = window_width;
         window_width = $(window).width();
         if (window_width < 768){
-            sidebar.hide();
-            if (isSidebarOpen){
-                map.addControl(btn);
-                isSidebarOpen = false;
+            // On mobile, window_width gets refreshed when we scroll on open naviagation menu.
+            // We used a trick with old_window_width: if width does not change (ie. we're scrolling), the opened
+            // nav menu remains open.
+            if (old_window_width != window_width){
+                sidebar.hide();
+                if (isSidebarOpen){
+                    map.addControl(btn);
+                    isSidebarOpen = false;
+                }
             }
         }else{
             sidebar.show();

@@ -64,7 +64,7 @@
             <div id="refinementsId">
               <% @categories.each do |category| %>
                   <% if category.is_refinement(params) %>
-                      <a href = "<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background">
+                      <a href = "<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background guided-nav-category">
                         <label style='width: 15px;'>
                           <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
                         </label>
@@ -83,7 +83,7 @@
             <h4><%= t('home.title_guided_nav') %></h4>
             <% @categories.each do |category| %>
                 <% if !category.is_refinement(params) %>
-                    <a href ="<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background">
+                    <a href ="<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background guided-nav-category">
                       <label style='width: 15px;'>
                         <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
                       </label>

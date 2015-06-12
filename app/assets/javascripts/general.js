@@ -27,6 +27,11 @@ $(document).ready(function() {
         }
     });
 
+    // Navigation bar: event tied to "up" arrow, to go back to the top of the page.
+    $('#navbar-up-link').click(function(){
+        $('html, body').animate({ scrollTop: 0 }, 1000);
+    });
+
     // Navigation - Search form: Ajax call to get locations proposition, based on user input in this form.
     $("#btn-form-search").bind("click", getLocationsPropositions);
 

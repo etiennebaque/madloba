@@ -80,14 +80,14 @@
 
   <% if @ad.image? %>
       <div class="row">
-        <div class="col-lg-7 ad-paragraph">
+        <div class="col-lg-7 col-sm-12 ad-paragraph">
           <%= render 'shared/ad_summary' %>
         </div>
 
         <!-- Ad image -->
-        <div class="col-lg-5 ad-image">
+        <div class="col-lg-5 col-sm-12 ad-image">
           <% if is_image_available(@ad) %>
-              <%= image_tag @ad.image_url(:normal).to_s %>
+              <%= image_tag @ad.image_url(:normal).to_s, width: '100%' %>
           <% else %>
               <div class="ad-processing">
                 <%= t('ad.show_ad_image_processed') %><br />
