@@ -65,6 +65,7 @@ en:
     e-mail: E-mail
     password: Password
     record_not_exist: Sorry, this page does not exist!
+    got_it: Got it!
     giving: "I'm giving away:"
     giving_away: "Giving away:"
     searching: "I'm searching for:"
@@ -330,9 +331,9 @@ en:
     no_mapbox_account_html: You don't have entered a Mapbox key yet, in "Map settings". You can get one by opening an account on <strong>%{href}</strong>, to get a new map style for your website.
     no_mapquest_account_html: You don't have entered a MapQuest key yet, in "Map settings". You can get one by opening an account on <strong>%{href}</strong>, to get a new map style for your website.
     no_social: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General settings". Specify some of them to increase your visibility.
-    no_categories_html: <strong>No category has been created yet</strong>. Please create a few categories to allow the user to refine their search by specific item categories.
+    one_category_html: <strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.
     no_website_description: No website description has been written yet, in "General settings". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
-    no_area_type_html: <strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area settings", please indicate how an area is defined (eg by postal code, by district), to give the user more flexibility, when it comes to choose a location.
+    no_area_type_html: <strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area settings", please indicate how an area is defined (by postal code or by district), to give the user more flexibility, when it comes to choose a location.
     you_admin: You're an administrator of this website.
     use_left_hand: Use the left-hand side menu to manage
     admin_descr1: the different components of this website (ads, locations, items, categories)
@@ -529,6 +530,7 @@ en:
     click_next: Click on "Next" to continue.
     back: Back
     next: Next
+    step_html: "(step %{current_step}/6)"
     general_info: General information
     image_storage: Image storage
     name_description: The name of your website
@@ -557,6 +559,7 @@ en:
     gmail_note4: Once you're done, you can continue with the submission of this form.
     confirm_email: If the information entered above in this form is correct, and after you click "Next", a confirmation e-mail will be sent to you.
     check_email: Please check your inbox to confirm your account.
+    note_for_gmail: Important note on using GMail for SMTP settings
     city_country_mandatory: "'City' and 'Country' fields are mandatory."
     option_no_storage: Users won't be allowed to upload any pictures at all.
     option_s3: Images will directly uploaded to Amazon S3.

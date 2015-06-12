@@ -14,6 +14,11 @@ $(document).ready(function() {
     // Initially created in 'application.html.erb' layout, this test div is now removed.
     $("#ad-block").remove();
 
+    // Setup pages - event for modal window on Map page.
+    $('#gmail_modal_link').click(function(){
+        $('#gmail_modal').modal('show');
+    });
+
     // Navigation bar: press Enter to valid form.
     $("#searchFormId input").keypress(function(event) {
         if (event.which == 13) {

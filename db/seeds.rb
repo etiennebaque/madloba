@@ -33,7 +33,7 @@ setting_list = [
     ['pinterest', ''],
     ['postal_code_length', ''],
     ['area_length', ''],
-    %w(area_type postal_code),
+    ['area_type', ''],
     %w(ad_max_expire 90),
     %w(setup_step 1),
     ['image_storage', '']

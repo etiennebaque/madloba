@@ -54,6 +54,10 @@ class SetupController < ApplicationController
       end
       record.save
     end
+
+    # Caching application name.
+    Rails.cache.write(CACHE_APP_NAME, params['app_name'])
+
     redirect_to setup_map_path
   end
 
