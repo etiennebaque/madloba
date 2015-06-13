@@ -353,7 +353,6 @@ function find_geocodes(){
             success: function(data) {
                 if (data != null){
                     // Geocodes were found: the location is shown on the map.
-
                     var myNewLat = Math.round(data.lat*100000)/100000
                     var myNewLng = Math.round(data.lon*100000)/100000
 
