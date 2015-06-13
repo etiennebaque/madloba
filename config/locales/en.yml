@@ -100,6 +100,7 @@ en:
     admin_panel: admin panel
     same_area: Ads related to a same area
     update: Update
+    demo_instructions_html: "Demo only: Instructions to login %{link}."
   errors:
     oops: "Oops!"
     not_found: 404 Page Not Found
