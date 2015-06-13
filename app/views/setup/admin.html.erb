@@ -71,21 +71,14 @@
 
               <hr>
 
-              <!-- Note about email being sent to new admin user -->
+              <!-- Note about GMail SMPT settings -->
               <div class="form-group">
                 <div class="col-lg-2"></div>
                 <div class="col-lg-6">
-                  <p><%= t('setup.gmail_note') %></p>
-                  <ol>
-                    <li><%= t('setup.gmail_note2') %></li>
-                    <li><%= t('setup.gmail_note3_html', link: link_to(t('setup.gmail_link_here'), 'https://accounts.google.com/DisplayUnlockCaptcha', {target: '_blank'})) %></li>
-                  </ol>
-
-                  <p><%= t('setup.gmail_note4') %></p>
+                  <a href="#" id="gmail_modal_link"><%= t('setup.note_for_gmail') %></a>
                 </div>
               </div>
 
-              <hr>
 
               <!-- Note about email being sent to new admin user -->
               <div class="form-group">
@@ -120,6 +113,29 @@
 
   </div>
 
+</div>
+
+<!-- Modal popup that appears with OpenStreetMap address suggestions -->
+<div class="modal fade" id="gmail_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">SMTP settings - GMail</h4>
+      </div>
+      <div class="modal-body" id="modal-body-id">
+        <p><%= t('setup.gmail_note') %></p>
+        <ol>
+          <li><%= t('setup.gmail_note2') %></li>
+          <li><%= t('setup.gmail_note3_html', link: link_to(t('setup.gmail_link_here'), 'https://accounts.google.com/DisplayUnlockCaptcha', {target: '_blank'})) %></li>
+        </ol>
+
+        <p><%= t('setup.gmail_note4') %></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><%= t('home.got_it') %></button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="push"></div>

@@ -19,9 +19,9 @@ class User::AdminPanelController < ApplicationController
       # To-do list creation
       empty_social = 0
 
-      if Category.count == 0
-        # Show a danger message, if no category has not been defined yet.
-        @messages << {text: t('admin.no_categories_html'), type: 'danger'}
+      if Category.count == 1
+        # Show a warning message, if there's only 1 category (the default one, most likely).
+        @messages << {text: t('admin.one_category_html'), type: 'danger'}
       end
 
       settings = Setting.all

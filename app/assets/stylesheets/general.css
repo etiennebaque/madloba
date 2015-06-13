@@ -189,6 +189,16 @@ span.disabled { color:gray; }
     width: 32px;
 }
 
+.navbar-arrow-up {
+    float: right;
+    padding: 9px 18px;
+    font-size: 22px;
+}
+
+#navbar-up-link{
+    color: white;
+}
+
 /*
  * Off canvas and style tweaks
  * ---------------------------
@@ -231,11 +241,28 @@ body {
         top: 0;
         width: 50%; /* 6 columns */
     }
+
+    .guided-nav-category{
+        margin: 10px 0px;
+    }
 }
 /*
 /* User panel - make sidebar nav vertical
 /* --------------------------------------
 */
+@media (min-width: 1060px) {
+    .navbar-arrow-up {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .navbar-arrow-up {
+        padding: 10px 12px 10px 0px;
+        font-size: 20px;
+    }
+}
+
 @media (min-width: 768px) {
     .sidebar-nav .navbar .navbar-collapse {
         padding: 0;
@@ -255,6 +282,7 @@ body {
         padding-top: 12px;
         padding-bottom: 12px;
     }
+
 }
 
 /*

@@ -105,6 +105,11 @@
 
 <!-- Loading JS scripts -->
 <% content_for :scripts do %>
+    <script>
+      // The initialization of this variable allows the JS events to be tied to the map of this page.
+      var districts_geocodes = {};
+    </script>
+
     <!-- Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and initialize_map partial that create the actual map)-->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>
