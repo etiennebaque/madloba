@@ -20,12 +20,12 @@ L.FunctionButtons = L.Control.extend({
 		var container = L.DomUtil.create('div', 'leaflet-bar');
 		for( var i = 0; i < this._buttons.length; i++ ) {
 			var button = this._buttons[i],
-				link = L.DomUtil.create('a', '', container);
+				link = L.DomUtil.create('a', 'btn btn-xs btn-success no-color', container);
 			link._buttonIndex = i; // todo: remove?
 			link.href = button.href || '#';
 			if( button.href )
 				link.target = 'funcbtn';
-			link.style.padding = '0 4px';
+			//link.style.padding = '0 0px';
 			link.style.width = 'auto';
 			link.style.minWidth = '20px';
 			if( button.bgColor )
