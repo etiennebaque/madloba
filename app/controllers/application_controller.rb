@@ -127,6 +127,7 @@ class ApplicationController < ActionController::Base
         response['zoom_level'] = CLOSER_ZOOM_LEVEL
       else
         address_found = t('home.not_found_map_position')
+        response = {}
         response['zoom_level'] = Setting.find_by_key('zoom_level').value
       end
     else

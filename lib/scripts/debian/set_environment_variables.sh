@@ -2,6 +2,10 @@
 
 #--------------------------------------
 
+# Replace '<path_to_my_app>' by the absolute path where your Madloba app will be deployed (e.g: /home/username/madloba).
+root_app='<path_to_my_app>'
+
+
 # Replace all the following settings values in this section, so that the script can export these
 # environment variables into .rbenv-vars.
 

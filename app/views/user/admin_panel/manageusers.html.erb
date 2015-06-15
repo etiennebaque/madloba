@@ -73,8 +73,8 @@
                     <td class="vert-align"><%= user.id %></td>
                     <td class="vert-align"><%= user.email %></td>
                     <td class="vert-align"><%= user.first_name %> <%= user.last_name %></td>
-                    <td class="vert-align"><%= user.role %></td>
-                    <td class="center"><a class="btn btn-info" href="/user/users/<%= user.id %>/edit"> <i class="glyphicon glyphicon-edit"></i> Edit details / Delete </a>
+                    <td class="vert-align"><%= user.role.capitalize %></td>
+                    <td class="center"><a class="btn btn-info" href="/user/users/<%= user.id %>/edit"> <i class="glyphicon glyphicon-edit"></i>&nbsp;<%= t('admin.edit_delete') %></a>
                     </td>
                   </tr>
               <% end %>

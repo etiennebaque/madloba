@@ -87,7 +87,7 @@ module ApplicationHelper
     safeurl = URI.parse(URI.encode(url))
     response = HTTParty.get(safeurl)
     if !response.success?
-      raise response.response
+      response = nil
     end
 
     return response
