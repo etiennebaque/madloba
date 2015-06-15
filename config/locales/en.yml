@@ -77,7 +77,7 @@ en:
     about_website: About %{website}
     links: Links
     your_searched_location: Your searched location
-    no_ad: There's no ad at the moment :(
+    no_ad: There's no ad at the moment.
     create_an_ad_now_html: "%{createad} to tell your community what you have to give, or what you're looking for!"
     signin_now_html: "%{signin} and create an ad to tell your community what you have to give, or what you're looking for!"
     about_page: About %{appname}
