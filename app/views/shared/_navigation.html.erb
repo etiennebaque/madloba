@@ -12,7 +12,7 @@
     <% else %>
         <%= link_to "#{image_tag 'madloba_logo_50.png', class: 'madloba-img'} #{site_name}".html_safe, root_path, :class => 'navbar-brand' %>
     <% end %>
-    <span class="navbar-arrow-up"><a href="#" id="navbar-up-link"><i class="fa fa-chevron-up"></i></a></span>
+    <span class="navbar-arrow-up"><a href="#" id="navbar-up-link" style="display: none;"><i class="fa fa-chevron-up"></i></a></span>
   </div>
 
   <% if !is_in_setup_mode %>

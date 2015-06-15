@@ -17,6 +17,8 @@ test:
   password: postgres
 
 production:
+  # Deployment on a server: please indicate your database credentials here
+  # (database name, username and password)
   adapter: postgresql
   encoding: unicode
   pool: 5

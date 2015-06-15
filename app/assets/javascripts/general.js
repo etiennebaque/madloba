@@ -32,6 +32,13 @@ $(document).ready(function() {
         $('html, body').animate({ scrollTop: 0 }, 1000);
     });
 
+    //Checks if we need to show the arrow up, in the navigation bar, on mobile devices.
+    show_hide_up_arrow();
+    
+    $(window).on("scroll", function() {
+        show_hide_up_arrow();
+    });
+
     // Navigation - Search form: Ajax call to get locations proposition, based on user input in this form.
     $("#btn-form-search").bind("click", getLocationsPropositions);
 
@@ -484,5 +491,17 @@ function getLocationsPropositions(){
     }else if (($('#item').val() != '') || ($('#user_action').val() != '')){
         // no location is being searched, but an item is. We need to submit the form with this information.
         $("#searchFormId").submit();
+    }
+}
+
+/**
+ * Checks if we need to show the arrow up, in the navigation bar, on mobile devices.
+ */
+function show_hide_up_arrow (){
+    var scrollPos = $(window).scrollTop();
+    if (scrollPos <= 0) {
+        $("#navbar-up-link").hide();
+    } else {
+        $("#navbar-up-link").show();
     }
 }
