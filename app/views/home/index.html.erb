@@ -92,7 +92,7 @@
                 <% end %>
             <% end %>
 
-            <% if @locations_postal.length > 0 || @locations_district.length > 0 %>
+            <% if (@locations_postal && @locations_postal.length > 0) || (@locations_district && @locations_district.length > 0) %>
                 <hr />
                 <%= image_tag 'madloba_logo.png', width: '26px' %>
                 <span class="guided-nav-label"><%= t('home.same_area') %></span>
