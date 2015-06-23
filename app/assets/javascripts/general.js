@@ -358,7 +358,7 @@ function find_geocodes(){
                 $('#findGeocodeLoaderId').html(gon.vars['searching_location']);
             },
             success: function(data) {
-                if (data != null){
+                if (data != null && data.status == 'ok'){
                     // Geocodes were found: the location is shown on the map.
                     var myNewLat = Math.round(data.lat*100000)/100000
                     var myNewLng = Math.round(data.lon*100000)/100000
@@ -368,6 +368,7 @@ function find_geocodes(){
 
                     // Update the center of map, to show the general area
                     map.setView(new L.LatLng(myNewLat, myNewLng), data.zoom_level);
+
                 }else{
                     // The address' geocodes were not found - the user has to pinpoint the location manually on the map.
                     $('#myErrorModal').modal('show');
@@ -463,7 +464,7 @@ function getLocationsPropositions(){
 
                         for (var i = 0; i < data.length; i++) {
                             var proposed_location = data[i];
-                            var url = "/search?lat="+proposed_location['lat']+"&lon="+proposed_location['lon'];
+                            var url = "/search?lat="+proposed_location['lat']+"&lon="+proposed_location['lon']+"&loc="+proposed_location['display_name'];
                             if (item != ''){
                                 url = url + "&item=" + item;
                             }
@@ -471,7 +472,7 @@ function getLocationsPropositions(){
                                 url = url + "&q=" + search_action;
                             }
 
-                            modalHtmlText = modalHtmlText + "<li><a href='"+url+"'>"+proposed_location['display_name']+"</a></li>";
+                            modalHtmlText = modalHtmlText + "<li><a href='"+encodeURI(url)+"'>"+proposed_location['display_name']+"</a></li>";
                         }
                         modalHtmlText = modalHtmlText + "</ul>";
                         $('#modal-body-id').html(modalHtmlText);
@@ -484,6 +485,7 @@ function getLocationsPropositions(){
 
                 }
 
+                // Webservice response came back - button label goes back to "Search"
                 $("#btn-form-search").html("Search");
 
             }

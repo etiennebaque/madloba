@@ -125,14 +125,17 @@ class ApplicationController < ActionController::Base
       if response
         address_found = t('home.full_not_found_map_position', address: address)
         response['zoom_level'] = CLOSER_ZOOM_LEVEL
+        response['status'] = 'ok'
       else
         address_found = t('home.not_found_map_position')
         response = {}
         response['zoom_level'] = Setting.find_by_key('zoom_level').value
+        response['status'] = 'not_found'
       end
     else
       address_found = t('home.map_positioned_found', address: address)
       response['zoom_level'] = CLOSER_ZOOM_LEVEL
+      response['status'] = 'ok'
     end
 
     response['address_found'] = address_found
@@ -168,7 +171,6 @@ class ApplicationController < ActionController::Base
         response.each do |response_location|
           locations_results << response_location.select {|key,value| %w(lat lon display_name).include? key}
         end
-        session['locations'] = locations_results
       else
         # The search didn't return anything.
         error_hash = {}
@@ -229,7 +231,7 @@ class ApplicationController < ActionController::Base
   def render_not_found(exception)
     ExceptionNotifier.notify_exception(exception, env: request.env, :data => {:message => "was doing something wrong"})
     respond_to do |format|
-      format.html { render template: 'errors/error404', layout: 'layouts/home', status: 404 }
+      format.html { render template: 'errors/error404', status: 404 }
       format.all { render nothing: true, status: 404}
     end
   end
@@ -238,7 +240,7 @@ class ApplicationController < ActionController::Base
   def render_error(exception)
     ExceptionNotifier.notify_exception(exception, env: request.env)
     respond_to do |format|
-      format.html { render template: 'errors/error500', layout: 'layouts/home', status: 500 }
+      format.html { render template: 'errors/error500', status: 500 }
       format.all { render nothing: true, status: 500}
     end
   end

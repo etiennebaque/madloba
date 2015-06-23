@@ -191,15 +191,18 @@ class User::AdminPanelController < ApplicationController
                        :country => params['country'],
                        :zoom_level => params['zoom_level'],
                        :map_center_geocode => new_map_center}
+
       settings_hash.each {|key, value|
         setting_record = Setting.find_by_key(key)
-        setting_record.update_attribute(:value, value)
+        if setting_record
+          setting_record.update_attributes(value: value)
+        end
       }
 
-      if (params['mapBoxApiKey'] == '' || params['mapQuestApiKey'] == '')
+      if (params['mapBoxApiKey'] == '' && params['mapQuestApiKey'] == '')
         # if there is no longer any Mapbox key, we get back to the default map type, osm.
         setting_record = Setting.find_by_key('chosen_map')
-        setting_record.update_attribute(:value, 'osm')
+        setting_record.update_attributes(value: 'osm')
       end
       flash[:setting_success] = t('admin.map_settings.update_success')
     end
@@ -244,6 +247,9 @@ class User::AdminPanelController < ApplicationController
       setting_record = Setting.find_by_key(key)
       setting_record.update_attribute(:value, value)
     }
+
+    # Updating cache value, for area types.
+    Rails.cache.write(CACHE_AREA_TYPE, area_type_param)
 
     flash[:setting_success] = t('admin.map_settings.area_update_success')
     redirect_to user_areasettings_path
