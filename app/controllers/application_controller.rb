@@ -231,7 +231,7 @@ class ApplicationController < ActionController::Base
   def render_not_found(exception)
     ExceptionNotifier.notify_exception(exception, env: request.env, :data => {:message => "was doing something wrong"})
     respond_to do |format|
-      format.html { render template: 'errors/error404', layout: 'layouts/home', status: 404 }
+      format.html { render template: 'errors/error404', status: 404 }
       format.all { render nothing: true, status: 404}
     end
   end
@@ -240,7 +240,7 @@ class ApplicationController < ActionController::Base
   def render_error(exception)
     ExceptionNotifier.notify_exception(exception, env: request.env)
     respond_to do |format|
-      format.html { render template: 'errors/error500', layout: 'layouts/home', status: 500 }
+      format.html { render template: 'errors/error500', status: 500 }
       format.all { render nothing: true, status: 500}
     end
   end
