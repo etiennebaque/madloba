@@ -485,6 +485,7 @@ function getLocationsPropositions(){
 
                 }
 
+                // Webservice response came back - button label goes back to "Search"
                 $("#btn-form-search").html("Search");
 
             }
