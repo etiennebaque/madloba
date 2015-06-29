@@ -22,18 +22,18 @@
 en:
   simple_captcha:
     placeholder: ""
-    label: "Enter the text in this field"
-    refresh_button_text: "Can't see? Refresh!"
+    label: "Tapez ce texte"
+    refresh_button_text: "Rafraichir!"
     message:
-      default: "code did not match with the image"
-      user: "The secret Image and code were different"
+      default: "code ne correspond pas à l'image:"
+      user: "L'image et le code sont différents:"
   activerecord:
     errors:
       models:
         category:
           attributes:
             name:
-              blank: The category name can't be blank
+              blank: Veuillez entrer un nom pour cette catégorie
             marker_color:
               taken: "and Icon error - the chosen pair is not available: both this icon and this marker color have already been used for another category. Please choose another marker and/or icon."
             icon:
@@ -41,71 +41,72 @@ en:
         ad:
           attributes:
             image:
-              too_long: must be less than 5MB.
+              too_long: - le poids du fichier ne doit pas dépasser 5 Mo.
             number_of_items:
-              greater_than: "Please add at least 1 item to your ad"
+              greater_than: "Veuillez ajouter au moins un objet à votre annonce"
 
   home:
-    home: Home
-    page: Home page
-    user_panel: User panel
-    create_new_ad: Create a new ad
-    sign_in: sign in
-    sign_up: Sign up here
-    not_have_account_yet_html: "%{signup} if you don't have an account yet."
-    or: or
-    create_account: create an account
-    refinements: Your selection
-    delete_all: Delete all
-    refine_location: Refine location
-    cancel: Cancel
-    close: Close
-    sign_register: Sign in / Create account
+    home: Accueil
+    page: Page d'accueil
+    user_panel: Votre profil
+    create_new_ad: Créer annonce
+    sign_in: S'identifier
+    sign_up: Enregistrez-vous ici
+    not_have_account_yet_html: "%{signup} si vous n'avez pas encore de compte."
+    or: ou
+    create_account: Créer un compte
+    refinements: Votre sélection
+    delete_all: Effacer tout
+    refine_location: Résultats
+    cancel: Annuler
+    close: Fermer
+    sign_register: S'identifier / Créer un compte
     e-mail: E-mail
-    password: Password
-    record_not_exist: Sorry, this page does not exist!
-    got_it: Got it!
-    giving: "I'm giving away:"
-    giving_away: "Giving away:"
-    searching: "I'm searching for:"
-    searching_for: "Searching for:"
-    search_items: Type an item
-    location_example: Street name, postal code...
-    search: Search
-    about: About
-    about_website: About %{website}
-    links: Links
-    your_searched_location: Your searched location
-    no_ad: There's no ad at the moment.
-    create_an_ad_now_html: "%{createad} to tell your community what you have to give, or what you're looking for!"
-    about_page: About %{appname}
-    about_description_1_html: "%{appname} is a website powered by %{madloba_link}."
-    about_description_2_html: "%{madloba_link} is an open-source platform that allows you to let your community know about what you want to give away."
-    about_description_3: So many (still useful!) objects go to waste all the time! Luckily, as we increasingly live in an open-data and location driven world, we now have the technological means to solve this problem. Madloba will give your community a new way to recycle, give or dispose all "this stuff" :)
-    contact_us: Contact us
-    send_us_message_html: Send us an email at %{email}
-    about_send_message_html: If you want to contact us, feel free to send us a message at %{email}.
-    loc_not_found: Sorry, this location was not found.
+    password: Mot de passe
+    record_not_exist: Désolé, cette page n'existe pas.
+    got_it: OK
+    giving: "Je donne:"
+    giving_away: "Donne:"
+    searching: "Je recherche:"
+    searching_for: "Recherche:"
+    search_items: Tapez un objet
+    location_example: Nom de rue, code postal...
+    search: Chercher
+    about: A propos
+    about_website: A propos de %{website}
+    links: Liens
+    your_searched_location: Votre recherche
+    no_ad: Pas d'annonce en ce moment.
+    create_an_ad_now_html: "%{createad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez!"
+    about_page: A propos de %{appname}
+    about_description_1_html: "%{appname} est un site utilisant %{madloba_link}."
+    about_description_2_html: "%{madloba_link} est une projet open-source qui vous permet de faire savoir à votre communauté ce que vous avez à donner."
+    about_description_3: "Il y a tellement d'objects qui partent constamment à la poubelle, alors qu'ils sont toujours utilisables! Heureusement, comme nous vivons de plus en plus dans un monde alimenté par des données de plus en plus ouvertes, nous avons maintenant les moyens technologiques de résoudre ce problème. Madloba donnera un nouveau moyen à votre communauté de recycler ou de donner tout ce qu'il y a à réutiliser."
+    contact_us: Contactez-nous
+    send_us_message_html: Envoyez-nous un e-mail à %{email}
+    about_send_message_html: Si vous voulez nous contacter, envoyez-nous un e-mail à %{email}.
+    loc_not_found: Désolé, cet endroit n'a pas été trouvé.
     server_error: Sorry, there was a server error. Please try again later.
-    default_current_loc: This is your current location.
-    title_guided_nav: Categories
-    map_positioned_found: "Map positioned on: %{address}"
-    full_not_found_map_position: "Full address not found, map positioned on: %{address}"
-    not_found_map_position: Sorry, address not found.
-    click_on_map_after: Once general area found, click on the map underneath to select the desired location.
-    demo_sidebar_note_html: (Demo) As an administrator, you can change the colors and the icons of these categories in the %{link}.
-    admin_panel: admin panel
-    same_area: Ads related to a same area
-    update: Update
-    demo_instructions_html: "(Demo) Instructions to login %{link}."
+    server_error: Désolé, il y a eu une erreur serveur. Veuillez essayer à nouveau plus tard.
+    default_current_loc: Ceci est votre endroit actuel.
+    title_guided_nav: Catégories
+    map_positioned_found: "Carte positionnée sur: %{address}"
+    full_not_found_map_position: "Adresse complète non trouvée, carte positionnée sur: %{address}"
+    not_found_map_position: Désolé, adresse non trouvée.
+    click_on_map_after: "Une fois que la zone générale a été trouvée, cliquez sur la carte ci-dessous pour sélectioner l'endroit désiré."
+    demo_sidebar_note_html: "(Démo) En tant qu'administrateur, vous pouvez changer les couleurs et les icônes de ces catégories dans le %{link}."
+    admin_panel: "panneau d'administration"
+    same_area: Annonces groupées par zone.
+    update: "Mise à jour"
+    demo_instructions_html: "(Démo) Indications pour s'identifier %{link}."
   errors:
-    oops: "Oops!"
-    not_found: 404 Page Not Found
-    server_error: 500 Internal server error
-    404_sorry: "Sorry, the requested page has not been found!"
-    500_sorry: "Sorry, there's been a server error. Please try again later."
+    oops: "Oups!"
+    not_found: 404 Page non trouvée
+    server_error: 500 Erreur server
+    404_sorry: "Désolé, la page demandée n'a pas été trouvée!"
+    500_sorry: "Désolé, il y a eu une erreur serveur. Veuillez essayer à nouveau plus tard."
   config:
-    not_authorized: You are not allowed go to that page.
+    not_authorized: Vous n'êtes pas autorisé à aller sur cette page.
   location:
     location: "Location:*"
     user_location: "This user's locations:*"
@@ -144,9 +145,9 @@ en:
     not_found_descr2: "But that's ok! Please select it manually on the map."
     district_help: Choose the district where this location can be found.
   ad:
-    new_ad: New ad
-    once_created_expire: Once created, your ad will be published for %{max_expire_days} days.
-    area: area
+    new_ad: Nouvelle annonce
+    once_created_expire: une fois créée, votre annonce sera publiée pour %{max_expire_days} jours.
+    area: zone
     error_occurred: "%{errors} occurred while saving this ad"
     published: "Published by:"
     expiration_date: This ad will expire on %{expire_date}.
