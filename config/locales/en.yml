@@ -187,7 +187,6 @@ en:
     choose_existing: Choose existing location instead
     submit: Submit
     create_this_ad: Create this ad!
-    cancel: Cancel
     create_success: The ad '%{title}' has been created. You will shortly receive an e-mail, with the new ad details.
     your_new: Your new ad
     where_to_find: "Where to find the item(s):"
@@ -266,7 +265,6 @@ en:
     unhappy: Unhappy?
     you_sure: Are you sure?
     back: Back
-    cancel_account: Cancel my account
     resend_unlock: Resend unlock instructions
   confirmation:
     resend: Resend confirmation instructions
@@ -289,7 +287,6 @@ en:
     exact_area: Location type
     ads: Ads
     ad_settings: Ad settings
-    location_tab: Location
     location_name: location
     expiration_date: Expiration date
     locations: Locations
@@ -326,7 +323,6 @@ en:
     mandatory: (* mandatory fields)
     general_settings_menu: General settings
     save: Save
-    cancel: Cancel
     log_out: Log out
     nothing_to_do: Yay! Nothing to worry about :)
     no_mapbox_account_html: You don't have entered a Mapbox key yet, in "Map settings". You can get one by opening an account on <strong>%{href}</strong>, to get a new map style for your website.
@@ -517,7 +513,6 @@ en:
       update_profile: Update profile
       new_user: New user
       make_user_admin: Make this user an admin.
-      email: E-mail
       first_name: First name
       last_name: Last name
       username: Username
