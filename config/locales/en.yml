@@ -132,8 +132,6 @@ en:
     district: "District*:"
     define_geocode_button: Locate me on the map
     geocodes: Geocodes
-    latitude_help: The latitude of your location (can be automatically found with the button above)
-    longitude_help: The longitude of your location (can be automatically found with the button above)
     map: "Map:"
     phone_number: "Phone number:"
     website: "Website:"
@@ -182,7 +180,6 @@ en:
     anonymous_help: Check this box if you want to publicly show your username, instead of your real name, when publishing this ad.
     new_location: Enter a new location
     choose_existing: Choose existing location instead
-    submit: Submit
     create_this_ad: Create this ad!
     create_success: The ad '%{title}' has been created. You will shortly receive an e-mail, with the new ad details.
     your_new: Your new ad
@@ -201,7 +198,7 @@ en:
     accepting: "Searching for:"
     edit_current_location: Edit current location
     ad_create_expire: Your ad will expire in %{day_number} days, on %{expire_date}.
-    ad_has_expired: Sorry, this ad has expired, and is not visible anymore.
+    ad_has_expired: Sorry, this ad has expired and is not visible anymore.
     no_ad_created_yet: You have not created any ad yet. Click on the button above to create your first one!
     no_location_yet: "Nothing to edit here: you have not created any ad with an exact location in it yet."
     upload_image: "Upload image:"
@@ -232,8 +229,8 @@ en:
     ad_title: Ad title
     item: Items
     description: Description
-    where_pick_up: Where to pick up the item
-    where_to_drop: Where to drop the item
+    where_pick_up: Where to pick up the items
+    where_to_drop: Where to drop the items
     admin_panel: our admin panel.
     manage_ad_html: "To manage this ad, as well as your previously posted ads, login to %{href}"
     thanks: Thanks, and have a good day!

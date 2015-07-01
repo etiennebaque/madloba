@@ -86,7 +86,6 @@ en:
     send_us_message_html: Envoyez-nous un e-mail à %{email}
     about_send_message_html: Si vous voulez nous contacter, envoyez-nous un e-mail à %{email}.
     loc_not_found: Désolé, cet endroit n'a pas été trouvé.
-    server_error: Sorry, there was a server error. Please try again later.
     server_error: Désolé, il y a eu une erreur serveur. Veuillez essayer à nouveau plus tard.
     default_current_loc: Ceci est votre endroit actuel.
     title_guided_nav: Catégories
@@ -108,230 +107,229 @@ en:
   config:
     not_authorized: Vous n'êtes pas autorisé à aller sur cette page.
   location:
-    location: "Location:*"
-    user_location: "This user's locations:*"
-    new_location: Enter a new location for this ad
-    name: "Location name:"
-    name_help: Give a name to your new location (eg shop name, random name you give your workshop...). It will be shown publicly. Leave blank if you don't want to assign any name.
-    name_to_use: "Which name would you like to use?*"
-    anon_publisher_name_note: "This is an ad posted by an anonymous user:"
+    location: "Emplacement:*"
+    user_location: "Emplacements de cet utilisateur:*"
+    new_location: Entrez un nouvel emplacement pour cette annonce
+    name: "Nom de l'emplacement:"
+    name_help: "Nommez votre nouvel emplacement (ex: nom de votre boutique, lieu-dit...). Ce nom sera public. N'écrivez rien si vous ne voulez pas nommer votre emplacement. "
+    name_to_use: "Quel nom voulez-vous utiliser?*"
+    anon_publisher_name_note: "Ceci est une annonce postée par un utilisateur anonyme:"
     ad_action: "Action:*"
-    ad_action_giving: I'm giving away items.
-    ad_action_accepting: I'm searching for items.
-    name_username: the username
-    name_fullname: the full name
-    definition: "Enter your location*:"
-    definition_exact: by exact address
-    definition_postal_code: by postal code
-    definition_district: by district
-    street_number: "Street number:"
-    street_name: "Street name*:"
-    street_name_help: For this location, the name of the street, avenue, drive...
-    postal_code: "Postal code*:"
-    province: Province
-    city: City
-    district: "District*:"
-    define_geocode_button: Locate me on the map
+    ad_action_giving: Je donne des objects.
+    ad_action_accepting: Je cherche des objects.
+    name_username: Nom d'utilisateur
+    name_fullname: Nom complet réel
+    definition: "Entrez votre emplacement*:"
+    definition_exact: par adresse exacte
+    definition_postal_code: par code postal
+    definition_district: par zone
+    street_number: "Numéro de rue:"
+    street_name: "Nom de la rue*:"
+    street_name_help: Exemple: nom de la rue, avenue, chemin...
+    postal_code: "Code postal*:"
+    province: Région
+    city: Ville
+    district: "Zone*:"
+    define_geocode_button: Trouvez-moi sur la carte
     geocodes: Geocodes
-    latitude_help: The latitude of your location (can be automatically found with the button above)
-    longitude_help: The longitude of your location (can be automatically found with the button above)
-    map: "Map:"
-    phone_number: "Phone number:"
-    website: "Website:"
-    description: "Location description:"
-    description_help: Fill this optional section if you want to give additional detail about the location (eg. how to find it, what it looks like...)
-    not_found: Location not found
-    not_found_descr1: "Based on the information you've entered, the location could not be found."
-    not_found_descr2: "But that's ok! Please select it manually on the map."
-    district_help: Choose the district where this location can be found.
+    map: "Carte:"
+    phone_number: "Numéro de téléphone:"
+    website: "Site web:"
+    description: "Au sujet de cet emplacement:"
+    description_help: Remplissez cette section si vous voulez donner quelques détails supplémentaires au sujet de cet emplacement (ex: comment trouver cet endroit, a quoi il ressemble...)
+    not_found: Emplacement non trouvé
+    not_found_descr1: "Cet emplacement n'a pas pu être trouvé, basé sur les informations entrées."
+    not_found_descr2: "Mais c'est pas grave! Cliquez sur la carte pour sélectionner cet emplacement."
+    district_help: Choisissez la zone où cet emplacement se trouve.
   ad:
     new_ad: Nouvelle annonce
     once_created_expire: une fois créée, votre annonce sera publiée pour %{max_expire_days} jours.
     area: zone
-    error_occurred: "%{errors} occurred while saving this ad"
-    published: "Published by:"
-    expiration_date: This ad will expire on %{expire_date}.
-    expires_today: This ad expires today!
+    error_occurred: "%{errors} à corriger ci-dessous:"
+    published: "Publié par:"
+    expiration_date: Cette annonce expirera le %{expire_date}.
+    expires_today: "Cette annonce expire aujourd'hui!"
     has_expired: This ad has expired on %{expire_date}, and is not visible on the website any longer.
-    title: "Ad title*:"
-    title_help: e.g. 'Gives away 5 shirts' or 'I want to get rid of my old laptop'...
-    item: "Which item(s)?*:"
-    about_you: "About you"
-    name: "Your name*:"
-    name_help: Please enter your name or a nickname here. It will appear publicly as it is, in the published ad.
-    your_email: "Your email*:"
+    has_expired: Cette annonce a expiré le %{expire_date}, et n'est plus visible sur ce site.
+    title: "Titre de l'annonce*:"
+    title_help: exemples: 'Donne 5 chemises', 'Je me débarasse de mon vieux portable'...
+    item: "Quels objets?*:"
+    about_you: "A propos de vous"
+    name: "Votre nom*:"
+    name_help: "Veuillez entrer votre nom ou votre pseudonyme ici. Il apparaitra tel quel, dans l'annonce publiée."
+    your_email: "Votre adresse email*:"
     captcha: "Captcha*:"
-    email_help: Providing your email is not mandatory (make sure you've at least put a phone number in the ad description). If you give an email address, it won't be published publicly and users will still be able to write a message to you.
-    no_item_added: No item added so far
-    item_name: Name
-    category_header: Category
+    email_help: "Donner votre adresse email n'est pas obligatoire (Soyez sûr d'indiquer votre numéro de téléphone dans la description de l'annonce). Si vous donnez votre adresse email, elle ne sera pas publiée publiquement, et les utilisateurs seront quand même capable de vous envoyer un message."
+    no_item_added: "Pas d'objet ajouté pour l'instant."
+    item_name: Nom
+    category_header: Catégorie
     item_help: Type the item you're giving away/looking for (choose it in the list, if it appears in it).
-    number_item: Quantity
-    ad_is_deleted: The ad '%{deleted_ad_title}' has been deleted.
-    location_website: "Location website:"
-    your_message: "Your message*:"
-    send_message: Send your message
-    send_message_label: "Send a message to %{name} about this ad:"
-    category: "Category*:"
-    category_help: Choose the category this new item belongs to.
+    item_help: "Tapez l'objet "
+    number_item: Quantité
+    ad_is_deleted: "L'annonce '%{deleted_ad_title}' a été supprimé."
+    location_website: "Site web:"
+    your_message: "Votre message*:"
+    send_message: Envoyer votre message
+    send_message_label: "Envoyer votre message à %{name} pour cette annonce:"
+    category: "Catégorie*:"
+    category_help: Choisissez une catégorie pour cet objet:
     description: Description
-    location_description: "About this place:"
-    description_help: Give some details about the item(s) you're giving away/searching.
-    expire_day_number_html: "Number of days for publication (Max: %{expire_max_number})"
-    expire_day_number_help: Number of days your ad will be published for, after it's created.
-    anonymous: Anonymous ad?
-    anonymous_help: Check this box if you want to publicly show your username, instead of your real name, when publishing this ad.
-    new_location: Enter a new location
-    choose_existing: Choose existing location instead
-    submit: Submit
-    create_this_ad: Create this ad!
-    create_success: The ad '%{title}' has been created. You will shortly receive an e-mail, with the new ad details.
-    your_new: Your new ad
-    where_to_find: "Where to find the item(s):"
-    where_to_bring: "Where to bring the item(s):"
-    you_own: You created this ad.
-    you_manage: You can manage it
-    here: here
-    error_empty_message: Please enter a valid, non-empty message.
-    error_refresh: A problem occurred while sending your message. Please try to send it again.
-    from: From
-    get_back_to: You can directly get back to %{first_name} by replying to this e-mail.
-    success_sent: Your message has been sent successfully.
-    summary: "Summary:"
-    giving_away: "Giving away:"
-    accepting: "Searching for:"
-    edit_current_location: Edit current location
-    ad_create_expire: Your ad will expire in %{day_number} days, on %{expire_date}.
-    ad_has_expired: Sorry, this ad has expired, and is not visible anymore.
-    no_ad_created_yet: You have not created any ad yet. Click on the button above to create your first one!
-    no_location_yet: "Nothing to edit here: you have not created any ad with an exact location in it yet."
-    upload_image: "Upload image:"
-    less_than_limit: Image must be less than 5MB.
-    remove_image: Remove image
-    image_currently_processed: Your image is currently being processed.
-    show_ad_image_processed: The image of this ad is currently being processed.
-    will_show_up: It will show up in a moment after you refresh the page.
-    create_item: Create a new item
-    write_new_item: Write a new item and select its category
-    add_item: Add an item
-    see_published: See this published ad
-    error_ad_must_have_item: Please add at least 1 item
-    provide_anon_name: Please enter your name
-    provide_anon_email: Please enter your email address
-    select_category: Available categories
-    captcha_not_valid: The captcha text you entered is not valid.
-    create_account_first_html: "%{create_account} or %{sign_in} now before publishing your ad, if you want to be able to edit it later."
+    location_description: "Au sujet de cet emplacement:"
+    description_help: Donnez quelques détails au sujet des objets que vous donnez/cherchez.
+    expire_day_number_html: "Nombre de jours pour publication (Max: %{expire_max_number})"
+    expire_day_number_help: "Nombre de jours pendant lesquels votre annonce sera publiée, après l'avoir publiée"
+    anonymous: Annonce anonyme ?
+    anonymous_help: Cliquez ici si vous voulez montrer publiquement votre pseudonyme, au lieu de votre nom réel, lorsque vous publiez votre annonce.
+    new_location: Entrez un nouvel emplacement
+    choose_existing: Choisir un emplacement existant
+    create_this_ad: Créer cette annonce !
+    create_success: "L'annonce '%{title}' a été créée. Vous recevrez un email dans un moment, avec un résumé de votre annonce."
+    your_new: Votre nouvelle annonce
+    where_to_find: "Où trouver les objets:"
+    where_to_bring: "Où apporter les objets:"
+    you_own: Vous avez créé cette annonce.
+    you_manage: Vous pouvez la modifier
+    here: ici
+    error_empty_message: Veuillez entrer un message valide.
+    error_refresh: "Problème durant l'envoi de votre message. Veuillez réessayer plus tard."
+    from: De
+    get_back_to: Vous pouvez directement revenir vers %{first_name} en répondant à cet e-mail.
+    success_sent: Votre message a été envoyé.
+    summary: "Résumé:"
+    giving_away: "Donne:"
+    accepting: "Recherche:"
+    edit_current_location: "Modifier l'emplacement actuel"
+    ad_create_expire: Votre annonce expirera dans %{day_number} jours, le %{expire_date}.
+    ad_has_expired: Désolé, cette annonce a expiré et n'est plus visible.
+    no_ad_created_yet: "Vous n'avez encore pas créé d'annonce. Cliquez sur le bouton ci-dessus pour créer votre première annonce."
+    no_location_yet: "Rien à modifier ici: vous n'avez pas encore créé d'annonce avec un emplacement exact."
+    upload_image: "Télécharger image:"
+    less_than_limit: "L'image doit faire moins de 5 Mo."
+    remove_image: "Retirer l'image"
+    image_currently_processed: "Votre image est en train d'être traitée."
+    show_ad_image_processed: "L'image de cette annonce est en train d'être traitée."
+    will_show_up: "Elle apparaitra dans un moment après avoir rechargé la page."
+    create_item: "Créer un nouvel objet"
+    write_new_item: "Tapez un novel objet et choisissez sa catégorie"
+    add_item: "Ajouter un objet"
+    see_published: "Voir cette annonce"
+    error_ad_must_have_item: "Veuillez ajouter au moins 1 objet"
+    provide_anon_name: "Veuillez entrer votre nom"
+    provide_anon_email: "Veuillez entre votre adresse email"
+    select_category: "Catégories disponibles"
+    captcha_not_valid: "Le text Captcha que vous avez entré n'est pas valide"
+    create_account_first_html: "%{create_account} ou %{sign_in} maintenant avant de publier votre annonce, si vous voulez la modifier plus tard."
   mailer:
-    welcome: "Welcome to %{name}!"
-    confirmation_descr1: You received this message because an account, based on your e-mail address, was created on this website.
-    confirmation_descr2: You can confirm your account through the link below
-    confirm_account: Confirm my account
-    thanks: Thank you! :-)
-    signature: The %{name} team.
-    dear: "Dear %{name}"
-    ad_created: You have successfully created the following ad, on %{site_name}
-    ad_title: Ad title
-    item: Items
+    welcome: "Bienvenue sur %{name}!"
+    confirmation_descr1: Vous avez reçu ce message car un compte, basé sur votre adresse email, a été créé sur ce site.
+    confirmation_descr2: Vous pouvez confirmer votre compte en cliquant sur lien ci-dessous.
+    confirm_account: Confirmer mon compte
+    thanks: Merci! :-)
+    signature: "L'équipe %{name}."
+    dear: "Cher %{name}"
+    ad_created: "Vous avez créé l'annonce suivante avec succès, sur %{site_name}"
+    ad_title: "Titre de l'annonce"
+    item: Objets
     description: Description
-    where_pick_up: Where to pick up the item
-    where_to_drop: Where to drop the item
-    admin_panel: our admin panel.
-    manage_ad_html: "To manage this ad, as well as your previously posted ads, login to %{href}"
-    thanks: Thanks, and have a good day!
-    received_message: You received a reply for your '%{ad_title}' ad on %{site_name}.
-    new_ad_object: Your new ad on %{site_name} - '%{ad_title}'
-    reply_ad_object: Reply to your '%{ad_title}' ad on %{site_name}
-    account_locked: Your account has been locked due to an excessive number of unsuccessful sign in attempts.
-    link_unlock: Click the link below to unlock your account
-    unlock_account: Unlock my account
-    ad_will_expire: This ad will expire in %{day_number} days, on %{expire_date}
+    where_pick_up: Où trouver les objets
+    where_to_drop: Où déposer les objets
+    admin_panel: "notre panneau d'administration."
+    manage_ad_html: "Pour modifier cette annonce, ainsi que les annonces créées auparavant, connectez-vous sur %{href}"
+    thanks: "Merci, et passez une bonne journée! :)"
+    received_message: "Vous avez reçu une réponse pour votre annonce '%{ad_title}' sur %{site_name}."
+    new_ad_object: Votre nouvelle annonce sur %{site_name} - '%{ad_title}'
+    reply_ad_object: Réponse pour votre annonce '%{ad_title}' sur %{site_name}
+    account_locked: Votre compte a été vérouillé à cause de trop nombreux essais de connection.
+    link_unlock: Cliquez sur le lien ci-dessous pour dévérouiller votre compte.
+    unlock_account: Dévérouiller mon compte.
+    ad_will_expire: Cette annonce expirera dans %{day_number} jours, le %{expire_date}
   registration:
-    all_mandatory: (All fields are mandatory)
-    first_name: First name
-    last_name: Last name
-    username: Username
-    username_help: Your username will be used if you don't want to show your full name, when publishing an ad.
-    email: E-mail
-    password: Password
-    password_confirm: Password confirmation
-    sign_up: Sign up
-    not_received: Didn't receive confirmation instructions?
-    waiting_confirmation: Currently waiting confirmation for
-    leave_blank: (leave blank if you don't want to change it)
-    need_current: (we need your current password to confirm your changes)
-    cancel_account: Cancel my account
-    unhappy: Unhappy?
-    you_sure: Are you sure?
-    back: Back
-    resend_unlock: Resend unlock instructions
+    all_mandatory: (Tous les champs sont obligatoires)
+    first_name: Prénom
+    last_name: Nom de famille
+    username: "Nom d'utilisateur"
+    username_help: Votre nom d'utilisateur sera utilisé si vous ne voulez pas montrer votre nom réel, lorsque vous publierez une annonce.
+    email: Adresse e-mail
+    password: Mot de passe
+    password_confirm: Confirmez mot de passe
+    sign_up: Créer compte
+    not_received: "Vous n'avez pas reçu vos instruction de confirmations ?"
+    waiting_confirmation: En attente de confirmation pour
+    leave_blank: (laissez ce champ vide si vous ne voulez pas le changer)
+    need_current: (nous avons besoin de votre mot de passe pour confirmer les changements)
+    cancel_account: Fermer mon compte
+    unhappy: Pas content ?
+    you_sure: Vous êtes sûr ?
+    back: Retour
+    resend_unlock: Réenvover les instructions de dévérouillage.
   confirmation:
-    resend: Resend confirmation instructions
+    resend: Réenvover les instructions de confirmation.
   session:
-    hello: Hello
-    sign_in: Sign in
-    someone_requested: Someone has requested a link to change your password. You can do this through the link below.
-    please_ignore: If you didn't request this, please ignore this email.
-    password_not_changing: Your password won't change until you access the link above and create a new one.
-    forgot: Forgot your password?
-    not_received_unlock: Didn't receive unlock instructions?
-    sign_in_with: Sign in with %{name}
-    change_password: Change my password
-    reset_password: Send me reset password instructions
-    change_your_password: Change your password
+    hello: Bonjour
+    sign_in: Se connecter
+    someone_requested: "Quelqu'un a demandé un lien pour changer le mot de passe. Vous pouvez le changer en cliqunt sur le lien ci-dessous."
+    please_ignore: "Si vous n'avez pas demandé ceci, veuillez ignorer ce message."
+    password_not_changing: Votre mot de passe ne changera pas à moins que vous cliquiez sur le lien ci-dessus pour en créer un nouveau.
+    forgot: Mot de passe oublié ?
+    not_received_unlock: Instructions de dévérouillage non reçues ?
+    sign_in_with: Se connecter avec %{name}
+    change_password: Changer mon mot de passe
+    reset_password: Envoyez-moi les instructions pour changer mon mot de passe
+    change_your_password: Changer votre mot de passe
   admin:
-    dashboard: Dashboard
-    name: Name
-    address: Address/Postal code/District
-    exact_area: Location type
-    ads: Ads
-    ad_settings: Ad settings
-    location_name: location
-    expiration_date: Expiration date
-    locations: Locations
-    items: Items
-    item_name: item
-    categories: Categories
-    add_location: Add location
-    edit_location: Edit location
-    new_location: New location
-    add_item: Add item
-    edit_item: Edit item
-    new_item: New item
-    add_category: Add category
-    edit_category: Edit category
-    new_category: New category
-    title: Title
+    dashboard: Accueil
+    name: Nom
+    address: Adresse/Code postal/Zone
+    exact_area: Type d'emplacement
+    ads: Annonces
+    ad_settings: Paramètres pour annonces
+    location_name: emplacement
+    expiration_date: "Date d'expiration"
+    locations: Emplacements
+    items: Objets
+    item_name: objet
+    categories: Catégories
+    add_location: Ajouter emplacement
+    edit_location: Mettre à jour emplacement
+    new_location: Nouvel emplacement
+    add_item: Ajouter objet
+    edit_item: Mettre à jour objet
+    new_item: Nouvel objet
+    add_category: Ajouter catégorie
+    edit_category: Mettre à jour catégorie
+    new_category: Nouvelle catégorie
+    title: Titre
     actions: Actions
     description: Description
-    item_under_cat: Item(s) under this category
-    category_name: Category name
-    marker: Marker
-    icon: Icon
-    edit_delete: Edit details / Delete
-    user: User
-    website: Website
-    created_by_user: Created by user
-    manage_your_ads: Manage your ads
-    manage_records: Manage records
-    records_message: From here, you can manage the ads posted on the website, as well as their locations, items, and categories.
-    back_to_records: Back to the 'Manage records' page
-    back_to_ads: Back to 'Manage your ads' page
-    back_to_users: Back to 'Manage users' page
-    create_ad: Create ad
-    mandatory: (* mandatory fields)
-    general_settings_menu: General settings
-    save: Save
-    log_out: Log out
-    nothing_to_do: Yay! Nothing to worry about :)
-    no_mapbox_account_html: You don't have entered a Mapbox key yet, in "Map settings". You can get one by opening an account on <strong>%{href}</strong>, to get a new map style for your website.
-    no_mapquest_account_html: You don't have entered a MapQuest key yet, in "Map settings". You can get one by opening an account on <strong>%{href}</strong>, to get a new map style for your website.
-    no_social: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General settings". Specify some of them to increase your visibility.
-    one_category_html: <strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.
-    no_website_description: No website description has been written yet, in "General settings". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
-    no_area_type_html: <strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area settings", please indicate how an area is defined (by postal code or by district), to give the user more flexibility, when it comes to choose a location.
-    you_admin: You're an administrator of this website.
-    use_left_hand: Use the left-hand side menu to manage
-    admin_descr1: the different components of this website (ads, locations, items, categories)
+    item_under_cat: Objet(s) appartenant à cette catégorie
+    category_name: Nom de la catégorie
+    marker: Marqueur
+    icon: Icône
+    edit_delete: Mettre à jour / Supprimer
+    user: Utilisateur
+    website: Site web
+    created_by_user: Créée par utilisateur
+    manage_your_ads: Gérer vos annonces
+    manage_records: Gérer base de données
+    records_message: Vous pouvez gérer ici les annonces postées sur ce site, ainsi que les emplacements, objets et catégories.
+    back_to_records: Retour à "Gérer base de données"
+    back_to_ads: Retour à "Gérer vos annonces"
+    back_to_users: Retour à "Gérer utilisateurs"
+    create_ad: Créer annonce
+    mandatory: (* champs obligatoires)
+    general_settings_menu: Paramètres du site
+    save: Enregistrer
+    log_out: Déconnexion
+    nothing_to_do: Super, rien à faire ! :)
+    no_mapbox_account_html: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{href}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+    no_mapquest_account_html: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{href}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+    no_social: Vous n'avez pas encore entré d'adresses de réseaux sociaux (Facebook, Twitter, Pinterest), dans "Paramètres du site". Entrez vos différents profils pour augmenter votre visibilité.
+    one_category_html: <strong>Seulement une seule catégorie est disponible</strong>. Veuillez créer quelques catégories pour permettres aux utilisateurs de filtrer leur recherche.
+    no_website_description: Aucune description de site web n'a été écrite, dans "Paramètres du site". Expliquez aux utilisateurs le but de votre site Madloba, en écrivant un texte court. Cette description apparaitra en page de la page d'accueil, ainsi que dans la page "A propos".
+    no_area_type_html: <strong>Aucune zone n'a été spécifiée</strong>. S'il n'a pas la possibilité de choisir une zone lorsque une annonce est créé, l'utilisateur devra entrer une adresse exacte (ce qui ne sera pas forcément souhaité). Dans "Paramètres des zones", veuillez définir les zones de votre ville (par code postal, par quartiers), pour donner plus de flexibilité aux utilisateurs, lorsqu'ils définiront un emplacement.
+    you_admin: Vous êtes un administrateur de ce site.
+    use_left_hand: Utilisez le menu sur la gauche pour gérer
+    admin_descr1: les différents éléments de ce site (annonces, emplacements, objets, catégories)
     admin_descr2: the registered users (admins and regulars users)
     admin_descr3: the website main settings
     admin_descr4: the settings for the map on the front page
