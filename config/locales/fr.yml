@@ -308,7 +308,7 @@ en:
     admin_descr2: les utilisateurs (administrateurs et autres)
     admin_descr3: les paramètres généraux du site
     admin_descr4: les paramètres de la carte en page d'accueil
-    admin_descr5: les paramètres qui définissent une zone dans votre ville (ex : codes postaux, quartiers...)
+    admin_descr5: "les paramètres qui définissent une zone dans votre ville (ex : codes postaux, quartiers...)"
     regular_actions: Vous avez aussi accès aux fonctions non-admins.
     todo_list: A faire
     welcome_user: Bienvenue sur le panneau admin de %{site_name}. Utiliser le menu à gauche pour gérer
@@ -331,7 +331,7 @@ en:
     ad:
       manage_ads: Gérer annonces
       ad_edit: Annonces - Mise à jour
-      ad_updated: L'annonce '%{title}' a été mise à jour.
+      ad_updated: "L'annonce '%{title}' a été mise à jour."
       error_update: "%{errors} lors de la mise à jour de l'annonce"
       delete: Supprimer cette annonce
       delete_ad_error_html: "Erreur lors de la mise à jour de cette annonce! Retour à %{href}"
@@ -340,7 +340,7 @@ en:
       giving_away: Donne
       accepting: Recherche
       delete_ad: Supprimer cette annonce?
-      delete_ad_permanently: Etês-vous sûr que vous voulez supprimer cette annonce définitivement ?
+      delete_ad_permanently: Etes-vous sûr que vous voulez supprimer cette annonce définitivement ?
       delete_this_ad: Oui, supprimer cette annonce
     location:
       error_occurred: "%{errors} lors de la création de cet emplacement"
@@ -348,7 +348,7 @@ en:
       created_success: "L'emplacement '%{name}' a été créé."
       delete: "Supprimer cet emplacement"
       linked_ads: "Annonces liées à cet emplacement"
-      no_ad: "Il n'y a pas encore d'annonce liée à cet emplacement".
+      no_ad: "Il n'y a pas encore d'annonce liée à cet emplacement."
       area: Zone
       exact_address: Adresse exacte
       map_notification_postal_code: Cliquez sur la carte pour localiser votre zone générale, en rapport avec vtre code postal.
@@ -376,10 +376,10 @@ en:
       currently_selected: Icône choisie
       font_awesome_link_html: Choisissez une icône de %{href}.
       font_awesome_link2_html: Vous pouvez aussi choisir une icône parmi la liste complète dans la librarie %{href}, en tapant son mot-clé ci-dessous.
-      font_awesome_help: Tapez le nom de l'icône tel que vous le voyez sur la page Font Awesome (ex : 'fa-bell', 'fa-circle'...)
+      font_awesome_help: "Tapez le nom de l'icône tel que vous le voyez sur la page Font Awesome (ex : 'fa-bell', 'fa-circle'...)"
       item_linked: Objets liés à cette catégorie
       item_name: "Nom de l'objet"
-      no_item: Il n'y a pas encore d'objet lié à cette catégorie.
+      no_item: "Il n'y a pas encore d'objet lié à cette catégorie."
     item:
       error_occurred: "%{errors} en enregistrant cet objet"
       update_success: "L'objet '%{name}' a été mis à jour."
