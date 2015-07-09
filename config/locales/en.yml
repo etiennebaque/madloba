@@ -53,7 +53,6 @@ en:
     sign_in: sign in
     sign_up: Sign up here
     not_have_account_yet_html: "%{signup} if you don't have an account yet."
-    or: or
     create_account: create an account
     refinements: Your selection
     delete_all: Delete all
@@ -127,11 +126,8 @@ en:
     street_name: "Street name*:"
     street_name_help: For this location, the name of the street, avenue, drive...
     postal_code: "Postal code*:"
-    province: Province
-    city: City
     district: "District*:"
     define_geocode_button: Locate me on the map
-    geocodes: Geocodes
     map: "Map:"
     phone_number: "Phone number:"
     website: "Website:"
@@ -159,44 +155,29 @@ en:
     your_email: "Your email*:"
     captcha: "Captcha*:"
     email_help: Providing your email is not mandatory (make sure you've at least put a phone number in the ad description). If you give an email address, it won't be published publicly and users will still be able to write a message to you.
-    no_item_added: No item added so far
-    item_name: Name
-    category_header: Category
-    item_help: Type the item you're giving away/looking for (choose it in the list, if it appears in it).
-    number_item: Quantity
     ad_is_deleted: The ad '%{deleted_ad_title}' has been deleted.
     location_website: "Location website:"
     your_message: "Your message*:"
     send_message: Send your message
     send_message_label: "Send a message to %{name} about this ad:"
-    category: "Category*:"
-    category_help: Choose the category this new item belongs to.
     description: Description
     location_description: "About this place:"
     description_help: Give some details about the item(s) you're giving away/searching.
-    expire_day_number_html: "Number of days for publication (Max: %{expire_max_number})"
-    expire_day_number_help: Number of days your ad will be published for, after it's created.
-    anonymous: Anonymous ad?
-    anonymous_help: Check this box if you want to publicly show your username, instead of your real name, when publishing this ad.
     new_location: Enter a new location
     choose_existing: Choose existing location instead
     create_this_ad: Create this ad!
     create_success: The ad '%{title}' has been created. You will shortly receive an e-mail, with the new ad details.
-    your_new: Your new ad
     where_to_find: "Where to find the item(s):"
     where_to_bring: "Where to bring the item(s):"
     you_own: You created this ad.
     you_manage: You can manage it
     here: here
     error_empty_message: Please enter a valid, non-empty message.
-    error_refresh: A problem occurred while sending your message. Please try to send it again.
     from: From
     get_back_to: You can directly get back to %{first_name} by replying to this e-mail.
     success_sent: Your message has been sent successfully.
-    summary: "Summary:"
     giving_away: "Giving away:"
     accepting: "Searching for:"
-    edit_current_location: Edit current location
     ad_create_expire: Your ad will expire in %{day_number} days, on %{expire_date}.
     ad_has_expired: Sorry, this ad has expired and is not visible anymore.
     no_ad_created_yet: You have not created any ad yet. Click on the button above to create your first one!
@@ -227,7 +208,6 @@ en:
     dear: "Dear %{name}"
     ad_created: You have successfully created the following ad, on %{site_name}
     ad_title: Ad title
-    item: Items
     description: Description
     where_pick_up: Where to pick up the items
     where_to_drop: Where to drop the items
@@ -299,13 +279,10 @@ en:
     title: Title
     actions: Actions
     description: Description
-    item_under_cat: Item(s) under this category
     category_name: Category name
     marker: Marker
     icon: Icon
     edit_delete: Edit details / Delete
-    user: User
-    website: Website
     created_by_user: Created by user
     manage_your_ads: Manage your ads
     manage_records: Manage records
@@ -317,7 +294,6 @@ en:
     mandatory: (* mandatory fields)
     general_settings_menu: General settings
     save: Save
-    log_out: Log out
     nothing_to_do: Yay! Nothing to worry about :)
     no_mapbox_account_html: You don't have entered a Mapbox key yet, in "Map settings". You can get one by opening an account on <strong>%{href}</strong>, to get a new map style for your website.
     no_mapquest_account_html: You don't have entered a MapQuest key yet, in "Map settings". You can get one by opening an account on <strong>%{href}</strong>, to get a new map style for your website.
@@ -353,14 +329,10 @@ en:
       manage_profile: Manage your profile
     ad:
       manage_ads: Manage ads
-      update_ad: Update ad
       ad_edit: Ad details - Edit
       ad_updated: The ad '%{title}' has been updated.
       error_update: "%{errors} occurred while updating this ad"
       delete: Delete this ad
-      your_locations: "Your locations:"
-      this_user_locations: "This user's locations:"
-      location_new_edit: Edit current location (%{current_location})
       delete_ad_error_html: "Error occurred when updating this ad! Back to %{href}"
       manage_ads_page: "'Manage your ads' page"
       giving_accepting_title: Giving away/Accepting
@@ -374,7 +346,6 @@ en:
       update_success: The location '%{name}' has been updated.
       created_success: The location '%{name}' has been created.
       delete: Delete this location
-      map_location_help: If the exact geocodes of this location cannot be found, please point on this map where this location is.
       linked_ads: Ads linked to that location
       no_ad: There is no ad linked to this location yet.
       area: Area
@@ -390,7 +361,6 @@ en:
       update_success: The category '%{name}' has been updated.
       created_success: The category '%{name}' has been created.
       cat_error_occurred: "%{errors} occurred while saving this category"
-      error_updating: Something went wrong went updating this category. Please try again later.
       delete_category: Delete this category
       choose_icon: Choose an icon
       delete_confirm: Are you sure you want to delete this category?
@@ -400,17 +370,14 @@ en:
       delete_yes: Yes, delete this category
       transfer_and_delete: Transfer items & delete this category
       success_deleted: The category '%{name}' has been deleted.
-      name: Category name
       marker: Category marker
       icon: Category icon
       currently_selected: Currently selected icon
-      current_marker: Current marker/icon
       font_awesome_link_html: Pick an icon from %{href}.
       font_awesome_link2_html: You can also choose an icon from the complete list, in the %{href} library, and type its keyword underneath.
       font_awesome_help: Type the name of the icon as you see them on the Font Awesome page (eg. 'fa-bell', 'fa-circle'...)
       item_linked: Items linked to that category
       item_name: Item name
-      icon_error: The icon name you entered is not valid
       no_item: There is no item linked to that category yet.
     item:
       error_occurred: "%{errors} occurred while saving this item"
@@ -458,18 +425,14 @@ en:
       mapbox: "Mapbox API key:"
       mapbox_link: Go to your Mapbox account...
       mapquest: "MapQuest API key:"
-      zoom_level: Map zoom level
       mapquest_link: Go to your MapQuest developer account...
       map_api_keys: Map API keys
       key_first: After entering a new API key, save the changes first. Then, in the drop down box above, select the type of the map related to that new key.
       location_info: Location information
-      postal_code: Postal code format
       postal_code_field1: Postal code length
       postal_code_field2: Area length
       postal_code_help1: Maximum number of characters used in your city's postal codes (eg. 6 for 'A1B2C3')
       postal_code_help2: Number of characters within the postal codes, that defines an area. (eg. 3 for 'A1B')
-      map_center: Default Map center coordinates
-      refresh_map: Refresh the map
       find_city_map: "Find a city on the map underneath:"
       city: City
       state: State/Region (optional)

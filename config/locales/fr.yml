@@ -41,7 +41,7 @@ en:
         ad:
           attributes:
             image:
-              too_long: - le poids du fichier ne doit pas dépasser 5 Mo.
+              too_long: "- le poids du fichier ne doit pas dépasser 5 Mo."
             number_of_items:
               greater_than: "Veuillez ajouter au moins un objet à votre annonce"
 
@@ -53,7 +53,6 @@ en:
     sign_in: S'identifier
     sign_up: Enregistrez-vous ici
     not_have_account_yet_html: "%{signup} si vous n'avez pas encore de compte."
-    or: ou
     create_account: Créer un compte
     refinements: Votre sélection
     delete_all: Effacer tout
@@ -125,18 +124,15 @@ en:
     definition_district: par zone
     street_number: "Numéro de rue:"
     street_name: "Nom de la rue*:"
-    street_name_help: Exemple: nom de la rue, avenue, chemin...
+    street_name_help: "Exemple: nom de la rue, avenue, chemin..."
     postal_code: "Code postal*:"
-    province: Région
-    city: Ville
     district: "Zone*:"
     define_geocode_button: Trouvez-moi sur la carte
-    geocodes: Geocodes
     map: "Carte:"
     phone_number: "Numéro de téléphone:"
     website: "Site web:"
     description: "Au sujet de cet emplacement:"
-    description_help: Remplissez cette section si vous voulez donner quelques détails supplémentaires au sujet de cet emplacement (ex: comment trouver cet endroit, a quoi il ressemble...)
+    description_help: "Remplissez cette section si vous voulez donner quelques détails supplémentaires au sujet de cet emplacement (ex: comment trouver cet endroit, a quoi il ressemble...)"
     not_found: Emplacement non trouvé
     not_found_descr1: "Cet emplacement n'a pas pu être trouvé, basé sur les informations entrées."
     not_found_descr2: "Mais c'est pas grave! Cliquez sur la carte pour sélectionner cet emplacement."
@@ -149,10 +145,9 @@ en:
     published: "Publié par:"
     expiration_date: Cette annonce expirera le %{expire_date}.
     expires_today: "Cette annonce expire aujourd'hui!"
-    has_expired: This ad has expired on %{expire_date}, and is not visible on the website any longer.
     has_expired: Cette annonce a expiré le %{expire_date}, et n'est plus visible sur ce site.
     title: "Titre de l'annonce*:"
-    title_help: exemples: 'Donne 5 chemises', 'Je me débarasse de mon vieux portable'...
+    title_help: "exemples: 'Donne 5 chemises', 'Je me débarasse de mon vieux portable'..."
     item: "Quels objets?*:"
     about_you: "A propos de vous"
     name: "Votre nom*:"
@@ -160,45 +155,30 @@ en:
     your_email: "Votre adresse email*:"
     captcha: "Captcha*:"
     email_help: "Donner votre adresse email n'est pas obligatoire (Soyez sûr d'indiquer votre numéro de téléphone dans la description de l'annonce). Si vous donnez votre adresse email, elle ne sera pas publiée publiquement, et les utilisateurs seront quand même capable de vous envoyer un message."
-    no_item_added: "Pas d'objet ajouté pour l'instant."
-    item_name: Nom
     category_header: Catégorie
-    item_help: Type the item you're giving away/looking for (choose it in the list, if it appears in it).
-    item_help: "Tapez l'objet "
-    number_item: Quantité
     ad_is_deleted: "L'annonce '%{deleted_ad_title}' a été supprimé."
     location_website: "Site web:"
     your_message: "Votre message*:"
     send_message: Envoyer votre message
     send_message_label: "Envoyer votre message à %{name} pour cette annonce:"
-    category: "Catégorie*:"
-    category_help: Choisissez une catégorie pour cet objet:
     description: Description
     location_description: "Au sujet de cet emplacement:"
     description_help: Donnez quelques détails au sujet des objets que vous donnez/cherchez.
-    expire_day_number_html: "Nombre de jours pour publication (Max: %{expire_max_number})"
-    expire_day_number_help: "Nombre de jours pendant lesquels votre annonce sera publiée, après l'avoir publiée"
-    anonymous: Annonce anonyme ?
-    anonymous_help: Cliquez ici si vous voulez montrer publiquement votre pseudonyme, au lieu de votre nom réel, lorsque vous publiez votre annonce.
     new_location: Entrez un nouvel emplacement
     choose_existing: Choisir un emplacement existant
     create_this_ad: Créer cette annonce !
     create_success: "L'annonce '%{title}' a été créée. Vous recevrez un email dans un moment, avec un résumé de votre annonce."
-    your_new: Votre nouvelle annonce
     where_to_find: "Où trouver les objets:"
     where_to_bring: "Où apporter les objets:"
     you_own: Vous avez créé cette annonce.
     you_manage: Vous pouvez la modifier
     here: ici
     error_empty_message: Veuillez entrer un message valide.
-    error_refresh: "Problème durant l'envoi de votre message. Veuillez réessayer plus tard."
     from: De
     get_back_to: Vous pouvez directement revenir vers %{first_name} en répondant à cet e-mail.
     success_sent: Votre message a été envoyé.
-    summary: "Résumé:"
     giving_away: "Donne:"
     accepting: "Recherche:"
-    edit_current_location: "Modifier l'emplacement actuel"
     ad_create_expire: Votre annonce expirera dans %{day_number} jours, le %{expire_date}.
     ad_has_expired: Désolé, cette annonce a expiré et n'est plus visible.
     no_ad_created_yet: "Vous n'avez encore pas créé d'annonce. Cliquez sur le bouton ci-dessus pour créer votre première annonce."
@@ -229,7 +209,6 @@ en:
     dear: "Cher %{name}"
     ad_created: "Vous avez créé l'annonce suivante avec succès, sur %{site_name}"
     ad_title: "Titre de l'annonce"
-    item: Objets
     description: Description
     where_pick_up: Où trouver les objets
     where_to_drop: Où déposer les objets
@@ -301,13 +280,10 @@ en:
     title: Titre
     actions: Actions
     description: Description
-    item_under_cat: Objet(s) appartenant à cette catégorie
     category_name: Nom de la catégorie
     marker: Marqueur
     icon: Icône
     edit_delete: Mettre à jour / Supprimer
-    user: Utilisateur
-    website: Site web
     created_by_user: Créée par utilisateur
     manage_your_ads: Gérer vos annonces
     manage_records: Gérer base de données
@@ -319,7 +295,6 @@ en:
     mandatory: (* champs obligatoires)
     general_settings_menu: Paramètres du site
     save: Enregistrer
-    log_out: Déconnexion
     nothing_to_do: Super, rien à faire ! :)
     no_mapbox_account_html: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{href}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
     no_mapquest_account_html: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{href}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
@@ -330,148 +305,135 @@ en:
     you_admin: Vous êtes un administrateur de ce site.
     use_left_hand: Utilisez le menu sur la gauche pour gérer
     admin_descr1: les différents éléments de ce site (annonces, emplacements, objets, catégories)
-    admin_descr2: the registered users (admins and regulars users)
-    admin_descr3: the website main settings
-    admin_descr4: the settings for the map on the front page
-    admin_descr5: the settings that define an area in your town (eg postal codes and/or districts)
-    regular_actions: You can also perform regular users' actions.
-    todo_list: To-do list
-    welcome_user: Welcome to your %{site_name} dashboard. Use the left-hand side menu to manage
-    user_descr1: the ads you published, as well as the locations tied to them.
-    user_descr2: your user information.
-    social_media: Social media
-    useful_links: Useful links
-    delete_sure: Are you sure you want to delete this %{entity}?
-    warning_ads_before_delete_item: "WARNING: some ads are still tied to this item. Deleting this item will permanently remove it from these ads."
-    warning_ads_before_delete_location: "WARNING: some ads are still tied to this location. Deleting this location will permanently delete these ads."
-    delete_confirm: Yes, delete this %{entity}
-    save_not_possible: "Demo - Update not possible for this page"
+    admin_descr2: les utilisateurs (administrateurs et autres)
+    admin_descr3: les paramètres généraux du site
+    admin_descr4: les paramètres de la carte en page d'accueil
+    admin_descr5: les paramètres qui définissent une zone dans votre ville (ex : codes postaux, quartiers...)
+    regular_actions: Vous avez aussi accès aux fonctions non-admins.
+    todo_list: A faire
+    welcome_user: Bienvenue sur le panneau admin de %{site_name}. Utiliser le menu à gauche pour gérer
+    user_descr1: les annonces que vous publiez, ainsi que les emplacements qui leur sont rattachés.
+    user_descr2: votre profil utilisateur.
+    social_media: Médias sociaux
+    useful_links: Liens
+    delete_sure: Etes vous sûr aue vous voulez supprimer cet %{entity}?
+    warning_ads_before_delete_item: "ATTENTION: quelques annonces sont rattachés à cet objet. Supprimer cet objet le fera disparaître de ces annonces définitivement."
+    warning_ads_before_delete_location: "ATTENTION: quelques annonces sont rattachés à cet emplacement. Supprimer cet emplacement aura pour effet de supprimer ces annonces définitivement."
+    delete_confirm: Oui, supprimer cet %{entity}
+    save_not_possible: "Démo - Mise à jour non possible pour cette page:"
     left_menu:
-      admin_task: Admin tasks
-      user_tasks: Regular user tasks
-      map_settings: Map settings
-      area_settings: Area settings
-      manage_users: Manage users
-      manage_profile: Manage your profile
+      admin_task: Tâches admin
+      user_tasks: Tâches utilisateur
+      map_settings: Paramètres de la carte
+      area_settings: Paramètres des zones
+      manage_users: Gérer utilisateurs
+      manage_profile: Gérer votre profil
     ad:
-      manage_ads: Manage ads
-      update_ad: Update ad
-      ad_edit: Ad details - Edit
-      ad_updated: The ad '%{title}' has been updated.
-      error_update: "%{errors} occurred while updating this ad"
-      delete: Delete this ad
-      your_locations: "Your locations:"
-      this_user_locations: "This user's locations:"
-      location_new_edit: Edit current location (%{current_location})
-      delete_ad_error_html: "Error occurred when updating this ad! Back to %{href}"
-      manage_ads_page: "'Manage your ads' page"
-      giving_accepting_title: Giving away/Accepting
-      giving_away: Giving away
-      accepting: Accepting
-      delete_ad: Delete this ad?
-      delete_ad_permanently: Are you sure you want to delete this ad permanently?
-      delete_this_ad: Yes, delete this ad
+      manage_ads: Gérer annonces
+      ad_edit: Annonces - Mise à jour
+      ad_updated: L'annonce '%{title}' a été mise à jour.
+      error_update: "%{errors} lors de la mise à jour de l'annonce"
+      delete: Supprimer cette annonce
+      delete_ad_error_html: "Erreur lors de la mise à jour de cette annonce! Retour à %{href}"
+      manage_ads_page: "Gérer annonces"
+      giving_accepting_title: Donne/Recherche
+      giving_away: Donne
+      accepting: Recherche
+      delete_ad: Supprimer cette annonce?
+      delete_ad_permanently: Etês-vous sûr que vous voulez supprimer cette annonce définitivement ?
+      delete_this_ad: Oui, supprimer cette annonce
     location:
-      error_occurred: "%{errors} occurred while saving this location"
-      update_success: The location '%{name}' has been updated.
-      created_success: The location '%{name}' has been created.
-      delete: Delete this location
-      map_location_help: If the exact geocodes of this location cannot be found, please point on this map where this location is.
-      linked_ads: Ads linked to that location
-      no_ad: There is no ad linked to this location yet.
-      area: Area
-      exact_address: Exact address
-      map_notification_postal_code: Click on the map to locate your general postal code area.
-      map_notification_exact: Click on the map to locate your exact address.
-      location_deleted: The location '%{deleted_location_name}' has been deleted.
-      unnamed: unnamed location
-      area_name: "%{area} area"
-      no_ad_tied: No ads are currently tied to this location.
-      anonymous_user: (Anonymous user)
+      error_occurred: "%{errors} lors de la création de cet emplacement"
+      update_success: "L'emplacement '%{name}' a été mis à jour."
+      created_success: "L'emplacement '%{name}' a été créé."
+      delete: "Supprimer cet emplacement"
+      linked_ads: "Annonces liées à cet emplacement"
+      no_ad: "Il n'y a pas encore d'annonce liée à cet emplacement".
+      area: Zone
+      exact_address: Adresse exacte
+      map_notification_postal_code: Cliquez sur la carte pour localiser votre zone générale, en rapport avec vtre code postal.
+      map_notification_exact: Cliquez sur la carte pour localiser votre adresse exacte.
+      location_deleted: "L'emplacement '%{deleted_location_name}' a été supprimé."
+      unnamed: emplacement sans nom
+      area_name: "zone %{area}"
+      no_ad_tied: "Pas d'annonce actuellement liée à cet emplacement."
+      anonymous_user: (Utilisateur anonyme)
     category:
-      update_success: The category '%{name}' has been updated.
-      created_success: The category '%{name}' has been created.
-      cat_error_occurred: "%{errors} occurred while saving this category"
-      error_updating: Something went wrong went updating this category. Please try again later.
-      delete_category: Delete this category
-      choose_icon: Choose an icon
-      delete_confirm: Are you sure you want to delete this category?
-      before_you_delete1: Some items are still tied to the category you want to delete.
-      before_you_delete2: Please choose another category, in the list below, to transfer these items to, before going ahead with the deletion of this category.
-      cannot_delete: You cannot delete this category, as it is the only existing category.
-      delete_yes: Yes, delete this category
-      transfer_and_delete: Transfer items & delete this category
-      success_deleted: The category '%{name}' has been deleted.
-      name: Category name
-      marker: Category marker
-      icon: Category icon
-      currently_selected: Currently selected icon
-      current_marker: Current marker/icon
-      font_awesome_link_html: Pick an icon from %{href}.
-      font_awesome_link2_html: You can also choose an icon from the complete list, in the %{href} library, and type its keyword underneath.
-      font_awesome_help: Type the name of the icon as you see them on the Font Awesome page (eg. 'fa-bell', 'fa-circle'...)
-      item_linked: Items linked to that category
-      item_name: Item name
-      icon_error: The icon name you entered is not valid
-      no_item: There is no item linked to that category yet.
+      update_success: La catégorie '%{name}' a été mise à jour.
+      created_success: La catégorie '%{name}' a été créée.
+      cat_error_occurred: "%{errors} en sauvant cette catégorie"
+      delete_category: Supprimer cette catégorie
+      choose_icon: Choisir une icône
+      delete_confirm: Etes-vous sûr que vous voulez supprimer cette catégorie ?
+      before_you_delete1: Quelques objets sont toujours liés à la catégorie que vous voulez supprimer.
+      before_you_delete2: Veuillez choisir une autre catégorie vers laquelle transférer ces objets, dans la liste ci-dessous, avant de supprimer cette catégorie.
+      cannot_delete: Vous ne pouvez pas supprimer cette catégories car c'est la seul existante.
+      delete_yes: Oui, supprimer cette catégorie.
+      transfer_and_delete: Transférer objets & supprimer cette catégorie
+      success_deleted: La catégorie '%{name}' a été supprimée.
+      marker: Marqueur
+      icon: Icône
+      currently_selected: Icône choisie
+      font_awesome_link_html: Choisissez une icône de %{href}.
+      font_awesome_link2_html: Vous pouvez aussi choisir une icône parmi la liste complète dans la librarie %{href}, en tapant son mot-clé ci-dessous.
+      font_awesome_help: Tapez le nom de l'icône tel que vous le voyez sur la page Font Awesome (ex : 'fa-bell', 'fa-circle'...)
+      item_linked: Objets liés à cette catégorie
+      item_name: "Nom de l'objet"
+      no_item: Il n'y a pas encore d'objet lié à cette catégorie.
     item:
-      error_occurred: "%{errors} occurred while saving this item"
-      update_success: The item '%{name}' has been updated.
-      created_success: The item '%{name}' has been created.
-      delete_item: Delete this item
-      name: Item name
-      category: Category
-      ads_promoting: Ads promoting this item
-      ad_title: Ad title
-      no_ad: There is no ad where this item is currently promoted.
-      item_deleted: the item '%{deleted_item_name}' has been deleted.
+      error_occurred: "%{errors} en enregistrant cet objet"
+      update_success: "L'objet '%{name}' a été mis à jour."
+      created_success: "L'objet '%{name}' a été créé."
+      delete_item: Supprimer cet objet
+      name: "Nom de l'objet"
+      category: Catégorie
+      ads_promoting: Annonces avec cet objet
+      ad_title: Titre
+      no_ad: "Pas d'annonce incluant cet objet pour le moment."
+      item_deleted: "L'objet '%{deleted_item_name}' a été supprimé."
     general_settings:
-      name: Website name
-      description: Website description
-      contact_email: Contact e-mail address
-      facebook: Facebook page URL
-      twitter: Twitter handle
-      pinterest: Pinterest page URL
-      success_message: The general settings have been updated.
-      error_message: The "Website name" field cannot be empty.
-      max_ad_expire: Ad expiration - Max. number of days
-      max_ad_expire_help: Set the maximum number of days an ad can remain published, after its creation (Enter '0' to set no limit).
-      link_one: First link
-      link_two: Second link
-      link_three: Third link
-      link_four: Fourth link
-      link_help: Create up to 4 links in this section, to advertise relevant websites/pages, at the bottom of the front page.
+      name: Nom du site
+      description: Description du site
+      contact_email: Adresse e-mail à contacter
+      facebook: Page Facebook
+      twitter: Twitter
+      pinterest: Page Pinterest
+      success_message: Les paramètres du site ont été mis à jour.
+      error_message: Le champ "Nom du site" ne peut pas être vide.
+      max_ad_expire: Expiration d'annonce - Nombre de jours max.
+      max_ad_expire_help: Nombre de jours maximum de publication d'une annonce, après sa création (Tapez '0' pour ne pas fixer de limite).
+      link_one: Premier lien
+      link_two: Deuxième lien
+      link_three: Troisième lien
+      link_four: Quatrième lien
+      link_help: "Créez jusqu'à 4 liens dans cette section pour promouvoir vos sites/pages web, en bas de la page d'accueil."
     area_settings:
-      title: Area settings
-      define_area: An area can be defined
-      by_postal_code: by postal code
-      by_district: by district
-      area_postal_code: Area defined by a postal code
-      area_district: Area defined by a district
-      map_description: Click on the 'Add district' link, type a name for this new district, and click on the map to define its location.
-      error_update_district: An server error occurred while updating districts. Please try again later.
-      district_name: District name
+      title: Paramètres des zones
+      define_area: Une zone peut être définie
+      by_postal_code: par un code postal
+      by_district: par un quartier
+      area_postal_code: Zone définie par un code postal
+      area_district: Zone définie par un quartier
+      map_description: Cliquez sur 'Ajouter quartier', tapez un nom pour ce nouveau quartier, et cliquez sur la carte pour définir son emplacement.
+      error_update_district: Erreur lors de la mise à jour des quartiers. Veuillez réessayer plus tard.
+      district_name: Nom du quartier
       latitude: Latitude
       longitude: Longitude
-      add_district: Add district
+      add_district: Ajouter quartier
     map_settings:
-      title: Map settings
-      type: "Map type:"
-      mapbox: "Mapbox API key:"
-      mapbox_link: Go to your Mapbox account...
-      mapquest: "MapQuest API key:"
-      zoom_level: Map zoom level
-      mapquest_link: Go to your MapQuest developer account...
-      map_api_keys: Map API keys
-      key_first: After entering a new API key, save the changes first. Then, in the drop down box above, select the type of the map related to that new key.
-      location_info: Location information
-      postal_code: Postal code format
-      postal_code_field1: Postal code length
-      postal_code_field2: Area length
-      postal_code_help1: Maximum number of characters used in your city's postal codes (eg. 6 for 'A1B2C3')
-      postal_code_help2: Number of characters within the postal codes, that defines an area. (eg. 3 for 'A1B')
-      map_center: Default Map center coordinates
-      refresh_map: Refresh the map
+      title: Paramètres de la carte
+      type: "Type de carte:"
+      mapbox: "Clé API Mapbox:"
+      mapbox_link: Aller sur votre compte Mapbox...
+      mapquest: "Clé API MapQuest:"
+      mapquest_link: Aller sur votre compte développeur MapQuest...
+      map_api_keys: Clés API carte
+      key_first: After avoir entré une nouvelle clé API, enregistrez vos changements tout d'abord. Ensuite, choisissez le type de carte désiré dans la liste ci-dessus.
+      location_info: Information au sujet de l'emplacement
+      postal_code_field1: Longueur du code postal
+      postal_code_field2: Longueur de la zone
+      postal_code_help1: Nombre maximum de caractères utilisés dans les codes postaux de votre ville (eg. 6 pour 'A1B2C3')
+      postal_code_help2: Nombre maximum de caractères utilisés définissant une zone, dans les codes postaux de votre ville. (eg. 3 pour 'A1B')
       find_city_map: "Find a city on the map underneath:"
       city: City
       state: State/Region (optional)

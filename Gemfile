@@ -102,6 +102,9 @@ end
 gem 'rails_12factor', group: :production
 gem 'unicorn'
 
+# Gems related to translation
+gem 'i18n-tasks', '~> 0.8.3'
+
 # To manage secrets.yml content, on Heroku
 # gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
 
