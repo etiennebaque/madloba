@@ -32,10 +32,15 @@ class ApplicationController < ActionController::Base
   # If 'setup_step' key, in Settings table, is set to '1', it means that the installation process
   # is not complete. Redirects to setup screens if it is the case.
   def check_if_setup
-    if !(((request.original_url).include? 'setup') || ((request.original_url).include? 'user/register') || ((request.original_url).include? 'getCityGeocodes'))
+    current_url = request.original_url
+    language_chosen = Rails.cache.fetch(CACHE_LANGUAGE_CHOSEN) {Setting.where(key: 'language_chosen').pluck(:value).first}
+    if (language_chosen.empty? && !(current_url.include? 'setup/language'))
+      # If the locale has never been specified (even during the setup process), redirect to the setup language page.
+      redirect_to setup_language_path
+    elsif !((current_url.include? 'setup') || (current_url.include? 'user/register') || (current_url.include? 'getCityGeocodes'))
+      # Redirect to the setup pages if it has never been completed.
       setup_step_value = Rails.cache.fetch(CACHE_SETUP_STEP) {Setting.where(key: 'setup_step').pluck(:value).first.to_i}
-      language_chosen = Rails.cache.fetch(CACHE_LANGUAGE_CHOSEN) {Setting.where(key: 'language_chosen').pluck(:value).first}
-      if setup_step_value == 1 || language_chosen.empty?
+      if setup_step_value == 1
         redirect_to setup_language_path
       end
     end
