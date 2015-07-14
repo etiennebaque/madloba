@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :check_if_setup
   before_action :load_javascript_text
   before_action :allow_iframe_requests
+  before_action :set_locale
 
   include ApplicationHelper
   include Pundit
@@ -33,8 +34,9 @@ class ApplicationController < ActionController::Base
   def check_if_setup
     if !(((request.original_url).include? 'setup') || ((request.original_url).include? 'user/register') || ((request.original_url).include? 'getCityGeocodes'))
       setup_step_value = Rails.cache.fetch(CACHE_SETUP_STEP) {Setting.where(key: 'setup_step').pluck(:value).first.to_i}
-      if setup_step_value == 1
-        redirect_to setup_path
+      language_chosen = Rails.cache.fetch(CACHE_LANGUAGE_CHOSEN) {Setting.where(key: 'language_chosen').pluck(:value).first}
+      if setup_step_value == 1 || language_chosen.empty?
+        redirect_to setup_language_path
       end
     end
   end
@@ -48,6 +50,17 @@ class ApplicationController < ActionController::Base
   # Allows the website to be embedded in an iframe.
   def allow_iframe_requests
     response.headers.delete('X-Frame-Options')
+  end
+
+  # Choose the right locale among the ones that are available.
+  def set_locale
+    language_chosen = Rails.cache.fetch(CACHE_LANGUAGE_CHOSEN) {Setting.where(key: 'language_chosen').pluck(:value).first}
+    if language_chosen && !language_chosen.empty?
+      l = language_chosen
+    else
+      l = I18n.default_locale
+    end
+    I18n.locale = l
   end
 
   # Redirects after signing in.

@@ -23,7 +23,7 @@ fr:
   simple_captcha:
     placeholder: ""
     label: "Tapez ce texte"
-    refresh_button_text: "Rafraichir!"
+    refresh_button_text: "Rafraichir !"
     message:
       default: "code ne correspond pas à l'image:"
       user: "L'image et le code sont différents:"
@@ -76,11 +76,11 @@ fr:
     links: Liens
     your_searched_location: Votre recherche
     no_ad: Pas d'annonce en ce moment.
-    create_an_ad_now_html: "%{createad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez!"
+    create_an_ad_now_html: "%{createad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
     about_page: A propos de %{appname}
     about_description_1_html: "%{appname} est un site utilisant %{madloba_link}."
     about_description_2_html: "%{madloba_link} est une projet open-source qui vous permet de faire savoir à votre communauté ce que vous avez à donner."
-    about_description_3: "Il y a tellement d'objects qui partent constamment à la poubelle, alors qu'ils sont toujours utilisables! Heureusement, comme nous vivons de plus en plus dans un monde alimenté par des données de plus en plus ouvertes, nous avons maintenant les moyens technologiques de résoudre ce problème. Madloba donnera un nouveau moyen à votre communauté de recycler ou de donner tout ce qu'il y a à réutiliser."
+    about_description_3: "Il y a tellement d'objects qui partent constamment à la poubelle, alors qu'ils sont toujours utilisables ! Heureusement, comme nous vivons de plus en plus dans un monde alimenté par des données de plus en plus ouvertes, nous avons maintenant les moyens technologiques de résoudre ce problème. Madloba donnera un nouveau moyen à votre communauté de recycler ou de donner tout ce qu'il y a à réutiliser."
     contact_us: Contactez-nous
     send_us_message_html: Envoyez-nous un e-mail à %{email}
     about_send_message_html: Si vous voulez nous contacter, envoyez-nous un e-mail à %{email}.
@@ -97,11 +97,13 @@ fr:
     same_area: Annonces groupées par zone.
     update: "Mise à jour"
     demo_instructions_html: "(Démo) Indications pour s'identifier %{link}."
+    footer_powered_by_html: Délivré par by %{madloba_link}
+    footer_new_powered_by_html: Nouveau site délivré par %{madloba_link}
   errors:
-    oops: "Oups!"
+    oops: "Oups !"
     not_found: 404 Page non trouvée
-    server_error: 500 Erreur server
-    404_sorry: "Désolé, la page demandée n'a pas été trouvée!"
+    server_error: 500 Erreur serveur
+    404_sorry: "Désolé, la page demandée n'a pas été trouvée !"
     500_sorry: "Désolé, il y a eu une erreur serveur. Veuillez essayer à nouveau plus tard."
   config:
     not_authorized: Vous n'êtes pas autorisé à aller sur cette page.
@@ -135,7 +137,7 @@ fr:
     description_help: "Remplissez cette section si vous voulez donner quelques détails supplémentaires au sujet de cet emplacement (ex: comment trouver cet endroit, a quoi il ressemble...)"
     not_found: Emplacement non trouvé
     not_found_descr1: "Cet emplacement n'a pas pu être trouvé, basé sur les informations entrées."
-    not_found_descr2: "Mais c'est pas grave! Cliquez sur la carte pour sélectionner cet emplacement."
+    not_found_descr2: "Mais ce n'est pas grave ! Cliquez sur la carte pour sélectionner cet emplacement."
     district_help: Choisissez la zone où cet emplacement se trouve.
   ad:
     new_ad: Nouvelle annonce
@@ -144,7 +146,7 @@ fr:
     error_occurred: "%{errors} à corriger ci-dessous:"
     published: "Publié par:"
     expiration_date: Cette annonce expirera le %{expire_date}.
-    expires_today: "Cette annonce expire aujourd'hui!"
+    expires_today: "Cette annonce expire aujourd'hui !"
     has_expired: Cette annonce a expiré le %{expire_date}, et n'est plus visible sur ce site.
     title: "Titre de l'annonce*:"
     title_help: "exemples: 'Donne 5 chemises', 'Je me débarasse de mon vieux portable'..."
@@ -199,11 +201,11 @@ fr:
     captcha_not_valid: "Le text Captcha que vous avez entré n'est pas valide"
     create_account_first_html: "%{create_account} ou %{sign_in} maintenant avant de publier votre annonce, si vous voulez la modifier plus tard."
   mailer:
-    welcome: "Bienvenue sur %{name}!"
+    welcome: "Bienvenue sur %{name} !"
     confirmation_descr1: Vous avez reçu ce message car un compte, basé sur votre adresse email, a été créé sur ce site.
     confirmation_descr2: Vous pouvez confirmer votre compte en cliquant sur lien ci-dessous.
     confirm_account: Confirmer mon compte
-    thanks: Merci! :-)
+    thanks: Merci ! :-)
     signature: "L'équipe %{name}."
     dear: "Cher %{name}"
     ad_created: "Vous avez créé l'annonce suivante avec succès, sur %{site_name}"
@@ -213,7 +215,7 @@ fr:
     where_to_drop: Où déposer les objets
     admin_panel: "notre panneau d'administration."
     manage_ad_html: "Pour modifier cette annonce, ainsi que les annonces créées auparavant, connectez-vous sur %{href}"
-    thanks: "Merci, et passez une bonne journée! :)"
+    thanks: "Merci, et passez une bonne journée ! :)"
     received_message: "Vous avez reçu une réponse pour votre annonce '%{ad_title}' sur %{site_name}."
     new_ad_object: Votre nouvelle annonce sur %{site_name} - '%{ad_title}'
     reply_ad_object: Réponse pour votre annonce '%{ad_title}' sur %{site_name}
@@ -333,7 +335,7 @@ fr:
       ad_updated: "L'annonce '%{title}' a été mise à jour."
       error_update: "%{errors} lors de la mise à jour de l'annonce"
       delete: Supprimer cette annonce
-      delete_ad_error_html: "Erreur lors de la mise à jour de cette annonce! Retour à %{href}"
+      delete_ad_error_html: "Erreur lors de la mise à jour de cette annonce ! Retour à %{href}"
       manage_ads_page: "Gérer annonces"
       giving_accepting_title: Donne/Recherche
       giving_away: Donne
@@ -457,10 +459,10 @@ fr:
       error_occurred: "%{errors} lors de la mise à jour cet utilisateur"
       myprofile_update_success: Votre profil utilisateur a été mis à jour.
       update_success: "L'utilisateur '%{email}' a été mis à jour."
-      created_success: "L'utilisateur" '%{email}' a été créé. Un message de bienvenue a été envoyé à cette adresse e-mail."
+      created_success: "L'utilisateur '%{email}' a été créé. Un message de bienvenue a été envoyé à cette adresse e-mail."
       delete: Supprimer cet utilisateur
       confirm_delete: "ATTENTION: Toutes les annonces publiées, ainsi que les emplacements enregistrés par cet utilisateur seront supprimés définitivement."
-      confirm_delete_2: Etes-vous sûr que vous voulez supprimer cet utilisateur définitevemnt?
+      confirm_delete_2: Etes-vous sûr que vous voulez supprimer cet utilisateur définitevement ?
       delete_yes: Oui, supprimer cet utilisateur
       user_destroyed: "L'utilisateur '%{email}' et les annonces qu'il a publiées ont été supprimés."
       delete_not_possible: "Démo - Suppression d'utilisateur non disponible"
@@ -477,11 +479,14 @@ fr:
       new_password: Nouveau mot de passe
       confirm_password: Confirmez mot de passe
   setup:
-    welcome_madloba: Bienvenue sur votre site Madloba!
-    about_to_setup: Vous êtes sur le point d'installer Madloba sur votre server.
-    process_takes: "Le processus d'installation prendra environ 10 minutes, puis tout sera prêt!"
+    choose_language: Veuillez choisir une langue
+    madloba_setup: Installation
+    welcome_madloba: Bienvenue sur votre site Madloba !
+    about_to_setup: Vous êtes sur le point de finaliser l'installation de Madloba sur votre serveur.
+    process_takes: "Ce processus d'installation prendra environ 10 minutes."
     click_next: Cliquez sur "Continuer" pour poursuivre l'installation.
     back: Retour
+    back_language_html: "(Vous pouvez aussi rechoisir une autre langue %{here})."
     next: Continuer
     step_html: "(étape %{current_step}/6)"
     general_info: Informations générales
@@ -493,7 +498,7 @@ fr:
     state_help: La province/région où votre ville se situe
     country_help: Le pays où votre ville se situe
     creation_admin: Création du compte administrateur
-    all_done: Voilà! Terminé!
+    all_done: Voilà ! Installation terminée !
     setup_successfully: Votre site Madloba a été installé avec succès !
     add_config: Il y a quelques paramètres à configurer.
     check_config: "Veuillez prendre connaissance de ces paramètres dans le panneau d'administration."
@@ -511,7 +516,7 @@ fr:
     gmail_link_here: ici
     gmail_note4: Une fois que vous avez terminé, vous pouvez continuer avec la soumission de ce formulaire.
     confirm_email: Si les informations entrées ci-dessus sont correctes, et après avoir cliqué "Continuer", un email de confirmation vous sera envoyé.
-    check_email: Veuillez vérifier votre boîte email pour confimer votre compte administrateur.
+    check_email: Veuillez vérifier votre boîte email pour confirmer votre compte administrateur.
     note_for_gmail: Note importante sur l'utilisation d'un compte Gmail en tant que paramètres SMTP.
     city_country_mandatory: "'Ville' et 'Pays' sont obligatoires."
     option_no_storage: Les utilisateurs ne seront pas du tout autorisés à télécharger des images.
@@ -527,7 +532,7 @@ fr:
     amazon_s3_warning_html: Si vous choisissez Amazon S3, soyez sûr que vous avez spécifié les variables d'environnement correctement (Veuillez consulter %{link} - section intitulée 'the set_environment_variables script' - pour plus de détails).
     image_error: Erreur lors de l'enregistrement de vos paramètres. Veuillez recharger cette page et essayez à nouveau dans un moment.
   general_js:
-    adblock_warning: Attention! Utilisation de AdBlock
+    adblock_warning: Attention ! Utilisation de AdBlock
     adblock_browser: Votre navigateur utilise AdBlock en ce moment.
     adblock_affecting: Ceci affecte le bon fonctionnement de Madloba.
     adblock_turnoff: Désactivez AdBlock pour ce site, et recharger cette page.

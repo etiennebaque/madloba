@@ -97,6 +97,8 @@ en:
     same_area: Ads related to a same area
     update: Update
     demo_instructions_html: "(Demo) Instructions to login %{link}."
+    footer_powered_by_html: Powered by %{madloba_link}
+    footer_new_powered_by_html: New website powered by %{madloba_link}
   errors:
     oops: "Oops!"
     not_found: 404 Page Not Found
@@ -477,11 +479,14 @@ en:
       new_password: New password
       confirm_password: Confirm password
   setup:
+    choose_language: Please choose a language
+    madloba_setup: Madloba setup
     welcome_madloba: Welcome to Madloba!
-    about_to_setup: You're about to setup Madloba on your server.
-    process_takes: The setup process takes about 10 minutes, then you'll be ready to go!
+    about_to_setup: You're about to finalize the Madloba setup on your server.
+    process_takes: This process will take about 10 minutes, then you'll be ready to go!
     click_next: Click on "Next" to continue.
     back: Back
+    back_language_html: (You can also go back and choose another language %{here}).
     next: Next
     step_html: "(step %{current_step}/6)"
     general_info: General information
