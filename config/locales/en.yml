@@ -70,7 +70,7 @@ en:
     searching_for: "Searching for:"
     search_items: Type an item
     location_example: Street name, postal code...
-    search: Search
+    search: OK
     about: About
     about_website: About %{website}
     links: Links
@@ -99,6 +99,8 @@ en:
     demo_instructions_html: "(Demo) Instructions to login %{link}."
     footer_powered_by_html: Powered by %{madloba_link}
     footer_new_powered_by_html: New website powered by %{madloba_link}
+    footer_theme_html: Theme from %{charisma}
+    log_out: Log out
   errors:
     oops: "Oops!"
     not_found: 404 Page Not Found
@@ -258,6 +260,7 @@ en:
     change_your_password: Change your password
   admin:
     dashboard: Dashboard
+    todo_list: To-do list
     name: Name
     address: Address/Postal code/District
     exact_area: Location type
@@ -551,3 +554,15 @@ en:
     loading: Loading...
     choose_location: Choose one of the following available locations, provided by OpenStreetMap
     remove: Remove
+    records_per_page: records per page
+    search: "Search:"
+    showing: Showing
+    to: to
+    of: of
+    entries: entries
+    previous: Previous
+    next: Next
+    no_data: No data available in table
+    first: First
+    last: Last
+    filtered_from: filtered from

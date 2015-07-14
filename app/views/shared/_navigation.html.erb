@@ -37,7 +37,7 @@
                   <% elsif current_user.admin? %>
                       <li><%= link_to t('home.admin_panel').capitalize, user_index_path %></li>
                   <% end %>
-                  <li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>
+                  <li><%= link_to t('home.log_out'), destroy_user_session_path, method: :delete %></li>
                 </ul>
               </li>
           <% else %>

@@ -25,8 +25,8 @@ fr:
     label: "Tapez ce texte"
     refresh_button_text: "Rafraichir !"
     message:
-      default: "code ne correspond pas à l'image:"
-      user: "L'image et le code sont différents:"
+      default: "code ne correspond pas à l'image :"
+      user: "L'image et le code sont différents :"
   activerecord:
     errors:
       models:
@@ -64,13 +64,13 @@ fr:
     password: Mot de passe
     record_not_exist: Désolé, cette page n'existe pas.
     got_it: OK
-    giving: "Je donne:"
-    giving_away: "Donne:"
-    searching: "Je recherche:"
-    searching_for: "Recherche:"
+    giving: "Je donne :"
+    giving_away: "Donne :"
+    searching: "Je recherche :"
+    searching_for: "Recherche :"
     search_items: Tapez un objet
     location_example: Nom de rue, code postal...
-    search: Chercher
+    search: OK
     about: A propos
     about_website: A propos de %{website}
     links: Liens
@@ -79,8 +79,8 @@ fr:
     create_an_ad_now_html: "%{createad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
     about_page: A propos de %{appname}
     about_description_1_html: "%{appname} est un site utilisant %{madloba_link}."
-    about_description_2_html: "%{madloba_link} est une projet open-source qui vous permet de faire savoir à votre communauté ce que vous avez à donner."
-    about_description_3: "Il y a tellement d'objects qui partent constamment à la poubelle, alors qu'ils sont toujours utilisables ! Heureusement, comme nous vivons de plus en plus dans un monde alimenté par des données de plus en plus ouvertes, nous avons maintenant les moyens technologiques de résoudre ce problème. Madloba donnera un nouveau moyen à votre communauté de recycler ou de donner tout ce qu'il y a à réutiliser."
+    about_description_2_html: "%{madloba_link} est un projet open-source qui vous permet de promouvoir à votre communauté ce que vous avez à donner."
+    about_description_3: "Tellement d'objects partent constamment à la poubelle, alors qu'ils sont toujours utilisables ! Heureusement, comme nous vivons de plus en plus dans un monde connecté par des données de plus en plus ouvertes, nous avons maintenant les moyens technologiques de résoudre ce problème. Madloba permettra à votre communauté de recycler ou de donner tout ce qu'elle a à réutiliser."
     contact_us: Contactez-nous
     send_us_message_html: Envoyez-nous un e-mail à %{email}
     about_send_message_html: Si vous voulez nous contacter, envoyez-nous un e-mail à %{email}.
@@ -97,8 +97,10 @@ fr:
     same_area: Annonces groupées par zone.
     update: "Mise à jour"
     demo_instructions_html: "(Démo) Indications pour s'identifier %{link}."
-    footer_powered_by_html: Délivré par by %{madloba_link}
+    footer_powered_by_html: Délivré par %{madloba_link}
     footer_new_powered_by_html: Nouveau site délivré par %{madloba_link}
+    footer_theme_html: "Thème : %{charisma}"
+    log_out: Déconnexion
   errors:
     oops: "Oups !"
     not_found: 404 Page non trouvée
@@ -111,29 +113,29 @@ fr:
     location: "Emplacement:*"
     user_location: "Emplacements de cet utilisateur:*"
     new_location: Entrez un nouvel emplacement pour cette annonce
-    name: "Nom de l'emplacement:"
+    name: "Nom de l'emplacement :"
     name_help: "Nommez votre nouvel emplacement (ex: nom de votre boutique, lieu-dit...). Ce nom sera public. N'écrivez rien si vous ne voulez pas nommer votre emplacement. "
     name_to_use: "Quel nom voulez-vous utiliser?*"
-    anon_publisher_name_note: "Ceci est une annonce postée par un utilisateur anonyme:"
+    anon_publisher_name_note: "Ceci est une annonce postée par un utilisateur anonyme :"
     ad_action: "Action:*"
     ad_action_giving: Je donne des objects.
     ad_action_accepting: Je cherche des objects.
     name_username: Nom d'utilisateur
     name_fullname: Nom complet réel
-    definition: "Entrez votre emplacement*:"
+    definition: "Entrez votre emplacement* :"
     definition_exact: par adresse exacte
     definition_postal_code: par code postal
     definition_district: par zone
-    street_number: "Numéro de rue:"
-    street_name: "Nom de la rue*:"
+    street_number: "Numéro de rue :"
+    street_name: "Nom de la rue* :"
     street_name_help: "Exemple: nom de la rue, avenue, chemin..."
-    postal_code: "Code postal*:"
-    district: "Zone*:"
+    postal_code: "Code postal* :"
+    district: "Zone* :"
     define_geocode_button: Trouvez-moi sur la carte
-    map: "Carte:"
-    phone_number: "Numéro de téléphone:"
-    website: "Site web:"
-    description: "Au sujet de cet emplacement:"
+    map: "Carte :"
+    phone_number: "Numéro de téléphone :"
+    website: "Site web :"
+    description: "Au sujet de cet emplacement :"
     description_help: "Remplissez cette section si vous voulez donner quelques détails supplémentaires au sujet de cet emplacement (ex: comment trouver cet endroit, a quoi il ressemble...)"
     not_found: Emplacement non trouvé
     not_found_descr1: "Cet emplacement n'a pas pu être trouvé, basé sur les informations entrées."
@@ -143,34 +145,34 @@ fr:
     new_ad: Nouvelle annonce
     once_created_expire: une fois créée, votre annonce sera publiée pour %{max_expire_days} jours.
     area: zone
-    error_occurred: "%{errors} à corriger ci-dessous:"
-    published: "Publié par:"
+    error_occurred: "%{errors} à corriger ci-dessous :"
+    published: "Publié par :"
     expiration_date: Cette annonce expirera le %{expire_date}.
     expires_today: "Cette annonce expire aujourd'hui !"
     has_expired: Cette annonce a expiré le %{expire_date}, et n'est plus visible sur ce site.
-    title: "Titre de l'annonce*:"
+    title: "Titre de l'annonce* :"
     title_help: "exemples: 'Donne 5 chemises', 'Je me débarasse de mon vieux portable'..."
-    item: "Quels objets?*:"
+    item: "Quels objets?* :"
     about_you: "A propos de vous"
-    name: "Votre nom*:"
+    name: "Votre nom* :"
     name_help: "Veuillez entrer votre nom ou votre pseudonyme ici. Il apparaitra tel quel, dans l'annonce publiée."
-    your_email: "Votre adresse email*:"
-    captcha: "Captcha*:"
+    your_email: "Votre adresse email* :"
+    captcha: "Captcha* :"
     email_help: "Donner votre adresse email n'est pas obligatoire (Soyez sûr d'indiquer votre numéro de téléphone dans la description de l'annonce). Si vous donnez votre adresse email, elle ne sera pas publiée publiquement, et les utilisateurs seront quand même capable de vous envoyer un message."
     ad_is_deleted: "L'annonce '%{deleted_ad_title}' a été supprimé."
-    location_website: "Site web:"
-    your_message: "Votre message*:"
+    location_website: "Site web :"
+    your_message: "Votre message* :"
     send_message: Envoyer votre message
-    send_message_label: "Envoyer votre message à %{name} pour cette annonce:"
+    send_message_label: "Envoyer votre message à %{name} pour cette annonce :"
     description: Description
-    location_description: "Au sujet de cet emplacement:"
+    location_description: "Au sujet de cet emplacement :"
     description_help: Donnez quelques détails au sujet des objets que vous donnez/cherchez.
     new_location: Entrez un nouvel emplacement
     choose_existing: Choisir un emplacement existant
     create_this_ad: Créer cette annonce !
     create_success: "L'annonce '%{title}' a été créée. Vous recevrez un email dans un moment, avec un résumé de votre annonce."
-    where_to_find: "Où trouver les objets:"
-    where_to_bring: "Où apporter les objets:"
+    where_to_find: "Où trouver les objets :"
+    where_to_bring: "Où apporter les objets :"
     you_own: Vous avez créé cette annonce.
     you_manage: Vous pouvez la modifier
     here: ici
@@ -178,13 +180,13 @@ fr:
     from: De
     get_back_to: Vous pouvez directement revenir vers %{first_name} en répondant à cet e-mail.
     success_sent: Votre message a été envoyé.
-    giving_away: "Donne:"
-    accepting: "Recherche:"
+    giving_away: "Donne :"
+    accepting: "Recherche :"
     ad_create_expire: Votre annonce expirera dans %{day_number} jours, le %{expire_date}.
     ad_has_expired: Désolé, cette annonce a expiré et n'est plus visible.
     no_ad_created_yet: "Vous n'avez encore pas créé d'annonce. Cliquez sur le bouton ci-dessus pour créer votre première annonce."
     no_location_yet: "Rien à modifier ici: vous n'avez pas encore créé d'annonce avec un emplacement exact."
-    upload_image: "Télécharger image:"
+    upload_image: "Télécharger image :"
     less_than_limit: "L'image doit faire moins de 5 Mo."
     remove_image: "Retirer l'image"
     image_currently_processed: "Votre image est en train d'être traitée."
@@ -258,6 +260,7 @@ fr:
     change_your_password: Changer votre mot de passe
   admin:
     dashboard: Accueil
+    todo_list: A faire
     name: Nom
     address: Adresse/Code postal/Zone
     exact_area: Type d'emplacement
@@ -287,9 +290,9 @@ fr:
     edit_delete: Mettre à jour / Supprimer
     created_by_user: Créée par utilisateur
     manage_your_ads: Gérer vos annonces
-    manage_records: Gérer base de données
+    manage_records: Base de données
     records_message: Vous pouvez gérer ici les annonces postées sur ce site, ainsi que les emplacements, objets et catégories.
-    back_to_records: Retour à "Gérer base de données"
+    back_to_records: Retour à "Base de données"
     back_to_ads: Retour à "Gérer vos annonces"
     back_to_users: Retour à "Gérer utilisateurs"
     create_ad: Créer annonce
@@ -321,7 +324,7 @@ fr:
     warning_ads_before_delete_item: "ATTENTION: quelques annonces sont rattachés à cet objet. Supprimer cet objet le fera disparaître de ces annonces définitivement."
     warning_ads_before_delete_location: "ATTENTION: quelques annonces sont rattachés à cet emplacement. Supprimer cet emplacement aura pour effet de supprimer ces annonces définitivement."
     delete_confirm: Oui, supprimer cet %{entity}
-    save_not_possible: "Démo - Mise à jour non possible pour cette page:"
+    save_not_possible: "Démo - Mise à jour non possible pour cette page :"
     left_menu:
       admin_task: Tâches admin
       user_tasks: Tâches utilisateur
@@ -423,19 +426,19 @@ fr:
       add_district: Ajouter quartier
     map_settings:
       title: Paramètres de la carte
-      type: "Type de carte:"
-      mapbox: "Clé API Mapbox:"
+      type: "Type de carte :"
+      mapbox: "Clé API Mapbox :"
       mapbox_link: Aller sur votre compte Mapbox...
-      mapquest: "Clé API MapQuest:"
+      mapquest: "Clé API MapQuest :"
       mapquest_link: Aller sur votre compte développeur MapQuest...
       map_api_keys: Clés API carte
       key_first: After avoir entré une nouvelle clé API, enregistrez vos changements tout d'abord. Ensuite, choisissez le type de carte désiré dans la liste ci-dessus.
-      location_info: Information au sujet de l'emplacement
+      location_info: "Choix de l'emplacement principal"
       postal_code_field1: Longueur du code postal
       postal_code_field2: Longueur de la zone
       postal_code_help1: Nombre maximum de caractères utilisés dans les codes postaux de votre ville (eg. 6 pour 'A1B2C3')
       postal_code_help2: Nombre maximum de caractères utilisés définissant une zone, dans les codes postaux de votre ville. (eg. 3 pour 'A1B')
-      find_city_map: "Trouvez une ville sur la carte ci-dessous:"
+      find_city_map: "Trouvez une ville sur la carte ci-dessous :"
       city: Ville
       state: Région (facultatif)
       country: Pays
@@ -510,7 +513,7 @@ fr:
     find_city_on_map: Chercher cette ville sur la carte
     map_description: "Cliquez quelque part dans votre ville: le marqueur définira le milieu de la carte, lors du chargement de la page d'accueil."
     map_description_2: "Cliquez aussi sur '+/-' pour régler le niveau de zoom par défaut."
-    gmail_note: "Si vous avez chiosi une adresse GMail en tant que SMTP, vous devez avertir Google à ce sujet. Avant de soumettre ce formulaire:"
+    gmail_note: "Si vous avez chiosi une adresse GMail en tant que SMTP, vous devez avertir Google à ce sujet. Avant de soumettre ce formulaire :"
     gmail_note2: Ouvrez un nouvel onglet maintenant, et connectez-vous sur votre compte email GMail utilisé en tant que SMTP (déconnectez-vous de tout autre compte Gmail).
     gmail_note3_html: Signalez à Google que vous souhaitez utiliser ce compte Gmail avec votre site Madloba, en cliquant %{link}.
     gmail_link_here: ici
@@ -545,9 +548,22 @@ fr:
     longitude: (longitude)
     add: Ajouter
     updating_district: Mise à jour de la liste de quartiers...
-    area_show_up: "Cette zone apparaitra en tant que:"
+    area_show_up: "Cette zone apparaitra en tant que :"
     searching_location: Recherche d'un emplacement...
     update: Mettre à jour
     loading: Chargement...
     choose_location: Choisissez un de ces emplacements disponibles
     remove: Retirer
+    records_per_page: enregistrements par page
+    search: "Recherche :"
+    showing: Résultats
+    to: à
+    of: sur
+    entries: enregistrements
+    previous: Précédent
+    next: Suivant
+    no_data: "Aucune information disponible"
+    first: Premier
+    last: Dernier
+    filtered_from: filtrés sur
+    total_entries: enregistrements au total
