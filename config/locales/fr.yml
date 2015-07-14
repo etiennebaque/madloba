@@ -19,7 +19,7 @@
 # To learn more, please read the Rails Internationalization guide
 # available at http://guides.rubyonrails.org/i18n.html.
 
-en:
+fr:
   simple_captcha:
     placeholder: ""
     label: "Tapez ce texte"
@@ -155,7 +155,6 @@ en:
     your_email: "Votre adresse email*:"
     captcha: "Captcha*:"
     email_help: "Donner votre adresse email n'est pas obligatoire (Soyez sûr d'indiquer votre numéro de téléphone dans la description de l'annonce). Si vous donnez votre adresse email, elle ne sera pas publiée publiquement, et les utilisateurs seront quand même capable de vous envoyer un message."
-    category_header: Catégorie
     ad_is_deleted: "L'annonce '%{deleted_ad_title}' a été supprimé."
     location_website: "Site web:"
     your_message: "Votre message*:"
@@ -434,117 +433,116 @@ en:
       postal_code_field2: Longueur de la zone
       postal_code_help1: Nombre maximum de caractères utilisés dans les codes postaux de votre ville (eg. 6 pour 'A1B2C3')
       postal_code_help2: Nombre maximum de caractères utilisés définissant une zone, dans les codes postaux de votre ville. (eg. 3 pour 'A1B')
-      find_city_map: "Find a city on the map underneath:"
-      city: City
-      state: State/Region (optional)
-      country: Country
-      find_city: Find this city
-      map_description: "- Choose the map default center by clicking on this map. The selected location will be used when no address is entered by the user."
-      map_description_zoom: "- Set also the desired default level of zoom (by clicking on '-' or '+')."
-      should_be_numeric: Latitude and longitude should be numeric values.
-      cannot_be_empty: Latitude or longitude cannot be empty.
-      postal_area_error: The postal code length should be greater or equals to the area code.
-      update_success: The map settings have been updated.
-      area_update_success: The area settings have been updated.
-      update_success_demo: Only the map type has been updated (demo).
-      demo_message: For demo purposes, you are able to update only the "Map type" on this screen.
+      find_city_map: "Trouvez une ville sur la carte ci-dessous:"
+      city: Ville
+      state: Région (facultatif)
+      country: Pays
+      find_city: Chercher cette ville
+      map_description: "- Choisissez le centre de la carte par défaut, en cliquant sur cette carte. L'emplacement choisi sera affiché au chargement de la page d'accueil."
+      map_description_zoom: "- Chiosissez aussi le niveau de zoom par défaut (en cliquant sur '-' ou '+')."
+      should_be_numeric: Latitude et longitude doivent être des valeurs numeriques.
+      cannot_be_empty: Latitude et longitude ne peuvent pas être vides.
+      postal_area_error: La longueur du code postal doit être égale ou supérieure à la longueur du code de zone.
+      update_success: Les paramètres de la carte ont été mis à jour.
+      area_update_success: Les paramètres de zones ont été mis à jour.
+      update_success_demo: Seul le type de carte a été mis à jour (démo).
+      demo_message: Sur ce site démo, vous êtes capable de mettre à jour le "type de carte" seulement sur cette page.
     users:
-      title: Manage users
-      description: From here, you can manage user accounts (admin and regular users).
-      add: Create user
-      email: Email
-      full_name: Full name
-      role: Role
-      error_occurred: "%{errors} occurred while saving this user"
-      myprofile_update_success: Your user profile has been updated.
-      update_success: The user '%{email}' has been updated.
-      created_success: The user '%{email}' has been created. A welcome message has been sent to that e-mail address.
-      delete: Delete this user
-      confirm_delete: "WARNING: All posted ads, as well as the locations registered by this user will be permanently deleted."
-      confirm_delete_2: Are you sure you want to delete this user permanently?
-      delete_yes: Yes, delete this user
-      user_destroyed: The user '%{email}' and the ads they posted have been deleted.
-      delete_not_possible: Demo - User deletion not available
+      title: Gérer utilisateurs
+      description: Sur cette page, vous pouvez gérer les comptes utilisateurs (admins et utilisateurs réguliers).
+      add: Créer utilisateur
+      email: E-mail
+      full_name: Nom complet
+      role: Rôle
+      error_occurred: "%{errors} lors de la mise à jour cet utilisateur"
+      myprofile_update_success: Votre profil utilisateur a été mis à jour.
+      update_success: "L'utilisateur '%{email}' a été mis à jour."
+      created_success: "L'utilisateur" '%{email}' a été créé. Un message de bienvenue a été envoyé à cette adresse e-mail."
+      delete: Supprimer cet utilisateur
+      confirm_delete: "ATTENTION: Toutes les annonces publiées, ainsi que les emplacements enregistrés par cet utilisateur seront supprimés définitivement."
+      confirm_delete_2: Etes-vous sûr que vous voulez supprimer cet utilisateur définitevemnt?
+      delete_yes: Oui, supprimer cet utilisateur
+      user_destroyed: "L'utilisateur '%{email}' et les annonces qu'il a publiées ont été supprimés."
+      delete_not_possible: "Démo - Suppression d'utilisateur non disponible"
     profile:
-      title: Manage your profile
-      title_manage_users: Manage users
-      update_profile: Update profile
-      new_user: New user
-      make_user_admin: Make this user an admin.
-      first_name: First name
-      last_name: Last name
-      username: Username
-      current_password: Current password
-      new_password: New password
-      confirm_password: Confirm password
+      title: Gérer votre profil
+      title_manage_users: Gérer utilisateurs
+      update_profile: Mettre à jour profil
+      new_user: Nouvel utilisateur
+      make_user_admin: "Donner droits d'admin à cet utilisateur."
+      first_name: Prénom
+      last_name: Nom de famille
+      username: Pseudonyme
+      current_password: Mot de passe actuel
+      new_password: Nouveau mot de passe
+      confirm_password: Confirmez mot de passe
   setup:
-    welcome_madloba: Welcome to Madloba!
-    about_to_setup: You're about to setup Madloba on your server.
-    process_takes: The setup process takes about 10 minutes, then you'll be ready to go!
-    click_next: Click on "Next" to continue.
-    back: Back
-    next: Next
-    step_html: "(step %{current_step}/6)"
-    general_info: General information
-    image_storage: Image storage
-    name_description: The name of your website
-    description_description: Write what your website is about...
-    map_settings: Map settings
-    city_help: The city your Madloba website is about
-    state_help: The state/province where this city is
-    country_help: The country where this city is
-    creation_admin: Creation of admin user
-    all_done: All done!
-    setup_successfully: Your Madloba website has been setup successfully!
-    add_config: There are some additional configurations to take care of.
-    check_config: Make sure to check them out in your admin panel!
-    enjoy: Enjoy!
-    go_to_website: Go to your website!
-    name_cant_be_blank: The website name cannot be blank.
-    select_geocodes: Please select a center point on the map.
-    state_province: State/Province
-    find_city_on_map: Find this city on the map
-    map_description: "Click somewhere in your city: the marker showing up will set the middle of the map, on the home page of your website."
-    map_description_2: "Click also on '+/-' to choose the default level of zoom."
-    gmail_note: "If you've set up a Gmail address as your SMTP username, you need to let Google know about it. So before submitting this form:"
-    gmail_note2: Open a new tab right now, and log into your Gmail SMTP email account (log out from any other Gmail account).
-    gmail_note3_html: Notify Google that you want to use this Gmail account with a third-party website, by clicking %{link}.
-    gmail_link_here: here
-    gmail_note4: Once you're done, you can continue with the submission of this form.
-    confirm_email: If the information entered above in this form is correct, and after you click "Next", a confirmation e-mail will be sent to you.
-    check_email: Please check your inbox to confirm your account.
-    note_for_gmail: Important note on using GMail for SMTP settings
-    city_country_mandatory: "'City' and 'Country' fields are mandatory."
-    option_no_storage: Users won't be allowed to upload any pictures at all.
-    option_s3: Images will directly uploaded to Amazon S3.
-    option_server: Images will be stored on the same server where this Madloba website is deployed.
-    image_description: When users create ads, they'll have the choice to attach an image with it.
-    image_server_or_s3_html: "This image can either be stored on your server, or on %{link}"
-    image_s3_only_html: "Ad images will be stored on %{s3_link}"
-    image_no_storage: Alternatively, you can choose not to have any image uploaded at all.
-    image_strategy: Image storage strategy
-    image_select_option: Please select below which photo storage strategy you'd like to choose.
-    install_guide: the installation guide
-    amazon_s3_warning_html: If you're choosing Amazon S3, make sure you've set up the relevant environment variables correctly (check out %{link} - section about the set_environment_variables script - for more details).
-    image_error: A problem occured while saving your settings. Please refresh this page and try again in a moment.
+    welcome_madloba: Bienvenue sur votre site Madloba!
+    about_to_setup: Vous êtes sur le point d'installer Madloba sur votre server.
+    process_takes: "Le processus d'installation prendra environ 10 minutes, puis tout sera prêt!"
+    click_next: Cliquez sur "Continuer" pour poursuivre l'installation.
+    back: Retour
+    next: Continuer
+    step_html: "(étape %{current_step}/6)"
+    general_info: Informations générales
+    image_storage: Storage d'images
+    name_description: Nom du site
+    description_description: "Ecrivez de quoi votre site s'agit..."
+    map_settings: Paramètres de la carte
+    city_help: La ville que votre site Madloba vise
+    state_help: La province/région où votre ville se situe
+    country_help: Le pays où votre ville se situe
+    creation_admin: Création du compte administrateur
+    all_done: Voilà! Terminé!
+    setup_successfully: Votre site Madloba a été installé avec succès !
+    add_config: Il y a quelques paramètres à configurer.
+    check_config: "Veuillez prendre connaissance de ces paramètres dans le panneau d'administration."
+    enjoy: "Merci d'avoir chiosi Madloba !"
+    go_to_website: Aller sur votre site !
+    name_cant_be_blank: Le nom du site ne peut pas être vide.
+    select_geocodes: Veuillez choisir un emplacement sur la carte.
+    state_province: Région / Province
+    find_city_on_map: Chercher cette ville sur la carte
+    map_description: "Cliquez quelque part dans votre ville: le marqueur définira le milieu de la carte, lors du chargement de la page d'accueil."
+    map_description_2: "Cliquez aussi sur '+/-' pour régler le niveau de zoom par défaut."
+    gmail_note: "Si vous avez chiosi une adresse GMail en tant que SMTP, vous devez avertir Google à ce sujet. Avant de soumettre ce formulaire:"
+    gmail_note2: Ouvrez un nouvel onglet maintenant, et connectez-vous sur votre compte email GMail utilisé en tant que SMTP (déconnectez-vous de tout autre compte Gmail).
+    gmail_note3_html: Signalez à Google que vous souhaitez utiliser ce compte Gmail avec votre site Madloba, en cliquant %{link}.
+    gmail_link_here: ici
+    gmail_note4: Une fois que vous avez terminé, vous pouvez continuer avec la soumission de ce formulaire.
+    confirm_email: Si les informations entrées ci-dessus sont correctes, et après avoir cliqué "Continuer", un email de confirmation vous sera envoyé.
+    check_email: Veuillez vérifier votre boîte email pour confimer votre compte administrateur.
+    note_for_gmail: Note importante sur l'utilisation d'un compte Gmail en tant que paramètres SMTP.
+    city_country_mandatory: "'Ville' et 'Pays' sont obligatoires."
+    option_no_storage: Les utilisateurs ne seront pas du tout autorisés à télécharger des images.
+    option_s3: Les images seront directement téléchargées sur Amazon S3.
+    option_server: Les images seront storées sur le même serveur que ce site Madloba.
+    image_description: Quand les utilisateurs créeront des annonces, ils auront le choix de joindre une image.
+    image_server_or_s3_html: "Cette image peut être storée soit sur votre serveur, soit sur %{link}"
+    image_s3_only_html: "Les images de cette annonce seront storées sur %{s3_link}"
+    image_no_storage: Vous pouvez également choisir de ne pas télécharger d'image du tout.
+    image_strategy: "Stratégie de storage d'images."
+    image_select_option: Veuillez choisir quelle stratégie de storage de photo vous convient.
+    install_guide: le guide d'installation
+    amazon_s3_warning_html: Si vous choisissez Amazon S3, soyez sûr que vous avez spécifié les variables d'environnement correctement (Veuillez consulter %{link} - section intitulée 'the set_environment_variables script' - pour plus de détails).
+    image_error: Erreur lors de l'enregistrement de vos paramètres. Veuillez recharger cette page et essayez à nouveau dans un moment.
   general_js:
-    adblock_warning: Warning! Use of AdBlock
-    adblock_browser: Your browser is currently using AdBlock.
-    adblock_affecting: It's affecting this Madloba website's ability to work well.
-    adblock_turnoff: Turn off AdBlock for this website, and reload the page.
-    search_for_items: Search for items...
-    start_typing_item: Start typing an item
-    no_result_create_item: No results. Select 'Create a new item'.
-    new_image_uploading: New image is being uploaded. Please wait.
-    type_district_name: Type a district name here...
+    adblock_warning: Attention! Utilisation de AdBlock
+    adblock_browser: Votre navigateur utilise AdBlock en ce moment.
+    adblock_affecting: Ceci affecte le bon fonctionnement de Madloba.
+    adblock_turnoff: Désactivez AdBlock pour ce site, et recharger cette page.
+    search_for_items: Recheche d'objets...
+    start_typing_item: Tapez le nom d'un objet
+    no_result_create_item: Pas de résultat. Choisissez 'Créer un nouvel objet'.
+    new_image_uploading: Téléchargement de la nouvelle image en cours. Veulliez attendre svp.
+    type_district_name: "Tapez le nom d'un quartier ici..."
     latitude: (latitude)
     longitude: (longitude)
-    add: Add
-    updating_district: Updating district list...
-    area_show_up: "This location area will show up as:"
-    searching_location: Searching location...
-    update: Update
-    loading: Loading...
-    choose_location: Choose one of the following available locations, provided by OpenStreetMap
-    new_image_uploading: New image is being uploaded. Please wait.
-    remove: Remove
+    add: Ajouter
+    updating_district: Mise à jour de la liste de quartiers...
+    area_show_up: "Cette zone apparaitra en tant que:"
+    searching_location: Recherche d'un emplacement...
+    update: Mettre à jour
+    loading: Chargement...
+    choose_location: Choisissez un de ces emplacements disponibles
+    remove: Retirer
