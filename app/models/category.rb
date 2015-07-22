@@ -81,7 +81,8 @@ class Category < ActiveRecord::Base
 
   # Custom validation to check if the chosen marker color / icon duo is unique
   def marker_icon_unique
-    if self.class.exists?(marker_color: marker_color, icon: icon)
+    other_cat = Category.where(marker_color: marker_color, icon: icon).first
+    if !other_cat.nil? && other_cat.id != self.id
       errors.add(:base, I18n.t('admin.category.marker_icon_not_unique'))
     end
   end
