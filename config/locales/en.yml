@@ -566,3 +566,9 @@ en:
     first: First
     last: Last
     filtered_from: filtered from
+    in_this_district: In this district
+    ads_for: Ads for
+    items_given: "Item(s) being given away:"
+    items_searched: "Item(s) being searched for:"
+    image_not_available: Image not available yet.
+    select_item: Select an item below for more details.

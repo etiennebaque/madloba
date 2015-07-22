@@ -567,3 +567,9 @@ fr:
     last: Dernier
     filtered_from: filtrés sur
     total_entries: enregistrements au total
+    in_this_district: Dans ce quartier
+    ads_for: Annonces pour
+    items_given: "Objets donnés :"
+    items_searched: "Objets recherchés :"
+    image_not_available: Image pas encore disponible.
+    select_item: Choisissez un objet ci-dessous pour plus de détails.

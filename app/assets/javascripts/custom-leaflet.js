@@ -171,7 +171,7 @@ function putLocationMarkers(){
             var locations = locations_district[district_id];
             var district_name = area_geocodes[district_id]['name'];
 
-            var popup_html_text = createPopupHtmlArea("In this district (<b>"+district_name+"</b>)<br /><br />", locations, 'district', district_id);
+            var popup_html_text = createPopupHtmlArea(gon.vars['in_this_district'] + " (<b>"+district_name+"</b>)<br /><br />", locations, 'district', district_id);
 
             marker = new L.marker(
                 [area_geocodes[district_id]['latitude'],area_geocodes[district_id]['longitude']],
@@ -200,7 +200,7 @@ function putLocationMarkers(){
                 icon = '<i class="fa '+ data['icon'] +'" style="color: '+ data['hexa_color'] +'; padding-right: 10px;"></i>';
             }
 
-            $('#adsModalTitle').html(icon + ' Ads for \'' + input[0].capitalizeFirstLetter() + '\' - ' + data['area_name'] + ' area');
+            $('#adsModalTitle').html(icon + gon.vars['ads_for']+' \'' + input[0].capitalizeFirstLetter() + '\' - ' + data['area_name']);
             var options = {
                 "backdrop" : "static",
                 "show" : "true"
@@ -231,14 +231,14 @@ function createPopupHtml(first_sentence, ad, index){
     var popup_item_name = "<span style='color:" + marker_colors[item['category']['marker_color']] + "';><strong>" + item['name'].capitalizeFirstLetter() + "</strong></span>";
 
     if (ad['is_giving'] == true){
-        second_sentence = "Item(s) being given away:<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
+        second_sentence = gon.vars['items_given']+"<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
     }else{
-        second_sentence = "Item(s) being searched for:<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
+        second_sentence = gon.vars['items_searched']+"<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
     }
 
     if (ad['image']['thumb']['url'] != null && ad['image']['thumb']['url'] != ''){
         // Popup is created with a thumbnail image in it.
-        var ad_image = "<img class='thumb_ad_image' onError=\"$('.thumb_ad_image').remove(); $('.image_notification').html('<i>Image not available yet.</i>');\" src='"+ad['image']['thumb']['url']+"'><span class=\"image_notification\"></span>";
+        var ad_image = "<img class='thumb_ad_image' onError=\"$('.thumb_ad_image').remove(); $('.image_notification').html('<i>"+gon.vars['image_not_available']+"</i>');\" src='"+ad['image']['thumb']['url']+"'><span class=\"image_notification\"></span>";
         result =  "<div style='overflow: auto;'><div class='col-sm-6'>"+first_sentence+"</div><div class='col-sm-6'>"+ad_image+"</div><div class='col-sm-12'><br>"+second_sentence+"</div></div>";
     }else{
         // Popup is created without any thumbnail image.
@@ -260,11 +260,11 @@ function createPopupHtmlArea(first_sentence, locations_from_same_area, area_type
     var is_accepting_item = false;
 
     // Adding a explanatory note, before listing items
-    var explanation = "<i>Select an item below for more details.</i><br /><br />"
+    var explanation = "<i>"+gon.vars['select_item']+"</i><br /><br />"
     first_sentence = first_sentence + explanation;
 
-    var people_give = "Item(s) being given away:<br />";
-    var people_accept = "Item(s) being searched for:<br />";
+    var people_give = gon.vars['items_given']+"<br />";
+    var people_accept = gon.vars['items_searched']+"<br />";
 
     // This hash will count how many ads we have, per promoted item.
     var ad_number_per_item = {};
