@@ -39,7 +39,7 @@
           <% if @item && @item.errors.any? %>
               <div class="alert alert-danger">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong><%= t('admin.item.error_occurred', name: pluralize(@item.errors.count, 'error')) %>:</strong>
+                <strong><%= t('admin.item.error_occurred', errors: pluralize(@item.errors.count, t('home.error.one'), t('home.error.more'))) %>:</strong>
                 <ul>
                   <% @item.errors.full_messages.each do |msg| %>
                       <li><%= msg %></li>

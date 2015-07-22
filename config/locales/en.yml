@@ -28,23 +28,17 @@ en:
       default: "code did not match with the image"
       user: "The secret Image and code were different"
   activerecord:
+    attributes:
+      category:
+        icon: Icon name
+      ad:
+        image: The uploaded image
     errors:
       models:
-        category:
-          attributes:
-            name:
-              blank: The category name can't be blank
-            marker_color:
-              taken: "and Icon error - the chosen pair is not available: both this icon and this marker color have already been used for another category. Please choose another marker and/or icon."
-            icon:
-              blank: name can't be blank.
         ad:
           attributes:
             image:
-              too_long: must be less than 5MB.
-            number_of_items:
-              greater_than: "Please add at least 1 item to your ad"
-
+              too_long: must be less than 5MB
   home:
     home: Home
     page: Home page
@@ -101,6 +95,9 @@ en:
     footer_new_powered_by_html: New website powered by %{madloba_link}
     footer_theme_html: Theme from %{charisma}
     log_out: Log out
+    error:
+      one: error
+      more: errors
   errors:
     oops: "Oops!"
     not_found: 404 Page Not Found
@@ -384,6 +381,9 @@ en:
       item_linked: Items linked to that category
       item_name: Item name
       no_item: There is no item linked to that category yet.
+      your_marker_icon: Your marker and icon
+      marker_icon_not_unique: Both this icon and this marker color have already been used for another category. Please choose another marker and/or icon.
+      our_selection: our selection list
     item:
       error_occurred: "%{errors} occurred while saving this item"
       update_success: The item '%{name}' has been updated.

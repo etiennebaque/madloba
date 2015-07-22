@@ -22,29 +22,37 @@
 fr:
   simple_captcha:
     placeholder: ""
-    label: "Tapez ce texte"
+    label: "Tapez le texte de l'image"
     refresh_button_text: "Rafraichir !"
     message:
-      default: "code ne correspond pas à l'image :"
-      user: "L'image et le code sont différents :"
+      default: "code ne correspond pas à l'image"
+      user: "L'image et le code sont différents"
   activerecord:
+    models:
+      user: Utilisateur
+    attributes:
+      ad:
+        title: "Titre de l'annonce"
+        image: "L'image téléchargée"
+      user:
+        password: Mot de passe
+        first_name: Prénom
+        last_name: Nom de famille
+        username: Nom d'utilisateur
+      location:
+        address: Adresse
+        postal_code: Code postal
+      item:
+        name: "Nom de l'objet"
+      category:
+        name: Nom de la catégorie
+        icon: "Nom de l'icône"
     errors:
       models:
-        category:
-          attributes:
-            name:
-              blank: Veuillez entrer un nom pour cette catégorie
-            marker_color:
-              taken: "and Icon error - the chosen pair is not available: both this icon and this marker color have already been used for another category. Please choose another marker and/or icon."
-            icon:
-              blank: name can't be blank.
         ad:
           attributes:
             image:
-              too_long: "- le poids du fichier ne doit pas dépasser 5 Mo."
-            number_of_items:
-              greater_than: "Veuillez ajouter au moins un objet à votre annonce"
-
+              too_long: "ne doit pas dépasser 5 Mo"
   home:
     home: Accueil
     page: Page d'accueil
@@ -101,6 +109,9 @@ fr:
     footer_new_powered_by_html: Nouveau site délivré par %{madloba_link}
     footer_theme_html: "Thème : %{charisma}"
     log_out: Déconnexion
+    error:
+      one: erreur
+      more: erreurs
   errors:
     oops: "Oups !"
     not_found: 404 Page non trouvée
@@ -128,7 +139,7 @@ fr:
     definition_district: par zone
     street_number: "Numéro de rue :"
     street_name: "Nom de la rue* :"
-    street_name_help: "Exemple: nom de la rue, avenue, chemin..."
+    street_name_help: "Exemple : nom de la rue, avenue, chemin..."
     postal_code: "Code postal* :"
     district: "Zone* :"
     define_geocode_button: Trouvez-moi sur la carte
@@ -145,13 +156,13 @@ fr:
     new_ad: Nouvelle annonce
     once_created_expire: une fois créée, votre annonce sera publiée pour %{max_expire_days} jours.
     area: zone
-    error_occurred: "%{errors} à corriger ci-dessous :"
-    published: "Publié par :"
+    error_occurred: "%{errors} à corriger ci-dessous "
+    published: "Publiée par :"
     expiration_date: Cette annonce expirera le %{expire_date}.
     expires_today: "Cette annonce expire aujourd'hui !"
     has_expired: Cette annonce a expiré le %{expire_date}, et n'est plus visible sur ce site.
     title: "Titre de l'annonce* :"
-    title_help: "exemples: 'Donne 5 chemises', 'Je me débarasse de mon vieux portable'..."
+    title_help: "Exemples : 'Donne 5 chemises', 'Je me débarasse de mon vieux portable'..."
     item: "Quels objets?* :"
     about_you: "A propos de vous"
     name: "Votre nom* :"
@@ -200,7 +211,7 @@ fr:
     provide_anon_name: "Veuillez entrer votre nom"
     provide_anon_email: "Veuillez entre votre adresse email"
     select_category: "Catégories disponibles"
-    captcha_not_valid: "Le text Captcha que vous avez entré n'est pas valide"
+    captcha_not_valid: "Le texte Captcha que vous avez entré n'est pas valide"
     create_account_first_html: "%{create_account} ou %{sign_in} maintenant avant de publier votre annonce, si vous voulez la modifier plus tard."
   mailer:
     welcome: "Bienvenue sur %{name} !"
@@ -365,7 +376,7 @@ fr:
     category:
       update_success: La catégorie '%{name}' a été mise à jour.
       created_success: La catégorie '%{name}' a été créée.
-      cat_error_occurred: "%{errors} en sauvant cette catégorie"
+      cat_error_occurred: "%{errors} en enregistrant cette catégorie"
       delete_category: Supprimer cette catégorie
       choose_icon: Choisir une icône
       delete_confirm: Etes-vous sûr que vous voulez supprimer cette catégorie ?
@@ -384,6 +395,9 @@ fr:
       item_linked: Objets liés à cette catégorie
       item_name: "Nom de l'objet"
       no_item: "Il n'y a pas encore d'objet lié à cette catégorie."
+      your_marker_icon: Vos marqueur et icône
+      marker_icon_not_unique: La combinaison de cette icône et ce marqueur a déjà été utilisée. Veuillez choisir une autre icône et/ou un autre marqueur.
+      our_selection: notre sélection
     item:
       error_occurred: "%{errors} en enregistrant cet objet"
       update_success: "L'objet '%{name}' a été mis à jour."
