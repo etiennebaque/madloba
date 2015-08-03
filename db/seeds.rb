@@ -36,7 +36,8 @@ setting_list = [
     ['area_type', ''],
     %w(ad_max_expire 90),
     %w(setup_step 1),
-    ['image_storage', '']
+    ['image_storage', ''],
+    ['language_chosen', 'en']
 ]
 
 setting_list.each do |setting|

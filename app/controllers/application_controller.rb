@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :check_if_setup
   before_action :load_javascript_text
   before_action :allow_iframe_requests
+  before_action :set_locale
 
   include ApplicationHelper
   include Pundit
@@ -31,10 +32,16 @@ class ApplicationController < ActionController::Base
   # If 'setup_step' key, in Settings table, is set to '1', it means that the installation process
   # is not complete. Redirects to setup screens if it is the case.
   def check_if_setup
-    if !(((request.original_url).include? 'setup') || ((request.original_url).include? 'user/register') || ((request.original_url).include? 'getCityGeocodes'))
+    current_url = request.original_url
+    language_chosen = Rails.cache.fetch(CACHE_LANGUAGE_CHOSEN) {Setting.where(key: 'language_chosen').pluck(:value).first}
+    if (language_chosen.empty? && !(current_url.include? 'setup/language'))
+      # If the locale has never been specified (even during the setup process), redirect to the setup language page.
+      redirect_to setup_language_path
+    elsif !((current_url.include? 'setup') || (current_url.include? 'user/register') || (current_url.include? 'getCityGeocodes'))
+      # Redirect to the setup pages if it has never been completed.
       setup_step_value = Rails.cache.fetch(CACHE_SETUP_STEP) {Setting.where(key: 'setup_step').pluck(:value).first.to_i}
       if setup_step_value == 1
-        redirect_to setup_path
+        redirect_to setup_language_path
       end
     end
   end
@@ -48,6 +55,17 @@ class ApplicationController < ActionController::Base
   # Allows the website to be embedded in an iframe.
   def allow_iframe_requests
     response.headers.delete('X-Frame-Options')
+  end
+
+  # Choose the right locale among the ones that are available.
+  def set_locale
+    language_chosen = Rails.cache.fetch(CACHE_LANGUAGE_CHOSEN) {Setting.where(key: 'language_chosen').pluck(:value).first}
+    if language_chosen && !language_chosen.empty?
+      l = language_chosen
+    else
+      l = I18n.default_locale
+    end
+    I18n.locale = l
   end
 
   # Redirects after signing in.

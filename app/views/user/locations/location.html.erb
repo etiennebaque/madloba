@@ -54,7 +54,7 @@
           <% if @location && @location.errors.any? %>
               <div class="alert alert-danger">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong><%= t('admin.location.error_occurred', errors: pluralize(@location.errors.count, 'error')) %>:</strong>
+                <strong><%= t('admin.location.error_occurred', errors: pluralize(@location.errors.count, t('home.error.one'), t('home.error.more'))) %>:</strong>
                 <ul>
                   <% @location.errors.full_messages.each do |msg| %>
                       <li><%= msg %></li>

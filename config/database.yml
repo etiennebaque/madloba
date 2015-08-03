@@ -12,9 +12,9 @@ test:
   adapter: postgresql
   encoding: unicode
   pool: 5
-  database: madloba_test
-  username: postgres
-  password: postgres
+  database: <%= ENV["MADLOBA_TEST_DATABASE"] %>
+  username: <%= ENV["MADLOBA_TEST_USERNAME"] %>
+  password: <%= ENV["MADLOBA_TEST_PASSWORD"] %>
 
 production:
   # Deployment on a server: please indicate your database credentials here

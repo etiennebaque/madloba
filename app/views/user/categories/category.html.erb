@@ -41,7 +41,7 @@
           <% if @category.errors.any? %>
               <div class="alert alert-danger">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong><%= t('admin.category.cat_error_occurred', errors: pluralize(@category.errors.count, "error")) %>:</strong>
+                <strong><%= t('admin.category.cat_error_occurred', errors: pluralize(@category.errors.count, t('home.error.one'), t('home.error.more'))) %>:</strong>
                 <ul>
                   <% @category.errors.full_messages.each do |msg| %>
                       <li><%= msg %></li>
@@ -110,7 +110,7 @@
 
                 <hr />
 
-                <h4>Your marker</h4>
+                <h4><%= t('admin.category.your_marker_icon') %></h4>
 
                 <!-- Category marker -->
                 <div class="form-inline">
@@ -139,7 +139,7 @@
                       </p>
                   <% end %>
                   <p>
-                    <i><%= t('admin.category.font_awesome_link_html', href: link_to('our selection list', '#', class: 'btn-icon-modal')) %></i><br />
+                    <i><%= t('admin.category.font_awesome_link_html', href: link_to(t('admin.category.our_selection'), '#', class: 'btn-icon-modal')) %></i><br />
                     <i><%= t('admin.category.font_awesome_link2_html', href: link_to('Font Awesome', 'http://fortawesome.github.io/Font-Awesome/icons/', target: '_blank')) %></i>
                   </p>
                   <div class="form-inline">

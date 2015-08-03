@@ -1,0 +1,589 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+fr:
+  simple_captcha:
+    placeholder: ""
+    label: "Tapez le texte de l'image"
+    refresh_button_text: "Rafraichir !"
+    message:
+      default: "code ne correspond pas à l'image"
+      user: "L'image et le code sont différents"
+  activerecord:
+    models:
+      user: Utilisateur
+    attributes:
+      ad:
+        title: "Titre de l'annonce"
+        image: "L'image téléchargée"
+      user:
+        password: Mot de passe
+        first_name: Prénom
+        last_name: Nom de famille
+        username: Nom d'utilisateur
+      location:
+        address: Adresse
+        postal_code: Code postal
+      item:
+        name: "Nom de l'objet"
+      category:
+        name: Nom de la catégorie
+        icon: "Nom de l'icône"
+    errors:
+      models:
+        ad:
+          attributes:
+            image:
+              too_long: "ne doit pas dépasser 5 Mo"
+  home:
+    home: Accueil
+    page: Page d'accueil
+    user_panel: Votre profil
+    create_new_ad: Créer annonce
+    sign_in: S'identifier
+    sign_up: Enregistrez-vous ici
+    not_have_account_yet_html: "%{signup} si vous n'avez pas encore de compte."
+    create_account: Créer un compte
+    refinements: Votre sélection
+    delete_all: Effacer tout
+    refine_location: Résultats
+    cancel: Annuler
+    close: Fermer
+    sign_register: S'identifier / Créer un compte
+    e-mail: E-mail
+    password: Mot de passe
+    record_not_exist: Désolé, cette page n'existe pas.
+    got_it: OK
+    giving: "Je donne :"
+    giving_away: "Donne :"
+    searching: "Je recherche :"
+    searching_for: "Recherche :"
+    search_items: Tapez un objet
+    location_example: Nom de rue, code postal...
+    search: OK
+    about: A propos
+    about_website: A propos de %{website}
+    links: Liens
+    your_searched_location: Votre recherche
+    no_ad: Pas d'annonce en ce moment.
+    create_an_ad_now_html: "%{createad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
+    about_page: A propos de %{appname}
+    about_description_1_html: "%{appname} est un site utilisant %{madloba_link}."
+    about_description_2_html: "%{madloba_link} est un projet open-source qui vous permet de promouvoir à votre communauté ce que vous avez à donner."
+    about_description_3: "Tellement d'objects partent constamment à la poubelle, alors qu'ils sont toujours utilisables ! Heureusement, comme nous vivons de plus en plus dans un monde connecté par des données de plus en plus ouvertes, nous avons maintenant les moyens technologiques de résoudre ce problème. Madloba permettra à votre communauté de recycler ou de donner tout ce qu'elle a à réutiliser."
+    contact_us: Contactez-nous
+    send_us_message_html: Envoyez-nous un e-mail à %{email}
+    about_send_message_html: Si vous voulez nous contacter, envoyez-nous un e-mail à %{email}.
+    loc_not_found: Désolé, cet endroit n'a pas été trouvé.
+    server_error: Désolé, il y a eu une erreur serveur. Veuillez essayer à nouveau plus tard.
+    default_current_loc: Ceci est votre endroit actuel.
+    title_guided_nav: Catégories
+    map_positioned_found: "Carte positionnée sur: %{address}"
+    full_not_found_map_position: "Adresse complète non trouvée, carte positionnée sur: %{address}"
+    not_found_map_position: Désolé, adresse non trouvée.
+    click_on_map_after: "Une fois que la zone générale a été trouvée, cliquez sur la carte ci-dessous pour sélectioner l'endroit désiré."
+    demo_sidebar_note_html: "(Démo) En tant qu'administrateur, vous pouvez changer les couleurs et les icônes de ces catégories dans le %{link}."
+    admin_panel: "panneau d'administration"
+    same_area: Annonces groupées par zone.
+    update: "Mise à jour"
+    demo_instructions_html: "(Démo) Indications pour s'identifier %{link}."
+    footer_powered_by_html: Délivré par %{madloba_link}
+    footer_new_powered_by_html: Nouveau site délivré par %{madloba_link}
+    footer_theme_html: "Thème : %{charisma}"
+    log_out: Déconnexion
+    error:
+      one: erreur
+      more: erreurs
+  errors:
+    oops: "Oups !"
+    not_found: 404 Page non trouvée
+    server_error: 500 Erreur serveur
+    404_sorry: "Désolé, la page demandée n'a pas été trouvée !"
+    500_sorry: "Désolé, il y a eu une erreur serveur. Veuillez essayer à nouveau plus tard."
+  config:
+    not_authorized: Vous n'êtes pas autorisé à aller sur cette page.
+  location:
+    location: "Emplacement:*"
+    user_location: "Emplacements de cet utilisateur:*"
+    new_location: Entrez un nouvel emplacement pour cette annonce
+    name: "Nom de l'emplacement :"
+    name_help: "Nommez votre nouvel emplacement (ex: nom de votre boutique, lieu-dit...). Ce nom sera public. N'écrivez rien si vous ne voulez pas nommer votre emplacement. "
+    name_to_use: "Quel nom voulez-vous utiliser?*"
+    anon_publisher_name_note: "Ceci est une annonce postée par un utilisateur anonyme :"
+    ad_action: "Action:*"
+    ad_action_giving: Je donne des objects.
+    ad_action_accepting: Je cherche des objects.
+    name_username: Nom d'utilisateur
+    name_fullname: Nom complet réel
+    definition: "Entrez votre emplacement* :"
+    definition_exact: par adresse exacte
+    definition_postal_code: par code postal
+    definition_district: par zone
+    street_number: "Numéro de rue :"
+    street_name: "Nom de la rue* :"
+    street_name_help: "Exemple : nom de la rue, avenue, chemin..."
+    postal_code: "Code postal* :"
+    district: "Zone* :"
+    define_geocode_button: Trouvez-moi sur la carte
+    map: "Carte :"
+    phone_number: "Numéro de téléphone :"
+    website: "Site web :"
+    description: "Au sujet de cet emplacement :"
+    description_help: "Remplissez cette section si vous voulez donner quelques détails supplémentaires au sujet de cet emplacement (ex: comment trouver cet endroit, a quoi il ressemble...)"
+    not_found: Emplacement non trouvé
+    not_found_descr1: "Cet emplacement n'a pas pu être trouvé, basé sur les informations entrées."
+    not_found_descr2: "Mais ce n'est pas grave ! Cliquez sur la carte pour sélectionner cet emplacement."
+    district_help: Choisissez la zone où cet emplacement se trouve.
+  ad:
+    new_ad: Nouvelle annonce
+    once_created_expire: une fois créée, votre annonce sera publiée pour %{max_expire_days} jours.
+    area: zone
+    error_occurred: "%{errors} à corriger ci-dessous "
+    published: "Publiée par :"
+    expiration_date: Cette annonce expirera le %{expire_date}.
+    expires_today: "Cette annonce expire aujourd'hui !"
+    has_expired: Cette annonce a expiré le %{expire_date}, et n'est plus visible sur ce site.
+    title: "Titre de l'annonce* :"
+    title_help: "Exemples : 'Donne 5 chemises', 'Je me débarasse de mon vieux portable'..."
+    item: "Quels objets?* :"
+    about_you: "A propos de vous"
+    name: "Votre nom* :"
+    name_help: "Veuillez entrer votre nom ou votre pseudonyme ici. Il apparaitra tel quel, dans l'annonce publiée."
+    your_email: "Votre adresse email* :"
+    captcha: "Captcha* :"
+    email_help: "Donner votre adresse email n'est pas obligatoire (Soyez sûr d'indiquer votre numéro de téléphone dans la description de l'annonce). Si vous donnez votre adresse email, elle ne sera pas publiée publiquement, et les utilisateurs seront quand même capable de vous envoyer un message."
+    ad_is_deleted: "L'annonce '%{deleted_ad_title}' a été supprimé."
+    location_website: "Site web :"
+    your_message: "Votre message* :"
+    send_message: Envoyer votre message
+    send_message_label: "Envoyer votre message à %{name} pour cette annonce :"
+    description: Description
+    location_description: "Au sujet de cet emplacement :"
+    description_help: Donnez quelques détails au sujet des objets que vous donnez/cherchez.
+    new_location: Entrez un nouvel emplacement
+    choose_existing: Choisir un emplacement existant
+    create_this_ad: Créer cette annonce !
+    create_success: "L'annonce '%{title}' a été créée. Vous recevrez un email dans un moment, avec un résumé de votre annonce."
+    where_to_find: "Où trouver les objets :"
+    where_to_bring: "Où apporter les objets :"
+    you_own: Vous avez créé cette annonce.
+    you_manage: Vous pouvez la modifier
+    here: ici
+    error_empty_message: Veuillez entrer un message valide.
+    from: De
+    get_back_to: Vous pouvez directement revenir vers %{first_name} en répondant à cet e-mail.
+    success_sent: Votre message a été envoyé.
+    giving_away: "Donne :"
+    accepting: "Recherche :"
+    ad_create_expire: Votre annonce expirera dans %{day_number} jours, le %{expire_date}.
+    ad_has_expired: Désolé, cette annonce a expiré et n'est plus visible.
+    no_ad_created_yet: "Vous n'avez encore pas créé d'annonce. Cliquez sur le bouton ci-dessus pour créer votre première annonce."
+    no_location_yet: "Rien à modifier ici: vous n'avez pas encore créé d'annonce avec un emplacement exact."
+    upload_image: "Télécharger image :"
+    less_than_limit: "L'image doit faire moins de 5 Mo."
+    remove_image: "Retirer l'image"
+    image_currently_processed: "Votre image est en train d'être traitée."
+    show_ad_image_processed: "L'image de cette annonce est en train d'être traitée."
+    will_show_up: "Elle apparaitra dans un moment après avoir rechargé la page."
+    create_item: "Créer un nouvel objet"
+    write_new_item: "Tapez un novel objet et choisissez sa catégorie"
+    add_item: "Ajouter un objet"
+    see_published: "Voir cette annonce"
+    error_ad_must_have_item: "Veuillez ajouter au moins 1 objet"
+    provide_anon_name: "Veuillez entrer votre nom"
+    provide_anon_email: "Veuillez entre votre adresse email"
+    select_category: "Catégories disponibles"
+    captcha_not_valid: "Le texte Captcha que vous avez entré n'est pas valide"
+    create_account_first_html: "%{create_account} ou %{sign_in} maintenant avant de publier votre annonce, si vous voulez la modifier plus tard."
+  mailer:
+    welcome: "Bienvenue sur %{name} !"
+    confirmation_descr1: Vous avez reçu ce message car un compte, basé sur votre adresse email, a été créé sur ce site.
+    confirmation_descr2: Vous pouvez confirmer votre compte en cliquant sur lien ci-dessous.
+    confirm_account: Confirmer mon compte
+    thanks: Merci ! :-)
+    signature: "L'équipe %{name}."
+    dear: "Cher %{name}"
+    ad_created: "Vous avez créé l'annonce suivante avec succès, sur %{site_name}"
+    ad_title: "Titre de l'annonce"
+    description: Description
+    where_pick_up: Où trouver les objets
+    where_to_drop: Où déposer les objets
+    admin_panel: "notre panneau d'administration."
+    manage_ad_html: "Pour modifier cette annonce, ainsi que les annonces créées auparavant, connectez-vous sur %{href}"
+    thanks: "Merci, et passez une bonne journée ! :)"
+    received_message: "Vous avez reçu une réponse pour votre annonce '%{ad_title}' sur %{site_name}."
+    new_ad_object: Votre nouvelle annonce sur %{site_name} - '%{ad_title}'
+    reply_ad_object: Réponse pour votre annonce '%{ad_title}' sur %{site_name}
+    account_locked: Votre compte a été vérouillé à cause de trop nombreux essais de connection.
+    link_unlock: Cliquez sur le lien ci-dessous pour dévérouiller votre compte.
+    unlock_account: Dévérouiller mon compte.
+    ad_will_expire: Cette annonce expirera dans %{day_number} jours, le %{expire_date}
+  registration:
+    all_mandatory: (Tous les champs sont obligatoires)
+    first_name: Prénom
+    last_name: Nom de famille
+    username: "Nom d'utilisateur"
+    username_help: Votre nom d'utilisateur sera utilisé si vous ne voulez pas montrer votre nom réel, lorsque vous publierez une annonce.
+    email: Adresse e-mail
+    password: Mot de passe
+    password_confirm: Confirmez mot de passe
+    sign_up: Créer compte
+    not_received: "Vous n'avez pas reçu vos instruction de confirmations ?"
+    waiting_confirmation: En attente de confirmation pour
+    leave_blank: (laissez ce champ vide si vous ne voulez pas le changer)
+    need_current: (nous avons besoin de votre mot de passe pour confirmer les changements)
+    cancel_account: Fermer mon compte
+    unhappy: Pas content ?
+    you_sure: Vous êtes sûr ?
+    back: Retour
+    resend_unlock: Réenvover les instructions de dévérouillage.
+  confirmation:
+    resend: Réenvover les instructions de confirmation.
+  session:
+    hello: Bonjour
+    sign_in: Se connecter
+    someone_requested: "Quelqu'un a demandé un lien pour changer le mot de passe. Vous pouvez le changer en cliqunt sur le lien ci-dessous."
+    please_ignore: "Si vous n'avez pas demandé ceci, veuillez ignorer ce message."
+    password_not_changing: Votre mot de passe ne changera pas à moins que vous cliquiez sur le lien ci-dessus pour en créer un nouveau.
+    forgot: Mot de passe oublié ?
+    not_received_unlock: Instructions de dévérouillage non reçues ?
+    sign_in_with: Se connecter avec %{name}
+    change_password: Changer mon mot de passe
+    reset_password: Envoyez-moi les instructions pour changer mon mot de passe
+    change_your_password: Changer votre mot de passe
+  admin:
+    dashboard: Accueil
+    todo_list: A faire
+    name: Nom
+    address: Adresse/Code postal/Zone
+    exact_area: Type d'emplacement
+    ads: Annonces
+    ad_settings: Paramètres pour annonces
+    location_name: emplacement
+    expiration_date: "Date d'expiration"
+    locations: Emplacements
+    items: Objets
+    item_name: objet
+    categories: Catégories
+    add_location: Ajouter emplacement
+    edit_location: Mettre à jour emplacement
+    new_location: Nouvel emplacement
+    add_item: Ajouter objet
+    edit_item: Mettre à jour objet
+    new_item: Nouvel objet
+    add_category: Ajouter catégorie
+    edit_category: Mettre à jour catégorie
+    new_category: Nouvelle catégorie
+    title: Titre
+    actions: Actions
+    description: Description
+    category_name: Nom de la catégorie
+    marker: Marqueur
+    icon: Icône
+    edit_delete: Mettre à jour / Supprimer
+    created_by_user: Créée par utilisateur
+    manage_your_ads: Gérer vos annonces
+    manage_records: Base de données
+    records_message: Vous pouvez gérer ici les annonces postées sur ce site, ainsi que les emplacements, objets et catégories.
+    back_to_records: Retour à "Base de données"
+    back_to_ads: Retour à "Gérer vos annonces"
+    back_to_users: Retour à "Gérer utilisateurs"
+    create_ad: Créer annonce
+    mandatory: (* champs obligatoires)
+    general_settings_menu: Paramètres du site
+    save: Enregistrer
+    nothing_to_do: Super, rien à faire ! :)
+    no_mapbox_account_html: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{href}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+    no_mapquest_account_html: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{href}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+    no_social: Vous n'avez pas encore entré d'adresses de réseaux sociaux (Facebook, Twitter, Pinterest), dans "Paramètres du site". Entrez vos différents profils pour augmenter votre visibilité.
+    one_category_html: <strong>Seulement une seule catégorie est disponible</strong>. Veuillez créer quelques catégories pour permettres aux utilisateurs de filtrer leur recherche.
+    no_website_description: Aucune description de site web n'a été écrite, dans "Paramètres du site". Expliquez aux utilisateurs le but de votre site Madloba, en écrivant un texte court. Cette description apparaitra en page de la page d'accueil, ainsi que dans la page "A propos".
+    no_area_type_html: <strong>Aucune zone n'a été spécifiée</strong>. S'il n'a pas la possibilité de choisir une zone lorsque une annonce est créé, l'utilisateur devra entrer une adresse exacte (ce qui ne sera pas forcément souhaité). Dans "Paramètres des zones", veuillez définir les zones de votre ville (par code postal, par quartiers), pour donner plus de flexibilité aux utilisateurs, lorsqu'ils définiront un emplacement.
+    you_admin: Vous êtes un administrateur de ce site.
+    use_left_hand: Utilisez le menu sur la gauche pour gérer
+    admin_descr1: les différents éléments de ce site (annonces, emplacements, objets, catégories)
+    admin_descr2: les utilisateurs (administrateurs et autres)
+    admin_descr3: les paramètres généraux du site
+    admin_descr4: les paramètres de la carte en page d'accueil
+    admin_descr5: "les paramètres qui définissent une zone dans votre ville (ex : codes postaux, quartiers...)"
+    regular_actions: Vous avez aussi accès aux fonctions non-admins.
+    todo_list: A faire
+    welcome_user: Bienvenue sur le panneau admin de %{site_name}. Utiliser le menu à gauche pour gérer
+    user_descr1: les annonces que vous publiez, ainsi que les emplacements qui leur sont rattachés.
+    user_descr2: votre profil utilisateur.
+    social_media: Médias sociaux
+    useful_links: Liens
+    delete_sure: Etes vous sûr aue vous voulez supprimer cet %{entity}?
+    warning_ads_before_delete_item: "ATTENTION: quelques annonces sont rattachés à cet objet. Supprimer cet objet le fera disparaître de ces annonces définitivement."
+    warning_ads_before_delete_location: "ATTENTION: quelques annonces sont rattachés à cet emplacement. Supprimer cet emplacement aura pour effet de supprimer ces annonces définitivement."
+    delete_confirm: Oui, supprimer cet %{entity}
+    save_not_possible: "Démo - Mise à jour non possible pour cette page :"
+    left_menu:
+      admin_task: Tâches admin
+      user_tasks: Tâches utilisateur
+      map_settings: Paramètres de la carte
+      area_settings: Paramètres des zones
+      manage_users: Gérer utilisateurs
+      manage_profile: Gérer votre profil
+    ad:
+      manage_ads: Gérer annonces
+      ad_edit: Annonces - Mise à jour
+      ad_updated: "L'annonce '%{title}' a été mise à jour."
+      error_update: "%{errors} lors de la mise à jour de l'annonce"
+      delete: Supprimer cette annonce
+      delete_ad_error_html: "Erreur lors de la mise à jour de cette annonce ! Retour à %{href}"
+      manage_ads_page: "Gérer annonces"
+      giving_accepting_title: Donne/Recherche
+      giving_away: Donne
+      accepting: Recherche
+      delete_ad: Supprimer cette annonce?
+      delete_ad_permanently: Etes-vous sûr que vous voulez supprimer cette annonce définitivement ?
+      delete_this_ad: Oui, supprimer cette annonce
+    location:
+      error_occurred: "%{errors} lors de la création de cet emplacement"
+      update_success: "L'emplacement '%{name}' a été mis à jour."
+      created_success: "L'emplacement '%{name}' a été créé."
+      delete: "Supprimer cet emplacement"
+      linked_ads: "Annonces liées à cet emplacement"
+      no_ad: "Il n'y a pas encore d'annonce liée à cet emplacement."
+      area: Zone
+      exact_address: Adresse exacte
+      map_notification_postal_code: Cliquez sur la carte pour localiser votre zone générale, en rapport avec vtre code postal.
+      map_notification_exact: Cliquez sur la carte pour localiser votre adresse exacte.
+      location_deleted: "L'emplacement '%{deleted_location_name}' a été supprimé."
+      unnamed: emplacement sans nom
+      area_name: "zone %{area}"
+      no_ad_tied: "Pas d'annonce actuellement liée à cet emplacement."
+      anonymous_user: (Utilisateur anonyme)
+    category:
+      update_success: La catégorie '%{name}' a été mise à jour.
+      created_success: La catégorie '%{name}' a été créée.
+      cat_error_occurred: "%{errors} en enregistrant cette catégorie"
+      delete_category: Supprimer cette catégorie
+      choose_icon: Choisir une icône
+      delete_confirm: Etes-vous sûr que vous voulez supprimer cette catégorie ?
+      before_you_delete1: Quelques objets sont toujours liés à la catégorie que vous voulez supprimer.
+      before_you_delete2: Veuillez choisir une autre catégorie vers laquelle transférer ces objets, dans la liste ci-dessous, avant de supprimer cette catégorie.
+      cannot_delete: Vous ne pouvez pas supprimer cette catégories car c'est la seul existante.
+      delete_yes: Oui, supprimer cette catégorie.
+      transfer_and_delete: Transférer objets & supprimer cette catégorie
+      success_deleted: La catégorie '%{name}' a été supprimée.
+      marker: Marqueur
+      icon: Icône
+      currently_selected: Icône choisie
+      font_awesome_link_html: Choisissez une icône de %{href}.
+      font_awesome_link2_html: Vous pouvez aussi choisir une icône parmi la liste complète dans la librarie %{href}, en tapant son mot-clé ci-dessous.
+      font_awesome_help: "Tapez le nom de l'icône tel que vous le voyez sur la page Font Awesome (ex : 'fa-bell', 'fa-circle'...)"
+      item_linked: Objets liés à cette catégorie
+      item_name: "Nom de l'objet"
+      no_item: "Il n'y a pas encore d'objet lié à cette catégorie."
+      your_marker_icon: Vos marqueur et icône
+      marker_icon_not_unique: La combinaison de cette icône et ce marqueur a déjà été utilisée. Veuillez choisir une autre icône et/ou un autre marqueur.
+      our_selection: notre sélection
+    item:
+      error_occurred: "%{errors} en enregistrant cet objet"
+      update_success: "L'objet '%{name}' a été mis à jour."
+      created_success: "L'objet '%{name}' a été créé."
+      delete_item: Supprimer cet objet
+      name: "Nom de l'objet"
+      category: Catégorie
+      ads_promoting: Annonces avec cet objet
+      ad_title: Titre
+      no_ad: "Pas d'annonce incluant cet objet pour le moment."
+      item_deleted: "L'objet '%{deleted_item_name}' a été supprimé."
+    general_settings:
+      name: Nom du site
+      description: Description du site
+      contact_email: Adresse e-mail à contacter
+      facebook: Page Facebook
+      twitter: Twitter
+      pinterest: Page Pinterest
+      success_message: Les paramètres du site ont été mis à jour.
+      error_message: Le champ "Nom du site" ne peut pas être vide.
+      max_ad_expire: Expiration d'annonce - Nombre de jours max.
+      max_ad_expire_help: Nombre de jours maximum de publication d'une annonce, après sa création (Tapez '0' pour ne pas fixer de limite).
+      link_one: Premier lien
+      link_two: Deuxième lien
+      link_three: Troisième lien
+      link_four: Quatrième lien
+      link_help: "Créez jusqu'à 4 liens dans cette section pour promouvoir vos sites/pages web, en bas de la page d'accueil."
+    area_settings:
+      title: Paramètres des zones
+      define_area: Une zone peut être définie
+      by_postal_code: par un code postal
+      by_district: par un quartier
+      area_postal_code: Zone définie par un code postal
+      area_district: Zone définie par un quartier
+      map_description: Cliquez sur 'Ajouter quartier', tapez un nom pour ce nouveau quartier, et cliquez sur la carte pour définir son emplacement.
+      error_update_district: Erreur lors de la mise à jour des quartiers. Veuillez réessayer plus tard.
+      district_name: Nom du quartier
+      latitude: Latitude
+      longitude: Longitude
+      add_district: Ajouter quartier
+    map_settings:
+      title: Paramètres de la carte
+      type: "Type de carte :"
+      mapbox: "Clé API Mapbox :"
+      mapbox_link: Aller sur votre compte Mapbox...
+      mapquest: "Clé API MapQuest :"
+      mapquest_link: Aller sur votre compte développeur MapQuest...
+      map_api_keys: Clés API carte
+      key_first: After avoir entré une nouvelle clé API, enregistrez vos changements tout d'abord. Ensuite, choisissez le type de carte désiré dans la liste ci-dessus.
+      location_info: "Choix de l'emplacement principal"
+      postal_code_field1: Longueur du code postal
+      postal_code_field2: Longueur de la zone
+      postal_code_help1: Nombre maximum de caractères utilisés dans les codes postaux de votre ville (eg. 6 pour 'A1B2C3')
+      postal_code_help2: Nombre maximum de caractères utilisés définissant une zone, dans les codes postaux de votre ville. (eg. 3 pour 'A1B')
+      find_city_map: "Trouvez une ville sur la carte ci-dessous :"
+      city: Ville
+      state: Région (facultatif)
+      country: Pays
+      find_city: Chercher cette ville
+      map_description: "- Choisissez le centre de la carte par défaut, en cliquant sur cette carte. L'emplacement choisi sera affiché au chargement de la page d'accueil."
+      map_description_zoom: "- Chiosissez aussi le niveau de zoom par défaut (en cliquant sur '-' ou '+')."
+      should_be_numeric: Latitude et longitude doivent être des valeurs numeriques.
+      cannot_be_empty: Latitude et longitude ne peuvent pas être vides.
+      postal_area_error: La longueur du code postal doit être égale ou supérieure à la longueur du code de zone.
+      update_success: Les paramètres de la carte ont été mis à jour.
+      area_update_success: Les paramètres de zones ont été mis à jour.
+      update_success_demo: Seul le type de carte a été mis à jour (démo).
+      demo_message: Sur ce site démo, vous êtes capable de mettre à jour le "type de carte" seulement sur cette page.
+    users:
+      title: Gérer utilisateurs
+      description: Sur cette page, vous pouvez gérer les comptes utilisateurs (admins et utilisateurs réguliers).
+      add: Créer utilisateur
+      email: E-mail
+      full_name: Nom complet
+      role: Rôle
+      error_occurred: "%{errors} lors de la mise à jour cet utilisateur"
+      myprofile_update_success: Votre profil utilisateur a été mis à jour.
+      update_success: "L'utilisateur '%{email}' a été mis à jour."
+      created_success: "L'utilisateur '%{email}' a été créé. Un message de bienvenue a été envoyé à cette adresse e-mail."
+      delete: Supprimer cet utilisateur
+      confirm_delete: "ATTENTION: Toutes les annonces publiées, ainsi que les emplacements enregistrés par cet utilisateur seront supprimés définitivement."
+      confirm_delete_2: Etes-vous sûr que vous voulez supprimer cet utilisateur définitevement ?
+      delete_yes: Oui, supprimer cet utilisateur
+      user_destroyed: "L'utilisateur '%{email}' et les annonces qu'il a publiées ont été supprimés."
+      delete_not_possible: "Démo - Suppression d'utilisateur non disponible"
+    profile:
+      title: Gérer votre profil
+      title_manage_users: Gérer utilisateurs
+      update_profile: Mettre à jour profil
+      new_user: Nouvel utilisateur
+      make_user_admin: "Donner droits d'admin à cet utilisateur."
+      first_name: Prénom
+      last_name: Nom de famille
+      username: Pseudonyme
+      current_password: Mot de passe actuel
+      new_password: Nouveau mot de passe
+      confirm_password: Confirmez mot de passe
+  setup:
+    choose_language: Veuillez choisir une langue
+    madloba_setup: Installation
+    welcome_madloba: Bienvenue sur votre site Madloba !
+    about_to_setup: Vous êtes sur le point de finaliser l'installation de Madloba sur votre serveur.
+    process_takes: "Ce processus d'installation prendra environ 10 minutes."
+    click_next: Cliquez sur "Continuer" pour poursuivre l'installation.
+    back: Retour
+    back_language_html: "(Vous pouvez aussi rechoisir une autre langue %{here})."
+    next: Continuer
+    step_html: "(étape %{current_step}/6)"
+    general_info: Informations générales
+    image_storage: Storage d'images
+    name_description: Nom du site
+    description_description: "Ecrivez de quoi votre site s'agit..."
+    map_settings: Paramètres de la carte
+    city_help: La ville que votre site Madloba vise
+    state_help: La province/région où votre ville se situe
+    country_help: Le pays où votre ville se situe
+    creation_admin: Création du compte administrateur
+    all_done: Voilà ! Installation terminée !
+    setup_successfully: Votre site Madloba a été installé avec succès !
+    add_config: Il y a quelques paramètres à configurer.
+    check_config: "Veuillez prendre connaissance de ces paramètres dans le panneau d'administration."
+    enjoy: "Merci d'avoir chiosi Madloba !"
+    go_to_website: Aller sur votre site !
+    name_cant_be_blank: Le nom du site ne peut pas être vide.
+    select_geocodes: Veuillez choisir un emplacement sur la carte.
+    state_province: Région / Province
+    find_city_on_map: Chercher cette ville sur la carte
+    map_description: "Cliquez quelque part dans votre ville: le marqueur définira le milieu de la carte, lors du chargement de la page d'accueil."
+    map_description_2: "Cliquez aussi sur '+/-' pour régler le niveau de zoom par défaut."
+    gmail_note: "Si vous avez chiosi une adresse GMail en tant que SMTP, vous devez avertir Google à ce sujet. Avant de soumettre ce formulaire :"
+    gmail_note2: Ouvrez un nouvel onglet maintenant, et connectez-vous sur votre compte email GMail utilisé en tant que SMTP (déconnectez-vous de tout autre compte Gmail).
+    gmail_note3_html: Signalez à Google que vous souhaitez utiliser ce compte Gmail avec votre site Madloba, en cliquant %{link}.
+    gmail_link_here: ici
+    gmail_note4: Une fois que vous avez terminé, vous pouvez continuer avec la soumission de ce formulaire.
+    confirm_email: Si les informations entrées ci-dessus sont correctes, et après avoir cliqué "Continuer", un email de confirmation vous sera envoyé.
+    check_email: Veuillez vérifier votre boîte email pour confirmer votre compte administrateur.
+    note_for_gmail: Note importante sur l'utilisation d'un compte Gmail en tant que paramètres SMTP.
+    city_country_mandatory: "'Ville' et 'Pays' sont obligatoires."
+    option_no_storage: Les utilisateurs ne seront pas du tout autorisés à télécharger des images.
+    option_s3: Les images seront directement téléchargées sur Amazon S3.
+    option_server: Les images seront storées sur le même serveur que ce site Madloba.
+    image_description: Quand les utilisateurs créeront des annonces, ils auront le choix de joindre une image.
+    image_server_or_s3_html: "Cette image peut être storée soit sur votre serveur, soit sur %{link}"
+    image_s3_only_html: "Les images de cette annonce seront storées sur %{s3_link}"
+    image_no_storage: Vous pouvez également choisir de ne pas télécharger d'image du tout.
+    image_strategy: "Stratégie de storage d'images."
+    image_select_option: Veuillez choisir quelle stratégie de storage de photo vous convient.
+    install_guide: le guide d'installation
+    amazon_s3_warning_html: Si vous choisissez Amazon S3, soyez sûr que vous avez spécifié les variables d'environnement correctement (Veuillez consulter %{link} - section intitulée 'the set_environment_variables script' - pour plus de détails).
+    image_error: Erreur lors de l'enregistrement de vos paramètres. Veuillez recharger cette page et essayez à nouveau dans un moment.
+  general_js:
+    adblock_warning: Attention ! Utilisation de AdBlock
+    adblock_browser: Votre navigateur utilise AdBlock en ce moment.
+    adblock_affecting: Ceci affecte le bon fonctionnement de Madloba.
+    adblock_turnoff: Désactivez AdBlock pour ce site, et recharger cette page.
+    search_for_items: Recheche d'objets...
+    start_typing_item: Tapez le nom d'un objet
+    no_result_create_item: Pas de résultat. Choisissez 'Créer un nouvel objet'.
+    new_image_uploading: Téléchargement de la nouvelle image en cours. Veulliez attendre svp.
+    type_district_name: "Tapez le nom d'un quartier ici..."
+    latitude: (latitude)
+    longitude: (longitude)
+    add: Ajouter
+    updating_district: Mise à jour de la liste de quartiers...
+    area_show_up: "Cette zone apparaitra en tant que :"
+    searching_location: Recherche d'un emplacement...
+    update: Mettre à jour
+    loading: Chargement...
+    choose_location: Choisissez un de ces emplacements disponibles
+    remove: Retirer
+    records_per_page: enregistrements par page
+    search: "Recherche :"
+    showing: Résultats
+    to: à
+    of: sur
+    entries: enregistrements
+    previous: Précédent
+    next: Suivant
+    no_data: "Aucune information disponible"
+    first: Premier
+    last: Dernier
+    filtered_from: filtrés sur
+    total_entries: enregistrements au total
+    in_this_district: Dans ce quartier
+    ads_for: Annonces pour
+    items_given: "Objets donnés :"
+    items_searched: "Objets recherchés :"
+    image_not_available: Image pas encore disponible.
+    select_item: Choisissez un objet ci-dessous pour plus de détails.
