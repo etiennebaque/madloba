@@ -33,8 +33,8 @@ class ApplicationController < ActionController::Base
   # is not complete. Redirects to setup screens if it is the case.
   def check_if_setup
     current_url = request.original_url
-    language_chosen = Rails.cache.fetch(CACHE_LANGUAGE_CHOSEN) {Setting.where(key: 'language_chosen').pluck(:value).first}
-    if (language_chosen.empty? && !(current_url.include? 'setup/language'))
+    chosen_language = Rails.cache.fetch(CACHE_CHOSEN_LANGUAGE) {Setting.where(key: 'chosen_language').pluck(:value).first}
+    if (chosen_language.empty? && !(current_url.include? 'setup/language'))
       # If the locale has never been specified (even during the setup process), redirect to the setup language page.
       redirect_to setup_language_path
     elsif !((current_url.include? 'setup') || (current_url.include? 'user/register') || (current_url.include? 'getCityGeocodes'))
@@ -59,9 +59,9 @@ class ApplicationController < ActionController::Base
 
   # Choose the right locale among the ones that are available.
   def set_locale
-    language_chosen = Rails.cache.fetch(CACHE_LANGUAGE_CHOSEN) {Setting.where(key: 'language_chosen').pluck(:value).first}
-    if language_chosen && !language_chosen.empty?
-      l = language_chosen
+    chosen_language = Rails.cache.fetch(CACHE_CHOSEN_LANGUAGE) {Setting.where(key: 'chosen_language').pluck(:value).first}
+    if chosen_language && !chosen_language.empty?
+      l = chosen_language
     else
       l = I18n.default_locale
     end
