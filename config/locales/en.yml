@@ -566,6 +566,7 @@ en:
     first: First
     last: Last
     filtered_from: filtered from
+    total_entries: total entries
     in_this_district: In this district
     ads_for: Ads for
     items_given: "Item(s) being given away:"

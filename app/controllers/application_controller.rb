@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
                 with: :user_not_authorized
   end
 
-  # If 'setup_step' key, in Settings table, is set to '1', it means that the installation process
+  # In the Settings table, if 'setup_step' is set to 1 or 'chosen_language' has no value, it means that the installation process
   # is not complete. Redirects to setup screens if it is the case.
   def check_if_setup
     current_url = request.original_url
