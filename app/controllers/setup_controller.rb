@@ -14,9 +14,34 @@ class SetupController < ApplicationController
     end
   end
 
+  # ---------------------------------------
+  # Method for 'language' page (intro page)
+  # ---------------------------------------
+  def show_choose_language
+    @current_step = 0
+    chosen_language = Rails.cache.fetch(CACHE_CHOSEN_LANGUAGE) {Setting.where(key: 'chosen_language').pluck(:value).first}
+    if chosen_language && !chosen_language.empty?
+      @current_language = chosen_language
+    else
+      # Default locale
+      @current_language = 'en'
+    end
+
+    render 'setup/language'
+  end
+
+  def process_chosen_language
+    chosen_language = Setting.find_or_create_by(key: 'chosen_language')
+    chosen_language.update_attributes(value: params['language'])
+
+    # Cache the chosen locale
+    Rails.cache.write(CACHE_CHOSEN_LANGUAGE, params['language'])
+
+    redirect_to setup_path
+  end
 
   # --------------------------------------
-  # Method for 'Welcome' page (first page)
+  # Method for 'Welcome' page
   # --------------------------------------
   def show_welcome
     @current_step = 1

@@ -39,7 +39,7 @@
           <% if @user && @user.errors.any? %>
               <div class="alert alert-danger">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong><%= t('admin.users.error_occurred', errors: pluralize(@user.errors.count, 'error')) %>:</strong>
+                <strong><%= t('admin.users.error_occurred', errors: pluralize(@user.errors.count, t('home.error.one'), t('home.error.more'))) %>:</strong>
                 <ul>
                   <% @user.errors.full_messages.each do |msg| %>
                       <li><%= msg %></li>
@@ -88,7 +88,7 @@
 
                 <!-- E-mail -->
                 <div class="form-group">
-                  <%= f.label :email, t('admin.profile.email')+':', class:'control-label' %>
+                  <%= f.label :email, t('home.e-mail')+':', class:'control-label' %>
                   <div class="form-inline">
                     <%= f.email_field :email, class: 'form-control', size: '40' %>
                   </div>
@@ -166,7 +166,7 @@
                     <!-- User creation and update is not allowed on Madloba demo website-->
                     <div class="form-actions">
                       <%= link_to t('admin.save_not_possible'), '#', class: 'btn btn-success disabled' %>
-                      <%= link_to t('admin.cancel'), '/user/index', class: 'btn' %>
+                      <%= link_to t('home.cancel'), '/user/index', class: 'btn' %>
                     </div>
                 <% else %>
                     <!-- Submit button and cancel link -->

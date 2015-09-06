@@ -63,6 +63,7 @@ CACHE_IMAGE_STORAGE = 'cache_image_storage'
 CACHE_MAX_DAYS_EXPIRE = 'cache_max_days_expire'
 CACHE_AREA_TYPE = 'cache_area_type'
 CACHE_DISTRICTS = 'cache_districts'
+CACHE_CHOSEN_LANGUAGE = 'cache_chosen_language'
 
 # Image storage constants
 IMAGE_NO_STORAGE = 'nostorage'

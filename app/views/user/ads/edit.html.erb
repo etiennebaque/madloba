@@ -63,7 +63,7 @@
               <div class="alert alert-danger">
                 <button type="button" class="close" data-dismiss="alert">×</button>
                 <% if @ad && @ad.errors.any? %>
-                    <strong><%= t('admin.ad.error_update', errors: pluralize(@ad.errors.count, 'error')) %>:</strong>
+                    <strong><%= t('admin.ad.error_update', errors: pluralize(@ad.errors.count, t('home.error.one'), t('home.error.more'))) %>:</strong>
 
                     <ul>
                       <% @ad.errors.full_messages.each do |msg| %>
@@ -72,7 +72,7 @@
                     </ul>
                 <% else %>
                     <% if flash[:error_delete_ad] %>
-                        <%= t('admin.ad.delete_ad_error_html', href: link_to(t('admin.ad.manage_ads_page'), '/user/manageads')) %>
+                        <%= t('admin.ad.delete_ad_error_html', manage_ads_page: link_to(t('admin.ad.manage_ads_page'), '/user/manageads')) %>
                     <% end %>
                 <% end %>
               </div>
@@ -319,7 +319,7 @@
         <p><%= t('admin.ad.delete_ad_permanently') %></p>
       </div>
       <div class="modal-footer">
-        <a href="#" class="btn btn-default" data-dismiss="modal"><%= t('admin.cancel') %></a>
+        <a href="#" class="btn btn-default" data-dismiss="modal"><%= t('home.cancel') %></a>
         <%= link_to t('admin.ad.delete_this_ad'), user_ad_path(@ad), method: :delete, class: 'btn btn-danger' %>
       </div>
     </div>

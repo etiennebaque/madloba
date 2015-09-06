@@ -1,7 +1,11 @@
-# Database credentials
+# Database credentials for development and test environments
 ENV['MADLOBA_DEV_USERNAME']='username'
 ENV['MADLOBA_DEV_PASSWORD']='password'
-ENV['MADLOBA_DEV_DATABASE']='database'
+ENV['MADLOBA_DEV_DATABASE']='madloba'
+
+ENV['MADLOBA_TEST_USERNAME']='username'
+ENV['MADLOBA_TEST_PASSWORD']='password'
+ENV['MADLOBA_TEST_DATABASE']='madloba_test'
 
 # App Secret key
 ENV['SECRET_KEY_BASE']='f02945bea150e522530c393d8cd49f3d9182845088395c10a476a6f25b76ea765bc81502fb963ec5905d7280857bfb860a23876c9bee9a4b1be4d60ea44310e6'
@@ -12,5 +16,5 @@ ENV['MADLOBA_S3_SECRET']='SecretAccessFromAWS'
 ENV['MADLOBA_S3_REGION']='us-east-1'
 ENV['MADLOBA_S3_BUCKET']='BucketNameFromAWS'
 
-# Is this app to be deployed on Heroku? (development: false)
+# Is this app to be deployed on Heroku? (development and test: false)
 ENV['MADLOBA_IS_ON_HEROKU']='false'

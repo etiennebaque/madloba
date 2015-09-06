@@ -175,9 +175,9 @@
                 <div class="form-actions">
                   <button id="area_settings_submit" type="button" class="btn btn-success"><%= t('admin.save') %></button>
                   <% if current_user.admin? %>
-                      <a href="/user/managerecords" class="btn"><%= t('admin.cancel') %></a>
+                      <a href="/user/managerecords" class="btn"><%= t('home.cancel') %></a>
                   <% else %>
-                      <a href="/user/manageads" class="btn"><%= t('admin.cancel') %></a>
+                      <a href="/user/manageads" class="btn"><%= t('home.cancel') %></a>
                   <% end %>
                   <span id="district_message_notification"></span>
                 </div>

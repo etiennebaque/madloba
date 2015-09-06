@@ -102,7 +102,7 @@
             <div class="list-group">
               <div class="list-group-item smaller-no-border-no-background">
                 <p><%= t('home.no_ad') %></p>
-                <p><%= t('home.create_an_ad_now_html', createad: (link_to t('home.create_new_ad'), new_ad_url) )%></p>
+                <p><%= t('home.create_an_ad_now_html', create_new_ad: (link_to t('home.create_new_ad'), new_ad_url) )%></p>
               </div>
             </div>
 
@@ -113,7 +113,7 @@
       <% if is_demo %>
           <hr />
           <div class="list-group">
-            <i><%= t('home.demo_sidebar_note_html', link: link_to(t('home.admin_panel'), '/user/managerecords#categories')) %></i>
+            <i><%= t('home.demo_sidebar_note_html', admin_panel: link_to(t('home.admin_panel'), '/user/managerecords#categories')) %></i>
           </div>
       <% end %>
 
@@ -144,7 +144,7 @@
     <% if @links.nil? || @links.length == 0 %>
         <!-- If there is no link to display, we span the description section over 2 columns -->
         <div class="col-lg-8">
-          <h2><%= t('home.about_website', website: site_name) %></h2>
+          <h2><%= t('home.about_website', website_name: site_name) %></h2>
             <span>
                 <% @website_description_paragraph.each do |paragraph| %>
                     <p><%= paragraph %></p>
@@ -154,7 +154,7 @@
         </div>
     <% else %>
         <div class="col-lg-4">
-          <h2><%= t('home.about_website', website: site_name) %></h2>
+          <h2><%= t('home.about_website', website_name: site_name) %></h2>
             <span>
                 <% @website_description_paragraph.each do |paragraph| %>
                     <p><%= paragraph %></p>

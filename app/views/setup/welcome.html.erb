@@ -15,11 +15,12 @@
           </div>
 
           <div class="setup-padding">
-            <p><%= t('setup.click_next') %></p>
+            <p><%= t('setup.click_next') %><br>
+            <%= t('setup.back_language_html', here: (link_to t('ad.here'), setup_language_path)) %></p>
           </div>
 
-          <div class="form-actions">
-            <a href="/setup/general" class="btn btn-success"><%= t('setup.next') %></a>
+          <div class="setup-padding">
+            <a href="/setup/general" class="btn btn-success pull-right"><%= t('setup.next') %></a>
           </div>
 
         </div>
