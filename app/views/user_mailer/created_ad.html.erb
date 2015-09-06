@@ -45,7 +45,7 @@
 
 <% if !@user[:is_anon] %>
 <p>
-  <%= t('mailer.manage_ad_html', :href => link_to(t('mailer.admin_panel'), @full_admin_url)) %>
+  <%= t('mailer.manage_ad_html', :admin_panel => link_to(t('mailer.admin_panel'), @full_admin_url)) %>
 </p>
 <% end %>
 

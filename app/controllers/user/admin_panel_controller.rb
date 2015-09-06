@@ -34,13 +34,13 @@ class User::AdminPanelController < ApplicationController
 
         # Show a message if no Mapbox key has been entered, in "Map settings"
         if (setting.key == 'map_box_api_key' && (setting.value == '' || setting.value.nil?))
-          @messages << {text: t('admin.no_mapbox_account_html', href: view_context.link_to('Mapbox', 'http://www.mapbox.com', {target: '_blank'})),
+          @messages << {text: t('admin.no_mapbox_account_html', mapbox_website: view_context.link_to('Mapbox', 'http://www.mapbox.com', {target: '_blank'})),
                         type: 'info'}
         end
 
         # Show a message if no MapQuest key has been entered, in "Map settings"
         if (setting.key == 'mapquest_api_key' && (setting.value == '' || setting.value.nil?))
-          @messages << {text: t('admin.no_mapquest_account_html', href: view_context.link_to('MapQuest Developers', 'http://developer.mapquest.com/web/info/account/app-keys', {target: '_blank'})),
+          @messages << {text: t('admin.no_mapquest_account_html', mapquest_website: view_context.link_to('MapQuest Developers', 'http://developer.mapquest.com/web/info/account/app-keys', {target: '_blank'})),
                         type: 'info'}
         end
 
@@ -199,8 +199,8 @@ class User::AdminPanelController < ApplicationController
         end
       }
 
-      if (params['mapBoxApiKey'] == '' && params['mapQuestApiKey'] == '')
-        # if there is no longer any Mapbox key, we get back to the default map type, osm.
+      if ((params['mapBoxApiKey'] == '' && params['maptype'] == 'mapbox') || (params['mapQuestApiKey'] == '' && params['maptype'] == 'mapquest'))
+        # if there is no longer any Mapbox or MapQuest keys, we get back to the default map type, osm.
         setting_record = Setting.find_by_key('chosen_map')
         setting_record.update_attributes(value: 'osm')
       end

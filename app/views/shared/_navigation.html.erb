@@ -47,9 +47,9 @@
                       <%= t('home.e-mail') %>:<br /><%= f.email_field :email, {} %><br />
                       <%= t('home.password') %>:<br /><%= f.password_field :password, {} %><br />
                       <%= f.submit t('home.sign_in').capitalize, class: 'btn btn-primary btn-xs', style: 'margin-top: 5px' %><br /><br />
-                      <%= t('home.not_have_account_yet_html', signup: "#{link_to t('home.sign_up'), new_registration_path(resource_name)}".html_safe ) %><br />
+                      <%= t('home.not_have_account_yet_html', sign_up_here: "#{link_to t('home.sign_up'), new_registration_path(resource_name)}".html_safe ) %><br />
                       <% if is_demo %>
-                        <br /><span style="font-size: 12px;"><i><%= t('home.demo_instructions_html', link: link_to(t('ad.here'), 'https://github.com/etiennebaque/madloba/wiki/Madloba-demo-instructions', target: '_blank') ) %></i></span>
+                        <br /><span style="font-size: 12px;"><i><%= t('home.demo_instructions_html', here: link_to(t('ad.here'), 'https://github.com/etiennebaque/madloba/wiki/Madloba-demo-instructions', target: '_blank') ) %></i></span>
                       <% end %>
                   <% end %>
                 </div>

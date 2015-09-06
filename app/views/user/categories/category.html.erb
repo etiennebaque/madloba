@@ -139,8 +139,8 @@
                       </p>
                   <% end %>
                   <p>
-                    <i><%= t('admin.category.font_awesome_link_html', href: link_to(t('admin.category.our_selection'), '#', class: 'btn-icon-modal')) %></i><br />
-                    <i><%= t('admin.category.font_awesome_link2_html', href: link_to('Font Awesome', 'http://fortawesome.github.io/Font-Awesome/icons/', target: '_blank')) %></i>
+                    <i><%= t('admin.category.font_awesome_link_html', our_selection: link_to(t('admin.category.our_selection'), '#', class: 'btn-icon-modal')) %></i><br />
+                    <i><%= t('admin.category.font_awesome_link2_html', fa_website: link_to('Font Awesome', 'http://fortawesome.github.io/Font-Awesome/icons/', target: '_blank')) %></i>
                   </p>
                   <div class="form-inline">
                     <%= f.text_field :icon, class: 'form-control', maxlength:'90', autocomplete: 'off',

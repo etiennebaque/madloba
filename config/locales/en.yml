@@ -46,7 +46,7 @@ en:
     create_new_ad: Create a new ad
     sign_in: sign in
     sign_up: Sign up here
-    not_have_account_yet_html: "%{signup} if you don't have an account yet."
+    not_have_account_yet_html: "%{sign_up_here} if you don't have an account yet."
     create_account: create an account
     refinements: Your selection
     delete_all: Delete all
@@ -66,13 +66,13 @@ en:
     location_example: Street name, postal code...
     search: OK
     about: About
-    about_website: About %{website}
+    about_website: About %{website_name}
     links: Links
     your_searched_location: Your searched location
     no_ad: There's no ad at the moment.
-    create_an_ad_now_html: "%{createad} to tell your community what you have to give, or what you're looking for!"
-    about_page: About %{appname}
-    about_description_1_html: "%{appname} is a website powered by %{madloba_link}."
+    create_an_ad_now_html: "%{create_new_ad} to tell your community what you have to give, or what you're looking for!"
+    about_page: About %{website_name}
+    about_description_1_html: "%{website_name} is a website powered by %{madloba_link}."
     about_description_2_html: "%{madloba_link} is an open-source platform that allows you to let your community know about what you want to give away."
     about_description_3: So many (still useful!) objects go to waste all the time! Luckily, as we increasingly live in an open-data and location driven world, we now have the technological means to solve this problem. Madloba will give your community a new way to recycle, give or dispose all "this stuff" :)
     contact_us: Contact us
@@ -86,11 +86,11 @@ en:
     full_not_found_map_position: "Full address not found, map positioned on: %{address}"
     not_found_map_position: Sorry, address not found.
     click_on_map_after: Once general area found, click on the map underneath to select the desired location.
-    demo_sidebar_note_html: (Demo) As an administrator, you can change the colors and the icons of these categories in the %{link}.
+    demo_sidebar_note_html: (Demo) As an administrator, you can change the colors and the icons of these categories in the %{admin_panel}.
     admin_panel: admin panel
     same_area: Ads related to a same area
     update: Update
-    demo_instructions_html: "(Demo) Instructions to login %{link}."
+    demo_instructions_html: "(Demo) Instructions to login %{here}."
     footer_powered_by_html: Powered by %{madloba_link}
     footer_new_powered_by_html: New website powered by %{madloba_link}
     footer_theme_html: Theme from %{charisma}
@@ -213,7 +213,7 @@ en:
     where_pick_up: Where to pick up the items
     where_to_drop: Where to drop the items
     admin_panel: our admin panel.
-    manage_ad_html: "To manage this ad, as well as your previously posted ads, login to %{href}"
+    manage_ad_html: "To manage this ad, as well as your previously posted ads, login to %{admin_panel}"
     thanks: Thanks, and have a good day!
     received_message: You received a reply for your '%{ad_title}' ad on %{site_name}.
     new_ad_object: Your new ad on %{site_name} - '%{ad_title}'
@@ -297,8 +297,8 @@ en:
     general_settings_menu: General settings
     save: Save
     nothing_to_do: Yay! Nothing to worry about :)
-    no_mapbox_account_html: You don't have entered a Mapbox key yet, in "Map settings". You can get one by opening an account on <strong>%{href}</strong>, to get a new map style for your website.
-    no_mapquest_account_html: You don't have entered a MapQuest key yet, in "Map settings". You can get one by opening an account on <strong>%{href}</strong>, to get a new map style for your website.
+    no_mapbox_account_html: You don't have entered a Mapbox key yet, in "Map settings". You can get one by opening an account on <strong>%{mapbox_website}</strong>, to get a new map style for your website.
+    no_mapquest_account_html: You don't have entered a MapQuest key yet, in "Map settings". You can get one by opening an account on <strong>%{mapquest_website}</strong>, to get a new map style for your website.
     no_social: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General settings". Specify some of them to increase your visibility.
     one_category_html: <strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.
     no_website_description: No website description has been written yet, in "General settings". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
@@ -335,7 +335,7 @@ en:
       ad_updated: The ad '%{title}' has been updated.
       error_update: "%{errors} occurred while updating this ad"
       delete: Delete this ad
-      delete_ad_error_html: "Error occurred when updating this ad! Back to %{href}"
+      delete_ad_error_html: "Error occurred when updating this ad! Back to %{manage_ads_page}"
       manage_ads_page: "'Manage your ads' page"
       giving_accepting_title: Giving away/Accepting
       giving_away: Giving away
@@ -356,7 +356,7 @@ en:
       map_notification_exact: Click on the map to locate your exact address.
       location_deleted: The location '%{deleted_location_name}' has been deleted.
       unnamed: unnamed location
-      area_name: "%{area} area"
+      area_name: "%{area_name} area"
       no_ad_tied: No ads are currently tied to this location.
       anonymous_user: (Anonymous user)
     category:
@@ -375,8 +375,8 @@ en:
       marker: Category marker
       icon: Category icon
       currently_selected: Currently selected icon
-      font_awesome_link_html: Pick an icon from %{href}.
-      font_awesome_link2_html: You can also choose an icon from the complete list, in the %{href} library, and type its keyword underneath.
+      font_awesome_link_html: Pick an icon from %{our_selection}.
+      font_awesome_link2_html: You can also choose an icon from the complete list, in the %{fa_website} library, and type its keyword underneath.
       font_awesome_help: Type the name of the icon as you see them on the Font Awesome page (eg. 'fa-bell', 'fa-circle'...)
       item_linked: Items linked to that category
       item_name: Item name
@@ -515,7 +515,7 @@ en:
     map_description_2: "Click also on '+/-' to choose the default level of zoom."
     gmail_note: "If you've set up a Gmail address as your SMTP username, you need to let Google know about it. So before submitting this form:"
     gmail_note2: Open a new tab right now, and log into your Gmail SMTP email account (log out from any other Gmail account).
-    gmail_note3_html: Notify Google that you want to use this Gmail account with a third-party website, by clicking %{link}.
+    gmail_note3_html: Notify Google that you want to use this Gmail account with a third-party website, by clicking %{here}.
     gmail_link_here: here
     gmail_note4: Once you're done, you can continue with the submission of this form.
     confirm_email: If the information entered above in this form is correct, and after you click "Next", a confirmation e-mail will be sent to you.
@@ -526,13 +526,13 @@ en:
     option_s3: Images will directly uploaded to Amazon S3.
     option_server: Images will be stored on the same server where this Madloba website is deployed.
     image_description: When users create ads, they'll have the choice to attach an image with it.
-    image_server_or_s3_html: "This image can either be stored on your server, or on %{link}"
+    image_server_or_s3_html: "This image can either be stored on your server, or on %{s3_link}"
     image_s3_only_html: "Ad images will be stored on %{s3_link}"
     image_no_storage: Alternatively, you can choose not to have any image uploaded at all.
     image_strategy: Image storage strategy
     image_select_option: Please select below which photo storage strategy you'd like to choose.
     install_guide: the installation guide
-    amazon_s3_warning_html: If you're choosing Amazon S3, make sure you've set up the relevant environment variables correctly (check out %{link} - section about the set_environment_variables script - for more details).
+    amazon_s3_warning_html: If you're choosing Amazon S3, make sure you've set up the relevant environment variables correctly (check out %{install_guide} - section about the set_environment_variables script - for more details).
     image_error: A problem occured while saving your settings. Please refresh this page and try again in a moment.
   general_js:
     adblock_warning: Warning! Use of AdBlock
