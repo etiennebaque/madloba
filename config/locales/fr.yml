@@ -60,7 +60,7 @@ fr:
     create_new_ad: Créer annonce
     sign_in: S'identifier
     sign_up: Enregistrez-vous ici
-    not_have_account_yet_html: "%{signup} si vous n'avez pas encore de compte."
+    not_have_account_yet_html: "%{sign_up_here} si vous n'avez pas encore de compte."
     create_account: Créer un compte
     refinements: Votre sélection
     delete_all: Effacer tout
@@ -80,13 +80,13 @@ fr:
     location_example: Nom de rue, code postal...
     search: OK
     about: A propos
-    about_website: A propos de %{website}
+    about_website: A propos de %{website_name}
     links: Liens
     your_searched_location: Votre recherche
     no_ad: Pas d'annonce en ce moment.
-    create_an_ad_now_html: "%{createad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
-    about_page: A propos de %{appname}
-    about_description_1_html: "%{appname} est un site utilisant %{madloba_link}."
+    create_an_ad_now_html: "%{create_new_ad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
+    about_page: A propos de %{website_name}
+    about_description_1_html: "%{website_name} est un site utilisant %{madloba_link}."
     about_description_2_html: "%{madloba_link} est un projet open-source qui vous permet de promouvoir à votre communauté ce que vous avez à donner."
     about_description_3: "Tellement d'objects partent constamment à la poubelle, alors qu'ils sont toujours utilisables ! Heureusement, comme nous vivons de plus en plus dans un monde connecté par des données de plus en plus ouvertes, nous avons maintenant les moyens technologiques de résoudre ce problème. Madloba permettra à votre communauté de recycler ou de donner tout ce qu'elle a à réutiliser."
     contact_us: Contactez-nous
@@ -100,11 +100,11 @@ fr:
     full_not_found_map_position: "Adresse complète non trouvée, carte positionnée sur: %{address}"
     not_found_map_position: Désolé, adresse non trouvée.
     click_on_map_after: "Une fois que la zone générale a été trouvée, cliquez sur la carte ci-dessous pour sélectioner l'endroit désiré."
-    demo_sidebar_note_html: "(Démo) En tant qu'administrateur, vous pouvez changer les couleurs et les icônes de ces catégories dans le %{link}."
+    demo_sidebar_note_html: "(Démo) En tant qu'administrateur, vous pouvez changer les couleurs et les icônes de ces catégories dans le %{admin_panel}."
     admin_panel: "panneau d'administration"
     same_area: Annonces groupées par zone.
     update: "Mise à jour"
-    demo_instructions_html: "(Démo) Indications pour s'identifier %{link}."
+    demo_instructions_html: "(Démo) Indications pour s'identifier %{here}."
     footer_powered_by_html: Délivré par %{madloba_link}
     footer_new_powered_by_html: Nouveau site délivré par %{madloba_link}
     footer_theme_html: "Thème : %{charisma}"
@@ -227,7 +227,7 @@ fr:
     where_pick_up: Où trouver les objets
     where_to_drop: Où déposer les objets
     admin_panel: "notre panneau d'administration."
-    manage_ad_html: "Pour modifier cette annonce, ainsi que les annonces créées auparavant, connectez-vous sur %{href}"
+    manage_ad_html: "Pour modifier cette annonce, ainsi que les annonces créées auparavant, connectez-vous sur %{admin_panel}"
     thanks: "Merci, et passez une bonne journée ! :)"
     received_message: "Vous avez reçu une réponse pour votre annonce '%{ad_title}' sur %{site_name}."
     new_ad_object: Votre nouvelle annonce sur %{site_name} - '%{ad_title}'
@@ -311,8 +311,8 @@ fr:
     general_settings_menu: Paramètres du site
     save: Enregistrer
     nothing_to_do: Super, rien à faire ! :)
-    no_mapbox_account_html: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{href}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
-    no_mapquest_account_html: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{href}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+    no_mapbox_account_html: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapbox_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+    no_mapquest_account_html: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapquest_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
     no_social: Vous n'avez pas encore entré d'adresses de réseaux sociaux (Facebook, Twitter, Pinterest), dans "Paramètres du site". Entrez vos différents profils pour augmenter votre visibilité.
     one_category_html: <strong>Seulement une seule catégorie est disponible</strong>. Veuillez créer quelques catégories pour permettres aux utilisateurs de filtrer leur recherche.
     no_website_description: Aucune description de site web n'a été écrite, dans "Paramètres du site". Expliquez aux utilisateurs le but de votre site Madloba, en écrivant un texte court. Cette description apparaitra en page de la page d'accueil, ainsi que dans la page "A propos".
@@ -349,7 +349,7 @@ fr:
       ad_updated: "L'annonce '%{title}' a été mise à jour."
       error_update: "%{errors} lors de la mise à jour de l'annonce"
       delete: Supprimer cette annonce
-      delete_ad_error_html: "Erreur lors de la mise à jour de cette annonce ! Retour à %{href}"
+      delete_ad_error_html: "Erreur lors de la mise à jour de cette annonce ! Retour à %{manage_ads_page}"
       manage_ads_page: "Gérer annonces"
       giving_accepting_title: Donne/Recherche
       giving_away: Donne
@@ -370,7 +370,7 @@ fr:
       map_notification_exact: Cliquez sur la carte pour localiser votre adresse exacte.
       location_deleted: "L'emplacement '%{deleted_location_name}' a été supprimé."
       unnamed: emplacement sans nom
-      area_name: "zone %{area}"
+      area_name: "zone %{area_name}"
       no_ad_tied: "Pas d'annonce actuellement liée à cet emplacement."
       anonymous_user: (Utilisateur anonyme)
     category:
@@ -389,8 +389,8 @@ fr:
       marker: Marqueur
       icon: Icône
       currently_selected: Icône choisie
-      font_awesome_link_html: Choisissez une icône de %{href}.
-      font_awesome_link2_html: Vous pouvez aussi choisir une icône parmi la liste complète dans la librarie %{href}, en tapant son mot-clé ci-dessous.
+      font_awesome_link_html: Choisissez une icône de %{our_selection}.
+      font_awesome_link2_html: Vous pouvez aussi choisir une icône parmi la liste complète dans la librarie %{fa_website}, en tapant son mot-clé ci-dessous.
       font_awesome_help: "Tapez le nom de l'icône tel que vous le voyez sur la page Font Awesome (ex : 'fa-bell', 'fa-circle'...)"
       item_linked: Objets liés à cette catégorie
       item_name: "Nom de l'objet"
@@ -529,7 +529,7 @@ fr:
     map_description_2: "Cliquez aussi sur '+/-' pour régler le niveau de zoom par défaut."
     gmail_note: "Si vous avez chiosi une adresse GMail en tant que SMTP, vous devez avertir Google à ce sujet. Avant de soumettre ce formulaire :"
     gmail_note2: Ouvrez un nouvel onglet maintenant, et connectez-vous sur votre compte email GMail utilisé en tant que SMTP (déconnectez-vous de tout autre compte Gmail).
-    gmail_note3_html: Signalez à Google que vous souhaitez utiliser ce compte Gmail avec votre site Madloba, en cliquant %{link}.
+    gmail_note3_html: Signalez à Google que vous souhaitez utiliser ce compte Gmail avec votre site Madloba, en cliquant %{here}.
     gmail_link_here: ici
     gmail_note4: Une fois que vous avez terminé, vous pouvez continuer avec la soumission de ce formulaire.
     confirm_email: Si les informations entrées ci-dessus sont correctes, et après avoir cliqué "Continuer", un email de confirmation vous sera envoyé.
@@ -540,13 +540,13 @@ fr:
     option_s3: Les images seront directement téléchargées sur Amazon S3.
     option_server: Les images seront storées sur le même serveur que ce site Madloba.
     image_description: Quand les utilisateurs créeront des annonces, ils auront le choix de joindre une image.
-    image_server_or_s3_html: "Cette image peut être storée soit sur votre serveur, soit sur %{link}"
+    image_server_or_s3_html: "Cette image peut être storée soit sur votre serveur, soit sur %{s3_link}"
     image_s3_only_html: "Les images de cette annonce seront storées sur %{s3_link}"
     image_no_storage: Vous pouvez également choisir de ne pas télécharger d'image du tout.
     image_strategy: "Stratégie de storage d'images."
     image_select_option: Veuillez choisir quelle stratégie de storage de photo vous convient.
     install_guide: le guide d'installation
-    amazon_s3_warning_html: Si vous choisissez Amazon S3, soyez sûr que vous avez spécifié les variables d'environnement correctement (Veuillez consulter %{link} - section intitulée 'the set_environment_variables script' - pour plus de détails).
+    amazon_s3_warning_html: Si vous choisissez Amazon S3, vérifiez que vous avez spécifié les variables d'environnement correctement (Veuillez consulter %{install_guide} - section intitulée 'the set_environment_variables script' - pour plus de détails).
     image_error: Erreur lors de l'enregistrement de vos paramètres. Veuillez recharger cette page et essayez à nouveau dans un moment.
   general_js:
     adblock_warning: Attention ! Utilisation de AdBlock

@@ -72,7 +72,7 @@
                     </ul>
                 <% else %>
                     <% if flash[:error_delete_ad] %>
-                        <%= t('admin.ad.delete_ad_error_html', href: link_to(t('admin.ad.manage_ads_page'), '/user/manageads')) %>
+                        <%= t('admin.ad.delete_ad_error_html', manage_ads_page: link_to(t('admin.ad.manage_ads_page'), '/user/manageads')) %>
                     <% end %>
                 <% end %>
               </div>
