@@ -79,7 +79,7 @@
       <!-- /.nav-collapse -->
   <% else %>
       <!-- Setup pages - display the current step -->
-      <% if @current_step > 0 %>
+      <% if @current_step && @current_step > 0 %>
         <span class="navbar-brand"><%= t('setup.step_html', current_step: @current_step) %></span>
       <% end %>
   <% end %>
