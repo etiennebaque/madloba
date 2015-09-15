@@ -1,8 +1,15 @@
 #!/bin/bash
 
-## Install Ruby 2.1.2
-rbenv install 2.1.2
-rbenv global 2.1.2
+## Install Ruby
+
+#--------------------------------------
+
+current_ruby_version='2.2.2'
+
+#--------------------------------------
+
+rbenv install "$current_ruby_version"
+rbenv global "$current_ruby_version"
 ruby -v
 
 echo "gem: --no-ri --no-rdoc" > ~/.gemrc
@@ -11,6 +18,6 @@ gem install bundler --no-ri --no-rdoc
 source ~/.gemrc
 
 echo "------------------------------"
-echo "ruby 2.1.2 has been installed."
+echo "ruby $current_ruby_version has been installed."
 echo "------------------------------"
 
