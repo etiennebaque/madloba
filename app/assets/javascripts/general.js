@@ -115,6 +115,7 @@ $(document).ready(function() {
                 preprocessData: function(data){
                     var items = [];
                     var len = data.length;
+                    // Populating the item drop-down box
                     for(var i = 0; i < len; i++){
                         var item = data[i];
                         items.push(
