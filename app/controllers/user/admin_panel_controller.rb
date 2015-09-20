@@ -217,7 +217,11 @@ class User::AdminPanelController < ApplicationController
   def areasettings
     authorize :admin, :areasettings?
 
-    @mapSettings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, CLICKABLE_MAP_AREA_MARKER)
+    @mapSettings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
+
+    # Adding this flag to add leaflet draw tool to the map, on the "Area settings" page.
+    # Drawing tool added in initLeafletMap(), in custom-leaflet.js
+    @mapSettings['page'] = 'areasettings'
 
     @districts = District.all.order('name asc')
     @districts_hash = {}
@@ -283,6 +287,22 @@ class User::AdminPanelController < ApplicationController
 
     render json: {'status' => message}
   end
+
+  # Save a district after it has been drawn on a map and named, on the "Area settings" page.
+  def save_district
+    bounds_geojson = params[:bounds]
+    district_name = params[:name]
+
+    d = District.new(name: district_name, bounds: bounds_geojson)
+    if d.save
+      message = 'ok'
+    else
+      message = 'Error occured while saving district. Please try again later.'
+    end
+
+    render json: {'status' => message, 'district_name' => district_name}
+
+  end  
 
   def getAreaSettings
     code_and_area = Setting.where(key: %w(postal_code_length area_length)).pluck(:value)

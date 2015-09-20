@@ -44,7 +44,7 @@ $(document).ready(function(){
 
 
     // Area settings page: JQuery snippet to add text fields dynamically, when "Add district..." link is clicked.
-    var wrapper         = $("#dynamic_wrapper"); //Fields wrapper
+    /*var wrapper         = $("#dynamic_wrapper"); //Fields wrapper
     var add_button      = $("#dynamic_add_link"); //Add button ID
 
     $(add_button).click(function(e){ //on add input button click
@@ -175,7 +175,7 @@ $(document).ready(function(){
         districts[index_to_remove]['to_delete'] = true;
         line_to_remove.remove();
     });
-
+    */
 
     // Character counter (class 'textarea_count'), for text area, in 'General settings'.
     $( ".textarea_count" ).keyup(function() {
@@ -214,7 +214,7 @@ $(document).ready(function(){
  * Function that adds a district to the list of districts, in the "Area settings" page (admin panel)
  * @param e
  */
-function add_district(e){
+/*function add_district(e){
     var latitude_text = $(".latitude_text").first().text();
     var longitude_text = $(".longitude_text").first().text();
 
@@ -236,4 +236,4 @@ function add_district(e){
     $(".dynamic_remove").removeClass('disabled');
     $('.remove-existing-district').removeClass('disabled');
     $("#dynamic_add_link").removeClass('disabled');
-}
+}*/

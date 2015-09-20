@@ -252,9 +252,6 @@ GEM
       terminal-table (>= 1.5.1)
     inflecto (0.0.2)
     ipaddress (0.8.0)
-    jbuilder (1.5.3)
-      activesupport (>= 3.0.0)
-      multi_json (>= 1.2.0)
     jquery-rails (4.0.5)
       rails-dom-testing (~> 1.0)
       railties (>= 4.2.0)
@@ -454,7 +451,6 @@ DEPENDENCIES
   guard-rspec
   httparty (~> 0.13.1)
   i18n-tasks (~> 0.8.3)
-  jbuilder (~> 1.5.3)
   jquery-rails
   launchy
   mailcatcher

@@ -99,6 +99,51 @@ function initLeafletMap(map_settings_array){
         });
     }
 
+    // Adding specific events on the 'Area settings' page, needed when drawing and saving districts. 
+    if (map_settings_array['page'] == 'areasettings'){
+        drawnItems = L.featureGroup().addTo(map);
+        var district_bounds;
+        var layer;
+
+        // Adding drawing control panel to the map
+        map.addControl(new L.Control.Draw({
+            edit: { featureGroup: drawnItems }
+        }));
+
+        // Event to activate 'Save district' button when district name not empty.
+        $('#map').on('keyup', '.save_district_text', function(){
+            if ($('.save_district_text').val().length > 0){
+                $('.save_district').removeClass('disabled');
+            }else{
+                $('.save_district').addClass('disabled');
+            }
+        });
+
+        // Saving district drawing (bounds) and name.
+        $('#map').unbind('click').on('click', '.save_district', function(){
+            var district_name = $('.save_district_text').val();
+            $.post("/user/areasettings/save_district", {bounds: district_bounds, name: district_name}, function (data){
+                if (data.status == 'ok'){
+                    layer.bindPopup(district_name);
+                }else{
+                    alert(data.status);
+                }
+            });
+        });
+
+        // Events to trigger, once the polygon (district) has been drawn.
+        map.on('draw:created', function(event) {
+            layer = event.layer;
+
+            drawnItems.addLayer(layer);
+
+            layer.bindPopup("<input type='text' class='save_district_text' style='margin-right:5px;' placeholder='District name'><button type='button' class='btn btn-xs btn-success save_district disabled'>Save district</button>");
+            district_bounds = layer.toGeoJSON();
+
+            layer.openPopup(layer.getBounds().getCenter());
+        });
+    }
+
 }
 
 /**
