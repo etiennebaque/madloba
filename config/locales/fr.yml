@@ -434,6 +434,7 @@ fr:
       area_district: Zone définie par un quartier
       map_description: Cliquez sur 'Ajouter quartier', tapez un nom pour ce nouveau quartier, et cliquez sur la carte pour définir son emplacement.
       error_update_district: Erreur lors de la mise à jour des quartiers. Veuillez réessayer plus tard.
+      error_save_district: Erreur lors de la sauvegarde de ce quartier. Veuillez réessayer plus tard.
       district_name: Nom du quartier
       latitude: Latitude
       longitude: Longitude
@@ -587,3 +588,18 @@ fr:
     items_searched: "Objets recherchés :"
     image_not_available: Image pas encore disponible.
     select_item: Choisissez un objet ci-dessous pour plus de détails.
+    cancel_drawing: Cancel drawing
+    cancel: Cancel
+    delete_last_point_drawn: Delete last point drawn
+    delete_last_point: Delete last point
+    draw_district: Draw a district
+    start_draw_district: Click to start drawing district.
+    continue_draw_district: Click to continue drawing district.
+    click_first_point: Click first point to close this district.
+    error: "Error:"
+    edges_cannot: "district edges cannot cross!"
+    edit_district: Edit district
+    no_edit_district: No district to edit
+    delete_district: Delete district
+    no_district_delete: No district to delete
+    drag_handles: Drag handles to edit district boundaries. Click on the area to edit its name.

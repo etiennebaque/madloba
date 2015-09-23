@@ -12,8 +12,8 @@
         }
     </style>
 
-    <script>
-        var districts = <%= raw @districts_hash.to_json %>
+    <script>s
+        var districts = <%= raw @districts.to_json %>
         var new_district_index = <%= @district_index %>
     </script>
 
@@ -126,43 +126,6 @@
                       <div id="map-canvas-wrapper">
                         <div id="map"></div>
                       </div>
-                    </div>
-                  </div>
-
-                  <!-- District table -->
-                  <div class="form-group col-xs-12">
-                    <div id="dynamic-table" class="col-lg-9 col-md-12">
-                      <table class="table table-striped">
-                        <thead>
-                        <tr>
-                          <th><%= t('admin.area_settings.district_name') %></th>
-                          <th><%= t('admin.area_settings.latitude') %></th>
-                          <th><%= t('admin.area_settings.longitude') %></th>
-                          <th></th>
-                        </tr>
-                        </thead>
-                        <tbody id="district_body">
-                        <% @districts.each do |district| %>
-                            <tr id="<%= district.id %>">
-                              <td class="district_name vert-align"><%= district.name %></td>
-                              <td class="vert-align"><%= district.latitude %></td>
-                              <td class="vert-align"><%= district.longitude %></td>
-                              <td class="vert-align">
-                                <button type="button" id="<%= district.id %>" class="dynamic_update btn btn-info btn-xs"><%= t('home.update') %></button>
-                                <a href="#" class="btn remove-existing-district"><i class="glyphicon glyphicon-remove" style="color: red;"></i></a>
-                              </td>
-                            </tr>
-                        <% end %>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  <!-- "Add district" link -->
-                  <div class="form-group">
-                    <div id="dynamic_wrapper"></div>
-                    <div class="form-inline">
-                      <a id="dynamic_add_link" class="btn btn-info" href="#"><i class="glyphicon glyphicon-plus"></i> <%= t('admin.area_settings.add_district') %></a>
                     </div>
                   </div>
 

@@ -223,10 +223,10 @@ class User::AdminPanelController < ApplicationController
     # Drawing tool added in initLeafletMap(), in custom-leaflet.js
     @mapSettings['page'] = 'areasettings'
 
-    @districts = District.all.order('name asc')
+    @districts_old = District.all.order('name asc')
     @districts_hash = {}
     @district_index = 0
-    @districts.each do |district|
+    @districts_old.each do |district|
       @districts_hash[district.id] = {name: district.name, latitude: district.latitude, longitude: district.longitude}
       if district.id >= @district_index
         # @district_index will be used as a key for @district_hash, when adding new district dynamically.
@@ -234,6 +234,8 @@ class User::AdminPanelController < ApplicationController
       end
     end
 
+    @districts = District.where('id >= 9')
+    
     @area_types = @mapSettings['area_type'].split(',')
 
   end
@@ -259,50 +261,75 @@ class User::AdminPanelController < ApplicationController
     redirect_to user_areasettings_path
 
   end
-
-  # Called via Ajax, when updating district values, in the area setting page.
-  def update_districts
-    districts = params[:data]
-    message = ''
-    districts.each do |id,district|
-      this_district = District.find_by_id(id)
-      if (this_district)
-        if district['to_delete']
-          # We delete this district
-          this_district.delete
-        else
-          # We update an existing district
-          this_district.update_attributes(name: district['name'], latitude: district['latitude'], longitude: district['longitude'])
-        end
-      else
-        this_district = District.new(district)
-      end
-      if this_district.save
-        message = 'ok'
-      else
-        message = t('admin.area_settings.error_update_district')
-        break
-      end
-    end
-
-    render json: {'status' => message}
-  end
-
-  # Save a district after it has been drawn on a map and named, on the "Area settings" page.
+  
+  # Save/update a district after it has been drawn on a map and named, on the "Area settings" page.
   def save_district
     bounds_geojson = params[:bounds]
     district_name = params[:name]
 
+    # Creation of district
     d = District.new(name: district_name, bounds: bounds_geojson)
     if d.save
       message = 'ok'
     else
-      message = 'Error occured while saving district. Please try again later.'
+      message = t('admin.area_settings.error_save_district')
+    end
+  
+    render json: {'status' => message, 'district_name' => district_name}
+  end
+
+  # Updating the name of an existing district
+  def update_district_name
+    d = District.find(params[:id].to_i)
+    if d && d.update_attributes(name: params[:name])
+      message = 'ok'
+    else
+      #message = t('admin.area_settings.error_save_district')
+      message = d.errors
     end
 
-    render json: {'status' => message, 'district_name' => district_name}
+    render json: {'status' => message}
+  end   
 
-  end  
+  def update_districts
+    districts = JSON.parse(params[:districts])
+    message = ''
+    districts.each do |district|
+      # Editing an existing district at a time.
+      district_id = district['properties']['id']
+      district_name = district['properties']['name']
+      if district_id
+        district['properties'] = {}
+        d = District.find(district_id.to_i)
+        if d.update_attributes(name: district_name, bounds: district)
+          message = 'ok'
+        else
+          #message = t('admin.area_settings.error_save_district')
+          message = d.errors
+          break
+        end
+      end
+    end
+
+    render json: {'status' => message}
+
+  end 
+
+  def delete_districts
+    ids_to_delete = params[:ids]
+    message = ''
+    ids_to_delete.each do |id|
+      d = District.find(id)
+      if d.delete
+        message = 'ok'
+      else
+        message = 'Error occured when deleting a district. Please try again later.'
+      end  
+    end  
+
+    render json: {'status' => message}
+
+  end 
 
   def getAreaSettings
     code_and_area = Setting.where(key: %w(postal_code_length area_length)).pluck(:value)

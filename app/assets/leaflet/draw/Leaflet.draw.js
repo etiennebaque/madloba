@@ -78,13 +78,13 @@ L.drawLocal = {
 				edit: 'Edit district',
 				editDisabled: 'No district to edit',
 				remove: 'Delete district',
-				removeDisabled: 'No layers to delete'
+				removeDisabled: 'No district to delete'
 			}
 		},
 		handlers: {
 			edit: {
 				tooltip: {
-					text: 'Drag handles, or marker to edit feature.',
+					text: 'Drag handles to edit district boundaries. Click on the area to edit its name.',
 					subtext: 'Click cancel to undo changes.'
 				}
 			},

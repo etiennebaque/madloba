@@ -420,6 +420,7 @@ en:
       area_district: Area defined by a district
       map_description: Click on the 'Add district' link, type a name for this new district, and click on the map to define its location.
       error_update_district: An server error occurred while updating districts. Please try again later.
+      error_save_district: An server error occurred while saving this district. Please try again later.
       district_name: District name
       latitude: Latitude
       longitude: Longitude
@@ -573,3 +574,18 @@ en:
     items_searched: "Item(s) being searched for:"
     image_not_available: Image not available yet.
     select_item: Select an item below for more details.
+    cancel_drawing: Cancel drawing
+    cancel: Cancel
+    delete_last_point_drawn: Delete last point drawn
+    delete_last_point: Delete last point
+    draw_district: Draw a district
+    start_draw_district: Click to start drawing district.
+    continue_draw_district: Click to continue drawing district.
+    click_first_point: Click first point to close this district.
+    error: "Error:"
+    edges_cannot: "district edges cannot cross!"
+    edit_district: Edit district
+    no_edit_district: No district to edit
+    delete_district: Delete district
+    no_district_delete: No district to delete
+    drag_handles: Drag handles to edit district boundaries. Click on the area to edit its name.

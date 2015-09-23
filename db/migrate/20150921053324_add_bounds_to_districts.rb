@@ -1,5 +1,5 @@
 class AddBoundsToDistricts < ActiveRecord::Migration
   def change
-    add_column :districts, :bounds, :jsonb
+    add_column :districts, :bounds, :json
   end
 end
