@@ -95,6 +95,7 @@ en:
     footer_new_powered_by_html: New website powered by %{madloba_link}
     footer_theme_html: Theme from %{charisma}
     log_out: Log out
+    show_ads_districts: Show ads in districts
     error:
       one: error
       more: errors

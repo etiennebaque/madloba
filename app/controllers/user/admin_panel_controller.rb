@@ -277,7 +277,8 @@ class User::AdminPanelController < ApplicationController
       style = STYLES[:error]
     end
   
-    render json: {'status' => status, 'id' => d.id, 'message' => message, 'style' => style, 'district_name' => district_name}
+    render json: {'status' => status, 'id' => d.id, 'message' => message, 'style' => style, 
+      'district_name' => district_name, 'district_color' => DISTRICT_COLOR}
   end
 
   # Updating the name of an existing district

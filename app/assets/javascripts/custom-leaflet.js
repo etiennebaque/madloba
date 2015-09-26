@@ -170,22 +170,21 @@ function putLocationMarkers(){
         })
     }
 
-    // Snippet that create markers, to represent ads tied to district-type location.
+    // Snippet that creates markers, to represent ads tied to district-type location.
     if (locations_district != null && Object.keys(locations_district).length > 0){
-        Object.keys(locations_district).forEach(function (district_id) {
-            var locations = locations_district[district_id];
-            var district_name = area_geocodes[district_id]['name'];
+        var drawn_districts = L.featureGroup().addTo(map);
 
-            var popup_html_text = createPopupHtmlArea(gon.vars['in_this_district'] + " (<b>"+district_name+"</b>)<br /><br />", locations, 'district', district_id);
+        // Drawing districts in this function by default, when home page loads.
+        drawDistrictsOnMap(drawn_districts, locations_district);
 
-            marker = new L.marker(
-                [area_geocodes[district_id]['latitude'],area_geocodes[district_id]['longitude']],
-                {icon: areaIcon, title: area_geocodes[district_id]['name']}
-            );
+        // Adding event to show/hide these districts from the checkbox in the guided navigation.
+        /*$('#show_area_id').is(':checked') {
+            // Drawing districts in this function, when checkbox is checked.
+            drawDistrictsOnMap(drawn_districts, locations_district);
+        }else{
+            drawn_districts,removeLayers();            
+        }*/    
 
-            marker.bindPopup(popup_html_text);
-            markers.addLayer(marker);
-        })
     }
 
     // Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
@@ -217,7 +216,6 @@ function putLocationMarkers(){
 
     // Adding all the markers to the map.
     map.addLayer(markers);
-
 }
 
 
@@ -252,6 +250,29 @@ function createPopupHtml(first_sentence, ad, index){
 
     return result;
 }
+
+/**
+ * This function draws districts (where at least a current is included) 
+ * on the map of the home page.
+ */
+ function drawDistrictsOnMap(drawn_districts, locations_district){
+    Object.keys(locations_district).forEach(function (district_id) {
+        var locations = locations_district[district_id];
+        var district_name = area_geocodes[district_id]['name'];
+        var district_bounds = area_geocodes[district_id]['bounds'];
+
+        var popup_html_text = createPopupHtmlArea(gon.vars['in_this_district'] + " (<b>"+district_name+"</b>)<br /><br />", locations, 'district', district_id);
+
+        // Adding the districts (which have ads) to the home page map.
+        L.geoJson(JSON.parse(district_bounds), {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(popup_html_text);
+                layer.setStyle({color: district_color});
+                drawn_districts.addLayer(layer);
+            }
+        });
+    })
+ }
 
 /**
  * Creates the text to be shown in a marker popup,
@@ -512,7 +533,7 @@ function initMapOnAreaSettings(){
             L.geoJson(districts[i], {
                 onEachFeature: function (feature, layer) {
                     layer.bindPopup(districts[i]['properties']['name']);
-                    layer.setStyle({color: '#6ca585'});
+                    layer.setStyle({color: district_color});
                     drawnItems.addLayer(layer);
                 }
             });
@@ -560,7 +581,7 @@ function initMapOnAreaSettings(){
                 L.geoJson(district_bounds, {
                     onEachFeature: function (feature, layer) {
                         layer.bindPopup(district_name);
-                        layer.setStyle({color: '#6ca585'});
+                        layer.setStyle({color: data.district_color});
                         drawnItems.addLayer(layer);
                     }
                 });

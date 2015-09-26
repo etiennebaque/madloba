@@ -44,6 +44,10 @@ MARKER_COLORS = {
     'red' => '#d63e2a',
 }
 
+# Color used to draw districts and postal code areas on map
+DISTRICT_COLOR = '#6ca585';
+POSTAL_CODE_AREA_COLOR = '#6ca585';
+
 # Selection of Font-Awesome icons, to be displayed in popup, when editing categories.
 ICON_SELECTION =
     %w(fa-anchor fa-archive fa-automobile fa-beer fa-bell-o fa-bicycle fa-binoculars fa-birthday-cake fa-book

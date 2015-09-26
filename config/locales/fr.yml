@@ -109,6 +109,7 @@ fr:
     footer_new_powered_by_html: Nouveau site délivré par %{madloba_link}
     footer_theme_html: "Thème : %{charisma}"
     log_out: Déconnexion
+    show_ads_districts: Afficher quartiers
     error:
       one: erreur
       more: erreurs

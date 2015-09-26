@@ -168,7 +168,7 @@ class HomeController < ApplicationController
     if (@locations_district && @locations_district.length > 0)
       districts = District.where(id: @locations_district.keys)
       districts.each do |district|
-        area_geocodes[district.id] = {'name' => district.name, 'latitude' => district.latitude, 'longitude' => district.longitude}
+        area_geocodes[district.id] = {'name' => district.name, 'bounds' => district.bounds}
       end
     end
 

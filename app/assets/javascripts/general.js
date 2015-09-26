@@ -11,7 +11,7 @@ $(document).ready(function() {
         '<p>'+gon.vars["adblock_turnoff"]+'</p>' +
         '</div>');
     }
-    // Initially created in 'application.html.erb' layout, this test div is now removed.
+    // Initially created in 'application.html.erb' layout, this div is now removed.
     $("#ad-block").remove();
 
     // Setup pages - event for modal window on Map page.
