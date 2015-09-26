@@ -101,147 +101,7 @@ function initLeafletMap(map_settings_array){
 
     // Adding specific events on the 'Area settings' page, needed when drawing and saving districts. 
     if (map_settings_array['page'] == 'areasettings'){
-        drawnItems = L.featureGroup().addTo(map);
-        var district_bounds;
-        var layer;
-
-        // Adding drawing control panel to the map
-        map.addControl(new L.Control.Draw({
-            edit: { featureGroup: drawnItems }
-        }));
-
-        // Adding existing districts to the map
-        for (var i=0; i<districts.length; i++){
-            // Adding the district id and name to the geoJson properties.
-            districts[i]['bounds']['properties']['id'] = districts[i].id;
-            districts[i]['bounds']['properties']['name'] = districts[i].name;
-
-            L.geoJson(districts[i]['bounds'], {
-                onEachFeature: function (feature, layer) {
-                    layer.bindPopup(districts[i]['name']);
-                    layer.setStyle({color: '#6ca585'});
-                    drawnItems.addLayer(layer);
-                }
-            });
-        }
-
-        // Event to activate 'Save district' button when district name not empty.
-        $('#map').on('keyup', '.save_district_text', function(){
-            if ($('.save_district_text').val().length > 0){
-                $('.save_district').removeClass('disabled');
-            }else{
-                $('.save_district').addClass('disabled');
-            }
-        });
-
-        // Events triggered once the polygon (district) has been drawn.
-        map.on('draw:created', function(e) {
-            layer = e.layer;
-
-            drawnItems.addLayer(layer);
-
-            // Text field and "Save district" button to show up in the popup.
-            layer.bindPopup("<input type='text' class='save_district_text' style='margin-right:5px;' placeholder='District name'><button type='button' class='btn btn-xs btn-success save_district disabled'>Save district</button>");
-            district_bounds = layer.toGeoJSON();
-
-            layer.openPopup(layer.getBounds().getCenter());
-        });
-
-        // Necessity to unbind click on map, to make the "on click" event right below work.
-        $('#map').unbind('click');
-
-        // Saving district drawing (bounds) and name.
-        $('#map').on('click', '.save_district', function(){
-            var district_name = $('.save_district_text').val();
-            $.post("/user/areasettings/save_district", {bounds: JSON.stringify(district_bounds), name: district_name}, function (data){
-                if (data.status == 'ok'){
-                    layer.setStyle({color: '#6ca585'});
-                    layer.bindPopup(district_name);
-                }else{
-                    alert(data.status);
-                }
-            });
-        });
-
-        // Update district name into the GeoJSON properties hash.
-        $('#map').on('click', '.update_district', function(){
-            var new_district_name = $('.update_district_text').val();
-            var district_id = $('.update_district_text').attr('id');
-
-            $.post("/user/areasettings/update_district_name", {id: district_id, name: new_district_name}, function (data){
-                if (data.status == 'ok'){
-                    $('.district_notif').html('Name saved!');
-                }else{
-                    alert(JSON.stringify(data.status));
-                }
-            });
-
-            // Going through the districts and checking which one to update.
-            for (var i=0; i<districts.length; i++){
-                if (district_id == districts[i]['bounds']['properties']['id']){
-                    districts[i]['bounds']['properties']['name'] = new_district_name;
-                    break;
-                }
-            }
-        });
-
-        // When starting to edit a district, create new popup for each district with current name in text field.
-        map.on('draw:editstart', function(e){
-            drawnItems.eachLayer(function (layer) {
-                district_bounds = layer.toGeoJSON();
-                layer.bindPopup("<input type='text' id='"+district_bounds['properties']['id']+"' class='update_district_text' style='margin-right:5px;' placeholder='District name' value='"+district_bounds['properties']['name']+"'><button type='button' id='save_"+district_bounds['properties']['id']+"' class='btn btn-xs btn-success update_district'>OK</button><br /><div class='district_notif'></div>"); 
-            });    
-
-        });
-
-        // After saving new name of district, remove the text input and display new name as text only.
-        map.on('draw:editstop', function(e){
-            drawnItems.eachLayer(function (layer) {
-                district_bounds = layer.toGeoJSON();
-                layer.bindPopup(district_bounds['properties']['name']);
-            });    
-
-        });
-
-        // Event triggered when polygon (district) has been edited, and "Save" has been clicked.
-        map.on('draw:edited', function (e) {
-            var layers = e.layers;
-            var count = 1;
-            var districts = [];
-            layers.eachLayer(function (layer) {
-                district_bounds = layer.toGeoJSON();
-                districts.push(district_bounds);
-            });
-
-            $.post("/user/areasettings/update_districts", {districts: JSON.stringify(districts)}, function (data){
-                if (data.status == 'ok'){
-                    alert("Districts updated.");
-                }else{
-                    alert(JSON.stringify(data.status));
-                }
-            });
-
-        });
-
-        // Event triggered after deleting districts and clicking on 'Save'.
-        map.on('draw:deleted', function (e) {
-            var layers = e.layers;
-            var district_ids = [];
-            layers.eachLayer(function (layer) {
-                district = layer.toGeoJSON();
-                district_ids.push(district['properties']['id']);                
-            });
-
-            $.post("/user/areasettings/delete_districts", {ids: district_ids}, function (data){
-                if (data.status == 'ok'){
-                    alert("Districts deleted.");
-                }else{
-                    alert(data.status);
-                }
-            });
-
-        });
-
+        initMapOnAreaSettings();
     }
 
 }
@@ -629,6 +489,153 @@ function putSingleMarker(lat, lng, location_marker_type, name){
     map.addLayer(newmarker);
 
     newmarker.bindPopup(name).openPopup();
+}
+
+/**
+ * Function initializes districts on the "Area settings" map, and tools to edit/delete them.
+ * Called in initLeafletMap.
+ */
+function initMapOnAreaSettings(){
+    drawnItems = L.featureGroup().addTo(map);
+    var district_bounds;
+    var layer;
+
+    // Adding drawing control panel to the map
+    map.addControl(new L.Control.Draw({
+        edit: { featureGroup: drawnItems }
+    }));
+
+    if (districts != null){
+        // Adding existing districts to the map
+        for (var i=0; i<districts.length; i++){
+            // Adding the district id and name to the geoJson properties.
+            L.geoJson(districts[i], {
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(districts[i]['properties']['name']);
+                    layer.setStyle({color: '#6ca585'});
+                    drawnItems.addLayer(layer);
+                }
+            });
+        }
+    }
+
+    // Event to activate 'Save district' button when district name not empty.
+    $('#map').on('keyup', '.save_district_text', function(){
+        if ($('.save_district_text').val().length > 0){
+            $('.save_district').removeClass('disabled');
+        }else{
+            $('.save_district').addClass('disabled');
+        }
+    });
+
+    // Events triggered once the polygon (district) has been drawn.
+    map.on('draw:created', function(e) {
+        layer = e.layer;
+        drawnItems.addLayer(layer);
+
+        // Text field and "Save district" button to show up in the popup.
+        popup = L.popup({closeButton: false}).setContent("<input type='text' class='save_district_text' style='margin-right:5px;' placeholder='District name'><button type='button' class='btn btn-xs btn-success save_district disabled'>Save district</button>");
+        
+        layer.bindPopup(popup);
+        district_bounds = layer.toGeoJSON();
+
+        layer.openPopup(layer.getBounds().getCenter());
+    });
+
+    // Necessity to unbind click on map, to make the "on click" event right below work.
+    $('#map').unbind('click');
+
+    // Saving district drawing (bounds) and name.
+    $('#map').on('click', '.save_district', function(){
+        var district_name = $('.save_district_text').val();
+
+        $.post("/user/areasettings/save_district", {bounds: JSON.stringify(district_bounds), name: district_name}, function (data){
+            $('#district_notification_message').html("<span class='"+data.style+"'><strong>"+data.message+"</strong></span>");
+            if (data.status == 'ok'){
+                drawnItems.removeLayer(layer);
+
+                district_bounds['properties']['id'] = data.id;
+                district_bounds['properties']['name'] = district_name;
+
+                L.geoJson(district_bounds, {
+                    onEachFeature: function (feature, layer) {
+                        layer.bindPopup(district_name);
+                        layer.setStyle({color: '#6ca585'});
+                        drawnItems.addLayer(layer);
+                    }
+                });
+            }
+        });
+    });
+
+    // Update district name into the GeoJSON properties hash.
+    $('#map').on('click', '.update_district', function(){
+        var new_district_name = $('.update_district_text').val();
+        var district_id = $('.update_district_text').attr('id');
+
+        $.post("/user/areasettings/update_district_name", {id: district_id, name: new_district_name}, function (data){
+            $('#district_notification_message').html("<span class='"+data.style+"'><strong>"+data.message+"</strong></span>");
+        });
+
+        // Going through the districts and checking which one to update.
+        drawnItems.eachLayer(function (layer) {
+            district_bounds = layer.toGeoJSON();
+            if (district_id == district_bounds['properties']['id']){
+                layer.bindPopup("<input type='text' id='"+district_bounds['properties']['id']+"' class='update_district_text' style='margin-right:5px;' placeholder='District name' value='"+new_district_name+"'><button type='button' id='save_"+district_bounds['properties']['id']+"' class='btn btn-xs btn-success update_district'>OK</button><br /><div class='district_notif'></div>");
+                layer.closePopup();
+            }    
+            
+        });
+    });
+
+    // When starting to edit a district, create new popup for each district with current name in text field.
+    map.on('draw:editstart', function(e){
+        drawnItems.eachLayer(function (layer) {
+            district_bounds = layer.toGeoJSON();
+            layer.bindPopup("<input type='text' id='"+district_bounds['properties']['id']+"' class='update_district_text' style='margin-right:5px;' placeholder='District name' value='"+district_bounds['properties']['name']+"'><button type='button' id='save_"+district_bounds['properties']['id']+"' class='btn btn-xs btn-success update_district'>OK</button><br /><div class='district_notif'></div>"); 
+        });    
+
+    });
+
+    // After saving new name of district, remove the text input and display new name as text only.
+    map.on('draw:editstop', function(e){
+        drawnItems.eachLayer(function (layer) {
+            district_bounds = layer.toGeoJSON();
+            layer.bindPopup(district_bounds['properties']['name']);
+        });    
+
+    });
+
+    // Event triggered when polygon (district) has been edited, and "Save" has been clicked.
+    map.on('draw:edited', function (e) {
+        var layers = e.layers;
+        var count = 1;
+        var updated_districts = [];
+        layers.eachLayer(function (layer) {
+            district_bounds = layer.toGeoJSON();
+            updated_districts.push(district_bounds);
+        });
+
+        $.post("/user/areasettings/update_districts", {districts: JSON.stringify(updated_districts)}, function (data){
+            $('#district_notification_message').html("<span class='"+data.style+"'><strong>"+data.message+"</strong></span>");
+        });
+
+    });
+
+    // Event triggered after deleting districts and clicking on 'Save'.
+    map.on('draw:deleted', function (e) {
+        var layers = e.layers;
+        var district_ids = [];
+        layers.eachLayer(function (layer) {
+            district = layer.toGeoJSON();
+            district_ids.push(district['properties']['id']);                
+        });
+
+        $.post("/user/areasettings/delete_districts", {ids: district_ids}, function (data){
+            $('#district_notification_message').html("<span class='"+data.style+"'><strong>"+data.message+"</strong></span>");
+        });
+
+    });
 }
 
 // Adding capitalization of first word of a string to String prototype.

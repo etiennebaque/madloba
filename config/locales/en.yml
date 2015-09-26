@@ -418,13 +418,19 @@ en:
       by_district: by district
       area_postal_code: Area defined by a postal code
       area_district: Area defined by a district
-      map_description: Click on the 'Add district' link, type a name for this new district, and click on the map to define its location.
+      map_description: "Use this map to draw, edit or delete the boundaries of your city's districts."
       error_update_district: An server error occurred while updating districts. Please try again later.
       error_save_district: An server error occurred while saving this district. Please try again later.
       district_name: District name
       latitude: Latitude
       longitude: Longitude
       add_district: Add district
+      save_success: New district has been saved.
+      save_name_success: District name successfully updated.
+      error_name_save: Error occured when updating district name. Please try again later.
+      update_success: The districts have been successfully updated.
+      delete_success: Deletion completed.
+      delete_error: Error occured when deleting a district. Please try again later.
     map_settings:
       title: Map settings
       type: "Map type:"

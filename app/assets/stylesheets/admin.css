@@ -71,6 +71,10 @@
   padding: 10px 20px
 }
 
+#district_notification_message{
+  margin-top: 15px;
+}
+
 /*
 /* Style for typeahead suggestions
 /* -------------------------------

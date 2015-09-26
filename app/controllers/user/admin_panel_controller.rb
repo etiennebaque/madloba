@@ -7,6 +7,9 @@ class User::AdminPanelController < ApplicationController
 
   include ApplicationHelper
 
+  # Style used to display messages on 'Area settings' page
+  STYLES = {success: 'text-success', error: 'text-danger' }
+
   def requires_user
     if !user_signed_in?
       redirect_to '/user/login'
@@ -223,21 +226,15 @@ class User::AdminPanelController < ApplicationController
     # Drawing tool added in initLeafletMap(), in custom-leaflet.js
     @mapSettings['page'] = 'areasettings'
 
-    @districts_old = District.all.order('name asc')
-    @districts_hash = {}
-    @district_index = 0
-    @districts_old.each do |district|
-      @districts_hash[district.id] = {name: district.name, latitude: district.latitude, longitude: district.longitude}
-      if district.id >= @district_index
-        # @district_index will be used as a key for @district_hash, when adding new district dynamically.
-        @district_index = district.id + 1
-      end
-    end
-
-    @districts = District.where('id >= 9')
-    
+    districts = District.all.select(:id, :name, :bounds)
+    @districts = []
+    districts.each do |d|
+      bounds = JSON.parse(d.bounds)
+      bounds['properties']['id'] = d.id
+      bounds['properties']['name'] = d.name
+      @districts.push(bounds)
+    end  
     @area_types = @mapSettings['area_type'].split(',')
-
   end
 
   def update_areasettings
@@ -267,33 +264,41 @@ class User::AdminPanelController < ApplicationController
     bounds_geojson = params[:bounds]
     district_name = params[:name]
 
+    style, message, status = '', '', ''
+
     # Creation of district
     d = District.new(name: district_name, bounds: bounds_geojson)
     if d.save
-      message = 'ok'
+      message = t('admin.area_settings.save_success')
+      style = STYLES[:success]
+      status = 'ok'
     else
       message = t('admin.area_settings.error_save_district')
+      style = STYLES[:error]
     end
   
-    render json: {'status' => message, 'district_name' => district_name}
+    render json: {'status' => status, 'id' => d.id, 'message' => message, 'style' => style, 'district_name' => district_name}
   end
 
   # Updating the name of an existing district
   def update_district_name
     d = District.find(params[:id].to_i)
+    style, message = '', ''
     if d && d.update_attributes(name: params[:name])
-      message = 'ok'
+      message = t('admin.area_settings.save_name_success')
+      style = STYLES[:success]
     else
-      #message = t('admin.area_settings.error_save_district')
-      message = d.errors
+      message = t('admin.area_settings.error_name_save')
+      style = STYLES[:error]
     end
 
-    render json: {'status' => message}
+    render json: {'message' => message, 'style' => style}
   end   
 
+  # Updating the boundaries of existing districts
   def update_districts
     districts = JSON.parse(params[:districts])
-    message = ''
+    style, message = '', ''
     districts.each do |district|
       # Editing an existing district at a time.
       district_id = district['properties']['id']
@@ -301,33 +306,36 @@ class User::AdminPanelController < ApplicationController
       if district_id
         district['properties'] = {}
         d = District.find(district_id.to_i)
-        if d.update_attributes(name: district_name, bounds: district)
-          message = 'ok'
+        if d.update_attributes(name: district_name, bounds: district.to_json)
+          message = t('admin.area_settings.update_success')
+          style = STYLES[:success]
         else
-          #message = t('admin.area_settings.error_save_district')
-          message = d.errors
+          message = t('admin.area_settings.error_update_district')
+          style = STYLES[:error]
           break
         end
       end
     end
 
-    render json: {'status' => message}
-
+    render json: {'message' => message, 'style' => style}
   end 
 
+  # Deletes existing districts
   def delete_districts
     ids_to_delete = params[:ids]
-    message = ''
+    style, message = '', ''
     ids_to_delete.each do |id|
       d = District.find(id)
       if d.delete
-        message = 'ok'
+        message = t('admin.area_settings.delete_success')
+        style = STYLES[:success]
       else
-        message = 'Error occured when deleting a district. Please try again later.'
+        message = t('admin.area_settings.delete_error')
+        style = STYLES[:error]
       end  
     end  
 
-    render json: {'status' => message}
+    render json: {'message' => message, 'style' => style}
 
   end 
 

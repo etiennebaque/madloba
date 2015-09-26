@@ -7,14 +7,13 @@
     <style type="text/css">
         #map {
             width: 100%;
-            height: 350px;
+            height: 400px;
             margin: 0;
         }
     </style>
 
-    <script>s
+    <script>
         var districts = <%= raw @districts.to_json %>
-        var new_district_index = <%= @district_index %>
     </script>
 
 
@@ -127,6 +126,7 @@
                         <div id="map"></div>
                       </div>
                     </div>
+                    <div id="district_notification_message"></div>
                   </div>
 
                 </div>
@@ -136,13 +136,8 @@
 
                 <!-- Submit button -->
                 <div class="form-actions">
-                  <button id="area_settings_submit" type="button" class="btn btn-success"><%= t('admin.save') %></button>
-                  <% if current_user.admin? %>
-                      <a href="/user/managerecords" class="btn"><%= t('home.cancel') %></a>
-                  <% else %>
-                      <a href="/user/manageads" class="btn"><%= t('home.cancel') %></a>
-                  <% end %>
-                  <span id="district_message_notification"></span>
+                  <%= submit_tag(t('admin.save'), class: 'btn btn-success') %>
+                  <a href="/user/index" class="btn"><%= t('home.cancel') %></a>
                 </div>
 
             <% end %>

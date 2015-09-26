@@ -432,13 +432,19 @@ fr:
       by_district: par un quartier
       area_postal_code: Zone définie par un code postal
       area_district: Zone définie par un quartier
-      map_description: Cliquez sur 'Ajouter quartier', tapez un nom pour ce nouveau quartier, et cliquez sur la carte pour définir son emplacement.
+      map_description: Utilisez cette carte pour dessiner, éditer ou supprimer les limites des différents quartiers de votre ville.
       error_update_district: Erreur lors de la mise à jour des quartiers. Veuillez réessayer plus tard.
       error_save_district: Erreur lors de la sauvegarde de ce quartier. Veuillez réessayer plus tard.
       district_name: Nom du quartier
       latitude: Latitude
       longitude: Longitude
       add_district: Ajouter quartier
+      save_success: Le nouveau quartier a été sauvegardé.
+      save_name_success: Le nom de ce quartier a été mis à jour.
+      error_name_save: Erreur lors de la mise à jour du nom de ce quartier. Veuillez réessayer plus tard.
+      update_success: Les quartiers ont été mis à jour.
+      delete_success: Quartier(s) supprimé(s).
+      delete_error: Erreur lors de la suppression de ce quartier. Veuillez réessayer plus tard.      
     map_settings:
       title: Paramètres de la carte
       type: "Type de carte :"
