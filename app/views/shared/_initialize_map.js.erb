@@ -3,6 +3,7 @@
 var map_settings_array = <%= raw @mapSettings.to_json %>;
 
 var newmarker;
+var selected_area;
 var markers;
 
 var default_marker_icon = "<%= j ActionController::Base.helpers.asset_path('images/marker-icon.png') %>";

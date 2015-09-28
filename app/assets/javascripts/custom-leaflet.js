@@ -153,37 +153,39 @@ function putLocationMarkers(){
         }
     }
 
-    // Snippet that create markers, to represent ads tied to postal-type location.
+    // Snippet that create markers, to represent ads tied to postal-type locations.
     if (locations_postal != null && Object.keys(locations_postal).length > 0){
-        Object.keys(locations_postal).forEach(function (area_code) {
-            var locations = locations_postal[area_code];
 
-            var popup_html_text = createPopupHtmlArea("In this area (<b>"+area_code+"</b>)<br /><br />", locations, 'postal', area_code);
+        var drawn_areas = L.featureGroup().addTo(map);
 
-            marker = new L.marker(
-                [area_geocodes[area_code]['latitude'],area_geocodes[area_code]['longitude']],
-                {icon: areaIcon, title: area_code}
-            );
-
-            marker.bindPopup(popup_html_text);
-            markers.addLayer(marker);
-        })
+        // Adding event to show/hide these districts from the checkbox in the guided navigation.
+        $("#show_area_id").change(function() {
+            if ($('#show_area_id').prop('checked')) {
+                // Drawing districts in this function, when checkbox is checked.
+                drawPostalCodeAreaOnMap(drawn_areas, locations_postal, area_geocodes);
+            }else{
+                drawn_areas.eachLayer(function (layer) {
+                    drawn_areas.removeLayer(layer);
+                });
+            }
+        }).change();
     }
 
     // Snippet that creates markers, to represent ads tied to district-type location.
     if (locations_district != null && Object.keys(locations_district).length > 0){
         var drawn_districts = L.featureGroup().addTo(map);
 
-        // Drawing districts in this function by default, when home page loads.
-        drawDistrictsOnMap(drawn_districts, locations_district);
-
         // Adding event to show/hide these districts from the checkbox in the guided navigation.
-        /*$('#show_area_id').is(':checked') {
-            // Drawing districts in this function, when checkbox is checked.
-            drawDistrictsOnMap(drawn_districts, locations_district);
-        }else{
-            drawn_districts,removeLayers();            
-        }*/    
+        $("#show_area_id").change(function() {
+            if ($('#show_area_id').prop('checked')) {
+                // Drawing districts in this function, when checkbox is checked.
+                drawDistrictsOnMap(drawn_districts, locations_district);
+            }else{
+                drawn_districts.eachLayer(function (layer) {
+                    drawn_districts.removeLayer(layer);
+                });
+            }
+        }).change();
 
     }
 
@@ -252,7 +254,7 @@ function createPopupHtml(first_sentence, ad, index){
 }
 
 /**
- * This function draws districts (where at least a current is included) 
+ * This function draws districts (where at least one current ad is included)
  * on the map of the home page.
  */
  function drawDistrictsOnMap(drawn_districts, locations_district){
@@ -273,6 +275,26 @@ function createPopupHtml(first_sentence, ad, index){
         });
     })
  }
+
+/**
+ * This function draws postal code areas (where at least a current ad is included)
+ * on the map of the home page.
+ */
+function drawPostalCodeAreaOnMap(drawn_areas, locations_postal, area_geocodes){
+    Object.keys(locations_postal).forEach(function (area_code) {
+        var locations = locations_postal[area_code];
+
+        var popup_html_text = createPopupHtmlArea("In this area (<b>"+area_code+"</b>)<br /><br />", locations, 'postal', area_code);
+
+        var area = L.circle([area_geocodes[area_code]['latitude'], area_geocodes[area_code]['longitude']], 600, {
+            color: postal_code_area_color,
+            fillColor: postal_code_area_color,
+            fillOpacity: 0.3
+        }).bindPopup(popup_html_text);
+
+        drawn_areas.addLayer(area);
+    });
+}
 
 /**
  * Creates the text to be shown in a marker popup,
@@ -461,7 +483,7 @@ function onMapClickLocation(e) {
 }
 
 /**
- * Callback fundtion that returns geocodes of clicked location.
+ * Callback function that returns geocodes of clicked location.
  * @param e
  * @returns "latitude,longitude"
  */
@@ -490,26 +512,27 @@ function onMapClick(e) {
 }
 
 /**
- * Function that display a single marker, with its relevant location details, on a map.
- * @param lat
- * @param lng
- * @param location_marker_type
- * @param name
+ * Function that displays a single district on a map.
+ * @param district name
+ * @param bounds
  */
-function putSingleMarker(lat, lng, location_marker_type, name){
-    if (newmarker != null){
-        map.removeLayer(newmarker);
+function showSingleDistrict(district_name, bounds){
+    // Before adding the selected district, we need to remove all the currently displayed districts.
+    if (selected_area != null){
+        map.removeLayer(selected_area);
     }
 
-    if (location_marker_type == 'exact'){
-        newmarker = new L.Marker([lat,lng], {icon: newIcon}, {draggable:false});
-    }else if (location_marker_type == 'area'){
-        newmarker = new L.Marker([lat,lng], {icon: areaIcon}, {draggable:false});
-    }
+    // Drawing the selecting district on the map.
+    L.geoJson(JSON.parse(bounds), {
+        onEachFeature: function (feature, layer) {
+            layer.bindPopup(district_name);
+            layer.setStyle({color: district_color});
+            map.addLayer(layer);
+            layer.openPopup(layer.getBounds().getCenter());
+            selected_area = layer;
+        }
+    });
 
-    map.addLayer(newmarker);
-
-    newmarker.bindPopup(name).openPopup();
 }
 
 /**

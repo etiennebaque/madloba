@@ -272,11 +272,12 @@ class User::AdminPanelController < ApplicationController
       message = t('admin.area_settings.save_success')
       style = STYLES[:success]
       status = 'ok'
+      Rails.cache.write(CACHE_DISTRICTS, District.select(:id, :name, :bounds))
     else
       message = t('admin.area_settings.error_save_district')
       style = STYLES[:error]
     end
-  
+
     render json: {'status' => status, 'id' => d.id, 'message' => message, 'style' => style, 
       'district_name' => district_name, 'district_color' => DISTRICT_COLOR}
   end
@@ -288,6 +289,7 @@ class User::AdminPanelController < ApplicationController
     if d && d.update_attributes(name: params[:name])
       message = t('admin.area_settings.save_name_success')
       style = STYLES[:success]
+      Rails.cache.write(CACHE_DISTRICTS, District.select(:id, :name, :bounds))
     else
       message = t('admin.area_settings.error_name_save')
       style = STYLES[:error]
@@ -310,6 +312,7 @@ class User::AdminPanelController < ApplicationController
         if d.update_attributes(name: district_name, bounds: district.to_json)
           message = t('admin.area_settings.update_success')
           style = STYLES[:success]
+          Rails.cache.write(CACHE_DISTRICTS, District.select(:id, :name, :bounds))
         else
           message = t('admin.area_settings.error_update_district')
           style = STYLES[:error]
@@ -330,6 +333,7 @@ class User::AdminPanelController < ApplicationController
       if d.delete
         message = t('admin.area_settings.delete_success')
         style = STYLES[:success]
+        Rails.cache.write(CACHE_DISTRICTS, District.select(:id, :name, :bounds))
       else
         message = t('admin.area_settings.delete_error')
         style = STYLES[:error]

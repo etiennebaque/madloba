@@ -6,12 +6,12 @@ module User::LocationFormHelper
     return all_districts.collect{|d| [d.name, d.id] }
   end
 
-  # Get the districts geocodes, when localizing districts on map.
-  def districts_geocodes
-    all_districts = Rails.cache.fetch(CACHE_DISTRICTS) {District.select(:id, :name, :latitude, :longitude)}
+  # Get the districts bounds, when localizing districts on map.
+  def districts_bounds
+    all_districts = Rails.cache.fetch(CACHE_DISTRICTS) {District.select(:id, :name, :bounds)}
     results = {}
     all_districts.each do |d|
-      results[d.id] = [d.latitude, d.longitude]
+      results[d.id] = d.bounds
     end
     return results
   end

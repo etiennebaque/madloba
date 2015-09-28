@@ -17,7 +17,7 @@ L.drawLocal = {
 			},
 			buttons: {
 				polyline: 'Draw a polyline',
-				polygon: 'Draw a district',
+				polygon: 'Draw a new district',
 				rectangle: 'Draw a rectangle',
 				circle: 'Draw a circle',
 				marker: 'Draw a marker'

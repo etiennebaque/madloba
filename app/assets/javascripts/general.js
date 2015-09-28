@@ -180,7 +180,7 @@ $(document).ready(function() {
             $("#locations_from_list").hide();
             $("#location a.add_fields").hide();
             initLeafletMap(map_settings_array);
-            init_location_form(districts_geocodes, map);
+            init_location_form(districts_bounds, map);
         },20);
     }
 
@@ -195,7 +195,7 @@ $(document).ready(function() {
             $("#new_location_form a.add_fields").hide();
             // Call to the JS functions that will initialize the new location form and the map.
             initLeafletMap(map_settings_array);
-            init_location_form(districts_geocodes, map);
+            init_location_form(districts_bounds, map);
         });
     $('#new_location_form').bind("cocoon:after-remove", function() {
             $("#locations_from_list").show();
@@ -204,8 +204,8 @@ $(document).ready(function() {
 
 
     // Function call to initialize the location form (Location edit form, all Ad forms).
-    if (typeof districts_geocodes != "undefined") {
-        init_location_form(districts_geocodes, map);
+    if (typeof districts_bounds != "undefined") {
+        init_location_form(districts_bounds, map);
     }
 
 
@@ -231,14 +231,13 @@ $(document).ready(function() {
  * This critical function initializes the location form (Location edit form, Ad forms)
  * as well as all the events tied to its relevant elements.
  */
-function init_location_form(districts_geocodes, map){
+function init_location_form(districts_bounds, map){
 
     if ($('#map').length > 0){
         $(".location_type_exact").click(function(){
+            if (newmarker != null){map.removeLayer(newmarker);}
+            if (selected_area != null){map.removeLayer(selected_area);}
             show_exact_address_section(map);
-            if (newmarker != null){
-                map.removeLayer(newmarker);
-            }
         });
 
         if($('.location_type_exact').is(':checked')) {
@@ -246,10 +245,9 @@ function init_location_form(districts_geocodes, map){
         }
 
         $(".location_type_postal_code").click(function(){
+            if (newmarker != null){map.removeLayer(newmarker);}
+            if (selected_area != null){map.removeLayer(selected_area);}
             show_postal_code_section(map);
-            if (newmarker != null){
-                map.removeLayer(newmarker);
-            }
         });
 
         if($('.location_type_postal_code').is(':checked')) {
@@ -257,11 +255,10 @@ function init_location_form(districts_geocodes, map){
         }
 
         $(".location_type_district").click(function(){
+            if (newmarker != null){map.removeLayer(newmarker);}
             show_district_section(map);
-            if (newmarker != null){
-                map.removeLayer(newmarker);
-            }
         });
+
         if($('.location_type_district').is(':checked')) {
             show_district_section(map);
         }
@@ -276,55 +273,31 @@ function init_location_form(districts_geocodes, map){
             var postal_code_value = $('.location_postal_code').val();
 
             if(typeof area_code_length == 'undefined' && typeof postal_code_length == 'undefined'){
-                $.ajax({
-                    url: "/user/getAreaSettings",
-                    global: false,
-                    type: "GET",
-                    data: {},
-                    cache: false,
-                    beforeSend: function(xhr) {
-                        xhr.setRequestHeader("Accept", "application/json");
-                        xhr.setRequestHeader("Content-Type", "application/json");
-                    },
-                    success: function(data) {
-                        if (data['code'] != null && data['area'] != null){
-                            // It is an existing item. We select the associated category, in the drop down box, on the same page.
-                            area_code_length = data['area'];
-                            if (postal_code.length >= area_code_length){
-                                $('#postal_code_notification').html("<i>"+ gon.vars['area_show_up'] +"'"+postal_code_value.substring(0, area_code_length)+"'</i>");
-                            }
+
+                $.get("/user/getAreaSettings", {}, function (data){
+                    if (data['code'] != null && data['area'] != null){
+                        // Based on the retrieved settings, we display which area code will be used for this ad.
+                        area_code_length = data['area'];
+                        if (postal_code.length >= area_code_length){
+                            $('#postal_code_notification').html("<i>"+ gon.vars['area_show_up'] +"'"+postal_code_value.substring(0, area_code_length)+"'</i>");
                         }
                     }
-
                 });
+
             }
         }
-    });
-
-    // Location form: when choosing a district from the drop-down box, we need to display the area on the map underneath.
-    $('.district_dropdown').change(function() {
-        var id = $('.district_dropdown option:selected').val();
-        var name = $('.district_dropdown option:selected').text();
-        var latitude = districts_geocodes[id][0];
-        var longitude = districts_geocodes[id][1];
-
-        putSingleMarker(latitude, longitude, 'area', name);
-
-        $(".latitude_hidden").val(latitude);
-        $(".longitude_hidden").val(longitude);
     });
 
     // Help messages for fields on "Create ad" form
     $('.help-message').popover();
 
-    // Initializing onclick event on button, when looking for location on map, based on user input.
+    // Initializing onclick event on "Locate me on the map" button, when looking for location on map, based on user input.
     find_geocodes();
-
 }
 
 
 /**
- * Event triggered when click on "Define geocodes & find address on the map" button,
+ * Event triggered when click on "Locate me on the map" button,
  * on the "Create ad" form, and on the Ad edit form.
  */
 function find_geocodes(){
@@ -382,6 +355,7 @@ function find_geocodes(){
     });
 }
 
+
 /**
  * Function used in the location form - show appropriate section when entering an exact address
  */
@@ -422,6 +396,23 @@ function show_district_section(map){
     location_marker_type = 'area';
     map.off('click', onMapClickLocation);
     $("#map_notification").addClass('hide');
+
+    // Loading the district matching the default option in the district drop-down box.
+    var id = $('.district_dropdown option:selected').val();
+    var name = $('.district_dropdown option:selected').text();
+    var bounds = districts_bounds[id];
+
+    showSingleDistrict(name, bounds);
+
+    // Location form: when choosing a district from the drop-down box, we need to display the area on the map underneath.
+    $('#district_section').on('change', '.district_dropdown', function() {
+        id = $('.district_dropdown option:selected').val();
+        name = $('.district_dropdown option:selected').text();
+        bounds = districts_bounds[id];
+
+        showSingleDistrict(name, bounds);
+
+    }).change();
 }
 
 /**

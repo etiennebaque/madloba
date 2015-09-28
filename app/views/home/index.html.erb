@@ -94,7 +94,11 @@
 
             <% if (@locations_postal && @locations_postal.length > 0) || (@locations_district && @locations_district.length > 0) %>
                 <hr />
-                <%= check_box_tag 'show_area_id', 'ok', true %> <%= t('home.show_ads_districts') %>
+                <div class="checkbox">
+                  <label>
+                    <%= check_box_tag 'show_area_id', 'ok', true %> <%= t('home.show_ads_districts') %>
+                  </label>
+                </div>
             <% end %>
 
         <% else %>
