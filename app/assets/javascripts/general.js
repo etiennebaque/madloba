@@ -100,10 +100,7 @@ $(document).ready(function() {
                     type: "GET",
                     dataType: 'json',
                     data: function () {
-                        var params = {
-                            item: '{{{q}}}',
-                            type: 'search_items'
-                        };
+                        var params = {item: '{{{q}}}', type: 'search_items'};
                         return params;
                     }
                 },
@@ -118,13 +115,7 @@ $(document).ready(function() {
                     // Populating the item drop-down box
                     for(var i = 0; i < len; i++){
                         var item = data[i];
-                        items.push(
-                            {
-                                'value': item.id,
-                                'text': item.value,
-                                'disable': false
-                            }
-                        );
+                        items.push({'value': item.id, 'text': item.value, 'disable': false});
                     }
                     return items;
                 },
@@ -235,8 +226,7 @@ function init_location_form(districts_bounds, map){
 
     if ($('#map').length > 0){
         $(".location_type_exact").click(function(){
-            if (newmarker != null){map.removeLayer(newmarker);}
-            if (selected_area != null){map.removeLayer(selected_area);}
+            removes_location_layers();
             show_exact_address_section(map);
         });
 
@@ -245,8 +235,7 @@ function init_location_form(districts_bounds, map){
         }
 
         $(".location_type_postal_code").click(function(){
-            if (newmarker != null){map.removeLayer(newmarker);}
-            if (selected_area != null){map.removeLayer(selected_area);}
+            removes_location_layers();
             show_postal_code_section(map);
         });
 
@@ -255,7 +244,7 @@ function init_location_form(districts_bounds, map){
         }
 
         $(".location_type_district").click(function(){
-            if (newmarker != null){map.removeLayer(newmarker);}
+            removes_location_layers();
             show_district_section(map);
         });
 
@@ -357,6 +346,16 @@ function find_geocodes(){
 
 
 /**
+ * On the location form, removes layers representing a previously clicked exact location, postal code area,
+ * or selected district.
+ */
+function removes_location_layers(){
+    if (newmarker != null){map.removeLayer(newmarker);}
+    if (selected_area != null){map.removeLayer(selected_area);}
+    if (postal_code_circle != null){map.removeLayer(postal_code_circle);}
+}
+
+/**
  * Function used in the location form - show appropriate section when entering an exact address
  */
 function show_exact_address_section(map){
@@ -438,7 +437,6 @@ function getLocationsPropositions(){
                 $("#btn-form-search").html("Loading...");
             },
             success: function(data) {
-
                 var modalHtmlText = "";
                 if (data != null && data.length > 0){
                     if (typeof data[0]['error_key'] != 'undefined'){

@@ -35,12 +35,20 @@ function initLeafletMap(map_settings_array){
             if (map_settings_array['ad_show_is_area'] == true){
                 // Postal or district address (area type) on ads#show.
                 // Shows an area icon on the map of the ads show page.
-                marker = new L.marker(
-                    [ mylat, mylng ],
-                    {icon: areaIcon, title: map_settings_array['popup_message']}
-                );
-                marker.addTo(map).bindPopup(map_settings_array['popup_message']).openPopup();
+                if (map_settings_array['loc_type'] == 'district'){
+                    // Drawing the district related to this ad.
+                    showSingleDistrict(map_settings_array['popup_message'], map_settings_array['bounds']);
+                }else{
 
+                    // Drawing the postal code area circle related to this ad.
+                    var area = new L.circle([mylat, mylng], 600, {
+                        color: postal_code_area_color,
+                        fillColor: postal_code_area_color,
+                        fillOpacity: 0.3
+                    });
+
+                    area.addTo(map).bindPopup(map_settings_array['popup_message']).openPopup();
+                }
             }else{
                 // Exact address on ads#show. Potentially several center markers on the map.
                 // Displays a marker for each item tied to the ad we're showing the details of.
@@ -68,16 +76,26 @@ function initLeafletMap(map_settings_array){
             // Center single marker on the map
             // Appearing only in admin map setting, and admin location page, on page load.
             // Define first if it should be the area icon (for addresses based only on postal codes), or the default icon.
-            var icon_to_use = defaultIcon;
-            if (map_settings_array['is_area']){
-                icon_to_use = areaIcon;
-            }
-            // we are displaying the center point.
-            var center_marker = L.marker([ mylat, mylng ], {icon: icon_to_use});
-            if (map_settings_array['marker_message'] != ""){
-                center_marker.addTo(map).bindPopup(map_settings_array['marker_message']).openPopup();
+            if (map_settings_array['loc_type'] == 'postal'){
+                // Drawing the postal code area circle related to this ad.
+                postal_code_circle = new L.circle([mylat, mylng], 600, {
+                    color: postal_code_area_color,
+                    fillColor: postal_code_area_color,
+                    fillOpacity: 0.3
+                });
+
+                postal_code_circle.addTo(map).bindPopup(map_settings_array['marker_message']).openPopup();
+
+            }else if (map_settings_array['loc_type'] == 'district'){
+                showSingleDistrict(map_settings_array['marker_message'], map_settings_array['bounds']);
             }else{
-                center_marker.addTo(map);
+                // we are displaying the center point.
+                var center_marker = L.marker([ mylat, mylng ], {icon: defaultIcon});
+                if (map_settings_array['marker_message'] != ""){
+                    center_marker.addTo(map).bindPopup(map_settings_array['marker_message']).openPopup();
+                }else{
+                    center_marker.addTo(map);
+                }
             }
         }
     }
@@ -489,10 +507,9 @@ function onMapClickLocation(e) {
  */
 function onMapClick(e) {
 
-	if (newmarker != null){
-		map.removeLayer(newmarker);
-	}
-	
+	if (newmarker != null){map.removeLayer(newmarker);}
+    if (postal_code_circle != null){map.removeLayer(postal_code_circle);}
+
 	var myNewLat = e.latlng.lat;
 	var myNewLng = e.latlng.lng;
 
@@ -502,11 +519,15 @@ function onMapClick(e) {
 
     if (location_marker_type == 'exact'){
         newmarker = new L.Marker(e.latlng, {icon: newIcon}, {draggable:false});
+        map.addLayer(newmarker);
     }else if (location_marker_type == 'area'){
-        newmarker = new L.Marker(e.latlng, {icon: areaIcon}, {draggable:false});
+        postal_code_circle = new L.circle(e.latlng, 600, {
+            color: postal_code_area_color,
+            fillColor: postal_code_area_color,
+            fillOpacity: 0.3
+        });
+        postal_code_circle.addTo(map);
     }
-
-    map.addLayer(newmarker);
 
     return myNewLat+','+myNewLng;
 }
