@@ -528,7 +528,7 @@ fr:
     add_config: Il y a quelques paramètres à configurer.
     check_config: "Veuillez prendre connaissance de ces paramètres dans le panneau d'administration."
     enjoy: "Merci d'avoir chiosi Madloba !"
-    go_to_website: Aller sur votre site !
+    go_to_website: Aller sur la page d'acceuil !
     name_cant_be_blank: Le nom du site ne peut pas être vide.
     select_geocodes: Veuillez choisir un emplacement sur la carte.
     state_province: Région / Province

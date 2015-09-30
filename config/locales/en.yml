@@ -514,7 +514,7 @@ en:
     add_config: There are some additional configurations to take care of.
     check_config: Make sure to check them out in your admin panel!
     enjoy: Enjoy!
-    go_to_website: Go to your website!
+    go_to_website: Go to the home page!
     name_cant_be_blank: The website name cannot be blank.
     select_geocodes: Please select a center point on the map.
     state_province: State/Province
