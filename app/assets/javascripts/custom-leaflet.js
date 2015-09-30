@@ -24,8 +24,17 @@ function initLeafletMap(map_settings_array){
         maptiles = MQ.mapLayer();
     }
 
-    // Map object initialization
-    map = L.map('map');
+    // Map object initialization. By default, it is not possible
+    // to zoom in/out when using the mouse wheel, unless clicking on the map (toggle).
+    map = L.map('map', {scrollWheelZoom: false});
+    map.on('click', function() {
+        if (map.scrollWheelZoom.enabled()) {
+            map.scrollWheelZoom.disable();
+        } else {
+            map.scrollWheelZoom.enable();
+        }
+    });
+
     maptiles.addTo(map);
     map.setView([mylat, mylng], map_settings_array['zoom_level']);
 
@@ -37,9 +46,9 @@ function initLeafletMap(map_settings_array){
                 // Shows an area icon on the map of the ads show page.
                 if (map_settings_array['loc_type'] == 'district'){
                     // Drawing the district related to this ad.
-                    showSingleDistrict(map_settings_array['popup_message'], map_settings_array['bounds']);
+                    var district_latlng = showSingleDistrict(map_settings_array['popup_message'], map_settings_array['bounds']);
+                    map.setView(district_latlng, map_settings_array['zoom_level']);
                 }else{
-
                     // Drawing the postal code area circle related to this ad.
                     var area = new L.circle([mylat, mylng], 600, {
                         color: postal_code_area_color,
@@ -48,6 +57,7 @@ function initLeafletMap(map_settings_array){
                     });
 
                     area.addTo(map).bindPopup(map_settings_array['popup_message']).openPopup();
+                    map.setView([mylat, mylng], map_settings_array['zoom_level']);
                 }
             }else{
                 // Exact address on ads#show. Potentially several center markers on the map.
@@ -70,6 +80,7 @@ function initLeafletMap(map_settings_array){
                     markers.addLayer(center_marker);
                 }
                 map.addLayer(markers);
+                map.setView([mylat, mylng], map_settings_array['zoom_level']);
             }
 
         }else{
@@ -536,6 +547,7 @@ function onMapClick(e) {
  * Function that displays a single district on a map.
  * @param district name
  * @param bounds
+ * return the center of the district, needed to center the feature on the map for ads#show
  */
 function showSingleDistrict(district_name, bounds){
     // Before adding the selected district, we need to remove all the currently displayed districts.
@@ -543,16 +555,22 @@ function showSingleDistrict(district_name, bounds){
         map.removeLayer(selected_area);
     }
 
+    var latlng;
+
     // Drawing the selecting district on the map.
     L.geoJson(JSON.parse(bounds), {
         onEachFeature: function (feature, layer) {
             layer.bindPopup(district_name);
             layer.setStyle({color: district_color});
             map.addLayer(layer);
-            layer.openPopup(layer.getBounds().getCenter());
+            latlng = layer.getBounds().getCenter();
+            layer.openPopup(latlng);
             selected_area = layer;
         }
     });
+
+
+    return latlng;
 
 }
 
