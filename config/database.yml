@@ -16,8 +16,18 @@ test:
   username: <%= ENV["MADLOBA_TEST_USERNAME"] %>
   password: <%= ENV["MADLOBA_TEST_PASSWORD"] %>
 
+staging:
+  # Deployment on a staging server: please indicate your database credentials here
+  # (database name, username and password)
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  database:
+  username:
+  password:
+
 production:
-  # Deployment on a server: please indicate your database credentials here
+  # Deployment on a production server: please indicate your database credentials here
   # (database name, username and password)
   adapter: postgresql
   encoding: unicode
