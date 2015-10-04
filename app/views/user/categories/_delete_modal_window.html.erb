@@ -13,7 +13,7 @@
             <p><%= t('admin.category.cannot_delete') %></p>
           </div>
           <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal"><%= t('admin.cancel') %></a>
+            <a href="#" class="btn" data-dismiss="modal"><%= t('home.cancel') %></a>
           </div>
       <% elsif @category.items && @category.items.length > 0 %>
           <!-- Before deletion of this category, we need to transfer linked items to another category -->
@@ -32,7 +32,7 @@
                 <% end %>
               </div>
               <div class="modal-footer">
-                <a href="#" class="btn" data-dismiss="modal"><%= t('admin.cancel') %></a>
+                <a href="#" class="btn" data-dismiss="modal"><%= t('home.cancel') %></a>
                 <%= submit_tag(t('admin.category.transfer_and_delete'), class: 'btn btn-danger') %>
               </div>
           <% end %>
@@ -42,7 +42,7 @@
             <p><%= t('admin.category.delete_confirm') %></p>
           </div>
           <div class="modal-footer">
-            <a href="#" class="btn" data-dismiss="modal"><%= t('admin.cancel') %></a>
+            <a href="#" class="btn" data-dismiss="modal"><%= t('home.cancel') %></a>
             <%= link_to t('admin.category.delete_yes'), user_category_path(@category), method: :delete, class: 'btn btn-danger' %>
           </div>
       <% end %>

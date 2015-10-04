@@ -3,8 +3,6 @@
 FactoryGirl.define do
   factory :district do |f|
     f.name { Faker::Name.title }
-    f.latitude { Faker::Address.latitude }
-    f.longitude { Faker::Address.longitude }
 
     factory :district_with_locations do
       after_create do |district|
@@ -19,7 +17,5 @@ FactoryGirl.define do
 
   factory :new_district do |f|
     f.name nil
-    f.latitude nil
-    f.longitude nil
   end
 end

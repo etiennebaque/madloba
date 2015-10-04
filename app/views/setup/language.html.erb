@@ -1,0 +1,46 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset>
+
+        <div class="setup-padding">
+          &nbsp;
+        </div>
+
+        <div class="col-lg-6">
+
+          <div class="setup-padding">
+            <p><%= t('setup.choose_language') %></p>
+          </div>
+
+          <%= form_tag '/setup/language/process', { class: 'form-horizontal' } do %>
+              <fieldset>
+                <!-- Language drop-down box -->
+                <div class="form-group setup-padding">
+                  <div class="col-lg-6">
+                    <%= select_tag 'language', options_for_select(available_languages, @current_language), class: 'form-control' %>
+                  </div>
+                </div>
+
+                <!-- OK button -->
+                <div class="form-group">
+                  <div class="col-lg-8">
+                    <%= submit_tag('OK', class: 'btn btn-success pull-right') %>
+                  </div>
+                </div>
+
+              </fieldset>
+          <% end %>
+
+
+        </div>
+
+      </fieldset>
+    </div>
+
+  </div>
+
+</div>
+
+<div id="push"></div>

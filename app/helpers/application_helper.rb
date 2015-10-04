@@ -123,6 +123,7 @@ module ApplicationHelper
     # Specific info related to ads#show
     @mapSettings['ad_show'] = []
     if location.is_area
+      # Getting information whether it's a postal code area, or a district
       @mapSettings['ad_show_is_area'] = true
       items_to_show = []
       items.each do |item|
@@ -130,6 +131,7 @@ module ApplicationHelper
       end
       @mapSettings['popup_message'] = items_to_show.join(', ')
     else
+      # Getting information as an exact address location
       @mapSettings['ad_show_is_area'] = false
       items.each_with_index do |item, index|
         @mapSettings['ad_show'][index] = {}
@@ -183,28 +185,34 @@ module ApplicationHelper
     @mapSettings['lat'] = 0
     @mapSettings['lng'] = 0
 
-    # If we consider a location instance, geocodes will come from it, and we'll initialize marker-related information.
-    if location && location.latitude && location.longitude
+    if location
+      # Getting map-related information from an existing location.
       location_type = location.loc_type
-      @mapSettings['lat'] = location.latitude
-      @mapSettings['lng'] = location.longitude
+      @mapSettings['loc_type'] = location_type
+      @mapSettings['is_area'] = ['postal','district'].include? location_type
 
-      if location_type == 'postal'
-        area_code_length = Setting.where(key: %w(area_length)).pluck(:value).first
-        @mapSettings['marker_message'] = "#{location.postal_code[0..area_code_length.to_i-1]} #{t('ad.area')}"
-      elsif location_type == 'district'
+      if location_type == 'district'
+        # Information for district type locations
         @mapSettings['marker_message'] = location.district.name
+        @mapSettings['bounds'] = location.district.bounds
       else
-        if location.name && location.name != ''
-          @mapSettings['marker_message'] = location.name
+        # Postal code and exact address type locations (geocode based location)
+        @mapSettings['lat'] = location.latitude
+        @mapSettings['lng'] = location.longitude
+        if location_type == 'postal'
+          area_code_length = Setting.where(key: %w(area_length)).pluck(:value).first
+          @mapSettings['marker_message'] = "#{location.postal_code[0..area_code_length.to_i-1]} #{t('ad.area')}"
         else
-          @mapSettings['marker_message'] = location.full_address
+          if location.name && location.name != ''
+            @mapSettings['marker_message'] = location.name
+          else
+            @mapSettings['marker_message'] = location.full_address
+          end
         end
       end
-      @mapSettings['is_area'] = ['postal','district'].include? location_type
     else
-      # The location's geocodes have not been determined yet.
-      # Getting map default center, to be used in this case.
+      # We're not dealing with any particular location.
+      # We're getting map default center then, to be used in this case.
       if @mapSettings['map_center_geocode'] && @mapSettings['map_center_geocode'] != ''
         # Using defined default map center
         default_geocodes = @mapSettings['map_center_geocode']
