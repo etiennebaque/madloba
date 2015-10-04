@@ -238,9 +238,11 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # Redirection when current user does not have the permission to go to
+  # the requested page (authorization managed by Pundit)
   def user_not_authorized
     flash[:error] = t('config.not_authorized')
-    redirect_to(request.referrer || user_path)
+    redirect_to(request.referrer || root_path || user_path)
   end
 
   protected

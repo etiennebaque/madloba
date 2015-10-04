@@ -2,7 +2,7 @@ module User::LocationFormHelper
 
   # Get all the districts for the location form partial.
   def districts
-    all_districts = Rails.cache.fetch(CACHE_DISTRICTS) {District.select(:id, :name, :latitude, :longitude)}
+    all_districts = Rails.cache.fetch(CACHE_DISTRICTS) {District.select(:id, :name, :bounds)}
     return all_districts.collect{|d| [d.name, d.id] }
   end
 
