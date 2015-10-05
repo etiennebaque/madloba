@@ -7,14 +7,13 @@
     <style type="text/css">
         #map {
             width: 100%;
-            height: 350px;
+            height: 400px;
             margin: 0;
         }
     </style>
 
     <script>
-        var districts = <%= raw @districts_hash.to_json %>
-        var new_district_index = <%= @district_index %>
+        var districts = <%= raw @districts.to_json %>
     </script>
 
 
@@ -127,43 +126,7 @@
                         <div id="map"></div>
                       </div>
                     </div>
-                  </div>
-
-                  <!-- District table -->
-                  <div class="form-group col-xs-12">
-                    <div id="dynamic-table" class="col-lg-9 col-md-12">
-                      <table class="table table-striped">
-                        <thead>
-                        <tr>
-                          <th><%= t('admin.area_settings.district_name') %></th>
-                          <th><%= t('admin.area_settings.latitude') %></th>
-                          <th><%= t('admin.area_settings.longitude') %></th>
-                          <th></th>
-                        </tr>
-                        </thead>
-                        <tbody id="district_body">
-                        <% @districts.each do |district| %>
-                            <tr id="<%= district.id %>">
-                              <td class="district_name vert-align"><%= district.name %></td>
-                              <td class="vert-align"><%= district.latitude %></td>
-                              <td class="vert-align"><%= district.longitude %></td>
-                              <td class="vert-align">
-                                <button type="button" id="<%= district.id %>" class="dynamic_update btn btn-info btn-xs"><%= t('home.update') %></button>
-                                <a href="#" class="btn remove-existing-district"><i class="glyphicon glyphicon-remove" style="color: red;"></i></a>
-                              </td>
-                            </tr>
-                        <% end %>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-
-                  <!-- "Add district" link -->
-                  <div class="form-group">
-                    <div id="dynamic_wrapper"></div>
-                    <div class="form-inline">
-                      <a id="dynamic_add_link" class="btn btn-info" href="#"><i class="glyphicon glyphicon-plus"></i> <%= t('admin.area_settings.add_district') %></a>
-                    </div>
+                    <div id="district_notification_message"></div>
                   </div>
 
                 </div>
@@ -173,13 +136,8 @@
 
                 <!-- Submit button -->
                 <div class="form-actions">
-                  <button id="area_settings_submit" type="button" class="btn btn-success"><%= t('admin.save') %></button>
-                  <% if current_user.admin? %>
-                      <a href="/user/managerecords" class="btn"><%= t('admin.cancel') %></a>
-                  <% else %>
-                      <a href="/user/manageads" class="btn"><%= t('admin.cancel') %></a>
-                  <% end %>
-                  <span id="district_message_notification"></span>
+                  <%= submit_tag(t('admin.save'), class: 'btn btn-success') %>
+                  <a href="/user/index" class="btn"><%= t('home.cancel') %></a>
                 </div>
 
             <% end %>
@@ -202,6 +160,9 @@
 <% content_for :scripts do %>
 
     <%= javascript_include_tag 'admin' %>
+
+    <!-- Inserting the Leaflet Draw plugin, in order to draw polygon to define districts -->
+    <%= render 'shared/included_leafletdraw_scripts' %>
 
     <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>

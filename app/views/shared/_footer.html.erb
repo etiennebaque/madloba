@@ -4,8 +4,8 @@
 
     <footer class="row">
       <p class="col-md-4 col-sm-4 col-xs-12">
-        Admin theme from <a href="http://usman.it/free-responsive-admin-template">Charisma</a> -
-        Powered by <a href="http://madloba.org">Madloba</a>
+        <%= t('home.footer_theme_html', charisma: (link_to 'Charisma', 'http://usman.it/free-responsive-admin-template', target: '_blank')) %> -
+        <%= t('home.footer_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank')) %>
       </p>
     </footer>
 <% else %>
@@ -14,10 +14,10 @@
       <div class="container-fluid lower-footer">
         <% if is_in_setup_mode %>
             <!-- Footer for setup pages -->
-            <p class="muted footer-message">New website powered by <a href="http://madloba.org" target="_blank">Madloba</a></p>
+            <p class="muted footer-message"><%= t('home.footer_new_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank')) %></p>
         <% else %>
             <!-- Footer for regular pages -->
-            <p class="muted footer-message"><%= site_name %> - Powered by <a href="http://madloba.org" target="_blank">Madloba</a></p>
+            <p class="muted footer-message"><%= site_name %> - <%= t('home.footer_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank')) %></p>
         <% end %>
       </div>
     </footer>

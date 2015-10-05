@@ -24,8 +24,17 @@ function initLeafletMap(map_settings_array){
         maptiles = MQ.mapLayer();
     }
 
-    // Map object initialization
-    map = L.map('map');
+    // Map object initialization. By default, it is not possible
+    // to zoom in/out when using the mouse wheel, unless clicking on the map (toggle).
+    map = L.map('map', {scrollWheelZoom: false});
+    map.on('click', function() {
+        if (map.scrollWheelZoom.enabled()) {
+            map.scrollWheelZoom.disable();
+        } else {
+            map.scrollWheelZoom.enable();
+        }
+    });
+
     maptiles.addTo(map);
     map.setView([mylat, mylng], map_settings_array['zoom_level']);
 
@@ -35,12 +44,21 @@ function initLeafletMap(map_settings_array){
             if (map_settings_array['ad_show_is_area'] == true){
                 // Postal or district address (area type) on ads#show.
                 // Shows an area icon on the map of the ads show page.
-                marker = new L.marker(
-                    [ mylat, mylng ],
-                    {icon: areaIcon, title: map_settings_array['popup_message']}
-                );
-                marker.addTo(map).bindPopup(map_settings_array['popup_message']).openPopup();
+                if (map_settings_array['loc_type'] == 'district'){
+                    // Drawing the district related to this ad.
+                    var district_latlng = showSingleDistrict(map_settings_array['popup_message'], map_settings_array['bounds']);
+                    map.setView(district_latlng, map_settings_array['zoom_level']);
+                }else{
+                    // Drawing the postal code area circle related to this ad.
+                    var area = new L.circle([mylat, mylng], 600, {
+                        color: postal_code_area_color,
+                        fillColor: postal_code_area_color,
+                        fillOpacity: 0.3
+                    });
 
+                    area.addTo(map).bindPopup(map_settings_array['popup_message']).openPopup();
+                    map.setView([mylat, mylng], map_settings_array['zoom_level']);
+                }
             }else{
                 // Exact address on ads#show. Potentially several center markers on the map.
                 // Displays a marker for each item tied to the ad we're showing the details of.
@@ -62,22 +80,33 @@ function initLeafletMap(map_settings_array){
                     markers.addLayer(center_marker);
                 }
                 map.addLayer(markers);
+                map.setView([mylat, mylng], map_settings_array['zoom_level']);
             }
 
         }else{
             // Center single marker on the map
             // Appearing only in admin map setting, and admin location page, on page load.
             // Define first if it should be the area icon (for addresses based only on postal codes), or the default icon.
-            var icon_to_use = defaultIcon;
-            if (map_settings_array['is_area']){
-                icon_to_use = areaIcon;
-            }
-            // we are displaying the center point.
-            var center_marker = L.marker([ mylat, mylng ], {icon: icon_to_use});
-            if (map_settings_array['marker_message'] != ""){
-                center_marker.addTo(map).bindPopup(map_settings_array['marker_message']).openPopup();
+            if (map_settings_array['loc_type'] == 'postal'){
+                // Drawing the postal code area circle related to this ad.
+                postal_code_circle = new L.circle([mylat, mylng], 600, {
+                    color: postal_code_area_color,
+                    fillColor: postal_code_area_color,
+                    fillOpacity: 0.3
+                });
+
+                postal_code_circle.addTo(map).bindPopup(map_settings_array['marker_message']).openPopup();
+
+            }else if (map_settings_array['loc_type'] == 'district'){
+                showSingleDistrict(map_settings_array['marker_message'], map_settings_array['bounds']);
             }else{
-                center_marker.addTo(map);
+                // we are displaying the center point.
+                var center_marker = L.marker([ mylat, mylng ], {icon: defaultIcon});
+                if (map_settings_array['marker_message'] != ""){
+                    center_marker.addTo(map).bindPopup(map_settings_array['marker_message']).openPopup();
+                }else{
+                    center_marker.addTo(map);
+                }
             }
         }
     }
@@ -97,6 +126,11 @@ function initLeafletMap(map_settings_array){
         map.on('zoomend', function() {
             $('#zoom_level').val(map.getZoom());
         });
+    }
+
+    // Adding specific events on the 'Area settings' page, needed when drawing and saving districts. 
+    if (map_settings_array['page'] == 'areasettings'){
+        initMapOnAreaSettings();
     }
 
 }
@@ -148,39 +182,40 @@ function putLocationMarkers(){
         }
     }
 
-    // Snippet that create markers, to represent ads tied to postal-type location.
+    // Snippet that create markers, to represent ads tied to postal-type locations.
     if (locations_postal != null && Object.keys(locations_postal).length > 0){
-        Object.keys(locations_postal).forEach(function (area_code) {
-            var locations = locations_postal[area_code];
 
-            var popup_html_text = createPopupHtmlArea("In this area (<b>"+area_code+"</b>)<br /><br />", locations, 'postal', area_code);
+        var drawn_areas = L.featureGroup().addTo(map);
 
-            marker = new L.marker(
-                [area_geocodes[area_code]['latitude'],area_geocodes[area_code]['longitude']],
-                {icon: areaIcon, title: area_code}
-            );
-
-            marker.bindPopup(popup_html_text);
-            markers.addLayer(marker);
-        })
+        // Adding event to show/hide these districts from the checkbox in the guided navigation.
+        $("#show_area_id").change(function() {
+            if ($('#show_area_id').prop('checked')) {
+                // Drawing districts in this function, when checkbox is checked.
+                drawPostalCodeAreaOnMap(drawn_areas, locations_postal, area_geocodes);
+            }else{
+                drawn_areas.eachLayer(function (layer) {
+                    drawn_areas.removeLayer(layer);
+                });
+            }
+        }).change();
     }
 
-    // Snippet that create markers, to represent ads tied to district-type location.
+    // Snippet that creates markers, to represent ads tied to district-type location.
     if (locations_district != null && Object.keys(locations_district).length > 0){
-        Object.keys(locations_district).forEach(function (district_id) {
-            var locations = locations_district[district_id];
-            var district_name = area_geocodes[district_id]['name'];
+        var drawn_districts = L.featureGroup().addTo(map);
 
-            var popup_html_text = createPopupHtmlArea("In this district (<b>"+district_name+"</b>)<br /><br />", locations, 'district', district_id);
+        // Adding event to show/hide these districts from the checkbox in the guided navigation.
+        $("#show_area_id").change(function() {
+            if ($('#show_area_id').prop('checked')) {
+                // Drawing districts in this function, when checkbox is checked.
+                drawDistrictsOnMap(drawn_districts, locations_district);
+            }else{
+                drawn_districts.eachLayer(function (layer) {
+                    drawn_districts.removeLayer(layer);
+                });
+            }
+        }).change();
 
-            marker = new L.marker(
-                [area_geocodes[district_id]['latitude'],area_geocodes[district_id]['longitude']],
-                {icon: areaIcon, title: area_geocodes[district_id]['name']}
-            );
-
-            marker.bindPopup(popup_html_text);
-            markers.addLayer(marker);
-        })
     }
 
     // Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
@@ -200,7 +235,7 @@ function putLocationMarkers(){
                 icon = '<i class="fa '+ data['icon'] +'" style="color: '+ data['hexa_color'] +'; padding-right: 10px;"></i>';
             }
 
-            $('#adsModalTitle').html(icon + ' Ads for \'' + input[0].capitalizeFirstLetter() + '\' - ' + data['area_name'] + ' area');
+            $('#adsModalTitle').html(icon + gon.vars['ads_for']+' \'' + input[0].capitalizeFirstLetter() + '\' - ' + data['area_name']);
             var options = {
                 "backdrop" : "static",
                 "show" : "true"
@@ -212,7 +247,6 @@ function putLocationMarkers(){
 
     // Adding all the markers to the map.
     map.addLayer(markers);
-
 }
 
 
@@ -231,14 +265,14 @@ function createPopupHtml(first_sentence, ad, index){
     var popup_item_name = "<span style='color:" + marker_colors[item['category']['marker_color']] + "';><strong>" + item['name'].capitalizeFirstLetter() + "</strong></span>";
 
     if (ad['is_giving'] == true){
-        second_sentence = "Item(s) being given away:<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
+        second_sentence = gon.vars['items_given']+"<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
     }else{
-        second_sentence = "Item(s) being searched for:<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
+        second_sentence = gon.vars['items_searched']+"<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
     }
 
     if (ad['image']['thumb']['url'] != null && ad['image']['thumb']['url'] != ''){
         // Popup is created with a thumbnail image in it.
-        var ad_image = "<img class='thumb_ad_image' onError=\"$('.thumb_ad_image').remove(); $('.image_notification').html('<i>Image not available yet.</i>');\" src='"+ad['image']['thumb']['url']+"'><span class=\"image_notification\"></span>";
+        var ad_image = "<img class='thumb_ad_image' onError=\"$('.thumb_ad_image').remove(); $('.image_notification').html('<i>"+gon.vars['image_not_available']+"</i>');\" src='"+ad['image']['thumb']['url']+"'><span class=\"image_notification\"></span>";
         result =  "<div style='overflow: auto;'><div class='col-sm-6'>"+first_sentence+"</div><div class='col-sm-6'>"+ad_image+"</div><div class='col-sm-12'><br>"+second_sentence+"</div></div>";
     }else{
         // Popup is created without any thumbnail image.
@@ -246,6 +280,49 @@ function createPopupHtml(first_sentence, ad, index){
     }
 
     return result;
+}
+
+/**
+ * This function draws districts (where at least one current ad is included)
+ * on the map of the home page.
+ */
+ function drawDistrictsOnMap(drawn_districts, locations_district){
+    Object.keys(locations_district).forEach(function (district_id) {
+        var locations = locations_district[district_id];
+        var district_name = area_geocodes[district_id]['name'];
+        var district_bounds = area_geocodes[district_id]['bounds'];
+
+        var popup_html_text = createPopupHtmlArea(gon.vars['in_this_district'] + " (<b>"+district_name+"</b>)<br /><br />", locations, 'district', district_id);
+
+        // Adding the districts (which have ads) to the home page map.
+        L.geoJson(JSON.parse(district_bounds), {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(popup_html_text);
+                layer.setStyle({color: district_color});
+                drawn_districts.addLayer(layer);
+            }
+        });
+    })
+ }
+
+/**
+ * This function draws postal code areas (where at least a current ad is included)
+ * on the map of the home page.
+ */
+function drawPostalCodeAreaOnMap(drawn_areas, locations_postal, area_geocodes){
+    Object.keys(locations_postal).forEach(function (area_code) {
+        var locations = locations_postal[area_code];
+
+        var popup_html_text = createPopupHtmlArea("In this area (<b>"+area_code+"</b>)<br /><br />", locations, 'postal', area_code);
+
+        var area = L.circle([area_geocodes[area_code]['latitude'], area_geocodes[area_code]['longitude']], 600, {
+            color: postal_code_area_color,
+            fillColor: postal_code_area_color,
+            fillOpacity: 0.3
+        }).bindPopup(popup_html_text);
+
+        drawn_areas.addLayer(area);
+    });
 }
 
 /**
@@ -260,11 +337,11 @@ function createPopupHtmlArea(first_sentence, locations_from_same_area, area_type
     var is_accepting_item = false;
 
     // Adding a explanatory note, before listing items
-    var explanation = "<i>Select an item below for more details.</i><br /><br />"
+    var explanation = "<i>"+gon.vars['select_item']+"</i><br /><br />"
     first_sentence = first_sentence + explanation;
 
-    var people_give = "Item(s) being given away:<br />";
-    var people_accept = "Item(s) being searched for:<br />";
+    var people_give = gon.vars['items_given']+"<br />";
+    var people_accept = gon.vars['items_searched']+"<br />";
 
     // This hash will count how many ads we have, per promoted item.
     var ad_number_per_item = {};
@@ -435,16 +512,15 @@ function onMapClickLocation(e) {
 }
 
 /**
- * Callback fundtion that returns geocodes of clicked location.
+ * Callback function that returns geocodes of clicked location.
  * @param e
  * @returns "latitude,longitude"
  */
 function onMapClick(e) {
 
-	if (newmarker != null){
-		map.removeLayer(newmarker);
-	}
-	
+	if (newmarker != null){map.removeLayer(newmarker);}
+    if (postal_code_circle != null){map.removeLayer(postal_code_circle);}
+
 	var myNewLat = e.latlng.lat;
 	var myNewLng = e.latlng.lng;
 
@@ -454,36 +530,195 @@ function onMapClick(e) {
 
     if (location_marker_type == 'exact'){
         newmarker = new L.Marker(e.latlng, {icon: newIcon}, {draggable:false});
+        map.addLayer(newmarker);
     }else if (location_marker_type == 'area'){
-        newmarker = new L.Marker(e.latlng, {icon: areaIcon}, {draggable:false});
+        postal_code_circle = new L.circle(e.latlng, 600, {
+            color: postal_code_area_color,
+            fillColor: postal_code_area_color,
+            fillOpacity: 0.3
+        });
+        postal_code_circle.addTo(map);
     }
-
-    map.addLayer(newmarker);
 
     return myNewLat+','+myNewLng;
 }
 
 /**
- * Function that display a single marker, with its relevant location details, on a map.
- * @param lat
- * @param lng
- * @param location_marker_type
- * @param name
+ * Function that displays a single district on a map.
+ * @param district name
+ * @param bounds
+ * return the center of the district, needed to center the feature on the map for ads#show
  */
-function putSingleMarker(lat, lng, location_marker_type, name){
-    if (newmarker != null){
-        map.removeLayer(newmarker);
+function showSingleDistrict(district_name, bounds){
+    // Before adding the selected district, we need to remove all the currently displayed districts.
+    if (selected_area != null){
+        map.removeLayer(selected_area);
     }
 
-    if (location_marker_type == 'exact'){
-        newmarker = new L.Marker([lat,lng], {icon: newIcon}, {draggable:false});
-    }else if (location_marker_type == 'area'){
-        newmarker = new L.Marker([lat,lng], {icon: areaIcon}, {draggable:false});
+    var latlng;
+
+    // Drawing the selecting district on the map.
+    L.geoJson(JSON.parse(bounds), {
+        onEachFeature: function (feature, layer) {
+            layer.bindPopup(district_name);
+            layer.setStyle({color: district_color});
+            map.addLayer(layer);
+            latlng = layer.getBounds().getCenter();
+            layer.openPopup(latlng);
+            selected_area = layer;
+        }
+    });
+
+
+    return latlng;
+
+}
+
+/**
+ * Function initializes districts on the "Area settings" map, and tools to edit/delete them.
+ * Called in initLeafletMap.
+ */
+function initMapOnAreaSettings(){
+    drawnItems = L.featureGroup().addTo(map);
+    var district_bounds;
+    var layer;
+
+    // Adding drawing control panel to the map
+    map.addControl(new L.Control.Draw({
+        edit: { featureGroup: drawnItems }
+    }));
+
+    if (districts != null){
+        // Adding existing districts to the map
+        for (var i=0; i<districts.length; i++){
+            // Adding the district id and name to the geoJson properties.
+            L.geoJson(districts[i], {
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(districts[i]['properties']['name']);
+                    layer.setStyle({color: district_color});
+                    drawnItems.addLayer(layer);
+                }
+            });
+        }
     }
 
-    map.addLayer(newmarker);
+    // Event to activate 'Save district' button when district name not empty.
+    $('#map').on('keyup', '.save_district_text', function(){
+        if ($('.save_district_text').val().length > 0){
+            $('.save_district').removeClass('disabled');
+        }else{
+            $('.save_district').addClass('disabled');
+        }
+    });
 
-    newmarker.bindPopup(name).openPopup();
+    // Events triggered once the polygon (district) has been drawn.
+    map.on('draw:created', function(e) {
+        layer = e.layer;
+        drawnItems.addLayer(layer);
+
+        // Text field and "Save district" button to show up in the popup.
+        popup = L.popup({closeButton: false}).setContent("<input type='text' class='save_district_text' style='margin-right:5px;' placeholder='District name'><button type='button' class='btn btn-xs btn-success save_district disabled'>Save district</button>");
+        
+        layer.bindPopup(popup);
+        district_bounds = layer.toGeoJSON();
+
+        layer.openPopup(layer.getBounds().getCenter());
+    });
+
+    // Necessity to unbind click on map, to make the "on click" event right below work.
+    $('#map').unbind('click');
+
+    // Saving district drawing (bounds) and name.
+    $('#map').on('click', '.save_district', function(){
+        var district_name = $('.save_district_text').val();
+
+        $.post("/user/areasettings/save_district", {bounds: JSON.stringify(district_bounds), name: district_name}, function (data){
+            $('#district_notification_message').html("<span class='"+data.style+"'><strong>"+data.message+"</strong></span>");
+            if (data.status == 'ok'){
+                drawnItems.removeLayer(layer);
+
+                district_bounds['properties']['id'] = data.id;
+                district_bounds['properties']['name'] = district_name;
+
+                L.geoJson(district_bounds, {
+                    onEachFeature: function (feature, layer) {
+                        layer.bindPopup(district_name);
+                        layer.setStyle({color: data.district_color});
+                        drawnItems.addLayer(layer);
+                    }
+                });
+            }
+        });
+    });
+
+    // Update district name into the GeoJSON properties hash.
+    $('#map').on('click', '.update_district', function(){
+        var new_district_name = $('.update_district_text').val();
+        var district_id = $('.update_district_text').attr('id');
+
+        $.post("/user/areasettings/update_district_name", {id: district_id, name: new_district_name}, function (data){
+            $('#district_notification_message').html("<span class='"+data.style+"'><strong>"+data.message+"</strong></span>");
+        });
+
+        // Going through the districts and checking which one to update.
+        drawnItems.eachLayer(function (layer) {
+            district_bounds = layer.toGeoJSON();
+            if (district_id == district_bounds['properties']['id']){
+                layer.bindPopup("<input type='text' id='"+district_bounds['properties']['id']+"' class='update_district_text' style='margin-right:5px;' placeholder='District name' value='"+new_district_name+"'><button type='button' id='save_"+district_bounds['properties']['id']+"' class='btn btn-xs btn-success update_district'>OK</button><br /><div class='district_notif'></div>");
+                layer.closePopup();
+            }    
+            
+        });
+    });
+
+    // When starting to edit a district, create new popup for each district with current name in text field.
+    map.on('draw:editstart', function(e){
+        drawnItems.eachLayer(function (layer) {
+            district_bounds = layer.toGeoJSON();
+            layer.bindPopup("<input type='text' id='"+district_bounds['properties']['id']+"' class='update_district_text' style='margin-right:5px;' placeholder='District name' value='"+district_bounds['properties']['name']+"'><button type='button' id='save_"+district_bounds['properties']['id']+"' class='btn btn-xs btn-success update_district'>OK</button><br /><div class='district_notif'></div>"); 
+        });    
+
+    });
+
+    // After saving new name of district, remove the text input and display new name as text only.
+    map.on('draw:editstop', function(e){
+        drawnItems.eachLayer(function (layer) {
+            district_bounds = layer.toGeoJSON();
+            layer.bindPopup(district_bounds['properties']['name']);
+        });    
+
+    });
+
+    // Event triggered when polygon (district) has been edited, and "Save" has been clicked.
+    map.on('draw:edited', function (e) {
+        var layers = e.layers;
+        var count = 1;
+        var updated_districts = [];
+        layers.eachLayer(function (layer) {
+            district_bounds = layer.toGeoJSON();
+            updated_districts.push(district_bounds);
+        });
+
+        $.post("/user/areasettings/update_districts", {districts: JSON.stringify(updated_districts)}, function (data){
+            $('#district_notification_message').html("<span class='"+data.style+"'><strong>"+data.message+"</strong></span>");
+        });
+
+    });
+
+    // Event triggered after deleting districts and clicking on 'Save'.
+    map.on('draw:deleted', function (e) {
+        var layers = e.layers;
+        var district_ids = [];
+        layers.eachLayer(function (layer) {
+            district = layer.toGeoJSON();
+            district_ids.push(district['properties']['id']);                
+        });
+
+        $.post("/user/areasettings/delete_districts", {ids: district_ids}, function (data){
+            $('#district_notification_message').html("<span class='"+data.style+"'><strong>"+data.message+"</strong></span>");
+        });
+
+    });
 }
 
 // Adding capitalization of first word of a string to String prototype.

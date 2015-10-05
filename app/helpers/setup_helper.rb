@@ -24,4 +24,9 @@ module SetupHelper
     end
   end
 
+  # Very first page of setup process - choosing language for the application.
+  def available_languages
+    [['English','en'],['Français','fr']]
+  end
+
 end

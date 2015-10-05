@@ -19,10 +19,6 @@
 
 <% end %>
 
-
-
-
-
 <div class="container">
 
   <% if flash[:new_ad] %>
@@ -57,8 +53,7 @@
       <div class="ad-title">
         <% if !is_owning(@ad) %>
             <!-- Ad publisher -->
-            <label class="ad-label"><%= t('ad.published') %></label>
-            <span><%= publisher_name(@ad) %></span>
+            <span><strong><%= t('ad.published') %></strong> <%= publisher_name(@ad) %></span>
         <% else %>
             <% if @your_ad_has_expired %>
                 <strong><%= t('ad.you_own') %></strong><br>

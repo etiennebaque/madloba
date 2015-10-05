@@ -90,7 +90,8 @@
                 <div class="form-group">
                   <%= label_tag 'mapBoxApiKey', t('admin.map_settings.mapbox'), class:'control-label' %>
                   <div class="form-inline">
-                    <%= text_field_tag 'mapBoxApiKey', @mapSettings['map_box_api_key'], class: 'form-control' %>
+                    <!-- Hidding key on demo website -->
+                    <%= text_field_tag 'mapBoxApiKey', is_demo ? '********' : @mapSettings['map_box_api_key'], class: 'form-control' %>
                     <a href="https://www.mapbox.com/account/apps" target="_blank"><%= t('admin.map_settings.mapbox_link') %></a>
                   </div>
                 </div>
@@ -99,7 +100,8 @@
                 <div class="form-group">
                   <%= label_tag 'mapQuestApiKey', t('admin.map_settings.mapquest'), class:'control-label' %>
                   <div class="form-inline">
-                    <%= text_field_tag 'mapQuestApiKey', @mapSettings['mapquest_api_key'], class: 'form-control' %>
+                    <!-- Hidding key on demo website -->
+                    <%= text_field_tag 'mapQuestApiKey', is_demo ? '********' : @mapSettings['mapquest_api_key'], class: 'form-control' %>
                     <a href="http://developer.mapquest.com/web/info/account/app-keys" target="_blank"><%= t('admin.map_settings.mapquest_link') %></a>
                   </div>
                 </div>

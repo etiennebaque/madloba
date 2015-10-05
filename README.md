@@ -1,4 +1,6 @@
-# Madloba [![Release Version](https://img.shields.io/github/release/etiennebaque/madloba.svg)](https://github.com/etiennebaque/madloba/releases) [![Build Status](https://img.shields.io/travis/etiennebaque/madloba/master.svg)](https://travis-ci.org/etiennebaque/madloba)
+# Madloba
+
+[![Release Version](https://img.shields.io/github/release/etiennebaque/madloba.svg)](https://github.com/etiennebaque/madloba/releases) [![Build Status](https://travis-ci.org/etiennebaque/madloba.svg?branch=master)](https://travis-ci.org/etiennebaque/madloba)
 
 Madloba (beta) is a free, open-source solution that connects people who have things to exchange.
 
@@ -15,8 +17,8 @@ If you want run Madloba on your local machine, follow these steps:
 
 1. Make sure you have these prerequisites installed:
   - [Git](https://github.com/etiennebaque/madloba/wiki/Install-Git-on-your-local-machine)
-  - [Ruby 2.1.2](https://github.com/etiennebaque/madloba/wiki/Install-Ruby-on-your-local-machine)
-  - [Bundler gem](http://bundler.io/)
+  - [Ruby 2.2.2](https://github.com/etiennebaque/madloba/wiki/Install-Ruby-on-your-local-machine)
+  - [Bundler](http://bundler.io/)
   - [Postgresql](http://www.postgresql.org/download/)
 
 2. Run the following commands:

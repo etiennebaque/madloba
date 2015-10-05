@@ -7,6 +7,9 @@ class User::AdminPanelController < ApplicationController
 
   include ApplicationHelper
 
+  # Style used to display messages on 'Area settings' page
+  STYLES = {success: 'text-success', error: 'text-danger' }
+
   def requires_user
     if !user_signed_in?
       redirect_to '/user/login'
@@ -34,13 +37,13 @@ class User::AdminPanelController < ApplicationController
 
         # Show a message if no Mapbox key has been entered, in "Map settings"
         if (setting.key == 'map_box_api_key' && (setting.value == '' || setting.value.nil?))
-          @messages << {text: t('admin.no_mapbox_account_html', href: view_context.link_to('Mapbox', 'http://www.mapbox.com', {target: '_blank'})),
+          @messages << {text: t('admin.no_mapbox_account_html', mapbox_website: view_context.link_to('Mapbox', 'http://www.mapbox.com', {target: '_blank'})),
                         type: 'info'}
         end
 
         # Show a message if no MapQuest key has been entered, in "Map settings"
         if (setting.key == 'mapquest_api_key' && (setting.value == '' || setting.value.nil?))
-          @messages << {text: t('admin.no_mapquest_account_html', href: view_context.link_to('MapQuest Developers', 'http://developer.mapquest.com/web/info/account/app-keys', {target: '_blank'})),
+          @messages << {text: t('admin.no_mapquest_account_html', mapquest_website: view_context.link_to('MapQuest Developers', 'http://developer.mapquest.com/web/info/account/app-keys', {target: '_blank'})),
                         type: 'info'}
         end
 
@@ -199,8 +202,8 @@ class User::AdminPanelController < ApplicationController
         end
       }
 
-      if (params['mapBoxApiKey'] == '' && params['mapQuestApiKey'] == '')
-        # if there is no longer any Mapbox key, we get back to the default map type, osm.
+      if ((params['mapBoxApiKey'] == '' && params['maptype'] == 'mapbox') || (params['mapQuestApiKey'] == '' && params['maptype'] == 'mapquest'))
+        # if there is no longer any Mapbox or MapQuest keys, we get back to the default map type, osm.
         setting_record = Setting.find_by_key('chosen_map')
         setting_record.update_attributes(value: 'osm')
       end
@@ -217,21 +220,21 @@ class User::AdminPanelController < ApplicationController
   def areasettings
     authorize :admin, :areasettings?
 
-    @mapSettings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, CLICKABLE_MAP_AREA_MARKER)
+    @mapSettings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
 
-    @districts = District.all.order('name asc')
-    @districts_hash = {}
-    @district_index = 0
-    @districts.each do |district|
-      @districts_hash[district.id] = {name: district.name, latitude: district.latitude, longitude: district.longitude}
-      if district.id >= @district_index
-        # @district_index will be used as a key for @district_hash, when adding new district dynamically.
-        @district_index = district.id + 1
-      end
-    end
+    # Adding this flag to add leaflet draw tool to the map, on the "Area settings" page.
+    # Drawing tool added in initLeafletMap(), in custom-leaflet.js
+    @mapSettings['page'] = 'areasettings'
 
+    districts = District.all.select(:id, :name, :bounds)
+    @districts = []
+    districts.each do |d|
+      bounds = JSON.parse(d.bounds)
+      bounds['properties']['id'] = d.id
+      bounds['properties']['name'] = d.name
+      @districts.push(bounds)
+    end  
     @area_types = @mapSettings['area_type'].split(',')
-
   end
 
   def update_areasettings
@@ -255,34 +258,91 @@ class User::AdminPanelController < ApplicationController
     redirect_to user_areasettings_path
 
   end
+  
+  # Save/update a district after it has been drawn on a map and named, on the "Area settings" page.
+  def save_district
+    bounds_geojson = params[:bounds]
+    district_name = params[:name]
 
-  # Called via Ajax, when updating district values, in the area setting page.
+    style, message, status = '', '', ''
+
+    # Creation of district
+    d = District.new(name: district_name, bounds: bounds_geojson)
+    if d.save
+      message = t('admin.area_settings.save_success')
+      style = STYLES[:success]
+      status = 'ok'
+      Rails.cache.write(CACHE_DISTRICTS, District.select(:id, :name, :bounds))
+    else
+      message = t('admin.area_settings.error_save_district')
+      style = STYLES[:error]
+    end
+
+    render json: {'status' => status, 'id' => d.id, 'message' => message, 'style' => style, 
+      'district_name' => district_name, 'district_color' => DISTRICT_COLOR}
+  end
+
+  # Updating the name of an existing district
+  def update_district_name
+    d = District.find(params[:id].to_i)
+    style, message = '', ''
+    if d && d.update_attributes(name: params[:name])
+      message = t('admin.area_settings.save_name_success')
+      style = STYLES[:success]
+      Rails.cache.write(CACHE_DISTRICTS, District.select(:id, :name, :bounds))
+    else
+      message = t('admin.area_settings.error_name_save')
+      style = STYLES[:error]
+    end
+
+    render json: {'message' => message, 'style' => style}
+  end   
+
+  # Updating the boundaries of existing districts
   def update_districts
-    districts = params[:data]
-    message = ''
-    districts.each do |id,district|
-      this_district = District.find_by_id(id)
-      if (this_district)
-        if district['to_delete']
-          # We delete this district
-          this_district.delete
+    districts = JSON.parse(params[:districts])
+    style, message = '', ''
+    districts.each do |district|
+      # Editing an existing district at a time.
+      district_id = district['properties']['id']
+      district_name = district['properties']['name']
+      if district_id
+        district['properties'] = {}
+        d = District.find(district_id.to_i)
+        if d.update_attributes(name: district_name, bounds: district.to_json)
+          message = t('admin.area_settings.update_success')
+          style = STYLES[:success]
+          Rails.cache.write(CACHE_DISTRICTS, District.select(:id, :name, :bounds))
         else
-          # We update an existing district
-          this_district.update_attributes(name: district['name'], latitude: district['latitude'], longitude: district['longitude'])
+          message = t('admin.area_settings.error_update_district')
+          style = STYLES[:error]
+          break
         end
-      else
-        this_district = District.new(district)
-      end
-      if this_district.save
-        message = 'ok'
-      else
-        message = t('admin.area_settings.error_update_district')
-        break
       end
     end
 
-    render json: {'status' => message}
-  end
+    render json: {'message' => message, 'style' => style}
+  end 
+
+  # Deletes existing districts
+  def delete_districts
+    ids_to_delete = params[:ids]
+    style, message = '', ''
+    ids_to_delete.each do |id|
+      d = District.find(id)
+      if d.delete
+        message = t('admin.area_settings.delete_success')
+        style = STYLES[:success]
+        Rails.cache.write(CACHE_DISTRICTS, District.select(:id, :name, :bounds))
+      else
+        message = t('admin.area_settings.delete_error')
+        style = STYLES[:error]
+      end  
+    end  
+
+    render json: {'message' => message, 'style' => style}
+
+  end 
 
   def getAreaSettings
     code_and_area = Setting.where(key: %w(postal_code_length area_length)).pluck(:value)

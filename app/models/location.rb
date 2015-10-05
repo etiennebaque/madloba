@@ -100,7 +100,7 @@ class Location < ActiveRecord::Base
     if self.loc_type == 'exact'
       full_address
     elsif self.loc_type == 'postal'
-      I18n.t('admin.location.area_name', area: self.area)
+      I18n.t('admin.location.area_name', area_name: self.area)
     elsif self.loc_type == 'district'
       self.district.name
     end

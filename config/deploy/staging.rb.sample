@@ -1,0 +1,49 @@
+# Simple Role Syntax
+# ==================
+# Supports bulk-adding hosts to roles, the primary
+# server in each group is considered to be the first
+# unless any hosts have the primary property set.
+# Don't declare `role :all`, it's a meta role
+
+#role :app, %w{deploy@example.com}
+#role :web, %w{deploy@example.com}
+#role :db,  %w{deploy@example.com}
+
+set :stage, :staging
+set :rails_env, 'staging'
+
+
+# --------------------------------------------------
+
+# TODO: Set the IP address of your server here, where your Madloba application will be deploy,
+# as well as the username used for deployment on this server.
+server 'your.server.ip.address', user: 'username', roles: %w{web app}
+
+# TODO: Set the absolute path where the 'shared' folder of your Madloba application is situated, on your server.
+# (eg: '/home/username/madloba/shared')
+set :shared_path, '/absolute/shared/folder/path'
+
+# --------------------------------------------------
+
+
+# you can set custom ssh options
+# it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
+# you can see them in [net/ssh documentation](http://net-ssh.github.io/net-ssh/classes/Net/SSH.html#method-c-start)
+# set it globally
+#  set :ssh_options, {
+#    keys: %w(/home/rlisowski/.ssh/id_rsa),
+#    forward_agent: false,
+#    auth_methods: %w(password)
+#  }
+# and/or per server
+# server 'example.com',
+#   user: 'user_name',
+#   roles: %w{web app},
+#   ssh_options: {
+#     user: 'user_name', # overrides user setting above
+#     keys: %w(/home/user_name/.ssh/id_rsa),
+#     forward_agent: false,
+#     auth_methods: %w(publickey password)
+#     # password: 'please use keys'
+#   }
+# setting per server overrides global ssh_options

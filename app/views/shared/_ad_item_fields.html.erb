@@ -1,3 +1,4 @@
+<!-- Item drop-down box and "Create a new item" button, in create/edit ad page -->
 <div class="nested-fields ad-item-fields" style="padding-bottom: 10px;">
     <div class="item_from_list" style="display: inline;">
       <%= f.select :item_id, options_from_collection_for_select(Item.where(id: f.object.item_id), 'id', 'name'), {}, {class: 'ad-item-select-list selectpicker selectpicker-items', data: {live_search: 'true'}} %>

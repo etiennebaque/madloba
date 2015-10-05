@@ -22,7 +22,7 @@
 
 ------------------------------------------------
 
-<%= t('mailer.manage_ad_html', :href => link_to(t('mailer.admin_panel'), @full_admin_url)) %>
+<%= t('mailer.manage_ad_html', :admin_panel => link_to(t('mailer.admin_panel'), @full_admin_url)) %>
 
 <%= t('mailer.ad_will_expire', day_number: @max_expire_days , expire_date: @ad.expire_date ) %>
 

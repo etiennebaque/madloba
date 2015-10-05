@@ -166,7 +166,7 @@ function docReady() {
         "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'i><'col-md-12 center-block'p>>",
         "sPaginationType": "bootstrap",
         "oLanguage": {
-            "sLengthMenu": "_MENU_ records per page"
+            "sLengthMenu": "_MENU_ " + gon.vars['records_per_page']
         }
     });
     $('.btn-close').click(function (e) {
