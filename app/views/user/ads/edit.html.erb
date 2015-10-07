@@ -3,9 +3,6 @@
     <!-- Includes the main Leaflet CSS and JS files, as well as Mapbox files -->
     <%= render 'shared/map_scripts_before_body', include_all_scripts: false %>
 
-    <!-- CSS file used on admin pages -->
-    <%= stylesheet_link_tag 'admin' %>
-
     <style type="text/css">
         #map {
             width: 100%;
@@ -13,8 +10,6 @@
             margin: 0;
         }
     </style>
-
-    <%= javascript_include_tag :cocoon %>
 
 <% end %>
 
@@ -344,7 +339,7 @@
 
 <% content_for :scripts do %>
     <!-- Admin screen related scripts -->
-    <%= javascript_include_tag 'admin' %>
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <!-- javascript_include_tag 'admin' -->
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>

@@ -132,6 +132,6 @@
 <% content_for :scripts do %>
     <%= javascript_include_tag 'leaflet.markercluster' %>
 
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and scripts that creates the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>

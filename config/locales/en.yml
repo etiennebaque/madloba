@@ -154,7 +154,7 @@ en:
     about_you: "About you"
     name: "Your name*:"
     name_help: Please enter your name or a nickname here. It will appear publicly as it is, in the published ad.
-    your_email: "Your email*:"
+    your_email: Your email
     captcha: "Captcha*:"
     email_help: Providing your email is not mandatory (make sure you've at least put a phone number in the ad description). If you give an email address, it won't be published publicly and users will still be able to write a message to you.
     ad_is_deleted: The ad '%{deleted_ad_title}' has been deleted.

@@ -95,8 +95,8 @@
     </div>
 
     <!-- Geocode (latitude and longitude hidden fields) -->
-    <%= form.hidden_field :latitude, value: @mapSettings['lat'], class: 'latitude_hidden' %>
-    <%= form.hidden_field :longitude, value: @mapSettings['lng'], class: 'longitude_hidden' %>
+    <%= form.hidden_field :latitude, value: @map_settings['lat'], class: 'latitude_hidden' %>
+    <%= form.hidden_field :longitude, value: @map_settings['lng'], class: 'longitude_hidden' %>
 
   </div>
 
@@ -126,8 +126,8 @@
         <%= form.select :district_id, options_for_select(districts, form.object.district_id), {}, {class: 'form-control help-message district_dropdown',
                                                                                                    :data => {:content => t('location.district_help'), :placement => 'right',
                                                                                                              :toggle => 'popover', :trigger => 'hover focus'}} %>
-        <%= form.hidden_field :latitude, value: @mapSettings['lat'], class: 'latitude_hidden' %>
-        <%= form.hidden_field :longitude, value: @mapSettings['lng'], class: 'longitude_hidden' %>
+        <%= form.hidden_field :latitude, value: @map_settings['lat'], class: 'latitude_hidden' %>
+        <%= form.hidden_field :longitude, value: @map_settings['lng'], class: 'longitude_hidden' %>
       </div>
     </div>
   </div>

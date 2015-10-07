@@ -2,7 +2,6 @@
 
     <!-- Includes the main Leaflet CSS and JS files, as well as Mapbox files -->
     <%= render 'shared/map_scripts_before_body', include_all_scripts: false %>
-    <%= stylesheet_link_tag 'admin' %>
 
     <style type="text/css">
         #map {
@@ -96,7 +95,7 @@
                   <div class="form-group">
                     <%= label_tag 'postal_code_length', t('admin.map_settings.postal_code_field1')+':', class:'control-label' %>
                     <div class="form-inline">
-                      <%= number_field_tag 'postal_code_length', @mapSettings['postal_code_length'], class: 'form-control', min: 1 %>
+                      <%= number_field_tag 'postal_code_length', @map_settings['postal_code_length'], class: 'form-control', min: 1 %>
                       <i><%= t('admin.map_settings.postal_code_help1') %></i>
                     </div>
                   </div>
@@ -104,7 +103,7 @@
                   <div class="form-group">
                     <%= label_tag 'area_length', t('admin.map_settings.postal_code_field2')+':', class:'control-label' %>
                     <div class="form-inline">
-                      <%= number_field_tag 'area_length', @mapSettings['area_length'], class: 'form-control', min: 1 %>
+                      <%= number_field_tag 'area_length', @map_settings['area_length'], class: 'form-control', min: 1 %>
                       <i><%= t('admin.map_settings.postal_code_help2') %></i>
                     </div>
                   </div>
@@ -159,11 +158,9 @@
 
 <% content_for :scripts do %>
 
-    <%= javascript_include_tag 'admin' %>
-
     <!-- Inserting the Leaflet Draw plugin, in order to draw polygon to define districts -->
     <%= render 'shared/included_leafletdraw_scripts' %>
 
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>

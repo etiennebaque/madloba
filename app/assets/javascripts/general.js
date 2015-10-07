@@ -1,3 +1,19 @@
+// Object used for autocompletion when user searches for an item, in navigation bar
+var searched_ad_items = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    prefetch: {
+        url: '/getItems?type=prefetch_ad_items'
+    },
+    remote: {
+        url: '/getItems?item=QUERY&type=search_ad_items',
+        wildcard: 'QUERY'
+    }
+});
+searched_ad_items.clearPrefetchCache();
+searched_ad_items.initialize(true);
+
+
 $(document).ready(function() {
 
     // This is a test to see if the user is using clients like AdBlock.
@@ -170,8 +186,8 @@ $(document).ready(function() {
             $("#new_location_form a.add_fields").trigger('click');
             $("#locations_from_list").hide();
             $("#location a.add_fields").hide();
-            initLeafletMap(map_settings_array);
-            init_location_form(districts_bounds, map);
+            initLeafletMap(map_settings);
+            init_location_form(districts_bounds, leaf.map);
         },20);
     }
 
@@ -185,8 +201,8 @@ $(document).ready(function() {
             $("#locations_from_list").hide();
             $("#new_location_form a.add_fields").hide();
             // Call to the JS functions that will initialize the new location form and the map.
-            initLeafletMap(map_settings_array);
-            init_location_form(districts_bounds, map);
+            initLeafletMap(map_settings);
+            init_location_form(districts_bounds, leaf.map);
         });
     $('#new_location_form').bind("cocoon:after-remove", function() {
             $("#locations_from_list").show();
@@ -196,17 +212,17 @@ $(document).ready(function() {
 
     // Function call to initialize the location form (Location edit form, all Ad forms).
     if (typeof districts_bounds != "undefined") {
-        init_location_form(districts_bounds, map);
+        init_location_form(districts_bounds, leaf.map);
     }
 
 
     // This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,
     // 'zoomToBoundsOnClick' would zoom in too much, and push the markers to the edge of the screen.
     // This event underneath fixes this behaviour, the markers are not pushed to the boundaries of the map anymore.
-    if(typeof markers != 'undefined'){
-        markers.on('clusterclick', function (a) {
+    if(markers.group != ''){
+        markers.group.on('clusterclick', function (a) {
             var bounds = a.layer.getBounds().pad(0.5);
-            map.fitBounds(bounds);
+            leaf.map.fitBounds(bounds);
         });
     }
 
@@ -215,6 +231,11 @@ $(document).ready(function() {
     $('#home-map-canvas-wrapper .leaflet-control-zoom-out, #home-map-canvas-wrapper .leaflet-control-zoom-in').click(function(){
         $("html, body").animate({ scrollTop: 0 }, 0);
     });
+
+    // load additional scripts when user is in the admin panel.
+    if (is_in_admin_panel()){
+        load_admin_scripts();
+    }
 
 });
 
@@ -227,29 +248,29 @@ function init_location_form(districts_bounds, map){
     if ($('#map').length > 0){
         $(".location_type_exact").click(function(){
             removes_location_layers();
-            show_exact_address_section(map);
+            show_exact_address_section();
         });
 
         if($('.location_type_exact').is(':checked')) {
-            show_exact_address_section(map);
+            show_exact_address_section();
         }
 
         $(".location_type_postal_code").click(function(){
             removes_location_layers();
-            show_postal_code_section(map);
+            show_postal_code_section();
         });
 
         if($('.location_type_postal_code').is(':checked')) {
-            show_postal_code_section(map);
+            show_postal_code_section();
         }
 
         $(".location_type_district").click(function(){
             removes_location_layers();
-            show_district_section(map);
+            show_district_section();
         });
 
         if($('.location_type_district').is(':checked')) {
-            show_district_section(map);
+            show_district_section();
         }
     }
 
@@ -330,7 +351,7 @@ function find_geocodes(){
                     $(".longitude_hidden").val(myNewLng);
 
                     // Update the center of map, to show the general area
-                    map.setView(new L.LatLng(myNewLat, myNewLng), data.zoom_level);
+                    leaf.map.setView(new L.LatLng(myNewLat, myNewLng), data.zoom_level);
 
                 }else{
                     // The address' geocodes were not found - the user has to pinpoint the location manually on the map.
@@ -350,20 +371,20 @@ function find_geocodes(){
  * or selected district.
  */
 function removes_location_layers(){
-    if (newmarker != null){map.removeLayer(newmarker);}
-    if (selected_area != null){map.removeLayer(selected_area);}
-    if (postal_code_circle != null){map.removeLayer(postal_code_circle);}
+    if (markers.new_marker != null){leaf.map.removeLayer(markers.new_marker);}
+    if (markers.selected_area != null){leaf.map.removeLayer(markers.selected_area);}
+    if (markers.postal_code_circle != null){leaf.map.removeLayer(markers.postal_code_circle);}
 }
 
 /**
  * Function used in the location form - show appropriate section when entering an exact address
  */
-function show_exact_address_section(map){
+function show_exact_address_section(){
     $("#postal_code_section").removeClass('hide');
     $("#district_section").addClass('hide');
     $(".exact_location_section").removeClass('hide');
-    location_marker_type = 'exact';
-    map.on('click', onMapClickLocation);
+    markers.location_marker_type = 'exact';
+    leaf.map.on('click', onMapClickLocation);
     $('#map_notification_postal_code_only').addClass('hide');
     $('#map_notification_exact').removeClass('hide');
 }
@@ -372,12 +393,12 @@ function show_exact_address_section(map){
 /**
  * Function used in the location form - show appropriate section when choosing a postal code-based area
  */
-function show_postal_code_section(map){
+function show_postal_code_section(){
     $(".exact_location_section").addClass('hide');
     $("#district_section").addClass('hide');
     $("#postal_code_section").removeClass('hide');
-    location_marker_type = 'area';
-    map.on('click', onMapClickLocation);
+    markers.location_marker_type = 'area';
+    leaf.map.on('click', onMapClickLocation);
     $('#map_notification_postal_code_only').removeClass('hide');
     $('#map_notification_exact').addClass('hide');
 }
@@ -386,14 +407,14 @@ function show_postal_code_section(map){
 /**
  * Function used in the location form - show appropriate section when choosing a district-based area
  */
-function show_district_section(map){
+function show_district_section(){
     $(".exact_location_section").addClass('hide');
     $("#postal_code_section").addClass('hide');
     $("#district_section").removeClass('hide');
     $('#map_notification_postal_code_only').addClass('hide');
     $('#map_notification_exact').addClass('hide');
-    location_marker_type = 'area';
-    map.off('click', onMapClickLocation);
+    markers.location_marker_type = 'area';
+    leaf.map.off('click', onMapClickLocation);
     $("#map_notification").addClass('hide');
 
     // Loading the district matching the default option in the district drop-down box.
@@ -401,7 +422,7 @@ function show_district_section(map){
     var name = $('.district_dropdown option:selected').text();
     var bounds = districts_bounds[id];
 
-    showSingleDistrict(name, bounds);
+    leaf.show_single_district(name, bounds);
 
     // Location form: when choosing a district from the drop-down box, we need to display the area on the map underneath.
     $('#district_section').on('change', '.district_dropdown', function() {
@@ -409,7 +430,7 @@ function show_district_section(map){
         name = $('.district_dropdown option:selected').text();
         bounds = districts_bounds[id];
 
-        showSingleDistrict(name, bounds);
+        leaf.show_single_district(name, bounds);
 
     }).change();
 }
@@ -495,5 +516,89 @@ function show_hide_up_arrow (){
         $("#navbar-up-link").hide();
     } else {
         $("#navbar-up-link").show();
+    }
+}
+
+
+/**
+ * Checks whether the user is in the admin panel (has '/user/' in the url)
+ */
+function is_in_admin_panel(){
+    return window.location.href.indexOf("/user/") > -1
+}
+
+/**
+ * Script to load on an admin page
+ */
+function load_admin_scripts (){
+    // Map settings admin page: refreshing map, when "Map type" field is modified.
+    $('#maptype').change(function(){
+        var selected_map = "";
+        $( "select option:selected" ).each(function() {
+            selected_map = $(this).val();
+        });
+        map_settings['chosen_map'] = selected_map;
+        map_settings['tiles_url'] = map_settings[selected_map]['tiles_url']
+        map_settings['attribution'] = map_settings[selected_map]['attribution']
+        initLeafletMap(map_settings);
+    });
+
+    // Area settings admin page: show either the "postal code" or the "district" section.
+    // "Create ad" form: show appropriate section when entering an exact address
+    $(".area_postal_code").click(function(){
+        $("#postal_code_section").toggle(0, function(){});
+    });
+
+    if($('.area_postal_code').is(':checked')) {
+        $("#postal_code_section").css('display', 'block');
+    }
+
+    // Area settings page: show appropriate section when choosing an area
+    $(".area_district").click(function(){
+        $("#district_section").toggle(0, function(){});
+        initLeafletMap(map_settings);
+    });
+
+    if($('.area_district').is(':checked')) {
+        $("#district_section").css('display', 'block');
+        initLeafletMap(map_settings);
+    }
+
+    // "Edit ad" form: create message when image needs to be uploaded.
+    $('#ad-edit-form').submit(function() {
+        var image_path = $('#ad_image').val();
+        if (image_path != null && image_path != ''){
+            $('#upload-in-progress').html('<i>'+gon.vars['new_image_uploading']+'</i>');
+        }
+    });
+
+    // Character counter (class 'textarea_count'), for text area, in 'General settings'.
+    $( ".textarea_count" ).keyup(function() {
+        var maxlength = $(this).attr('maxlength');
+        var textlength = $(this).val().length;
+        $(".remaining_characters").html(maxlength - textlength);
+    });
+
+    $( ".textarea_count" ).keydown(function() {
+        var maxlength = $(this).attr('maxlength');
+        var textlength = $(this).val().length;
+        $(".remaining_characters").html(maxlength - textlength);
+    });
+
+    // Category edit page: opening up the icon modal window.
+    $(".btn-icon-modal").click(function (){
+        $('#myModalIcon').modal('show');
+    });
+
+    // Onclick event triggered when Icon clicked in modal window, in Category edit page.
+    $(".icon-for-category").click(function (){
+        var icon_key = $(this).attr('id');
+        $('#myModalIcon').modal('toggle');
+        $('#category_icon').val(icon_key);
+    });
+
+    // Manage record page: go to the right tab, if page loads with an anchor in url (like 'http://...#categories')
+    if (window.location.href.indexOf("managerecords") > -1 && window.location.hash){
+        $('#records-tabs a[href='+window.location.hash+']').tab('show')
     }
 }
