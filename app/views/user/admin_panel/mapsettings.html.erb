@@ -157,12 +157,6 @@
 </div><!--/fluid-row-->
 
 <% content_for :scripts do %>
-    <script>
-        // The initialization of this variable allows the JS events to be tied to the map of this page.
-        var districts_geocodes = {};
-    </script>
-    <!-- Admin screen related scripts -->
-    <%= javascript_include_tag 'admin' %>
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: true %>
 <% end %>

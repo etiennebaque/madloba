@@ -9,10 +9,7 @@
   <title><%= site_name %></title>
 
   <!-- Main CSS files to be included in all pages. -->
-  <%= render 'shared/included_css' %>
-
-  <!-- JQuery.min.js to be included before body. Other JS scripts included after body -->
-  <%= javascript_include_tag 'jquery.min' %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
 
   <!-- Gon gem - managing text in JS files -->
   <%= include_gon %>
@@ -47,7 +44,7 @@
   <%= render 'shared/navigation' %>
 
   <% if is_in_admin_panel %>
-      <!-- Rendering admin panel and its footer -->
+      <!-- Rendering admin panel and its footer in a 'ch-container' div -->
       <div class="ch-container">
         <%= yield %>
         <%= render 'shared/footer' %>
@@ -59,19 +56,17 @@
 
 </div>
 
+
 <% if !is_in_admin_panel %>
     <!-- Rendering footer for regular pages -->
     <%= render 'shared/footer' %>
 <% end %>
 
-<!-- Main Javascript files to be included in all pages. -->
-<%= render 'shared/included_js' %>
+<!-- Javascript files to be included in all pages. -->
+<%= javascript_include_tag 'application' %>
 
 <!-- Javascript files specific to some pages, to be included here. -->
 <%= yield :scripts %>
-
-<!-- Including jquery_ujs after loading all scripts -->
-<%= javascript_include_tag 'jquery_ujs' %>
 
 </body>
 </html>

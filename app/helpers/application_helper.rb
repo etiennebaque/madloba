@@ -239,6 +239,12 @@ module ApplicationHelper
     areas = Location.where(:loc_type => ['postal,district']).select(:id, :name, :postal_code, :latitude, :longitude)
     @mapSettings['areas'] = areas.as_json
 
+    # Other type of information needed for the map, like district area color, marker image path...
+    @mapSettings['default_marker_icon'] = ActionController::Base.helpers.asset_path('images/marker-icon.png')
+    @mapSettings['new_marker_icon'] = ActionController::Base.helpers.asset_path('images/marker-icon-red.png')
+    @mapSettings['district_color'] = DISTRICT_COLOR
+    @mapSettings['postal_code_area_color'] = POSTAL_CODE_AREA_COLOR
+
     return @mapSettings
   end
 

@@ -344,7 +344,7 @@
 
 <% content_for :scripts do %>
     <!-- Admin screen related scripts -->
-    <%= javascript_include_tag 'admin' %>
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <!-- javascript_include_tag 'admin' -->
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>

@@ -8,7 +8,7 @@ gem 'rails', '4.2.4'
 gem 'pg'
 
 # Use SCSS for stylesheets
-# gem 'sass-rails', '~> 4.0.5' # scss files not used for now.
+gem 'sass-rails', '~> 5.0'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -23,7 +23,10 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+#gem 'turbolinks'
+
+# jQuery plugin for drop-in fix binded events problem caused by Turbolinks
+#gem 'jquery-turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 #gem 'jbuilder', '~> 2.3.1'

@@ -4,10 +4,17 @@
 <% end %>
 
 <!-- Including Leaflet javascript files -->
+
 <%= javascript_include_tag 'leaflet.awesome-markers.js' %>
 <%= javascript_include_tag 'custom-leaflet.js' %>
 
 <script>
-    // the script in this partial underneath calls the method initializing the map for this page.
-    <%= render 'shared/initialize_map.js.erb' %>
+    // Initializing a bunch of variables used over the map-related scripts.
+    var map_settings_array = <%= raw @mapSettings.to_json %>;
+
+
+    // Call to the JS function that will initialize the map.
+    if ($("#map").length > 0){
+        initLeafletMap(map_settings_array);
+    }
 </script>

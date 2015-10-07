@@ -1,3 +1,6 @@
+/**
+ * Script to be loaded when user is on the admin panel.
+ */
 $(document).ready(function(){
 
     // Map settings admin page: refreshing map, when "Map type" field is modified.
@@ -10,7 +13,6 @@ $(document).ready(function(){
         map_settings_array['tiles_url'] = map_settings_array[selected_map]['tiles_url']
         map_settings_array['attribution'] = map_settings_array[selected_map]['attribution']
         initLeafletMap(map_settings_array);
-
     });
 
     // Area settings admin page: show either the "postal code" or the "district" section.

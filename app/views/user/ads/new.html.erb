@@ -11,8 +11,6 @@
         }
     </style>
 
-    <%= javascript_include_tag :cocoon %>
-
     <script>
         var current_page = "new_ad";
         var location_number = <%= user_locations_number %>;
@@ -289,6 +287,6 @@
 
 <!-- Loading JS scripts -->
 <% content_for :scripts do %>
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>
