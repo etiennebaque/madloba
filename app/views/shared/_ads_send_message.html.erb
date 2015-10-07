@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="form-group">
-                  <%= label_tag 'email', t('ad.your_email'), class: 'col-lg-2 control-label' %>
+                  <%= label_tag 'email', t('ad.your_email')+'*:', class: 'col-lg-2 control-label' %>
                   <div class="col-lg-4">
                     <%= email_field_tag 'email', params['email'], class: 'form-control', required: true %>
                   </div>

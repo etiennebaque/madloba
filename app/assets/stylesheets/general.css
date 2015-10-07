@@ -247,8 +247,39 @@ body {
         margin: 10px 0px;
     }
 }
+
 /*
-/* User panel - make sidebar nav vertical
+/* Admin panel - various styles
+/* ----------------------------
+*/
+.table tbody>tr>td.vert-align{
+    vertical-align: middle;
+}
+
+.vert-align{
+    vertical-align: middle !important;
+}
+
+.ad-add-item{
+    margin-top: 20px;
+}
+
+.ad-select-category .popover-title{
+    font-size: 11px;
+    background: #f0f0f0 none repeat scroll 0 0;
+    color: #999;
+    font-weight: 500;
+    font-style: italic;
+    padding: 10px 20px
+}
+
+#district_notification_message{
+    margin-top: 15px;
+}
+
+
+/*
+/* Admin panel - make sidebar nav vertical
 /* --------------------------------------
 */
 @media (min-width: 1060px) {
@@ -324,7 +355,7 @@ body {
 }
 
 .ad-processing{
-    padding-top: 20px;
+    padding-top: 20px 0px;
     color: #3a87ad;
     font-weight: bold;
 }

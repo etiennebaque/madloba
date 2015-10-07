@@ -6,7 +6,7 @@ class HomeController < ApplicationController
   # --------------------------------------
   def index
     # Initializations
-    @mapSettings = {}
+    @map_settings = {}
     @location_search_refinement_to_display = nil
     @error_location_message = nil
     selected_item_ids = nil
@@ -18,7 +18,7 @@ class HomeController < ApplicationController
     end
 
     # Initializing the map, in relation to its center, defined in the settings table.
-    @mapSettings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
+    @map_settings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
 
     # Getting all the needed settings to load the page
     settings_records = Setting.where(key: %w(description area_length area_type contact_email facebook twitter pinterest
@@ -37,10 +37,10 @@ class HomeController < ApplicationController
 
     if (params[:lat] && params[:lon])
         # It's a location-based search
-        @mapSettings['page'] = 'searchedLocationOnHome'
+        @map_settings['page'] = 'searchedLocationOnHome'
         # The center of the map is now represented by the searched location.
-        @mapSettings['lat'] = params[:lat]
-        @mapSettings['lng'] = params[:lon]
+        @map_settings['lat'] = params[:lat]
+        @map_settings['lng'] = params[:lon]
 
         if params[:loc]
           # A location search was just performed, with the name of the searched location (given back from Nominatim ws) in it.
@@ -53,7 +53,7 @@ class HomeController < ApplicationController
           end
         end
 
-        @mapSettings['searched_address'] = current_location
+        @map_settings['searched_address'] = current_location
         @location_search_refinement_to_display = current_location
 
     end

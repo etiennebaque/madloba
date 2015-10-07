@@ -142,13 +142,13 @@ class User::AdminPanelController < ApplicationController
   # ----------------------------------
   def mapsettings
     authorize :admin, :mapsettings?
-    @mapSettings = getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
+    @map_settings = getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
 
     # More settings to get, in addition to the one we already get in getMapSettings.
     settings = Setting.where(key: %w(city state country))
     if settings
       settings.each do |setting|
-        @mapSettings[setting.key] = setting.value
+        @map_settings[setting.key] = setting.value
         # Updating cache value
         if setting.key == 'city'
           Rails.cache.write(CACHE_CITY_NAME, setting.value)
@@ -158,16 +158,16 @@ class User::AdminPanelController < ApplicationController
 
     # Adding this element to the hash, in order to get the 'zoomend' event working,
     # only for the map settings page (needed to define zoom level).
-    @mapSettings['page'] = 'mapsettings'
+    @map_settings['page'] = 'mapsettings'
 
     # Initializing the map type drop down box.
     @options_for_maptype_select = []
     @options_for_maptype_select << ['OpenStreetMap', 'osm']
     # If a Mapbox and a MapQuest keys has been provided, then we include them in the drop down box
-    if @mapSettings['map_box_api_key'] && @mapSettings['map_box_api_key'] != ''
+    if @map_settings['map_box_api_key'] && @map_settings['map_box_api_key'] != ''
       @options_for_maptype_select << ['Mapbox', 'mapbox']
     end
-    if @mapSettings['mapquest_api_key'] && @mapSettings['mapquest_api_key'] != ''
+    if @map_settings['mapquest_api_key'] && @map_settings['mapquest_api_key'] != ''
       @options_for_maptype_select << ['MapQuest', 'mapquest']
     end
 
@@ -220,11 +220,11 @@ class User::AdminPanelController < ApplicationController
   def areasettings
     authorize :admin, :areasettings?
 
-    @mapSettings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
+    @map_settings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
 
     # Adding this flag to add leaflet draw tool to the map, on the "Area settings" page.
     # Drawing tool added in initLeafletMap(), in custom-leaflet.js
-    @mapSettings['page'] = 'areasettings'
+    @map_settings['page'] = 'areasettings'
 
     districts = District.all.select(:id, :name, :bounds)
     @districts = []
@@ -234,7 +234,7 @@ class User::AdminPanelController < ApplicationController
       bounds['properties']['name'] = d.name
       @districts.push(bounds)
     end  
-    @area_types = @mapSettings['area_type'].split(',')
+    @area_types = @map_settings['area_type'].split(',')
   end
 
   def update_areasettings

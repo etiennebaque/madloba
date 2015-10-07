@@ -2,8 +2,6 @@
 
     <!-- Includes the main Leaflet CSS and JS files, as well as Mapbox files -->
     <%= render 'shared/map_scripts_before_body', include_all_scripts: true %>
-    <!-- CSS file used on admin pages -->
-    <%= stylesheet_link_tag 'admin' %>
 
     <style type="text/css">
         #map {
@@ -74,7 +72,7 @@
                 <div class="form-group">
                   <%= label_tag 'maptype', t('admin.map_settings.type'), class:'control-label' %>
                   <div class="form-inline">
-                    <%= select_tag 'maptype', options_for_select(@options_for_maptype_select, @mapSettings['chosen_map']), class: 'form-control' %>
+                    <%= select_tag 'maptype', options_for_select(@options_for_maptype_select, @map_settings['chosen_map']), class: 'form-control' %>
                   </div>
                 </div>
 
@@ -91,7 +89,7 @@
                   <%= label_tag 'mapBoxApiKey', t('admin.map_settings.mapbox'), class:'control-label' %>
                   <div class="form-inline">
                     <!-- Hidding key on demo website -->
-                    <%= text_field_tag 'mapBoxApiKey', is_demo ? '********' : @mapSettings['map_box_api_key'], class: 'form-control' %>
+                    <%= text_field_tag 'mapBoxApiKey', is_demo ? '********' : @map_settings['map_box_api_key'], class: 'form-control' %>
                     <a href="https://www.mapbox.com/account/apps" target="_blank"><%= t('admin.map_settings.mapbox_link') %></a>
                   </div>
                 </div>
@@ -101,7 +99,7 @@
                   <%= label_tag 'mapQuestApiKey', t('admin.map_settings.mapquest'), class:'control-label' %>
                   <div class="form-inline">
                     <!-- Hidding key on demo website -->
-                    <%= text_field_tag 'mapQuestApiKey', is_demo ? '********' : @mapSettings['mapquest_api_key'], class: 'form-control' %>
+                    <%= text_field_tag 'mapQuestApiKey', is_demo ? '********' : @map_settings['mapquest_api_key'], class: 'form-control' %>
                     <a href="http://developer.mapquest.com/web/info/account/app-keys" target="_blank"><%= t('admin.map_settings.mapquest_link') %></a>
                   </div>
                 </div>
@@ -110,23 +108,23 @@
 
                 <h4><%= t('admin.map_settings.location_info') %></h4>
 
-                <%= hidden_field_tag 'hiddenLatId', @mapSettings['lat'], class: 'latitude_hidden' %>
-                <%= hidden_field_tag 'hiddenLngId', @mapSettings['lng'], class: 'longitude_hidden' %>
+                <%= hidden_field_tag 'hiddenLatId', @map_settings['lat'], class: 'latitude_hidden' %>
+                <%= hidden_field_tag 'hiddenLngId', @map_settings['lng'], class: 'longitude_hidden' %>
 
                 <!-- City, State/Province and Country fields -->
                 <div class="form-group">
                   <%= label_tag 'cityCountry', t('admin.map_settings.find_city_map'), class:'control-label' %>
                   <div class="form-inline">
-                    <%= text_field_tag 'city', @mapSettings['city'], class: 'form-control location_city', placeholder: t('admin.map_settings.city'), :required => true %>
-                    <%= text_field_tag 'state', @mapSettings['state'], class: 'form-control location_state', placeholder: t('admin.map_settings.state') %>
-                    <%= text_field_tag 'country', @mapSettings['country'], class: 'form-control location_country', placeholder: t('admin.map_settings.country'), :required => true %>
+                    <%= text_field_tag 'city', @map_settings['city'], class: 'form-control location_city', placeholder: t('admin.map_settings.city'), :required => true %>
+                    <%= text_field_tag 'state', @map_settings['state'], class: 'form-control location_state', placeholder: t('admin.map_settings.state') %>
+                    <%= text_field_tag 'country', @map_settings['country'], class: 'form-control location_country', placeholder: t('admin.map_settings.country'), :required => true %>
                     <a href="#" id="findGeocodeAddressMapBtnId" class="btn btn-info" style="vertical-align: top"><%= t('admin.map_settings.find_city') %></a>
                     <span id="findGeocodeLoaderId"></span>
                   </div>
                 </div>
 
                 <!-- Zoom level -->
-                <%= hidden_field_tag 'zoom_level', @mapSettings['zoom_level'] %>
+                <%= hidden_field_tag 'zoom_level', @map_settings['zoom_level'] %>
 
                 <div class="form-group">
                   <%= label_tag 'map-canvas-wrapper', t('admin.map_settings.map_description'), class:'control-label' %>

@@ -186,7 +186,7 @@ $(document).ready(function() {
             $("#new_location_form a.add_fields").trigger('click');
             $("#locations_from_list").hide();
             $("#location a.add_fields").hide();
-            initLeafletMap(map_settings_array);
+            initLeafletMap(map_settings);
             init_location_form(districts_bounds, leaf.map);
         },20);
     }
@@ -201,7 +201,7 @@ $(document).ready(function() {
             $("#locations_from_list").hide();
             $("#new_location_form a.add_fields").hide();
             // Call to the JS functions that will initialize the new location form and the map.
-            initLeafletMap(map_settings_array);
+            initLeafletMap(map_settings);
             init_location_form(districts_bounds, leaf.map);
         });
     $('#new_location_form').bind("cocoon:after-remove", function() {

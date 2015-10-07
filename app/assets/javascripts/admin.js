@@ -9,10 +9,10 @@ $(document).ready(function(){
         $( "select option:selected" ).each(function() {
             selected_map = $(this).val();
         });
-        map_settings_array['chosen_map'] = selected_map;
-        map_settings_array['tiles_url'] = map_settings_array[selected_map]['tiles_url']
-        map_settings_array['attribution'] = map_settings_array[selected_map]['attribution']
-        initLeafletMap(map_settings_array);
+        map_settings['chosen_map'] = selected_map;
+        map_settings['tiles_url'] = map_settings[selected_map]['tiles_url']
+        map_settings['attribution'] = map_settings[selected_map]['attribution']
+        initLeafletMap(map_settings);
     });
 
     // Area settings admin page: show either the "postal code" or the "district" section.
@@ -28,12 +28,12 @@ $(document).ready(function(){
     // Area settings page: show appropriate section when choosing an area
     $(".area_district").click(function(){
         $("#district_section").toggle(0, function(){});
-        initLeafletMap(map_settings_array);
+        initLeafletMap(map_settings);
     });
 
     if($('.area_district').is(':checked')) {
         $("#district_section").css('display', 'block');
-        initLeafletMap(map_settings_array);
+        initLeafletMap(map_settings);
     }
 
     // "Edit ad" form: create message when image needs to be uploaded.

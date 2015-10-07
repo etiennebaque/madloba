@@ -168,7 +168,7 @@ fr:
     about_you: "A propos de vous"
     name: "Votre nom* :"
     name_help: "Veuillez entrer votre nom ou votre pseudonyme ici. Il apparaitra tel quel, dans l'annonce publiée."
-    your_email: "Votre adresse email* :"
+    your_email: Votre adresse email
     captcha: "Captcha* :"
     email_help: "Donner votre adresse email n'est pas obligatoire (Soyez sûr d'indiquer votre numéro de téléphone dans la description de l'annonce). Si vous donnez votre adresse email, elle ne sera pas publiée publiquement, et les utilisateurs seront quand même capable de vous envoyer un message."
     ad_is_deleted: "L'annonce '%{deleted_ad_title}' a été supprimé."

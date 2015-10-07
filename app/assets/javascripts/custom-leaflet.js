@@ -13,7 +13,7 @@ var leaf = {
 
     // By default, it is not possible to zoom in/out when using
     // the mouse wheel, unless clicking on the map (toggle).
-    init: function (map_settings_array) {
+    init: function (map_settings) {
         leaf.map = L.map('map', {scrollWheelZoom: false});
 
         leaf.map.on('click', function() {
@@ -24,21 +24,22 @@ var leaf = {
             }
         });
 
-        leaf.my_lat = map_settings_array['lat'];
-        leaf.my_lng = map_settings_array['lng'];
+        leaf.my_lat = map_settings['lat'];
+        leaf.my_lng = map_settings['lng'];
 
-        if (map_settings_array['chosen_map'] == 'mapbox' || map_settings_array['chosen_map'] == 'osm'){
+        if (map_settings['chosen_map'] == 'mapbox' || map_settings['chosen_map'] == 'osm'){
             // Mapbox or OSM
-            leaf.map_tiles = L.tileLayer(map_settings_array['tiles_url'], {
-                attribution: map_settings_array['attribution']
+            leaf.map_tiles = L.tileLayer(map_settings['tiles_url'], {
+                attribution: map_settings['attribution']
             });
         }else{
             // Mapquest
             leaf.map_tiles = MQ.mapLayer();
         }
         leaf.map_tiles.addTo(leaf.map);
-        leaf.map.setView([leaf.my_lat, leaf.my_lng], map_settings_array['zoom_level']);
+        leaf.map.setView([leaf.my_lat, leaf.my_lng], map_settings['zoom_level']);
 
+        // Load districts when available (eg. on area settings page, when all of them need to show up on a map...)
         if (typeof districts != 'undefined' && districts != null){
             leaf.districts = districts;
         }
@@ -46,14 +47,14 @@ var leaf = {
 
     // This method is used on the ad details page (ads#show) to display
     // the right feature on the map (eg. marker, district area or postal code area)
-    show_features_on_ad_details_page: function(map_settings_array) {
-        if (map_settings_array['ad_show_is_area'] == true){
+    show_features_on_ad_details_page: function(map_settings) {
+        if (map_settings['ad_show_is_area'] == true){
             // Postal or district address (area type).
             // Shows an area icon on the map of the ads show page.
-            if (map_settings_array['loc_type'] == 'district'){
+            if (map_settings['loc_type'] == 'district'){
                 // Drawing the district related to this ad.
-                var district_latlng = leaf.show_single_district(map_settings_array['popup_message'], map_settings_array['bounds']);
-                leaf.map.setView(district_latlng, map_settings_array['zoom_level']);
+                var district_latlng = leaf.show_single_district(map_settings['popup_message'], map_settings['bounds']);
+                leaf.map.setView(district_latlng, map_settings['zoom_level']);
             }else{
                 // Drawing the postal code area circle related to this ad.
                 var area = new L.circle([leaf.my_lat, leaf.my_lng], 600, {
@@ -62,37 +63,37 @@ var leaf = {
                     fillOpacity: 0.3
                 });
 
-                area.addTo(leaf.map).bindPopup(map_settings_array['popup_message']).openPopup();
-                leaf.map.setView([leaf.my_lat, leaf.my_lng], map_settings_array['zoom_level']);
+                area.addTo(leaf.map).bindPopup(map_settings['popup_message']).openPopup();
+                leaf.map.setView([leaf.my_lat, leaf.my_lng], map_settings['zoom_level']);
             }
         }else{
             // Exact address. Potentially several center markers on the map.
             // Displays a marker for each item tied to the ad we're showing the details of.
             // Using the Marker Cluster plugin to spiderfy this ad's item marker.
             markers.group = new L.MarkerClusterGroup({spiderfyDistanceMultiplier : 2, zoomToBoundsOnClick: false});
-            for (var i= 0; i<map_settings_array['ad_show'].length; i++){
-                var item_category = map_settings_array['ad_show'][i];
+            for (var i= 0; i<map_settings['ad_show'].length; i++){
+                var item_category = map_settings['ad_show'][i];
                 var icon_to_use = L.AwesomeMarkers.icon({
                     prefix: 'fa',
                     markerColor: item_category['color'],
                     icon: item_category['icon']
                 });
 
-                var center_marker = L.marker([leaf.my_lat, leaf.my_lng], {icon: icon_to_use});
-                if (map_settings_array['marker_message'] != ""){
-                    center_marker.bindPopup(map_settings_array['marker_message'] + ' - ' + item_category['item_name']).openPopup();
+                var map_center_marker = L.marker([leaf.my_lat, leaf.my_lng], {icon: icon_to_use});
+                if (map_settings['marker_message'] != ""){
+                    map_center_marker.bindPopup(map_settings['marker_message'] + ' - ' + item_category['item_name']).openPopup();
                 }
 
-                markers.addLayer(center_marker);
+                markers.group.addLayer(map_center_marker);
             }
-            leaf.map.addLayer(markers.groups);
-            leaf.map.setView([leaf.my_lat, leaf.my_lng], map_settings_array['zoom_level']);
+            leaf.map.addLayer(markers.group);
+            leaf.map.setView([leaf.my_lat, leaf.my_lng], map_settings['zoom_level']);
         }
     },
 
     // Method showing a single feature on a map.
-    show_single_marker: function(map_settings_array){
-        if (map_settings_array['loc_type'] == 'postal'){
+    show_single_marker: function(map_settings){
+        if (map_settings['loc_type'] == 'postal'){
             // Drawing the postal code area circle related to this ad.
             markers.postal_code_circle = new L.circle([leaf.my_lat, leaf.my_lng], 600, {
                 color: markers.postal_code_area_color,
@@ -100,15 +101,15 @@ var leaf = {
                 fillOpacity: 0.3
             });
 
-            markers.postal_code_circle.addTo(leaf.map).bindPopup(map_settings_array['marker_message']).openPopup();
+            markers.postal_code_circle.addTo(leaf.map).bindPopup(map_settings['marker_message']).openPopup();
 
-        }else if (map_settings_array['loc_type'] == 'district'){
-            leaf.show_single_district(map_settings_array['marker_message'], map_settings_array['bounds']);
+        }else if (map_settings['loc_type'] == 'district'){
+            leaf.show_single_district(map_settings['marker_message'], map_settings['bounds']);
         }else{
             // we are displaying the center point.
             var center_marker = L.marker([leaf.my_lat, leaf.my_lng], {icon: markers.default_icon});
-            if (map_settings_array['marker_message'] != ""){
-                center_marker.addTo(leaf.map).bindPopup(map_settings_array['marker_message']).openPopup();
+            if (map_settings['marker_message'] != ""){
+                center_marker.addTo(leaf.map).bindPopup(map_settings['marker_message']).openPopup();
             }else{
                 center_marker.addTo(leaf.map);
             }
@@ -117,26 +118,26 @@ var leaf = {
 
     // Method defining different events bound to the map, depending on
     // which page this map is displayed.
-    setup_custom_behaviors: function(map_settings_array){
-        if (map_settings_array['clickableMapMarker'] != 'none'){
+    setup_custom_behaviors: function(map_settings){
+        if (map_settings['clickableMapMarker'] != 'none'){
             // Getting latitude and longitude of clicked point on the map.
             leaf.map.on('click', onMapClickLocation);
         }
 
-        if (map_settings_array['page'] == 'searchedLocationOnHome'){
+        if (map_settings['page'] == 'searchedLocationOnHome'){
             // Adding marker for the searched address, on the home page.
             L.marker([ leaf.my_lat, leaf.my_lon ], {icon: markers.default_icon}).addTo(leaf.map).bindPopup(
-                map_settings_array['searched_address']).openPopup();
+                map_settings['searched_address']).openPopup();
         }
 
-        if (map_settings_array['page'] == 'mapsettings'){
+        if (map_settings['page'] == 'mapsettings'){
             leaf.map.on('zoomend', function() {
                 $('#zoom_level').val(leaf.map.getZoom());
             });
         }
 
         // Adding specific events on the 'Area settings' page, needed when drawing and saving districts.
-        if (map_settings_array['page'] == 'areasettings'){
+        if (map_settings['page'] == 'areasettings'){
             leaf.init_map_on_area_settings();
         }
     },
@@ -322,7 +323,6 @@ var markers = {
     postal_code_circle: '',
     group: '',
 
-
     default_icon: null,
     new_icon: null,
     postal_code_area_color: null,
@@ -338,59 +338,138 @@ var markers = {
     district_color: '',
     postal_code_area_color: '',
 
-    init: function (map_settings_array) {
+    init: function (map_settings) {
         markers.default_icon = L.icon ({
-            iconUrl: map_settings_array['default_marker_icon'],
+            iconUrl: map_settings['default_marker_icon'],
             iconAnchor: [12, 41],
             popupAnchor:  [0, -34]
         });
 
         markers.new_icon = L.icon ({
-            iconUrl: map_settings_array['new_marker_icon'],
+            iconUrl: map_settings['new_marker_icon'],
             iconAnchor: [12, 41],
             popupAnchor:  [0, -34]
         });
 
-        markers.location_marker_type = map_settings_array['clickableMapMarker'];
+        markers.location_marker_type = map_settings['clickableMapMarker'];
 
-        markers.district_color = map_settings_array['district_color'];
-        markers.postal_code_area_color = map_settings_array['postal_code_area_color'];
+        markers.district_color = map_settings['district_color'];
+        markers.postal_code_area_color = map_settings['postal_code_area_color'];
+    },
+
+    // Method that creates markers representing ads tied to exact-type location.
+    place_exact_locations_markers: function (locations_exact) {
+        for (var i=0; i<locations_exact.length; i++){
+            var location = locations_exact[i];
+
+            for (var j=0; j<location['ads'].length; j++){
+                var popup_html_text;
+                var marker;
+
+                var ad = location['ads'][j];
+
+                for (var k=0; k<ad['items'].length; k++){
+
+                    var item = ad['items'][k];
+
+                    var marker_icon = L.AwesomeMarkers.icon({
+                        prefix: 'fa',
+                        markerColor: item['category']['marker_color'],
+                        icon: item['category']['icon']
+                    });
+
+                    // HTML snippet for the popup
+                    if (location['name'] != ''){
+                        popup_html_text = createPopupHtml("<b>"+location['name']+"</b><br />" +location['street_number'] + " " + location['address'], ad, k);
+                    }else{
+                        popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'] + "</b>", ad, k);
+                    }
+
+                    var marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address']})
+                    var popup = L.popup({minWidth: 250}).setContent(popup_html_text);
+
+                    marker.bindPopup(popup);
+                    markers.group.addLayer(marker);
+                }
+            }
+        }
+    },
+
+    // Method that draws circles, representing ads tied to a postal code only.
+    draw_postal_code_areas: function (locations_postal, area_geocodes, marker_colors) {
+        if (locations_postal != null && Object.keys(locations_postal).length > 0){
+
+            var drawn_areas = L.featureGroup().addTo(leaf.map);
+
+            // Adding event to show/hide these districts from the checkbox in the guided navigation.
+            $("#show_area_id").change(function() {
+                if ($('#show_area_id').prop('checked')) {
+                    // Drawing districts in this function, when checkbox is checked.
+                    drawPostalCodeAreaOnMap(drawn_areas, locations_postal, area_geocodes, marker_colors);
+                }else{
+                    drawn_areas.eachLayer(function (layer) {
+                        drawn_areas.removeLayer(layer);
+                    });
+                }
+            }).change();
+        }
+    },
+
+    // Method drawing the boundaries of districts on a map. Only the districts related to an active ad are drawn.
+    draw_district_areas: function (locations_district, area_geocodes, marker_colors) {
+        // Snippet that creates markers, to represent ads tied to district-type location.
+        if (locations_district != null && Object.keys(locations_district).length > 0){
+            var drawn_districts = L.featureGroup().addTo(leaf.map);
+
+            // Adding event to show/hide these districts from the checkbox in the guided navigation.
+            $("#show_area_id").change(function() {
+                if ($('#show_area_id').prop('checked')) {
+                    // Drawing districts in this function, when checkbox is checked.
+                    drawDistrictsOnMap(drawn_districts, locations_district, area_geocodes, marker_colors);
+                }else{
+                    drawn_districts.eachLayer(function (layer) {
+                        drawn_districts.removeLayer(layer);
+                    });
+                }
+            }).change();
+        }
     }
 }
 
 /**
  * Main function that initializes the map on different screens (eg home page, map setting page, ad page...).
- * @param map_settings_array - hash that contains all info needed to initialize the map.
+ * @param map_settings - hash that contains all info needed to initialize the map.
  */
-function initLeafletMap(map_settings_array){
-
+function initLeafletMap(map_settings){
 
     if (leaf != null && leaf.map != null){
         leaf.map.remove();
     }
 
-    leaf.init(map_settings_array);
-    markers.init(map_settings_array);
+    // Initialization of the map and markers.
+    leaf.init(map_settings);
+    markers.init(map_settings);
 
 
-    if (map_settings_array['hasCenterMarker'] == true){
-        if (map_settings_array['ad_show']){
+    if (map_settings['hasCenterMarker'] == true){
+        if (map_settings['ad_show']){
             // Showing markers, district area or postal code area on the ad details page (ads#show)
-            leaf.show_features_on_ad_details_page(map_settings_array);
+            leaf.show_features_on_ad_details_page(map_settings);
 
         }else{
             // Center single marker on the map
             // Appearing only in admin map setting, and admin location page, on page load.
             // Define first if it should be the area icon (for addresses based only on postal codes), or the default icon.
-            leaf.show_single_marker(map_settings_array);
+            leaf.show_single_marker(map_settings);
         }
     }
 
     // Depending of the page, the map might react differently (eg. marker showing on onClick...)
     // This method sets up the map behavior in relation to the page the user's on.
-    leaf.setup_custom_behaviors(map_settings_array);
+    leaf.setup_custom_behaviors(map_settings);
 
 }
+
 
 /**
  * Populates the map with different markers (eg exact address and area-type markers, to show ads)
@@ -402,78 +481,14 @@ function putLocationMarkers(locations_exact, locations_postal, locations_distric
     // when they get too close to one another, as the user zooms out, on the home page.
     markers.group = new L.MarkerClusterGroup({spiderfyDistanceMultiplier : 2, zoomToBoundsOnClick: false});
 
-    // Loop that create markers, to represent ads tied to exact-type location.
-    for (var i=0; i<locations_exact.length; i++){
-        var location = locations_exact[i];
+    // Displaying markers on map
+    markers.place_exact_locations_markers(locations_exact);
 
-        for (var j=0; j<location['ads'].length; j++){
-            var popup_html_text;
-            var marker;
+    // Displaying postal code area circles on map
+    markers.draw_postal_code_areas(locations_postal, area_geocodes, marker_colors);
 
-            var ad = location['ads'][j];
-
-            for (var k=0; k<ad['items'].length; k++){
-
-                var item = ad['items'][k];
-
-                var marker_icon = L.AwesomeMarkers.icon({
-                    prefix: 'fa',
-                    markerColor: item['category']['marker_color'],
-                    icon: item['category']['icon']
-                });
-
-                // HTML snippet for the popup
-                if (location['name'] != ''){
-                    popup_html_text = createPopupHtml("<b>"+location['name']+"</b><br />" +location['street_number'] + " " + location['address'], ad, k);
-                }else{
-                    popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'] + "</b>", ad, k);
-                }
-
-                var marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address']})
-                var popup = L.popup({minWidth: 250}).setContent(popup_html_text);
-
-                marker.bindPopup(popup);
-                markers.group.addLayer(marker);
-            }
-
-        }
-    }
-
-    // Snippet that create markers, to represent ads tied to postal-type locations.
-    if (locations_postal != null && Object.keys(locations_postal).length > 0){
-
-        var drawn_areas = L.featureGroup().addTo(leaf.map);
-
-        // Adding event to show/hide these districts from the checkbox in the guided navigation.
-        $("#show_area_id").change(function() {
-            if ($('#show_area_id').prop('checked')) {
-                // Drawing districts in this function, when checkbox is checked.
-                drawPostalCodeAreaOnMap(drawn_areas, locations_postal, area_geocodes, marker_colors);
-            }else{
-                drawn_areas.eachLayer(function (layer) {
-                    drawn_areas.removeLayer(layer);
-                });
-            }
-        }).change();
-    }
-
-    // Snippet that creates markers, to represent ads tied to district-type location.
-    if (locations_district != null && Object.keys(locations_district).length > 0){
-        var drawn_districts = L.featureGroup().addTo(leaf.map);
-
-        // Adding event to show/hide these districts from the checkbox in the guided navigation.
-        $("#show_area_id").change(function() {
-            if ($('#show_area_id').prop('checked')) {
-                // Drawing districts in this function, when checkbox is checked.
-                drawDistrictsOnMap(drawn_districts, locations_district, area_geocodes, marker_colors);
-            }else{
-                drawn_districts.eachLayer(function (layer) {
-                    drawn_districts.removeLayer(layer);
-                });
-            }
-        }).change();
-
-    }
+    // Displaying district areas on map
+    markers.draw_district_areas(locations_district, area_geocodes, marker_colors);
 
     // Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
     // Server side is in home_controller, method showSpecificAds.
@@ -504,6 +519,7 @@ function putLocationMarkers(locations_exact, locations_postal, locations_distric
 
     // Adding all the markers to the map.
     leaf.map.addLayer(markers.group);
+
 }
 
 
@@ -538,6 +554,7 @@ function createPopupHtml(first_sentence, ad, index){
 
     return result;
 }
+
 
 /**
  * This function draws districts (where at least one current ad is included)
@@ -798,8 +815,6 @@ function onMapClick(e) {
 
     return myNewLat+','+myNewLng;
 }
-
-
 
 // Adding capitalization of first word of a string to String prototype.
 // Used to capitalize item names, in marker popup and area modal windows.
