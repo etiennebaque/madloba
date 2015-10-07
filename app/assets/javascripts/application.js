@@ -36,6 +36,4 @@
 // application script for Charisma theme
 //= require charisma
 
-//= require admin
-
 ////= require_tree .
