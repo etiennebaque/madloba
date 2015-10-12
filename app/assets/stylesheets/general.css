@@ -210,7 +210,7 @@ body {
     padding-top: 58px;
 }
 
-@media screen and (max-width: 767px) {
+@media only screen and (max-device-width: 991px) {
     .row-offcanvas {
         position: relative;
         -webkit-transition: all 0.25s ease-out;
@@ -314,6 +314,10 @@ body {
         padding-bottom: 12px;
     }
 
+}
+
+.list-group h4 {
+    margin-top: 10px !important;
 }
 
 /*

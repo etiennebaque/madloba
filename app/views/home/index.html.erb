@@ -61,29 +61,32 @@
                   <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
                 </a>
             <% end %>
-            <div id="refinementsId">
-              <% @categories.each do |category| %>
-                  <% if category.is_refinement(params) %>
-                      <a href = "<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background guided-nav-category">
-                        <label style='width: 15px;'>
-                          <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
-                        </label>
-                        <span class="guided-nav-label"><%= category.name %></span>
-                        <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
-                      </a>
-                  <% end %>
-              <% end %>
-            </div>
           </div>
       <% end %>
+
+      <!-- List of selected categories -->
+      <div id="refinementsId">
+        <% @categories.each do |category| %>
+            <% if category.is_refinement(params) %>
+                <a href = "<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background guided-nav-category">
+                  <label style='width: 15px;'>
+                    <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
+                  </label>
+                  <span class="guided-nav-label"><%= category.name %></span>
+                  <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
+                </a>
+            <% end %>
+        <% end %>
+      </div>
 
       <!-- Sidebar - list of Categories -->
       <div class="list-group">
         <% if @categories.length > 0 %>
             <h4><%= t('home.title_guided_nav') %></h4>
+            <div id="available_categories">
             <% @categories.each do |category| %>
                 <% if !category.is_refinement(params) %>
-                    <a href ="<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background guided-nav-category">
+                    <a id="<%= category.id %>" href ="#" class="list-group-item smaller-no-border-no-background guided-nav-category">
                       <label style='width: 15px;'>
                         <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
                       </label>
@@ -91,6 +94,7 @@
                     </a>
                 <% end %>
             <% end %>
+            </div>
 
             <% if (@locations_postal && @locations_postal.length > 0) || (@locations_district && @locations_district.length > 0) %>
                 <hr />
@@ -243,6 +247,13 @@ If they do, it will affect the website's ability to work well (test carried out 
         putLocationMarkers(locations_exact, locations_postal, locations_district, area_geocodes, marker_colors);
 
         initializeSideBar();
+
+        // Initialization of websoket url and object.
+        App = {websocket_url: "<%= "ws://#{request.host}:#{request.port}" %>"};
+
+        $(function() {
+            var adSocket = new AdSocket();
+        });
 
     </script>
 <% end %>

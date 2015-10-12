@@ -36,7 +36,7 @@
       box-shadow: none;
       border: 2px solid rgba(0, 0, 0, 0.2);
       background-clip: padding-box; }
-  @media (max-width: 767px) {
+  @media (max-width: 480px) {
     .leaflet-sidebar {
       width: 80%;
       height: 100%;
@@ -59,6 +59,11 @@
         border-radius: 0; }
         .leaflet-touch .leaflet-sidebar > .leaflet-control {
           border: 0; } }
+  @media (min-width: 481px) and (max-width: 767px) {
+      .leaflet-sidebar {
+          width: 60%;
+      }
+  }
   @media (min-width: 768px) and (max-width: 991px) {
     .leaflet-sidebar {
       width: 305px; }
@@ -80,6 +85,7 @@
         left: 280px; }
       .leaflet-sidebar.right.visible ~ .leaflet-right {
         right: 280px; } }
+
   .leaflet-sidebar .close {
     position: absolute;
     right: 20px;

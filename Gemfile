@@ -75,6 +75,9 @@ gem 'gon'
 # Simple captcha - used when anonymous users create new ads, or reply to existing ones.
 gem 'simple_captcha2', require: 'simple_captcha'
 
+# Gem to enable use of websockets.
+gem 'faye-websocket'
+
 group :development, :test do
 
   # Mailcatcher

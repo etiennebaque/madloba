@@ -1,4 +1,5 @@
 require File.expand_path('../boot', __FILE__)
+require File.expand_path('../../lib/ad_socket', __FILE__)
 
 require 'rails/all'
 
@@ -54,6 +55,10 @@ module Madloba
     # Require needed in order for the custom 404 page to trigger
     require Rails.root.join('lib/custom_public_exceptions')
     config.exceptions_app = CustomPublicExceptions.new(Rails.public_path)
+
+    # Adding Ad websocket class as a middleware
+    config.middleware.use AdSocket
+    config.middleware.delete Rack::Lock
 
   end
 end
