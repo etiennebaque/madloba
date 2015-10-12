@@ -14,9 +14,14 @@ class Location < ActiveRecord::Base
 
 
   # This method returns the right query to display relevant markers, on the home page.
-  def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action )
+  def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action, ad_id)
 
     locations = Location.includes(ads: {items: :category}).type(location_type).references(:ads)
+
+    if ad_id.present?
+      # Search by ad ids when adding ads on home page dynamically, when other user just created an ad (websocket)
+      locations = locations.where('ads.id = ?', ad_id)
+    end
 
     if cat_nav_state || searched_item
       if cat_nav_state

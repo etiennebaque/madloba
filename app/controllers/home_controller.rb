@@ -69,16 +69,16 @@ class HomeController < ApplicationController
 
     # Queries to get ads to be displayed on the map, based on their locations
     # First, we get the ads tied to an exact location.
-    @locations_exact = Location.search('exact', cat_nav_state, searched_item, selected_item_ids, params[:q])
+    @locations_exact = Location.search('exact', cat_nav_state, searched_item, selected_item_ids, params[:q], nil)
 
     area_types = settings['area_type'].split(',')
     if area_types.include?('postal')
       # If the users have the possiblity to post ad linked to a postal code, we get here these type of ads.
-      @locations_postal = Location.search('postal', cat_nav_state, searched_item, selected_item_ids, params[:q])
+      @locations_postal = Location.search('postal', cat_nav_state, searched_item, selected_item_ids, params[:q], nil)
     end
     if area_types.include?('district')
       # If the users have the possiblity to post ad linked to a pre-defined district, we also get here these type of ads.
-      @locations_district = Location.search('district', cat_nav_state, searched_item, selected_item_ids, params[:q])
+      @locations_district = Location.search('district', cat_nav_state, searched_item, selected_item_ids, params[:q], nil)
     end
 
     # Getting a hash that matches areas to their respective latitude and longitudes.

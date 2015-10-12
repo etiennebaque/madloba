@@ -364,7 +364,7 @@ var markers = {
     },
 
     // Method that creates markers representing ads tied to exact-type location.
-    place_exact_locations_markers: function (locations_exact) {
+    place_exact_locations_markers: function (locations_exact, is_bouncing_on_add) {
         for (var i=0; i<locations_exact.length; i++){
             var location = locations_exact[i];
 
@@ -391,7 +391,7 @@ var markers = {
                         popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'] + "</b>", ad, k);
                     }
 
-                    var marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address']})
+                    var marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address'], bounceOnAdd: is_bouncing_on_add});
                     var popup = L.popup({minWidth: 250}).setContent(popup_html_text);
 
                     marker.bindPopup(popup);
@@ -490,7 +490,7 @@ function putLocationMarkers(locations_exact, locations_postal, locations_distric
     markers.marker_colors = marker_colors;
 
     // Displaying markers on map
-    markers.place_exact_locations_markers(locations_exact);
+    markers.place_exact_locations_markers(locations_exact, false);
 
     // Displaying postal code area circles on map
     markers.draw_postal_code_areas(locations_postal);

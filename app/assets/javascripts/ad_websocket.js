@@ -3,7 +3,6 @@
  * Websocket-powered communication is used when selecting categories on the guided navigation.
  */
 var AdSocket = function() {
-
     //this.nav_state = new NavState();
     this.nav_state = {
         cat: [],
@@ -15,6 +14,11 @@ var AdSocket = function() {
     this.socket = new WebSocket(App.websocket_url+"/websocket");
     this.initBinds();
 };
+
+var messagePrefix = {
+    refresh_map: 'map',
+    add_new_marker: 'new'
+}
 
 AdSocket.prototype.stringifyState = function() {
     var _this = this;
@@ -53,7 +57,6 @@ AdSocket.prototype.initBinds = function() {
     var _this = this;
 
     $('#sidebar').on('click', '.guided-nav-category', function(){
-
         // Copying the html of the selected category and inserting it in the "Selected categories" section.
         var selectedLinkHtml = $(this).clone();
         var link_id = $(this).attr('id');
@@ -87,7 +90,17 @@ AdSocket.prototype.initBinds = function() {
 
             _this.nav_state.cat.push($(this).attr('id'));
         }
+
         _this.sendNavState(_this.stringifyState());
+    });
+
+    // Message sent to server when a new ad has just been created
+    // (ie. new ad notification message has been loaded on ads#show)
+    $(document).ready(function() {
+        var new_ad_id = $('#new_ad_id').val();
+        if (typeof new_ad_id != "undefined"){
+            _this.sendNewAdNotification(new_ad_id);
+        }
     });
 
     this.socket.onmessage = function(e) {
@@ -106,7 +119,7 @@ AdSocket.prototype.initBinds = function() {
             case "error":
                 _this.error_map(map_info);
                 break;
-            case "new_marker":
+            case "new_ad":
                 _this.add_marker(map_info);
                 break;
         }
@@ -115,19 +128,24 @@ AdSocket.prototype.initBinds = function() {
 };
 
 AdSocket.prototype.sendNavState = function(value) {
-    this.socket.send(value);
+    this.socket.send(messagePrefix.refresh_map+value);
+};
+
+AdSocket.prototype.sendNewAdNotification = function(value) {
+    //this.socket.send(messagePrefix.add_new_marker+value);
+    this.send(messagePrefix.add_new_marker+value);
 };
 
 // After selection of a category in the guided navigation, we need to refresh the map accordingly.
 AdSocket.prototype.refresh_map = function (new_map_info){
     // First we need to clear all the current layers.
-
     markers.group.clearLayers();
     markers.postal_group.clearLayers();
     markers.district_group.clearLayers();
 
+    // Then we place the different markers and areas.
     if (new_map_info['markers'] != ''){
-        markers.place_exact_locations_markers(new_map_info['markers']);
+        markers.place_exact_locations_markers(new_map_info['markers'], false);
     }
 
     if (new_map_info['postal'] != ''){
@@ -140,9 +158,36 @@ AdSocket.prototype.refresh_map = function (new_map_info){
 };
 
 AdSocket.prototype.error_map = function (new_map_info){
-
+    // to be implemented.
 };
 
 AdSocket.prototype.add_marker = function (new_map_info){
+    if (new_map_info['markers'].length > 1){
+        // There are several markers to add on the map. Let's not bounce them, as animation conflicts with MarkerClusterGroup.
+        markers.place_exact_locations_markers(new_map_info['markers'], false);
+    }else{
+        // 1 marker to add, let's bounce it.
+        markers.place_exact_locations_markers(new_map_info['markers'], true);
+    }
 
+};
+
+// Custom 'send' function, making sure that the websocket connection is available.
+AdSocket.prototype.send = function (message) {
+    var socket = this.socket;
+    this.waitForConnection(function () {
+        socket.send(message);
+    }, 1000);
+};
+
+AdSocket.prototype.waitForConnection = function (callback, interval) {
+    if (this.socket.readyState === 1) {
+        callback();
+    } else {
+        var that = this;
+        // optional: implement backoff for interval here
+        setTimeout(function () {
+            that.waitForConnection(callback, interval);
+        }, interval);
+    }
 };
