@@ -59,9 +59,9 @@ en:
     record_not_exist: Sorry, this page does not exist!
     got_it: Got it!
     giving: "I'm giving away:"
-    giving_away: "Giving away:"
+    giving_away: "You're giving away:"
     searching: "I'm searching for:"
-    searching_for: "Searching for:"
+    searching_for: "You're searching for:"
     search_items: Type an item
     location_example: Street name, postal code...
     search: OK
@@ -105,6 +105,7 @@ en:
     server_error: 500 Internal server error
     404_sorry: "Sorry, the requested page has not been found!"
     500_sorry: "Sorry, there's been a server error. Please try again later."
+    ws_error: Sorry, a server error occurred. Please refresh this page.
   config:
     not_authorized: You are not allowed go to that page.
   location:

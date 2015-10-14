@@ -1,6 +1,7 @@
 # Server side of the websocket in charge of showing the relevant ads on the home page,
 # based on guided navigation selection.
 class AdSocket
+
   def initialize(app)
      @app = app
      @clients = []
@@ -52,7 +53,7 @@ class AdSocket
             selected_item_ids = []
             # An item is being searched.
             searched_item = nav_params['item']
-            selected_item_ids = Item.joins(:ads).where("name LIKE '%#{searched_item}%'").pluck(:id).uniq
+            selected_item_ids = Item.joins(:ads).where('name LIKE ?', "%#{searched_item}%").pluck(:id).uniq
           end
 
           response = {}
@@ -81,6 +82,8 @@ class AdSocket
       rescue Exception => e
         p e
         p e.backtrace
+        response['status'] = 'error'
+        response['map_info'] = t('errors.ws_error')
       end
     end
 

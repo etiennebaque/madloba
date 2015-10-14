@@ -119,6 +119,7 @@ fr:
     server_error: 500 Erreur serveur
     404_sorry: "Désolé, la page demandée n'a pas été trouvée !"
     500_sorry: "Désolé, il y a eu une erreur serveur. Veuillez essayer à nouveau plus tard."
+    ws_error: "Désolé, il y a eu une erreur serveur. Veuillez rafraichir cette page."
   config:
     not_authorized: Vous n'êtes pas autorisé à aller sur cette page.
   location:

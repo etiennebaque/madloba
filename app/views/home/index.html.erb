@@ -37,27 +37,18 @@
       <!-- Sidebar - Refinements section -->
       <% if (@categories && @categories.select{|cat| cat.is_refinement(params)}.length > 0) || @location_search_refinement_to_display || user_search_action %>
           <div class="list-group">
-            <h4><%= t('home.refinements') %></h4>
-
-            <% if @categories.select{|cat| cat.is_refinement(params)}.length > 1 %>
-                <div id="deleteAllId">
-                  <a href="/" class="list-group-item smaller-no-border-no-background">
-                    <label style='width: 15px;'>&nbsp;</label>
-                    <span class="guided-nav-label"><%= t('home.delete_all') %></span>
-                    <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
-                  </a>
-                </div>
-            <% end %>
-
             <% if @location_search_refinement_to_display %>
+                <h4><%= t('home.your_searched_location') %></h4>
                 <a href = "/" class="list-group-item smaller-no-border-no-background">
-                  <span class="guided-nav-label"><%= t('home.your_searched_location') %></span>
+                  <span><%= params[:loc] %></span>
                   <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
                 </a>
             <% end %>
             <% if user_search_action %>
+                <!-- "You're searching for: / You're giving away:" refinement -->
+                <h4><%= user_search_action %></h4>
                 <a href = "/" class="list-group-item smaller-no-border-no-background">
-                  <span class="guided-nav-label"><%= user_search_action %></span>
+                  <span><%= params[:item].capitalize %></span>
                   <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
                 </a>
             <% end %>
@@ -66,6 +57,9 @@
 
       <!-- List of selected categories -->
       <div id="refinementsId">
+        <% if @categories.select{|cat| cat.is_refinement(params)}.length > 0 %>
+            <h4><%= t('home.refinements') %></h4>
+        <% end %>
         <% @categories.each do |category| %>
             <% if category.is_refinement(params) %>
                 <a href = "<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background guided-nav-category">
@@ -82,19 +76,23 @@
       <!-- Sidebar - list of Categories -->
       <div class="list-group">
         <% if @categories.length > 0 %>
-            <h4><%= t('home.title_guided_nav') %></h4>
-            <div id="available_categories">
-            <% @categories.each do |category| %>
-                <% if !category.is_refinement(params) %>
-                    <a id="<%= category.id %>" href ="#" class="list-group-item smaller-no-border-no-background guided-nav-category">
-                      <label style='width: 15px;'>
-                        <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
-                      </label>
-                      <span class="guided-nav-label"><%= category.name %></span>
-                    </a>
-                <% end %>
+
+            <% if @categories.length > 1 %>
+                <!-- No point in showing only one category -->
+                <h4><%= t('home.title_guided_nav') %></h4>
+                <div id="available_categories">
+                  <% @categories.each do |category| %>
+                      <% if !category.is_refinement(params) %>
+                          <a id="<%= category.id %>" href ="#" class="list-group-item smaller-no-border-no-background guided-nav-category">
+                            <label style='width: 15px;'>
+                              <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
+                            </label>
+                            <span class="guided-nav-label"><%= category.name %></span>
+                          </a>
+                      <% end %>
+                  <% end %>
+                </div>
             <% end %>
-            </div>
 
             <% if (@locations_postal && @locations_postal.length > 0) || (@locations_district && @locations_district.length > 0) %>
                 <hr />

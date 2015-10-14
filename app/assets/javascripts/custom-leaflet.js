@@ -6,9 +6,10 @@ var leaf = {
     map: null,
     map_tiles: null,
     my_lat: '',
-    my_lon: '',
+    my_lng: '',
     drawn_items: null,
     districts: null,
+    searched_address: '',
 
     // By default, it is not possible to zoom in/out when using
     // the mouse wheel, unless clicking on the map (toggle).
@@ -25,6 +26,7 @@ var leaf = {
 
         leaf.my_lat = map_settings['lat'];
         leaf.my_lng = map_settings['lng'];
+        leaf.searched_address = map_settings['searched_address'];
 
         if (map_settings['chosen_map'] == 'mapbox' || map_settings['chosen_map'] == 'osm'){
             // Mapbox or OSM
@@ -109,24 +111,19 @@ var leaf = {
             var center_marker = L.marker([leaf.my_lat, leaf.my_lng], {icon: markers.default_icon});
             if (map_settings['marker_message'] != ""){
                 center_marker.addTo(leaf.map).bindPopup(map_settings['marker_message']).openPopup();
+                //center_marker.bindPopup(map_settings['marker_message']).openPopup();
             }else{
                 center_marker.addTo(leaf.map);
             }
         }
     },
 
-    // Method defining different events bound to the map, depending on
-    // which page this map is displayed.
+    // Method defining different events bound to the map, depending on which page this map is displayed.
+    // Also displaying specific markers, like searched location marker
     setup_custom_behaviors: function(map_settings){
         if (map_settings['clickableMapMarker'] != 'none'){
             // Getting latitude and longitude of clicked point on the map.
             leaf.map.on('click', onMapClickLocation);
-        }
-
-        if (map_settings['page'] == 'searchedLocationOnHome'){
-            // Adding marker for the searched address, on the home page.
-            L.marker([ leaf.my_lat, leaf.my_lon ], {icon: markers.default_icon}).addTo(leaf.map).bindPopup(
-                map_settings['searched_address']).openPopup();
         }
 
         if (map_settings['page'] == 'mapsettings'){
@@ -525,8 +522,22 @@ function putLocationMarkers(locations_exact, locations_postal, locations_distric
         })
     });
 
+    var searched_location_marker = '';
+    if (typeof leaf.searched_address != 'undefined'){
+        // Adding marker for the searched address, on the home page.
+        searched_location_marker = L.marker([ leaf.my_lat, leaf.my_lng ], {icon: markers.default_icon}).bindPopup(leaf.searched_address);
+        searched_location_marker.addTo(leaf.map);
+        //markers.group.addLayer(searched_location_marker);
+        //leaf.map.fitBounds(markers.group.getBounds().pad(0.1));
+    }
+
     // Adding all the markers to the map.
     leaf.map.addLayer(markers.group);
+
+    if (searched_location_marker != ''){
+        searched_location_marker.openPopup();
+    }
+
 
 }
 

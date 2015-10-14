@@ -20,6 +20,7 @@ var messagePrefix = {
     add_new_marker: 'new'
 }
 
+// Method that turns the current navigation state into a string.
 AdSocket.prototype.stringifyState = function() {
     var _this = this;
     var complete_state = '';
@@ -52,7 +53,7 @@ function append_to_state(complete_state, param, value){
     return complete_state
 }
 
-
+// Initialisation of the websocket.
 AdSocket.prototype.initBinds = function() {
     var _this = this;
 
@@ -111,10 +112,11 @@ AdSocket.prototype.initBinds = function() {
         var response = JSON.parse(e.data);
         var status = response['status'];
         var map_info = response['map_info'];
+        var new_nav_state = _this.nav_state;
 
         switch(status) {
             case "mapok":
-                _this.refresh_map(map_info);
+                _this.refresh_map(map_info, new_nav_state);
                 break;
             case "error":
                 _this.error_map(map_info);
@@ -127,21 +129,28 @@ AdSocket.prototype.initBinds = function() {
     };
 };
 
+// Sending the new navigation state to the server, in order to get the relevant markers and areas.
 AdSocket.prototype.sendNavState = function(value) {
     this.socket.send(messagePrefix.refresh_map+value);
 };
 
+// Sending a message to the server to notify other users that a new ad has been created, and to display on other users' home page map.
 AdSocket.prototype.sendNewAdNotification = function(value) {
-    //this.socket.send(messagePrefix.add_new_marker+value);
     this.send(messagePrefix.add_new_marker+value);
 };
 
 // After selection of a category in the guided navigation, we need to refresh the map accordingly.
-AdSocket.prototype.refresh_map = function (new_map_info){
+AdSocket.prototype.refresh_map = function (new_map_info, new_nav_state){
     // First we need to clear all the current layers.
-    markers.group.clearLayers();
-    markers.postal_group.clearLayers();
-    markers.district_group.clearLayers();
+    if (markers.group != ''){
+        markers.group.clearLayers();
+    }
+    if (markers.postal_group != ''){
+        markers.postal_group.clearLayers();
+    }
+    if (markers.district_group != ''){
+        markers.district_group.clearLayers();
+    }
 
     // Then we place the different markers and areas.
     if (new_map_info['markers'] != ''){
@@ -155,12 +164,60 @@ AdSocket.prototype.refresh_map = function (new_map_info){
     if (new_map_info['district'] != ''){
         drawDistrictsOnMap(new_map_info['district']);
     }
+
+    //this.updateURL(new_nav_state);
 };
 
-AdSocket.prototype.error_map = function (new_map_info){
-    // to be implemented.
+// This method allows to update the URL without redirecting, when a category is selected.
+// By doing so, we give the user the possibility to reload the page on a specific category nav state.
+// (Not used for now)
+AdSocket.prototype.updateURL = function (new_nav_state){
+    var params = location.search;
+    var current_url = window.location.href;
+    var new_cat_params = 'cat='+new_nav_state.cat.join('+');
+    var new_url = '';
+
+    if (params != ''){
+        var param_array = params.replace('?','').split('&');
+        var cat_param = ''
+        for (var i = 0; i < param_array.length; i++){
+            if (param_array[i].indexOf("cat=") > -1){
+                cat_param = param_array[i];
+                break;
+            }
+        }
+        if (cat_param != ''){
+            if (new_cat_params == 'cat='){
+                new_url = current_url.replace(cat_param, '');
+            }else{
+                new_url = current_url.replace(cat_param, new_cat_params);
+            }
+        }else{
+            new_url = current_url + '&'+ new_cat_params;
+        }
+
+    }else{
+        if (new_cat_params == 'cat='){
+            new_url = current_url;
+        }else{
+            new_url = current_url + '?' + new_cat_params;
+        }
+    }
+
+    if (new_url.indexOf("?#") > -1){
+        new_url = new_url.replace("?#","");
+    }
+
+    history.replaceState('data', '', new_url);
+
+}
+
+AdSocket.prototype.error_map = function (message){
+    // if there's been an websocket error, use the 'search_error_message' div in navbar to display an error message
+    $('#search_error_message').html(message);
 };
 
+// Method that place the new markers sent back from the server
 AdSocket.prototype.add_marker = function (new_map_info){
     if (new_map_info['markers'].length > 1){
         // There are several markers to add on the map. Let's not bounce them, as animation conflicts with MarkerClusterGroup.

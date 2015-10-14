@@ -1,18 +1,14 @@
 // Object used for autocompletion when user searches for an item, in navigation bar
-var searched_ad_items = new Bloodhound({
+searched_ad_items = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    prefetch: {
-        url: '/getItems?type=prefetch_ad_items'
-    },
     remote: {
         url: '/getItems?item=QUERY&type=search_ad_items',
         wildcard: 'QUERY'
     }
 });
 searched_ad_items.clearPrefetchCache();
-searched_ad_items.initialize(true);
-
+searched_ad_items.initialize();
 
 $(document).ready(function() {
 
@@ -86,12 +82,13 @@ $(document).ready(function() {
 
     // Type-ahead for the item text field, in the main navigation bar.
     // searched_ad_items object is initialized in home layout template.
-    if (typeof searched_ad_items != 'undefined') {
-        $('#item').typeahead(null, {
-            display: 'value',
-            source: searched_ad_items
-        });
-    }
+
+    $('#item').typeahead(null, {
+        name: 'item-search',
+        display: 'value',
+        source: searched_ad_items
+    });
+
 
 
     // Offcanvas related scripts
@@ -103,6 +100,7 @@ $(document).ready(function() {
     // ***********************
     // Create/Edit an ad pages
     // ***********************
+
     // Function that binds events to the item drop down list (in ads#new and ads#edit pages)
     // These events consists of making ajax call to check what items exists, in order to
     // create a type-ahead for the search bar of that drop drown box.
@@ -232,8 +230,15 @@ $(document).ready(function() {
         $("html, body").animate({ scrollTop: 0 }, 0);
     });
 
+    // Navigation bar: changing the typeahead query, depending of user choice between "I'm giving away" and "I'm searching for"
+    $('#q').change(function(){
+        searched_ad_items.remote.url = '/getItems?item=QUERY&type=search_ad_items&q='+$('#q').val();
+        // As the type of search changes, the item name field needs to be reset.
+        $('#item').val('');
+    }).change();
+
     // load additional scripts when user is in the admin panel.
-    if (is_in_admin_panel()){
+    if (is_in_admin_panel()) {
         load_admin_scripts();
     }
 
