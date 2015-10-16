@@ -388,7 +388,13 @@ var markers = {
                         popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'] + "</b>", ad, k);
                     }
 
-                    var marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address'], bounceOnAdd: is_bouncing_on_add});
+                    var marker = '';
+                    if (is_bouncing_on_add){
+                        marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address'], bounceOnAdd: is_bouncing_on_add});
+                    }else{
+                        marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address']});
+                    }
+
                     var popup = L.popup({minWidth: 250}).setContent(popup_html_text);
 
                     marker.bindPopup(popup);

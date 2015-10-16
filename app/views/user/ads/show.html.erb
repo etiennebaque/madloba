@@ -128,12 +128,9 @@
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 
     <script>
-        // Initialization of websoket url and object.
-        App = {websocket_url: "<%= "ws://#{request.host}:#{request.port}" %>"};
 
-        $(function() {
-            var adSocket = new AdSocket();
-        });
+        // Initialize the Web socket object
+        <%= render 'shared/initialize_websocket.js' %>
 
     </script>
 <% end %>

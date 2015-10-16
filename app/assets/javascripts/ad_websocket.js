@@ -100,6 +100,7 @@ AdSocket.prototype.initBinds = function() {
     $(document).ready(function() {
         var new_ad_id = $('#new_ad_id').val();
         if (typeof new_ad_id != "undefined"){
+            console.log($('#new_ad_id').val());
             _this.sendNewAdNotification(new_ad_id);
         }
     });
@@ -219,11 +220,12 @@ AdSocket.prototype.error_map = function (message){
 
 // Method that place the new markers sent back from the server
 AdSocket.prototype.add_marker = function (new_map_info){
-    if (new_map_info['markers'].length > 1){
+    var ad_items = new_map_info['markers'][0]['ads'][0]['items'];
+    if (ad_items.length > 1){
         // There are several markers to add on the map. Let's not bounce them, as animation conflicts with MarkerClusterGroup.
         markers.place_exact_locations_markers(new_map_info['markers'], false);
     }else{
-        // 1 marker to add, let's bounce it.
+        // 1 marker to add, let's make it bounce.
         markers.place_exact_locations_markers(new_map_info['markers'], true);
     }
 
