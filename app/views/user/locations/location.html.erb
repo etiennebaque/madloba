@@ -134,7 +134,7 @@
                                   <td><%= ad.id %></td>
                                   <td><a href="/user/ads/<%= ad.id %>/edit"><%= ad.title %></a></td>
                                   <td><%= ad.items.map{|i| i.name}.join(', ') %></td>
-                                  <td><%= ad.description %></td>
+                                  <td><%= simple_format(ad.description) %></td>
                                 </tr>
                             <% end %>
                             </tbody>

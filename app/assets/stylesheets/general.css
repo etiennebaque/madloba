@@ -97,6 +97,10 @@ body {
     z-index: 1;
 }
 
+.show_ad_paragraph{
+    margin-bottom: 20px;
+}
+
 /*
  * Home page
  * ---------

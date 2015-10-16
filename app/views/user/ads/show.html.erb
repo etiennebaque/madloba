@@ -82,6 +82,7 @@
   <% if @ad.image? %>
       <div class="row">
         <div class="col-lg-7 col-sm-12 ad-paragraph">
+          <!-- Partial showing info about the ad -->
           <%= render 'shared/ad_summary' %>
         </div>
 
@@ -98,27 +99,12 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-lg-12 ad-paragraph">
-          <!-- Ad description -->
-          <div class="ad-show-description">
-            <label class="ad-label"><%= t('ad.description') %>:</label>
-            <span><%= simple_format(@ad.description) %></span>
-          </div>
-        </div>
-      </div>
   <% else %>
 
       <div class="row">
         <div class="col-lg-12 ad-paragraph">
-
+          <!-- Partial showing info about the ad -->
           <%= render 'shared/ad_summary' %>
-
-          <!-- Ad description -->
-          <div class="ad-show-description">
-            <label class="ad-label"><%= t('ad.description') %>:</label>
-            <span><%= simple_format(@ad.description) %></span>
-          </div>
         </div>
       </div>
 

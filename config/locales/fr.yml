@@ -123,7 +123,7 @@ fr:
   config:
     not_authorized: Vous n'êtes pas autorisé à aller sur cette page.
   location:
-    location: "Emplacement:*"
+    location: "Emplacement"
     user_location: "Emplacements de cet utilisateur:*"
     new_location: Entrez un nouvel emplacement pour cette annonce
     name: "Nom de l'emplacement :"
