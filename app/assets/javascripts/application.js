@@ -36,4 +36,6 @@
 // application script for Charisma theme
 //= require charisma
 
+//= require ad_websocket
+
 ////= require_tree .

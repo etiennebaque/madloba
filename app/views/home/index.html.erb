@@ -37,59 +37,61 @@
       <!-- Sidebar - Refinements section -->
       <% if (@categories && @categories.select{|cat| cat.is_refinement(params)}.length > 0) || @location_search_refinement_to_display || user_search_action %>
           <div class="list-group">
-            <h4><%= t('home.refinements') %></h4>
-
-            <% if @categories.select{|cat| cat.is_refinement(params)}.length > 1 %>
-                <div id="deleteAllId">
-                  <a href="/" class="list-group-item smaller-no-border-no-background">
-                    <label style='width: 15px;'>&nbsp;</label>
-                    <span class="guided-nav-label"><%= t('home.delete_all') %></span>
-                    <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
-                  </a>
-                </div>
-            <% end %>
-
             <% if @location_search_refinement_to_display %>
+                <h4><%= t('home.your_searched_location') %></h4>
                 <a href = "/" class="list-group-item smaller-no-border-no-background">
-                  <span class="guided-nav-label"><%= t('home.your_searched_location') %></span>
+                  <span><%= params[:loc] %></span>
                   <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
                 </a>
             <% end %>
             <% if user_search_action %>
+                <!-- "You're searching for: / You're giving away:" refinement -->
+                <h4><%= user_search_action %></h4>
                 <a href = "/" class="list-group-item smaller-no-border-no-background">
-                  <span class="guided-nav-label"><%= user_search_action %></span>
+                  <span><%= params[:item].capitalize %></span>
                   <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
                 </a>
             <% end %>
-            <div id="refinementsId">
-              <% @categories.each do |category| %>
-                  <% if category.is_refinement(params) %>
-                      <a href = "<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background guided-nav-category">
-                        <label style='width: 15px;'>
-                          <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
-                        </label>
-                        <span class="guided-nav-label"><%= category.name %></span>
-                        <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
-                      </a>
-                  <% end %>
-              <% end %>
-            </div>
           </div>
       <% end %>
+
+      <!-- List of selected categories -->
+      <div id="refinementsId">
+        <% if @categories.select{|cat| cat.is_refinement(params)}.length > 0 %>
+            <h4><%= t('home.refinements') %></h4>
+        <% end %>
+        <% @categories.each do |category| %>
+            <% if category.is_refinement(params) %>
+                <a href = "<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background guided-nav-category">
+                  <label style='width: 15px;'>
+                    <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
+                  </label>
+                  <span class="guided-nav-label"><%= category.name %></span>
+                  <i class="glyphicon glyphicon-remove align-cross" style="float: right"></i>
+                </a>
+            <% end %>
+        <% end %>
+      </div>
 
       <!-- Sidebar - list of Categories -->
       <div class="list-group">
         <% if @categories.length > 0 %>
-            <h4><%= t('home.title_guided_nav') %></h4>
-            <% @categories.each do |category| %>
-                <% if !category.is_refinement(params) %>
-                    <a href ="<%= category.refinement_url(params) %>" class="list-group-item smaller-no-border-no-background guided-nav-category">
-                      <label style='width: 15px;'>
-                        <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
-                      </label>
-                      <span class="guided-nav-label"><%= category.name %></span>
-                    </a>
-                <% end %>
+
+            <% if @categories.length > 1 %>
+                <!-- No point in showing only one category -->
+                <h4><%= t('home.title_guided_nav') %></h4>
+                <div id="available_categories">
+                  <% @categories.each do |category| %>
+                      <% if !category.is_refinement(params) %>
+                          <a id="<%= category.id %>" href ="#" class="list-group-item smaller-no-border-no-background guided-nav-category">
+                            <label style='width: 15px;'>
+                              <i class="fa <%= category.icon %>" style="color: <%= category.marker_color_hexacode %>;"></i>
+                            </label>
+                            <span class="guided-nav-label"><%= category.name %></span>
+                          </a>
+                      <% end %>
+                  <% end %>
+                </div>
             <% end %>
 
             <% if (@locations_postal && @locations_postal.length > 0) || (@locations_district && @locations_district.length > 0) %>
@@ -228,7 +230,7 @@ If they do, it will affect the website's ability to work well (test carried out 
 
     <!-- Leaflet plug-ins and library used on the home page -->
     <%= javascript_include_tag 'leaflet-sidebar', 'leaflet-function-button' %>
-    <%= javascript_include_tag 'leaflet.markercluster' %>
+    <%= javascript_include_tag 'leaflet.markercluster', 'bouncemarker' %>
 
     <!-- Javascript function calls, related specifically to the home page -->
     <script>
@@ -240,9 +242,14 @@ If they do, it will affect the website's ability to work well (test carried out 
         var area_geocodes = <%= raw @area_geocodes.to_json %>;
         var marker_colors = <%= raw MARKER_COLORS.to_json %>;
 
+        // Put all markers and areas on the home page map
         putLocationMarkers(locations_exact, locations_postal, locations_district, area_geocodes, marker_colors);
 
+        // Setup the guided navigation sidebar
         initializeSideBar();
+
+        // Initialize the Web socket object
+        <%= render 'shared/initialize_websocket.js' %>
 
     </script>
 <% end %>

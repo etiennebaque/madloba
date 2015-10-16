@@ -3,13 +3,13 @@
  * This object attributes consists of the map object, map tiles and other map-related objects.
  */
 var leaf = {
-
     map: null,
     map_tiles: null,
     my_lat: '',
-    my_lon: '',
+    my_lng: '',
     drawn_items: null,
     districts: null,
+    searched_address: '',
 
     // By default, it is not possible to zoom in/out when using
     // the mouse wheel, unless clicking on the map (toggle).
@@ -26,6 +26,7 @@ var leaf = {
 
         leaf.my_lat = map_settings['lat'];
         leaf.my_lng = map_settings['lng'];
+        leaf.searched_address = map_settings['searched_address'];
 
         if (map_settings['chosen_map'] == 'mapbox' || map_settings['chosen_map'] == 'osm'){
             // Mapbox or OSM
@@ -110,24 +111,19 @@ var leaf = {
             var center_marker = L.marker([leaf.my_lat, leaf.my_lng], {icon: markers.default_icon});
             if (map_settings['marker_message'] != ""){
                 center_marker.addTo(leaf.map).bindPopup(map_settings['marker_message']).openPopup();
+                //center_marker.bindPopup(map_settings['marker_message']).openPopup();
             }else{
                 center_marker.addTo(leaf.map);
             }
         }
     },
 
-    // Method defining different events bound to the map, depending on
-    // which page this map is displayed.
+    // Method defining different events bound to the map, depending on which page this map is displayed.
+    // Also displaying specific markers, like searched location marker
     setup_custom_behaviors: function(map_settings){
         if (map_settings['clickableMapMarker'] != 'none'){
             // Getting latitude and longitude of clicked point on the map.
             leaf.map.on('click', onMapClickLocation);
-        }
-
-        if (map_settings['page'] == 'searchedLocationOnHome'){
-            // Adding marker for the searched address, on the home page.
-            L.marker([ leaf.my_lat, leaf.my_lon ], {icon: markers.default_icon}).addTo(leaf.map).bindPopup(
-                map_settings['searched_address']).openPopup();
         }
 
         if (map_settings['page'] == 'mapsettings'){
@@ -318,15 +314,25 @@ var leaf = {
  * Object gathering different markers and icons that are used on the Madloba maps.
  */
 var markers = {
+    // Single feature to appear on pages like new ad form (location form), or ad detail page.
     new_marker: '',
     selected_area: '',
     postal_code_circle: '',
-    group: '',
 
+    // Group of features, to appear mainly on the main map (home page).
+    group: '',
+    postal_group: '',
+    district_group: '',
+
+    // Icons and feature colors
     default_icon: null,
     new_icon: null,
+    marker_colors: null,
     postal_code_area_color: null,
-    district_area_color: null,
+    district_color: null,
+
+    // Geocodes needed to draw the postal code circles or the district boundaries
+    area_geocodes: null,
 
     // There are 2 types of markers, when defining a new location:
     // exact (by full address, default one), and area (by postal code, or district)
@@ -334,9 +340,6 @@ var markers = {
 
     // Marker that will be in the center of the map.
     center_marker: null,
-
-    district_color: '',
-    postal_code_area_color: '',
 
     init: function (map_settings) {
         markers.default_icon = L.icon ({
@@ -358,7 +361,7 @@ var markers = {
     },
 
     // Method that creates markers representing ads tied to exact-type location.
-    place_exact_locations_markers: function (locations_exact) {
+    place_exact_locations_markers: function (locations_exact, is_bouncing_on_add) {
         for (var i=0; i<locations_exact.length; i++){
             var location = locations_exact[i];
 
@@ -385,7 +388,13 @@ var markers = {
                         popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'] + "</b>", ad, k);
                     }
 
-                    var marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address']})
+                    var marker = '';
+                    if (is_bouncing_on_add){
+                        marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address'], bounceOnAdd: is_bouncing_on_add});
+                    }else{
+                        marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address']});
+                    }
+
                     var popup = L.popup({minWidth: 250}).setContent(popup_html_text);
 
                     marker.bindPopup(popup);
@@ -396,19 +405,19 @@ var markers = {
     },
 
     // Method that draws circles, representing ads tied to a postal code only.
-    draw_postal_code_areas: function (locations_postal, area_geocodes, marker_colors) {
+    draw_postal_code_areas: function (locations_postal) {
         if (locations_postal != null && Object.keys(locations_postal).length > 0){
 
-            var drawn_areas = L.featureGroup().addTo(leaf.map);
+            markers.postal_group = L.featureGroup().addTo(leaf.map);
 
             // Adding event to show/hide these districts from the checkbox in the guided navigation.
             $("#show_area_id").change(function() {
                 if ($('#show_area_id').prop('checked')) {
                     // Drawing districts in this function, when checkbox is checked.
-                    drawPostalCodeAreaOnMap(drawn_areas, locations_postal, area_geocodes, marker_colors);
+                    drawPostalCodeAreaOnMap(locations_postal);
                 }else{
-                    drawn_areas.eachLayer(function (layer) {
-                        drawn_areas.removeLayer(layer);
+                    markers.postal_group.eachLayer(function (layer) {
+                        markers.postal_group.removeLayer(layer);
                     });
                 }
             }).change();
@@ -416,19 +425,19 @@ var markers = {
     },
 
     // Method drawing the boundaries of districts on a map. Only the districts related to an active ad are drawn.
-    draw_district_areas: function (locations_district, area_geocodes, marker_colors) {
+    draw_district_areas: function (locations_district) {
         // Snippet that creates markers, to represent ads tied to district-type location.
         if (locations_district != null && Object.keys(locations_district).length > 0){
-            var drawn_districts = L.featureGroup().addTo(leaf.map);
+            markers.district_group = L.featureGroup().addTo(leaf.map);
 
             // Adding event to show/hide these districts from the checkbox in the guided navigation.
             $("#show_area_id").change(function() {
                 if ($('#show_area_id').prop('checked')) {
                     // Drawing districts in this function, when checkbox is checked.
-                    drawDistrictsOnMap(drawn_districts, locations_district, area_geocodes, marker_colors);
+                    drawDistrictsOnMap(locations_district);
                 }else{
-                    drawn_districts.eachLayer(function (layer) {
-                        drawn_districts.removeLayer(layer);
+                    markers.district_group.eachLayer(function (layer) {
+                        markers.district_group.removeLayer(layer);
                     });
                 }
             }).change();
@@ -480,15 +489,17 @@ function putLocationMarkers(locations_exact, locations_postal, locations_distric
     // The MarkerClusterGroup object will allow to aggregate location markers (both 'exact location' and 'area' markers),
     // when they get too close to one another, as the user zooms out, on the home page.
     markers.group = new L.MarkerClusterGroup({spiderfyDistanceMultiplier : 2, zoomToBoundsOnClick: false});
+    markers.area_geocodes = area_geocodes;
+    markers.marker_colors = marker_colors;
 
     // Displaying markers on map
-    markers.place_exact_locations_markers(locations_exact);
+    markers.place_exact_locations_markers(locations_exact, false);
 
     // Displaying postal code area circles on map
-    markers.draw_postal_code_areas(locations_postal, area_geocodes, marker_colors);
+    markers.draw_postal_code_areas(locations_postal);
 
     // Displaying district areas on map
-    markers.draw_district_areas(locations_district, area_geocodes, marker_colors);
+    markers.draw_district_areas(locations_district);
 
     // Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
     // Server side is in home_controller, method showSpecificAds.
@@ -517,8 +528,22 @@ function putLocationMarkers(locations_exact, locations_postal, locations_distric
         })
     });
 
+    var searched_location_marker = '';
+    if (typeof leaf.searched_address != 'undefined'){
+        // Adding marker for the searched address, on the home page.
+        searched_location_marker = L.marker([ leaf.my_lat, leaf.my_lng ], {icon: markers.default_icon}).bindPopup(leaf.searched_address);
+        searched_location_marker.addTo(leaf.map);
+        //markers.group.addLayer(searched_location_marker);
+        //leaf.map.fitBounds(markers.group.getBounds().pad(0.1));
+    }
+
     // Adding all the markers to the map.
     leaf.map.addLayer(markers.group);
+
+    if (searched_location_marker != ''){
+        searched_location_marker.openPopup();
+    }
+
 
 }
 
@@ -560,20 +585,20 @@ function createPopupHtml(first_sentence, ad, index){
  * This function draws districts (where at least one current ad is included)
  * on the map of the home page.
  */
- function drawDistrictsOnMap(drawn_districts, locations_district, area_geocodes, marker_colors){
+ function drawDistrictsOnMap(locations_district){
     Object.keys(locations_district).forEach(function (district_id) {
         var locations = locations_district[district_id];
-        var district_name = area_geocodes[district_id]['name'];
-        var district_bounds = area_geocodes[district_id]['bounds'];
+        var district_name = markers.area_geocodes[district_id]['name'];
+        var district_bounds = markers.area_geocodes[district_id]['bounds'];
 
-        var popup_html_text = createPopupHtmlArea(gon.vars['in_this_district'] + " (<b>"+district_name+"</b>)<br /><br />", locations, 'district', district_id, marker_colors);
+        var popup_html_text = createPopupHtmlArea(gon.vars['in_this_district'] + " (<b>"+district_name+"</b>)<br /><br />", locations, 'district', district_id);
 
         // Adding the districts (which have ads) to the home page map.
         L.geoJson(JSON.parse(district_bounds), {
             onEachFeature: function (feature, layer) {
                 layer.bindPopup(popup_html_text);
                 layer.setStyle({color: markers.district_color});
-                drawn_districts.addLayer(layer);
+                markers.district_group.addLayer(layer);
             }
         });
     })
@@ -583,19 +608,19 @@ function createPopupHtml(first_sentence, ad, index){
  * This function draws postal code areas (where at least a current ad is included)
  * on the map of the home page.
  */
-function drawPostalCodeAreaOnMap(drawn_areas, locations_postal, area_geocodes, marker_colors){
+function drawPostalCodeAreaOnMap(locations_postal){
     Object.keys(locations_postal).forEach(function (area_code) {
         var locations = locations_postal[area_code];
 
-        var popup_html_text = createPopupHtmlArea("In this area (<b>"+area_code+"</b>)<br /><br />", locations, 'postal', area_code, marker_colors);
+        var popup_html_text = createPopupHtmlArea("In this area (<b>"+area_code+"</b>)<br /><br />", locations, 'postal', area_code);
 
-        var area = L.circle([area_geocodes[area_code]['latitude'], area_geocodes[area_code]['longitude']], 600, {
+        var area = L.circle([markers.area_geocodes[area_code]['latitude'], markers.area_geocodes[area_code]['longitude']], 600, {
             color: markers.postal_code_area_color,
             fillColor: markers.postal_code_area_color,
             fillOpacity: 0.3
         }).bindPopup(popup_html_text);
 
-        drawn_areas.addLayer(area);
+        markers.postal_group.addLayer(area);
     });
 }
 
@@ -606,7 +631,7 @@ function drawPostalCodeAreaOnMap(drawn_areas, locations_postal, area_geocodes, m
  * @param location
  * @returns Popup text content.
  */
-function createPopupHtmlArea(first_sentence, locations_from_same_area, area_type, area_id, marker_colors){
+function createPopupHtmlArea(first_sentence, locations_from_same_area, area_type, area_id){
     var is_giving_item = false;
     var is_accepting_item = false;
 
@@ -632,7 +657,7 @@ function createPopupHtmlArea(first_sentence, locations_from_same_area, area_type
             for (var k=0; k<ad['items'].length; k++){
                 var item = ad['items'][k];
 
-                var item_marker_color = item['name'] + '|' + marker_colors[item['category']['marker_color']];
+                var item_marker_color = item['name'] + '|' + markers.marker_colors[item['category']['marker_color']];
 
                 if (item_marker_color in ad_number_per_item){
                     ad_number_per_item[item_marker_color]['number'] = ad_number_per_item[item_marker_color]['number'] + 1;

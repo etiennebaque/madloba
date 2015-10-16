@@ -223,7 +223,7 @@
                         <% if user_locations_number > 0 %>
                             <!-- List of all the different locations previously entered by the current user -->
                             <div id="locations_from_list" class="form-group">
-                              <%= f.label :location, t('location.location'), class: 'control-label' %>
+                              <%= f.label :location, t('location.location')+'*:', class: 'control-label' %>
                               <% current_user.locations.each_with_index do |loc, index| %>
                                   <div class='radio existing_location'>
                                     <label>
@@ -246,7 +246,7 @@
                         <% if @ad.is_anonymous %>
                             <!-- Show this anonymous user's location -->
                             <div id="locations_from_list" class="form-group">
-                              <%= f.label :location, t('location.location'), class: 'control-label' %>
+                              <%= f.label :location, t('location.location')+'*:', class: 'control-label' %>
                               <%= link_to(@ad.location.location_full_name, edit_user_location_path(@ad.location.id)) %> - <%= @ad.location.location_type_address %>
                             </div>
                         <% elsif current_user != @ad.user %>
@@ -264,7 +264,7 @@
                         <% elsif user_locations_number > 0 %>
                             <!-- List of all the different locations previously entered by the current user -->
                             <div id="locations_from_list" class="form-group">
-                              <%= f.label :location, t('location.location'), class: 'control-label' %>
+                              <%= f.label :location, t('location.location')+'*:', class: 'control-label' %>
                               <% current_user.locations.each_with_index do |loc, index| %>
                                   <div class='radio existing_location'>
                                     <label>

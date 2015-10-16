@@ -182,7 +182,7 @@
                   <% if user_locations_number > 0 %>
                       <!-- List of all the different locations previously entered by the current user -->
                       <div id="locations_from_list" class="form-group">
-                        <%= f.label :location, t('location.location'), class: 'col-lg-2 control-label' %>
+                        <%= f.label :location, t('location.location')+'*:', class: 'col-lg-2 control-label' %>
                         <div class="col-lg-6">
                           <% current_user.locations.each_with_index do |loc, index| %>
                               <div class='radio existing_location'>

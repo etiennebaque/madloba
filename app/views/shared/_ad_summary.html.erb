@@ -1,5 +1,5 @@
 <!-- Left-hand side: Items -->
-<div>
+<div class="show_ad_paragraph">
   <% if @ad.is_giving %>
       <label class="ad-label"><%= t('ad.giving_away') %></label>
   <% else %>
@@ -14,35 +14,42 @@
     </span>
 </div>
 
-<br />
-
 <!-- Left-hand side: Location -->
-<div>
-  <label class="ad-label">
-    <% if @ad.is_giving %>
-        <%= t('ad.where_to_find') %>
-    <% else %>
-        <%= t('ad.where_to_bring') %>
-    <% end %>
-  </label>
+<div class="show_ad_paragraph">
+  <label><%= t('location.location')+':' %></label>
   <span><%= @ad.location.name_and_or_full_address %></span>
 </div>
 
 
 <% if @ad.location.loc_type == 'exact' %>
+    <!-- Left-hand side: Phone number -->
+    <% if @ad.location.website && @ad.location.website != '' %>
+        <div class="show_ad_paragraph">
+          <label><%= t('location.phone_number') %></label>
+          <span><%= @ad.location.phone_number %></span>
+        </div>
+    <% end %>
+
     <!-- Left-hand side: Website -->
     <% if @ad.location.website && @ad.location.website != '' %>
-        <div>
-          <label class="ad-label"><%= t('ad.location_website') %></label>
+        <div class="show_ad_paragraph">
+          <label><%= t('ad.location_website') %></label>
           <span><a href="<%= @ad.location.full_website_url %>" target="_blank"><%= @ad.location.website %></a></span>
         </div>
     <% end %>
 
     <!-- Location description -->
     <% if @ad.location.description && @ad.location.description != '' %>
-        <div>
-          <label class="ad-label"><%= t('ad.location_description') %></label>
-          <span><%= @ad.location.description %></span>
+        <div class="show_ad_paragraph">
+          <label><%= t('ad.location_description') %></label>
+          <span><%= simple_format(@ad.location.description) %></span>
         </div>
     <% end %>
 <% end %>
+
+
+<!-- Ad description -->
+<div class="show_ad_paragraph">
+    <label><%= t('ad.description') %>:</label>
+    <span><%= simple_format(@ad.description) %></span>
+</div>
