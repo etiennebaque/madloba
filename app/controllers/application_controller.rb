@@ -102,7 +102,7 @@ class ApplicationController < ActionController::Base
 
     end
 
-    if params['city'].nil? || params['state'].nil? || params['country'].nil?
+    if params['city'].nil? || params['country'].nil?
       # If this inforamtion doesn't come from the page, we get it from the Settings table
       settings = Setting.where(key: %w(city state country))
       settings.each do |setting|
