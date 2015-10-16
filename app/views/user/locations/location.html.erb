@@ -134,7 +134,7 @@
                                   <td><%= ad.id %></td>
                                   <td><a href="/user/ads/<%= ad.id %>/edit"><%= ad.title %></a></td>
                                   <td><%= ad.items.map{|i| i.name}.join(', ') %></td>
-                                  <td><%= ad.description %></td>
+                                  <td><%= simple_format(ad.description) %></td>
                                 </tr>
                             <% end %>
                             </tbody>
@@ -190,6 +190,6 @@
 
 
 <% content_for :scripts do %>
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that create the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>

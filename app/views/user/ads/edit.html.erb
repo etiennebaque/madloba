@@ -3,9 +3,6 @@
     <!-- Includes the main Leaflet CSS and JS files, as well as Mapbox files -->
     <%= render 'shared/map_scripts_before_body', include_all_scripts: false %>
 
-    <!-- CSS file used on admin pages -->
-    <%= stylesheet_link_tag 'admin' %>
-
     <style type="text/css">
         #map {
             width: 100%;
@@ -13,8 +10,6 @@
             margin: 0;
         }
     </style>
-
-    <%= javascript_include_tag :cocoon %>
 
 <% end %>
 
@@ -228,7 +223,7 @@
                         <% if user_locations_number > 0 %>
                             <!-- List of all the different locations previously entered by the current user -->
                             <div id="locations_from_list" class="form-group">
-                              <%= f.label :location, t('location.location'), class: 'control-label' %>
+                              <%= f.label :location, t('location.location')+'*:', class: 'control-label' %>
                               <% current_user.locations.each_with_index do |loc, index| %>
                                   <div class='radio existing_location'>
                                     <label>
@@ -251,7 +246,7 @@
                         <% if @ad.is_anonymous %>
                             <!-- Show this anonymous user's location -->
                             <div id="locations_from_list" class="form-group">
-                              <%= f.label :location, t('location.location'), class: 'control-label' %>
+                              <%= f.label :location, t('location.location')+'*:', class: 'control-label' %>
                               <%= link_to(@ad.location.location_full_name, edit_user_location_path(@ad.location.id)) %> - <%= @ad.location.location_type_address %>
                             </div>
                         <% elsif current_user != @ad.user %>
@@ -269,7 +264,7 @@
                         <% elsif user_locations_number > 0 %>
                             <!-- List of all the different locations previously entered by the current user -->
                             <div id="locations_from_list" class="form-group">
-                              <%= f.label :location, t('location.location'), class: 'control-label' %>
+                              <%= f.label :location, t('location.location')+'*:', class: 'control-label' %>
                               <% current_user.locations.each_with_index do |loc, index| %>
                                   <div class='radio existing_location'>
                                     <label>
@@ -344,7 +339,7 @@
 
 <% content_for :scripts do %>
     <!-- Admin screen related scripts -->
-    <%= javascript_include_tag 'admin' %>
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <!-- javascript_include_tag 'admin' -->
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>

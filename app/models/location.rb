@@ -14,9 +14,14 @@ class Location < ActiveRecord::Base
 
 
   # This method returns the right query to display relevant markers, on the home page.
-  def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action )
+  def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action, ad_id)
 
     locations = Location.includes(ads: {items: :category}).type(location_type).references(:ads)
+
+    if ad_id.present?
+      # Search by ad ids when adding ads on home page dynamically, when other user just created an ad (websocket)
+      locations = locations.where('ads.id = ?', ad_id)
+    end
 
     if cat_nav_state || searched_item
       if cat_nav_state
@@ -44,6 +49,33 @@ class Location < ActiveRecord::Base
     end
 
     return locations
+  end
+
+  # This method creates the final longitudes and latitudes for each area to be displayed on the map.
+  def self.define_area_geocodes (locations_postal, locations_district)
+    area_geocodes = {}
+    if (locations_postal && locations_postal.length > 0)
+      locations_postal.each do |area, locations|
+        total_latitude = 0.0
+        total_longitude = 0.0
+        count = 0
+        locations.each do |location|
+          total_latitude += location.latitude.to_f
+          total_longitude += location.longitude.to_f
+          count += 1
+        end
+        area_geocodes[area] = {'latitude' => total_latitude / count, 'longitude' => total_longitude / count}
+      end
+    end
+
+    if (locations_district && locations_district.length > 0)
+      districts = District.where(id: locations_district.keys)
+      districts.each do |district|
+        area_geocodes[district.id] = {'name' => district.name, 'bounds' => district.bounds}
+      end
+    end
+
+    return area_geocodes
   end
 
   def is_area

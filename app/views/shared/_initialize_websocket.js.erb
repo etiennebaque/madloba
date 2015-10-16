@@ -1,0 +1,10 @@
+// Initialization of websocket url and object.
+App = {websocket_url: "<%= "ws://#{request.host}:#{request.port}" %>"};
+
+$(function() {
+    var adSocket = new AdSocket();
+
+    $(window).on('beforeunload', function(){
+        adSocket.socket.close();
+    });
+});

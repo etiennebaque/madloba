@@ -59,9 +59,9 @@ en:
     record_not_exist: Sorry, this page does not exist!
     got_it: Got it!
     giving: "I'm giving away:"
-    giving_away: "Giving away:"
+    giving_away: "You're giving away:"
     searching: "I'm searching for:"
-    searching_for: "Searching for:"
+    searching_for: "You're searching for:"
     search_items: Type an item
     location_example: Street name, postal code...
     search: OK
@@ -105,10 +105,11 @@ en:
     server_error: 500 Internal server error
     404_sorry: "Sorry, the requested page has not been found!"
     500_sorry: "Sorry, there's been a server error. Please try again later."
+    ws_error: Sorry, a server error occurred. Please refresh this page.
   config:
     not_authorized: You are not allowed go to that page.
   location:
-    location: "Location:*"
+    location: "Location"
     user_location: "This user's locations:*"
     new_location: Enter a new location for this ad
     name: "Location name:"
@@ -154,11 +155,11 @@ en:
     about_you: "About you"
     name: "Your name*:"
     name_help: Please enter your name or a nickname here. It will appear publicly as it is, in the published ad.
-    your_email: "Your email*:"
+    your_email: Your email
     captcha: "Captcha*:"
     email_help: Providing your email is not mandatory (make sure you've at least put a phone number in the ad description). If you give an email address, it won't be published publicly and users will still be able to write a message to you.
     ad_is_deleted: The ad '%{deleted_ad_title}' has been deleted.
-    location_website: "Location website:"
+    location_website: "Website:"
     your_message: "Your message*:"
     send_message: Send your message
     send_message_label: "Send a message to %{name} about this ad:"

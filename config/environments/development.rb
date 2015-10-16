@@ -38,6 +38,8 @@ Madloba::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
+  config.serve_static_files = false
+
   Madloba::Application.config.middleware.use ExceptionNotification::Rack,
                                              :email => {
                                                  :email_prefix => "[Madloba App error] ",

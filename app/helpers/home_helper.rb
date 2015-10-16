@@ -22,9 +22,9 @@ module HomeHelper
       # For the user action's "delete refinement" url, we need to get rid of empty parameters, like 'item=' or 'location='.
       # That's why we have elem[-1], in the delete_if clause.
       if user_action == 'searching'
-        search_action = "#{t('home.searching_for')} #{searched_term}"
+        search_action = t('home.searching_for')
       elsif user_action == 'giving'
-        search_action = "#{t('home.giving_away')} #{searched_term}"
+        search_action = t('home.giving_away')
       end
     end
 

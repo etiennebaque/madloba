@@ -91,7 +91,7 @@ class SetupController < ApplicationController
   # -----------------------------------------
   def show_map
     getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
-    @mapSettings['page'] = 'mapsettings'
+    @map_settings['page'] = 'mapsettings'
     @current_step = 3
 
     render 'setup/map'

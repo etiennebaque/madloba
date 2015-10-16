@@ -11,8 +11,6 @@
         }
     </style>
 
-    <%= javascript_include_tag :cocoon %>
-
     <script>
         var current_page = "new_ad";
         var location_number = <%= user_locations_number %>;
@@ -184,7 +182,7 @@
                   <% if user_locations_number > 0 %>
                       <!-- List of all the different locations previously entered by the current user -->
                       <div id="locations_from_list" class="form-group">
-                        <%= f.label :location, t('location.location'), class: 'col-lg-2 control-label' %>
+                        <%= f.label :location, t('location.location')+'*:', class: 'col-lg-2 control-label' %>
                         <div class="col-lg-6">
                           <% current_user.locations.each_with_index do |loc, index| %>
                               <div class='radio existing_location'>
@@ -226,7 +224,7 @@
 
                 <!-- Anonymous user's email -->
                 <div class="form-group">
-                  <%= f.label :anon_email, t('admin.users.email')+'*:', class: 'col-lg-2 control-label' %>
+                  <%= f.label :anon_email, t('ad.your_email')+'*:', class: 'col-lg-2 control-label' %>
                   <div class="col-lg-6">
                     <%= f.email_field :anon_email, class: 'form-control help-message', autofocus: true,
                                       :data => {:content => t('ad.email_help'), :placement => 'right',
@@ -289,6 +287,6 @@
 
 <!-- Loading JS scripts -->
 <% content_for :scripts do %>
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
 <% end %>

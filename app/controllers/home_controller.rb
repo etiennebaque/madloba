@@ -6,7 +6,7 @@ class HomeController < ApplicationController
   # --------------------------------------
   def index
     # Initializations
-    @mapSettings = {}
+    @map_settings = {}
     @location_search_refinement_to_display = nil
     @error_location_message = nil
     selected_item_ids = nil
@@ -18,7 +18,7 @@ class HomeController < ApplicationController
     end
 
     # Initializing the map, in relation to its center, defined in the settings table.
-    @mapSettings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
+    @map_settings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
 
     # Getting all the needed settings to load the page
     settings_records = Setting.where(key: %w(description area_length area_type contact_email facebook twitter pinterest
@@ -32,15 +32,13 @@ class HomeController < ApplicationController
     if params[:item] && params[:item] != ''
       # An item is being searched.
       searched_item = params[:item]
-      selected_item_ids = Item.joins(:ads).where("name LIKE '%#{searched_item}%'").pluck(:id).uniq
+      selected_item_ids = Item.joins(:ads).where('name LIKE ?', "%#{searched_item}%").pluck(:id).uniq
     end
 
     if (params[:lat] && params[:lon])
-        # It's a location-based search
-        @mapSettings['page'] = 'searchedLocationOnHome'
         # The center of the map is now represented by the searched location.
-        @mapSettings['lat'] = params[:lat]
-        @mapSettings['lng'] = params[:lon]
+        @map_settings['lat'] = params[:lat]
+        @map_settings['lng'] = params[:lon]
 
         if params[:loc]
           # A location search was just performed, with the name of the searched location (given back from Nominatim ws) in it.
@@ -53,7 +51,7 @@ class HomeController < ApplicationController
           end
         end
 
-        @mapSettings['searched_address'] = current_location
+        @map_settings['searched_address'] = current_location
         @location_search_refinement_to_display = current_location
 
     end
@@ -69,21 +67,21 @@ class HomeController < ApplicationController
 
     # Queries to get ads to be displayed on the map, based on their locations
     # First, we get the ads tied to an exact location.
-    @locations_exact = Location.search('exact', cat_nav_state, searched_item, selected_item_ids, params[:q])
+    @locations_exact = Location.search('exact', cat_nav_state, searched_item, selected_item_ids, params[:q], nil)
 
     area_types = settings['area_type'].split(',')
     if area_types.include?('postal')
       # If the users have the possiblity to post ad linked to a postal code, we get here these type of ads.
-      @locations_postal = Location.search('postal', cat_nav_state, searched_item, selected_item_ids, params[:q])
+      @locations_postal = Location.search('postal', cat_nav_state, searched_item, selected_item_ids, params[:q], nil)
     end
     if area_types.include?('district')
       # If the users have the possiblity to post ad linked to a pre-defined district, we also get here these type of ads.
-      @locations_district = Location.search('district', cat_nav_state, searched_item, selected_item_ids, params[:q])
+      @locations_district = Location.search('district', cat_nav_state, searched_item, selected_item_ids, params[:q], nil)
     end
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
     if area_types.include?('postal') || area_types.include?('district')
-      @area_geocodes = define_area_geocodes
+      @area_geocodes = Location.define_area_geocodes(@locations_postal, @locations_district)
     end
 
   end
@@ -117,7 +115,7 @@ class HomeController < ApplicationController
 
     result = {}
     if location_type == 'postal'
-      ads = ads.where("locations.postal_code LIKE '#{area_value}%'")
+      ads = ads.where('locations.postal_code LIKE ?', "#{area_value}%")
       result['area_name'] = area_value
     elsif location_type == 'district'
       ads = ads.where('locations.district_id = ?', area_value)
@@ -146,33 +144,6 @@ class HomeController < ApplicationController
     if label != '' && url != ''
       return {label: label, url: url}
     end
-  end
-
-  # This method creates the final longitudes and latitudes for each area to be displayed on the map.
-  def define_area_geocodes
-    area_geocodes = {}
-    if (@locations_postal && @locations_postal.length > 0)
-      @locations_postal.each do |area, locations|
-        total_latitude = 0.0
-        total_longitude = 0.0
-        count = 0
-        locations.each do |location|
-          total_latitude += location.latitude.to_f
-          total_longitude += location.longitude.to_f
-          count += 1
-        end
-        area_geocodes[area] = {'latitude' => total_latitude / count, 'longitude' => total_longitude / count}
-      end
-    end
-
-    if (@locations_district && @locations_district.length > 0)
-      districts = District.where(id: @locations_district.keys)
-      districts.each do |district|
-        area_geocodes[district.id] = {'name' => district.name, 'bounds' => district.bounds}
-      end
-    end
-
-    return area_geocodes
   end
 
   # Get information ready for the footer of the home page

@@ -9,5 +9,15 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require ajax-bootstrap-select
+ *= require bootstrap-select.min
+ *= require bootstrap-spacelab.min.css.erb
+ *= require charisma-app
+ *= require chosen.min
+ *= require colorbox
+ *= require jquery.iphone.toggle
+ *= require jquery.noty
+ *= require noty_theme_default
+ *= require responsive-tables
  *= require_tree .
  */

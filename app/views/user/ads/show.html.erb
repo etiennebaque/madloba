@@ -22,7 +22,7 @@
 <div class="container">
 
   <% if flash[:new_ad] %>
-      <div class="alert alert-dismissable alert-success" style="margin-top: 21px;">
+      <div id="new_ad_success_message" class="alert alert-dismissable alert-success" style="margin-top: 21px;">
         <button data-dismiss="alert" class="close" type="button">×</button>
         <%= t('ad.create_success', title: flash[:new_ad]) %>
       </div>
@@ -50,6 +50,12 @@
     <div class="col-lg-12">
       <h3><%= @ad.title %></h3>
 
+      <% if flash[:new_ad] && !@map_settings['is_area']%>
+        <!-- Ad id added just when the ad has just been created. This is to be read by ad_websocket.js,
+        when it is an exact location -->
+        <%= hidden_field_tag 'new_ad_id', @ad.id %>
+      <% end %>
+
       <div class="ad-title">
         <% if !is_owning(@ad) %>
             <!-- Ad publisher -->
@@ -76,6 +82,7 @@
   <% if @ad.image? %>
       <div class="row">
         <div class="col-lg-7 col-sm-12 ad-paragraph">
+          <!-- Partial showing info about the ad -->
           <%= render 'shared/ad_summary' %>
         </div>
 
@@ -92,27 +99,12 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-lg-12 ad-paragraph">
-          <!-- Ad description -->
-          <div class="ad-show-description">
-            <label class="ad-label"><%= t('ad.description') %>:</label>
-            <span><%= simple_format(@ad.description) %></span>
-          </div>
-        </div>
-      </div>
   <% else %>
 
       <div class="row">
         <div class="col-lg-12 ad-paragraph">
-
+          <!-- Partial showing info about the ad -->
           <%= render 'shared/ad_summary' %>
-
-          <!-- Ad description -->
-          <div class="ad-show-description">
-            <label class="ad-label"><%= t('ad.description') %>:</label>
-            <span><%= simple_format(@ad.description) %></span>
-          </div>
         </div>
       </div>
 
@@ -132,6 +124,13 @@
 <% content_for :scripts do %>
     <%= javascript_include_tag 'leaflet.markercluster' %>
 
-    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and initialize_map partial that create the actual map -->
+    <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and scripts that creates the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: false %>
+
+    <script>
+
+        // Initialize the Web socket object
+        <%= render 'shared/initialize_websocket.js' %>
+
+    </script>
 <% end %>
