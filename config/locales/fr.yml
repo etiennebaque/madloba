@@ -128,7 +128,7 @@ fr:
     new_location: Entrez un nouvel emplacement pour cette annonce
     name: "Nom de l'emplacement :"
     name_help: "Nommez votre nouvel emplacement (ex: nom de votre boutique, lieu-dit...). Ce nom sera public. N'écrivez rien si vous ne voulez pas nommer votre emplacement. "
-    name_to_use: "Quel nom voulez-vous utiliser?*"
+    name_to_use: "Quel nom voulez-vous afficher?*"
     anon_publisher_name_note: "Ceci est une annonce postée par un utilisateur anonyme :"
     ad_action: "Action:*"
     ad_action_giving: Je donne des objects.
@@ -214,7 +214,7 @@ fr:
     provide_anon_email: "Veuillez entre votre adresse email"
     select_category: "Catégories disponibles"
     captcha_not_valid: "Le texte Captcha que vous avez entré n'est pas valide"
-    create_account_first_html: "%{create_account} ou %{sign_in} maintenant avant de publier votre annonce, si vous voulez la modifier plus tard."
+    create_account_first_html: "%{create_account} ou %{sign_in} maintenant avant de publier votre annonce, si vous voulez la modifier ou la supprimer plus tard."
   mailer:
     welcome: "Bienvenue sur %{name} !"
     confirmation_descr1: Vous avez reçu ce message car un compte, basé sur votre adresse email, a été créé sur ce site.

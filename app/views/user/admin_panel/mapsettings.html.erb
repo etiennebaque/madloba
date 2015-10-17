@@ -157,4 +157,9 @@
 <% content_for :scripts do %>
     <!-- Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map -->
     <%= render 'shared/map_scripts_after_body', include_all_scripts: true %>
+
+    <script>
+        // Giving this page the possibility to find geocodes.
+        find_geocodes();
+    </script>
 <% end %>

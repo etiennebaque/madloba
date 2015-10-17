@@ -114,7 +114,7 @@ en:
     new_location: Enter a new location for this ad
     name: "Location name:"
     name_help: Give a name to your new location (eg shop name, random name you give your workshop...). It will be shown publicly. Leave blank if you don't want to assign any name.
-    name_to_use: "Which name would you like to use?*"
+    name_to_use: "Which name would you like to show?*"
     anon_publisher_name_note: "This is an ad posted by an anonymous user:"
     ad_action: "Action:*"
     ad_action_giving: I'm giving away items.
@@ -200,7 +200,7 @@ en:
     provide_anon_email: Please enter your email address
     select_category: Available categories
     captcha_not_valid: The captcha text you entered is not valid.
-    create_account_first_html: "%{create_account} or %{sign_in} now before publishing your ad, if you want to be able to edit it later."
+    create_account_first_html: "%{create_account} or %{sign_in} now before publishing your ad, if you want to be able to edit it or delete it later."
   mailer:
     welcome: "Welcome to %{name}!"
     confirmation_descr1: You received this message because an account, based on your e-mail address, was created on this website.
