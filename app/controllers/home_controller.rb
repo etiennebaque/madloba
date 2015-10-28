@@ -5,34 +5,17 @@ class HomeController < ApplicationController
   # Method for the main screen (home page)
   # --------------------------------------
   def index
-    # Initializations
-    @map_settings = {}
-    @location_search_refinement_to_display = nil
-    @error_location_message = nil
-    selected_item_ids = nil
-
-    # We need to see if we have a navigation state.
-    # If we do, that will impact what will be displayed on the map.
-    if params[:cat]
-      cat_nav_state = params[:cat].split(" ")
-    end
-
     # Initializing the map, in relation to its center, defined in the settings table.
+    # Map on the home page does not focus on 1 specific marker, and is not clickable (ie no marker appears on clicl on the map)
     @map_settings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
 
-    # Getting all the needed settings to load the page
-    settings_records = Setting.where(key: %w(description area_length area_type contact_email facebook twitter pinterest
-                                     link_one_label link_one_url link_two_label link_two_url
-                                     link_three_label link_three_url link_four_label link_four_url))
-
     # Initializing links, and social media information, for the footer of the home page.
-    settings = get_footer_info(settings_records)
+    settings = get_footer_info
 
     # We check if the user searched for an item and/or a location
     if params[:item] && params[:item] != ''
       # An item is being searched.
-      searched_item = params[:item]
-      selected_item_ids = Item.joins(:ads).where('name LIKE ?', "%#{searched_item}%").pluck(:id).uniq
+      selected_item_ids = Item.joins(:ads).where('name LIKE ?', "%#{params[:item].downcase}%").pluck(:id).uniq
     end
 
     if (params[:lat] && params[:lon])
@@ -65,25 +48,30 @@ class HomeController < ApplicationController
       @categories = Category.joins(items: :ads).order('name asc').uniq
     end
 
+    # We need to see if we have a navigation state.
+    # If we do, that will impact what will be displayed on the map.
+    if params[:cat]
+      cat_nav_state = params[:cat].split(" ")
+    end
+
     # Queries to get ads to be displayed on the map, based on their locations
     # First, we get the ads tied to an exact location.
-    @locations_exact = Location.search('exact', cat_nav_state, searched_item, selected_item_ids, params[:q], nil)
+    @locations_exact = Location.search('exact', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
 
     area_types = settings['area_type'].split(',')
     if area_types.include?('postal')
       # If the users have the possiblity to post ad linked to a postal code, we get here these type of ads.
-      @locations_postal = Location.search('postal', cat_nav_state, searched_item, selected_item_ids, params[:q], nil)
+      @locations_postal = Location.search('postal', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
     end
     if area_types.include?('district')
       # If the users have the possiblity to post ad linked to a pre-defined district, we also get here these type of ads.
-      @locations_district = Location.search('district', cat_nav_state, searched_item, selected_item_ids, params[:q], nil)
+      @locations_district = Location.search('district', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
     end
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
     if area_types.include?('postal') || area_types.include?('district')
       @area_geocodes = Location.define_area_geocodes(@locations_postal, @locations_district)
     end
-
   end
 
 
@@ -149,10 +137,10 @@ class HomeController < ApplicationController
   # Get information ready for the footer of the home page
   # (eg. Website description, contact email, social media links... )
   # Also returns a settings hash, that will be needed for the rest of HomeController#index execution.
-  def get_footer_info(settings_records)
+  def get_footer_info
     @social_medias = []
     settings = {}
-    settings_records.each do |setting|
+    Setting.all.each do |setting|
       if %w(facebook twitter pinterest).include? setting['key']
         # Website's social media
         social = {}
@@ -180,11 +168,11 @@ class HomeController < ApplicationController
     end
 
     # Useful links, for the footer section.
+    link_numbers = %w(one two three four)
     @links = []
-    @links << get_link(settings['link_one_label'], settings['link_one_url'])
-    @links << get_link(settings['link_two_label'], settings['link_two_url'])
-    @links << get_link(settings['link_three_label'], settings['link_three_url'])
-    @links << get_link(settings['link_four_label'], settings['link_four_url'])
+    link_numbers.each do |number|
+      @links << get_link(settings["link_#{number}_label"], settings["link_#{number}_url"])
+    end
 
     return settings
   end

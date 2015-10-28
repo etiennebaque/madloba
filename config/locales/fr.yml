@@ -156,7 +156,7 @@ fr:
     district_help: Choisissez la zone où cet emplacement se trouve.
   ad:
     new_ad: Nouvelle annonce
-    once_created_expire: une fois créée, votre annonce sera publiée pour %{max_expire_days} jours.
+    once_created_expire_html: une fois créée, votre annonce sera publiée pour <strong>%{max_expire_days} jours</strong>.
     area: zone
     error_occurred: "%{errors} à corriger ci-dessous "
     published: "Publiée par :"
@@ -171,7 +171,7 @@ fr:
     name_help: "Veuillez entrer votre nom ou votre pseudonyme ici. Il apparaitra tel quel, dans l'annonce publiée."
     your_email: Votre adresse email
     captcha: "Captcha* :"
-    email_help: "Donner votre adresse email n'est pas obligatoire (Soyez sûr d'indiquer votre numéro de téléphone dans la description de l'annonce). Si vous donnez votre adresse email, elle ne sera pas publiée publiquement, et les utilisateurs seront quand même capable de vous envoyer un message."
+    email_help: "Votre adresse email ne sera pas publiée publiquement."
     ad_is_deleted: "L'annonce '%{deleted_ad_title}' a été supprimé."
     location_website: "Site web :"
     your_message: "Votre message* :"

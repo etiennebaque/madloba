@@ -53,7 +53,7 @@
             <% if max_expire_days.to_i > 0 %>
                 <div class="form-group">
                   <div class="col-lg-2"></div>
-                  <div class="col-lg-6"><i><%= t('ad.once_created_expire', max_expire_days: max_expire_days) %></i></div>
+                  <div class="col-lg-6"><i><%= t('ad.once_created_expire_html', max_expire_days: max_expire_days) %></i></div>
                 </div>
             <% end %>
 
@@ -63,7 +63,7 @@
               <%= f.label :title, t('ad.title'), class: 'col-lg-2 control-label' %>
               <div class="col-lg-6">
                 <%= f.text_field :title, class: 'form-control help-message', autofocus: true,
-                                 :data => {:content => t('ad.title_help'), :placement => 'right',
+                                 :data => {:content => t('ad.title_help'), :placement => 'top',
                                            :toggle => 'popover', :trigger => 'hover focus'} %>
               </div>
             </div>
@@ -124,7 +124,7 @@
               <%= f.label :description, t('ad.description')+'*:', class: 'col-lg-2 control-label' %>
               <div class="col-lg-6">
                 <%= f.text_area :description, class: 'form-control help-message', rows: 6,
-                                :data => {:content => t('ad.description_help'), :placement => 'right',
+                                :data => {:content => t('ad.description_help'), :placement => 'top',
                                           :toggle => 'popover', :trigger => 'hover focus'} %>
               </div>
             </div>
@@ -135,7 +135,7 @@
                   <%= f.label :description, t('ad.upload_image'), class: 'col-lg-2 control-label' %>
                   <div class="col-lg-6">
                     <%= f.file_field :image, class: 'form-control', style: 'border: 0px; height: auto;' %>
-                    <%= f.hidden_field :image_cache, value: params[:image_cache] %>
+                    <%= f.hidden_field :image_cache %>
                     <span id="message"><%= t('ad.less_than_limit') %></span>
                   </div>
                 </div>
@@ -217,7 +217,7 @@
                   <%= f.label :anon_name, t('ad.name'), class: 'col-lg-2 control-label' %>
                   <div class="col-lg-6">
                     <%= f.text_field :anon_name, class: 'form-control help-message',
-                                     :data => {:content => t('ad.name_help'), :placement => 'right',
+                                     :data => {:content => t('ad.name_help'), :placement => 'top',
                                                :toggle => 'popover', :trigger => 'hover focus'} %>
                   </div>
                 </div>
@@ -227,7 +227,7 @@
                   <%= f.label :anon_email, t('ad.your_email')+'*:', class: 'col-lg-2 control-label' %>
                   <div class="col-lg-6">
                     <%= f.email_field :anon_email, class: 'form-control help-message', autofocus: true,
-                                      :data => {:content => t('ad.email_help'), :placement => 'right',
+                                      :data => {:content => t('ad.email_help'), :placement => 'top',
                                                 :toggle => 'popover', :trigger => 'hover focus'} %>
                   </div>
                 </div>

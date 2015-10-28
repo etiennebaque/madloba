@@ -142,7 +142,7 @@ en:
     district_help: Choose the district where this location can be found.
   ad:
     new_ad: New ad
-    once_created_expire: Once created, your ad will be published for %{max_expire_days} days.
+    once_created_expire_html: Once created, your ad will be published for <strong>%{max_expire_days} days</strong>.
     area: area
     error_occurred: "%{errors} occurred while saving this ad"
     published: "Published by:"
@@ -157,7 +157,7 @@ en:
     name_help: Please enter your name or a nickname here. It will appear publicly as it is, in the published ad.
     your_email: Your email
     captcha: "Captcha*:"
-    email_help: Providing your email is not mandatory (make sure you've at least put a phone number in the ad description). If you give an email address, it won't be published publicly and users will still be able to write a message to you.
+    email_help: Your email address won't be published publicly.
     ad_is_deleted: The ad '%{deleted_ad_title}' has been deleted.
     location_website: "Website:"
     your_message: "Your message*:"

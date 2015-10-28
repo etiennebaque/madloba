@@ -31,7 +31,7 @@
     <div class='<%= col6 %>'>
       <%= form.text_field :name, class: 'form-control help-message', maxlength:'90',
                           :data => {:content => t('location.name_help'),
-                                    :placement => 'right', :toggle => 'popover', :trigger => 'hover focus'} %>
+                                    :placement => 'top', :toggle => 'popover', :trigger => 'hover focus'} %>
     </div>
   </div>
 
@@ -79,7 +79,7 @@
       <div class='<%= col6 %>'>
         <%= form.text_field :address, class: 'form-control help-message location_streetname', maxlength:'90',
                             :data => {:content => t('location.street_name_help'),
-                                      :placement => 'right', :toggle => 'popover', :trigger => 'hover focus'} %>
+                                      :placement => 'top', :toggle => 'popover', :trigger => 'hover focus'} %>
       </div>
     </div>
   </div>
@@ -124,7 +124,7 @@
       <%= form.label :district_id, t('location.district'), class: label_class %>
       <div class='<%= col3 %>'>
         <%= form.select :district_id, options_for_select(districts, form.object.district_id), {}, {class: 'form-control help-message district_dropdown',
-                                                                                                   :data => {:content => t('location.district_help'), :placement => 'right',
+                                                                                                   :data => {:content => t('location.district_help'), :placement => 'top',
                                                                                                              :toggle => 'popover', :trigger => 'hover focus'}} %>
         <%= form.hidden_field :latitude, value: @map_settings['lat'], class: 'latitude_hidden' %>
         <%= form.hidden_field :longitude, value: @map_settings['lng'], class: 'longitude_hidden' %>
@@ -164,7 +164,7 @@
     <div class='<%= col6 %>'>
       <%= form.text_area :description, class: 'help-message', cols: 40, rows: 6,
                          :data => {:content => t('location.description_help'),
-                                   :placement => 'right', :toggle => 'popover', :trigger => 'hover focus'} %>
+                                   :placement => 'top', :toggle => 'popover', :trigger => 'hover focus'} %>
     </div>
   </div>
 
