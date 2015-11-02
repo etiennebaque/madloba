@@ -30,6 +30,7 @@ class Ad < ActiveRecord::Base
     if current_user
       self.save
     else
+      self.is_username_used = false
       self.save_with_captcha
     end
   end
@@ -98,8 +99,6 @@ class Ad < ActiveRecord::Base
 
   # Setting default values after initialization.
   def default_values
-    self.is_username_used = false
-
     # we define the date when the ad won't be published any longer (see maximum number of days, in Settings table)
     if max_number_days_publish == '0'
       # No limit set for ad expiration. Let's use 2100-01-01 as a default date value

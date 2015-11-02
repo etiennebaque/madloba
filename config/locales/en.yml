@@ -191,6 +191,7 @@ en:
     image_currently_processed: Your image is currently being processed.
     show_ad_image_processed: The image of this ad is currently being processed.
     will_show_up: It will show up in a moment after you refresh the page.
+    image_selected: Image is selected. It will be uploaded once this ad is created.
     create_item: Create a new item
     write_new_item: Write a new item and select its category
     add_item: Add an item

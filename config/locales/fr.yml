@@ -205,6 +205,7 @@ fr:
     image_currently_processed: "Votre image est en train d'être traitée."
     show_ad_image_processed: "L'image de cette annonce est en train d'être traitée."
     will_show_up: "Elle apparaitra dans un moment après avoir rechargé la page."
+    image_selected: "Image sélectionée, elle sera téléchargée quand l'annonce sera créée."
     create_item: "Créer un nouvel objet"
     write_new_item: "Tapez un novel objet et choisissez sa catégorie"
     add_item: "Ajouter un objet"

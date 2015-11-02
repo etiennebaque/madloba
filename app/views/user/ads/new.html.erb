@@ -75,13 +75,13 @@
                   <div class='col-lg-6'>
                     <div class="radio">
                       <label>
-                        <%= f.radio_button :is_username_used, true, checked: true, value: true %>
+                        <%= f.radio_button :is_username_used, true, checked: true %>
                         <%= t('location.name_username') %> (<%= current_user.username %>)
                       </label>
                     </div>
                     <div class="radio">
                       <label>
-                        <%= f.radio_button :is_username_used, false, value: false %>
+                        <%= f.radio_button :is_username_used, false %>
                         <%= t('location.name_fullname') %> (<%= current_user.first_name %> <%= current_user.last_name %>)
                       </label>
                     </div>
@@ -155,8 +155,7 @@
                             </div>
                         <% elsif @ad.image && (@ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0)) %>
                             <div class="ad-processing">
-                              <%= t('ad.image_currently_processed') %><br />
-                              <%= t('ad.will_show_up') %>
+                                <%= t('ad.image_selected') %>
                             </div>
                         <% end %>
                     <% else %>
@@ -182,12 +181,17 @@
                   <% if user_locations_number > 0 %>
                       <!-- List of all the different locations previously entered by the current user -->
                       <div id="locations_from_list" class="form-group">
-                        <%= f.label :location, t('location.location')+'*:', class: 'col-lg-2 control-label' %>
+                        <%= f.label :location_id, t('location.location')+'*:', class: 'col-lg-2 control-label' %>
                         <div class="col-lg-6">
                           <% current_user.locations.each_with_index do |loc, index| %>
                               <div class='radio existing_location'>
                                 <label>
-                                  <%= f.radio_button :location_id, loc.id, checked: index == 0 %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                                  <% if index == 0 %>
+                                      <%= f.radio_button :location_id, loc.id, checked: true %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                                  <% else %>
+                                      <%= f.radio_button :location_id, loc.id %><%= "#{loc.location_full_name} - #{loc.location_type_address}" %>
+                                  <% end %>
+
                                 </label>
                               </div>
                           <% end %>
