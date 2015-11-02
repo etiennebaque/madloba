@@ -70,9 +70,9 @@
 
                 <!-- Choose Map drop down box -->
                 <div class="form-group">
-                  <%= label_tag 'maptype', t('admin.map_settings.type'), class:'control-label' %>
+                  <%= label_tag 'chosen_map', t('admin.map_settings.type'), class:'control-label' %>
                   <div class="form-inline">
-                    <%= select_tag 'maptype', options_for_select(@options_for_maptype_select, @map_settings['chosen_map']), class: 'form-control' %>
+                    <%= select_tag 'chosen_map', options_for_select(options_for_maptype_select(@map_settings), @map_settings['chosen_map']), class: 'form-control' %>
                   </div>
                 </div>
 
@@ -86,20 +86,20 @@
 
                 <!-- MapBox API key-->
                 <div class="form-group">
-                  <%= label_tag 'mapBoxApiKey', t('admin.map_settings.mapbox'), class:'control-label' %>
+                  <%= label_tag 'map_box_api_key', t('admin.map_settings.mapbox'), class:'control-label' %>
                   <div class="form-inline">
                     <!-- Hidding key on demo website -->
-                    <%= text_field_tag 'mapBoxApiKey', is_demo ? '********' : @map_settings['map_box_api_key'], class: 'form-control' %>
+                    <%= text_field_tag 'map_box_api_key', is_demo ? '********' : @map_settings['map_box_api_key'], class: 'form-control' %>
                     <a href="https://www.mapbox.com/account/apps" target="_blank"><%= t('admin.map_settings.mapbox_link') %></a>
                   </div>
                 </div>
 
                 <!-- Map Quest API key-->
                 <div class="form-group">
-                  <%= label_tag 'mapQuestApiKey', t('admin.map_settings.mapquest'), class:'control-label' %>
+                  <%= label_tag 'mapquest_api_key', t('admin.map_settings.mapquest'), class:'control-label' %>
                   <div class="form-inline">
                     <!-- Hidding key on demo website -->
-                    <%= text_field_tag 'mapQuestApiKey', is_demo ? '********' : @map_settings['mapquest_api_key'], class: 'form-control' %>
+                    <%= text_field_tag 'mapquest_api_key', is_demo ? '********' : @map_settings['mapquest_api_key'], class: 'form-control' %>
                     <a href="http://developer.mapquest.com/web/info/account/app-keys" target="_blank"><%= t('admin.map_settings.mapquest_link') %></a>
                   </div>
                 </div>

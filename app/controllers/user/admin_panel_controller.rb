@@ -82,9 +82,13 @@ class User::AdminPanelController < ApplicationController
   # Methods for 'General settings' screens
   # --------------------------------------
   def general_settings_keys
-    return %w(app_name description contact_email ad_max_expire facebook twitter pinterest
+    %w(app_name description contact_email ad_max_expire facebook twitter pinterest
               link_one_label link_one_url link_two_label link_two_url
               link_three_label link_three_url link_four_label link_four_url)
+  end
+
+  def map_settings_keys
+    %w(map_box_api_key mapquest_api_key map_center_geocode chosen_map city state country zoom_level)
   end
 
   def generalsettings
@@ -160,17 +164,6 @@ class User::AdminPanelController < ApplicationController
     # only for the map settings page (needed to define zoom level).
     @map_settings['page'] = 'mapsettings'
 
-    # Initializing the map type drop down box.
-    @options_for_maptype_select = []
-    @options_for_maptype_select << ['OpenStreetMap', 'osm']
-    # If a Mapbox and a MapQuest keys has been provided, then we include them in the drop down box
-    if @map_settings['map_box_api_key'] && @map_settings['map_box_api_key'] != ''
-      @options_for_maptype_select << ['Mapbox', 'mapbox']
-    end
-    if @map_settings['mapquest_api_key'] && @map_settings['mapquest_api_key'] != ''
-      @options_for_maptype_select << ['MapQuest', 'mapquest']
-    end
-
   end
 
   def update_mapsettings
@@ -180,29 +173,23 @@ class User::AdminPanelController < ApplicationController
     if is_demo
       # If this is the Madloba Demo, then we update only the chosen_map. The other parameters cannot be changed.
       setting_record = Setting.find_by_key(:chosen_map)
-      setting_record.update_attribute(:value, params['maptype'])
+      setting_record.update_attribute(:value, params['chosen_map'])
       flash[:setting_success] = t('admin.map_settings.update_success_demo')
 
     elsif ((lat.is_a? Numeric) && (lng.is_a? Numeric)) || lat != nil || lng != nil
       # All the information on the map settings page that can be saved
-      new_map_center = "#{lat},#{lng}"
-      settings_hash = {:map_box_api_key => params['mapBoxApiKey'],
-                       :mapquest_api_key => params['mapQuestApiKey'],
-                       :chosen_map => params['maptype'],
-                       :city => params['city'],
-                       :state => params['state'],
-                       :country => params['country'],
-                       :zoom_level => params['zoom_level'],
-                       :map_center_geocode => new_map_center}
-
-      settings_hash.each {|key, value|
+      map_settings_keys.each do |key|
         setting_record = Setting.find_by_key(key)
         if setting_record
-          setting_record.update_attributes(value: value)
+          if key == 'map_center_geocode'
+            setting_record.update_attributes(value: "#{lat},#{lng}")
+          else
+            setting_record.update_attributes(value: params[key])
+          end
         end
-      }
+      end
 
-      if ((params['mapBoxApiKey'] == '' && params['maptype'] == 'mapbox') || (params['mapQuestApiKey'] == '' && params['maptype'] == 'mapquest'))
+      if ((params['map_box_api_key'] == '' && params['chosen_map'] == 'mapbox') || (params['mapquest_api_key'] == '' && params['chosen_map'] == 'mapquest'))
         # if there is no longer any Mapbox or MapQuest keys, we get back to the default map type, osm.
         setting_record = Setting.find_by_key('chosen_map')
         setting_record.update_attributes(value: 'osm')
@@ -372,7 +359,7 @@ class User::AdminPanelController < ApplicationController
   private
 
   def social_networks
-    ['facebook', 'twitter', 'pinterest']
+    %w(facebook twitter pinterest)
   end
 
 

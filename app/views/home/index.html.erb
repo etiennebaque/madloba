@@ -127,18 +127,9 @@
 
     <!-- Map section -->
     <div class="col-xs-12 no-left-right-border">
-      <% if @error_location_message %>
-          <!-- Alert popup indicating that the searched location was not found, or error occurred while requesting Nominatim data-->
-          <div class="alert alert-dismissable alert-danger">
-            <button type="button" class="close" data-dismiss="alert">×</button>
-            <%= @error_location_message %>
-          </div>
-      <% end %>
-
       <div id="home-map-canvas-wrapper">
         <div id="map"></div>
       </div>
-
     </div>
 
 
