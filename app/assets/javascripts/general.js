@@ -623,7 +623,6 @@ function show_hide_up_arrow (){
     }
 }
 
-
 /**
  * Checks whether the user is in the admin panel (has '/user/' in the url)
  */
