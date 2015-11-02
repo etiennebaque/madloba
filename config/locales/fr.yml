@@ -128,7 +128,7 @@ fr:
     new_location: Entrez un nouvel emplacement pour cette annonce
     name: "Nom de l'emplacement :"
     name_help: "Nommez votre nouvel emplacement (ex: nom de votre boutique, lieu-dit...). Ce nom sera public. N'écrivez rien si vous ne voulez pas nommer votre emplacement. "
-    name_to_use: "Quel nom voulez-vous utiliser?*"
+    name_to_use: "Quel nom voulez-vous afficher?*"
     anon_publisher_name_note: "Ceci est une annonce postée par un utilisateur anonyme :"
     ad_action: "Action:*"
     ad_action_giving: Je donne des objects.
@@ -156,7 +156,7 @@ fr:
     district_help: Choisissez la zone où cet emplacement se trouve.
   ad:
     new_ad: Nouvelle annonce
-    once_created_expire: une fois créée, votre annonce sera publiée pour %{max_expire_days} jours.
+    once_created_expire_html: une fois créée, votre annonce sera publiée pour <strong>%{max_expire_days} jours</strong>.
     area: zone
     error_occurred: "%{errors} à corriger ci-dessous "
     published: "Publiée par :"
@@ -171,7 +171,7 @@ fr:
     name_help: "Veuillez entrer votre nom ou votre pseudonyme ici. Il apparaitra tel quel, dans l'annonce publiée."
     your_email: Votre adresse email
     captcha: "Captcha* :"
-    email_help: "Donner votre adresse email n'est pas obligatoire (Soyez sûr d'indiquer votre numéro de téléphone dans la description de l'annonce). Si vous donnez votre adresse email, elle ne sera pas publiée publiquement, et les utilisateurs seront quand même capable de vous envoyer un message."
+    email_help: "Votre adresse email ne sera pas publiée publiquement."
     ad_is_deleted: "L'annonce '%{deleted_ad_title}' a été supprimé."
     location_website: "Site web :"
     your_message: "Votre message* :"
@@ -205,6 +205,7 @@ fr:
     image_currently_processed: "Votre image est en train d'être traitée."
     show_ad_image_processed: "L'image de cette annonce est en train d'être traitée."
     will_show_up: "Elle apparaitra dans un moment après avoir rechargé la page."
+    image_selected: "Image sélectionée, elle sera téléchargée quand l'annonce sera créée."
     create_item: "Créer un nouvel objet"
     write_new_item: "Tapez un novel objet et choisissez sa catégorie"
     add_item: "Ajouter un objet"
@@ -214,7 +215,7 @@ fr:
     provide_anon_email: "Veuillez entre votre adresse email"
     select_category: "Catégories disponibles"
     captcha_not_valid: "Le texte Captcha que vous avez entré n'est pas valide"
-    create_account_first_html: "%{create_account} ou %{sign_in} maintenant avant de publier votre annonce, si vous voulez la modifier plus tard."
+    create_account_first_html: "%{create_account} ou %{sign_in} maintenant avant de publier votre annonce, si vous voulez la modifier ou la supprimer plus tard."
   mailer:
     welcome: "Bienvenue sur %{name} !"
     confirmation_descr1: Vous avez reçu ce message car un compte, basé sur votre adresse email, a été créé sur ce site.

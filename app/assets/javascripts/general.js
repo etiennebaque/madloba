@@ -7,242 +7,341 @@ searched_ad_items = new Bloodhound({
         wildcard: 'QUERY'
     }
 });
+
 searched_ad_items.clearPrefetchCache();
 searched_ad_items.initialize();
 
-$(document).ready(function() {
-
-    // This is a test to see if the user is using clients like AdBlock.
-    // The use of AdBlock blocks a lot of markups on this website, unfortunately (eg. everything that has 'ad' in the class name)
-    // When AdBlock is detected, we display a popup indicating that AdBlock should be deactivated for this Madloba website.
-    if ($('#ad-block').length && !$('#ad-block').height()) {
-        $('#wrap').append('<div class="blocking-notification alert alert-dismissible alert-warning" role="alert">' +
-        '<button type="button" class="close" data-dismiss="alert">×</button>' +
-        '<h5>'+gon.vars["adblock_warning"]+'</h5>' +
-        '<p>'+gon.vars["adblock_browser"]+'<br />'+gon.vars["adblock_affecting"]+'</p>' +
-        '<p>'+gon.vars["adblock_turnoff"]+'</p>' +
-        '</div>');
-    }
-    // Initially created in 'application.html.erb' layout, this div is now removed.
-    $("#ad-block").remove();
-
-    // Setup pages - event for modal window on Map page.
-    $('#gmail_modal_link').click(function(){
-        $('#gmail_modal').modal('show');
-    });
-
-    // Navigation bar: press Enter to valid form.
-    $("#searchFormId input").keypress(function(event) {
-        if (event.which == 13) {
-            event.preventDefault();
-            getLocationsPropositions();
-        }
-    });
-
-    // Navigation bar: event tied to "up" arrow, to go back to the top of the page.
-    $('#navbar-up-link').click(function(){
-        $('html, body').animate({ scrollTop: 0 }, 1000);
-    });
-
-    //Checks if we need to show the arrow up, in the navigation bar, on mobile devices.
-    show_hide_up_arrow();
+// Object containing the scripts to load on different pages of the application.
+// See 'custom-leaflet.js' file for map-related scripts.
+var events = {
     
-    $(window).on("scroll", function() {
-        show_hide_up_arrow();
-    });
-
-    // Navigation - Search form: Ajax call to get locations proposition, based on user input in this form.
-    $("#btn-form-search").bind("click", getLocationsPropositions);
-
-    // Navigation bar on device: closes the navigation menu, when click.
-    $('#about-nav-link').on('click', function(){
-        if($('.navbar-toggle').css('display') !='none'){
-            $(".navbar-toggle").click()
+    // Scripts to load on the "New Ad" page.
+    init_new_ad_page: function() {
+        // This is a test to see if the user is using clients like AdBlock.
+        // The use of AdBlock blocks a lot of markups on this website, unfortunately (eg. everything that has 'ad' in the class name)
+        // When AdBlock is detected, we display a popup indicating that AdBlock should be deactivated for this Madloba website.
+        if ($('#ad-block').length && !$('#ad-block').height()) {
+            $('#wrap').append('<div class="blocking-notification alert alert-dismissible alert-warning" role="alert">' +
+            '<button type="button" class="close" data-dismiss="alert">×</button>' +
+            '<h5>'+gon.vars["adblock_warning"]+'</h5>' +
+            '<p>'+gon.vars["adblock_browser"]+'<br />'+gon.vars["adblock_affecting"]+'</p>' +
+            '<p>'+gon.vars["adblock_turnoff"]+'</p>' +
+            '</div>');
         }
-    });
+        // Initially created in 'application.html.erb' layout, this div is now removed.
+        $("#ad-block").remove();
 
-    // Home page: When clicking on about, scroll to the home page upper footer.
-    $("#about-nav-link").click(function(){
-        $('html, body').animate({
-            scrollTop: $("#upper-footer-id").offset().top
-        }, 2000);
-    });
-
-    // Popover when "Sign in / Register" link is clicked, in the navigation bar.
-    $('#popover').popover({
-        html : true,
-        placement : 'bottom',
-        title: function() {
-            return $("#popover-head").html();
-        },
-        content: function() {
-            return $("#popover-content").html();
+        // On the "New ad" form, open automatically the new location form, if the user is anonymous,
+        // or never created any location as a signed in user.
+        if (typeof current_page != "undefined" && current_page == "new_ad"
+            && typeof can_choose_existing_locations != "undefined" && can_choose_existing_locations == false){
+            setTimeout(function() {
+                $("#new_location_form a.add_fields").trigger('click');
+                $("#locations_from_list").hide();
+                $("#location a.add_fields").hide();
+                initLeafletMap(map_settings);
+                init_location_form(districts_bounds, leaf.map);
+            },20);
         }
-    });
 
-    // Type-ahead for the item text field, in the main navigation bar.
-    // searched_ad_items object is initialized in home layout template.
+        // Create an ad: adding the location form dynamically, via Cocoon
+        $("#new_location_form a.add_fields").
+            data("association-insertion-position", 'before').
+            data("association-insertion-node", 'this');
 
-    $('#item').typeahead(null, {
-        name: 'item-search',
-        display: 'value',
-        source: searched_ad_items
-    });
-
-
-
-    // Offcanvas related scripts
-    $('[data-toggle=offcanvas]').click(function() {
-        $('.row-offcanvas').toggleClass('active');
-    });
-
-
-    // ***********************
-    // Create/Edit an ad pages
-    // ***********************
-
-    // Function that binds events to the item drop down list (in ads#new and ads#edit pages)
-    // These events consists of making ajax call to check what items exists, in order to
-    // create a type-ahead for the search bar of that drop drown box.
-    function bindTypeaheadToItemSelect(object){
-        object.selectpicker({
-                liveSearch: true
-            })
-            .ajaxSelectPicker({
-                ajax: {
-                    url: '/getItems',
-                    type: "GET",
-                    dataType: 'json',
-                    data: function () {
-                        var params = {item: '{{{q}}}', type: 'search_items'};
-                        return params;
-                    }
-                },
-                locale: {
-                    emptyTitle: gon.vars['search_for_items'],
-                    statusInitialized: gon.vars['start_typing_item'],
-                    statusNoResults: gon.vars['no_result_create_item']
-                },
-                preprocessData: function(data){
-                    var items = [];
-                    var len = data.length;
-                    // Populating the item drop-down box
-                    for(var i = 0; i < len; i++){
-                        var item = data[i];
-                        items.push({'value': item.id, 'text': item.value, 'disable': false});
-                    }
-                    return items;
-                },
-                preserveSelected: false
+        $('#new_location_form').bind('cocoon:after-insert',
+            function() {
+                $("#locations_from_list").hide();
+                $("#new_location_form a.add_fields").hide();
+                // Call to the JS functions that will initialize the new location form and the map.
+                initLeafletMap(map_settings);
+                init_location_form(districts_bounds, leaf.map);
             });
-    }
+        $('#new_location_form').bind("cocoon:after-remove", function() {
+            $("#locations_from_list").show();
+            $("#new_location_form a.add_fields").show();
+        });
+    },
 
-    bindTypeaheadToItemSelect($('#items .selectpicker-items'));
+    // Scripts to load on the "New Ad" and "Edit Ad" page.
+    init_new_and_edit_pages: function(){
+        bindTypeaheadToItemSelect($('#items .selectpicker-items'));
 
-    // "Create ad" form: create message when image needs to be uploaded.
-    $('#new_ad').submit(function() {
-        var image_path = $('#ad_image').val();
-        if (image_path != null && image_path != ''){
-            $('#upload-in-progress').html('<i>'+gon.vars['new_image_uploading']+'</i>');
-        }
-    });
+        // "Create/Edit ad" form: create message when image needs to be uploaded.
+        $('#new_ad').submit(function() {
+            var image_path = $('#ad_image').val();
+            if (image_path != null && image_path != ''){
+                $('#upload-in-progress').html('<i>'+gon.vars['new_image_uploading']+'</i>');
+            }
+        });
 
-    // Events to be triggered when item field added or removed, in the ad form.
-    $("#items a.add_fields").
-        data("association-insertion-position", 'before').
-        data("association-insertion-node", 'this');
+        // Events to be triggered when item field added or removed, in the ad form.
+        $("#items a.add_fields").
+            data("association-insertion-position", 'before').
+            data("association-insertion-node", 'this');
 
-    $('#items').on('cocoon:after-insert',
-        function() {
-            $(".ad-item-fields a.add_fields").
-                data("association-insertion-position", 'before').
-                data("association-insertion-node", 'this');
+        $('#items').on('cocoon:after-insert',
+            function() {
+                $(".ad-item-fields a.add_fields").
+                    data("association-insertion-position", 'before').
+                    data("association-insertion-node", 'this');
                 $('.selectpicker').selectpicker('refresh');
                 bindTypeaheadToItemSelect($('#items .selectpicker-items'));
 
-            $('.ad-item-fields').on('cocoon:after-insert',
-                function() {
-                    $(this).children(".item_from_list").remove();
-                    $(this).children("a.add_fields").hide();
-                });
-        });
+                $('.ad-item-fields').on('cocoon:after-insert',
+                    function() {
+                        $(this).children(".item_from_list").remove();
+                        $(this).children("a.add_fields").hide();
+                    });
+            });
 
-    $('.ad-item-fields').bind('cocoon:after-insert',
-        function(e) {
-            e.stopPropagation();
-            $(this).find(".item_from_list").remove();
-            $(this).find("a.add_fields").hide();
-            $('.selectpicker').selectpicker('refresh');
-        });
+        $('.ad-item-fields').bind('cocoon:after-insert',
+            function(e) {
+                e.stopPropagation();
+                $(this).find(".item_from_list").remove();
+                $(this).find("a.add_fields").hide();
+                $('.selectpicker').selectpicker('refresh');
+            }
+        );
 
-
-    // On the "New ad" form, open automatically the new location form, if the user is anonymous,
-    // or never created any location as a signed in user.
-    if (typeof current_page != "undefined" && current_page == "new_ad"
-         && typeof can_choose_existing_locations != "undefined" && can_choose_existing_locations == false){
-        setTimeout(function() {
-            $("#new_location_form a.add_fields").trigger('click');
-            $("#locations_from_list").hide();
-            $("#location a.add_fields").hide();
-            initLeafletMap(map_settings);
+        // Function call to initialize the location form (Location edit form, all Ad forms).
+        if (typeof districts_bounds != "undefined") {
             init_location_form(districts_bounds, leaf.map);
-        },20);
-    }
+        }
+    },
 
-    // Create an ad: adding the location form dynamically, via Cocoon
-    $("#new_location_form a.add_fields").
-        data("association-insertion-position", 'before').
-        data("association-insertion-node", 'this');
+    // Scripts to load on the "Setup" pages.
+    init_setup_pages: function() {
+        // Setup pages - event for modal window on Map page.
+        $('#gmail_modal_link').click(function(){
+            $('#gmail_modal').modal('show');
+        });
+    },
 
-    $('#new_location_form').bind('cocoon:after-insert',
-        function() {
-            $("#locations_from_list").hide();
-            $("#new_location_form a.add_fields").hide();
-            // Call to the JS functions that will initialize the new location form and the map.
+    // Scripts related to the events on the navigation bar.
+    init_navigation_bar: function() {
+        // Navigation bar: press Enter to valid form.
+        $("#searchFormId input").keypress(function(event) {
+            if (event.which == 13) {
+                event.preventDefault();
+                getLocationsPropositions();
+            }
+        });
+
+        // Navigation bar: event tied to "up" arrow, to go back to the top of the page.
+        $('#navbar-up-link').click(function(){
+            $('html, body').animate({ scrollTop: 0 }, 1000);
+        });
+
+        //Checks if we need to show the arrow up, in the navigation bar, on mobile devices.
+        show_hide_up_arrow();
+
+        $(window).on("scroll", function() {
+            show_hide_up_arrow();
+        });
+
+        // Navigation - Search form: Ajax call to get locations proposition, based on user input in this form.
+        $("#btn-form-search").bind("click", getLocationsPropositions);
+
+        // Navigation bar on device: closes the navigation menu, when click.
+        $('#about-nav-link').on('click', function(){
+            if($('.navbar-toggle').css('display') !='none'){
+                $(".navbar-toggle").click()
+            }
+        });
+
+        // Home page: When clicking on about, scroll to the home page upper footer.
+        $("#about-nav-link").click(function(){
+            $('html, body').animate({
+                scrollTop: $("#upper-footer-id").offset().top
+            }, 2000);
+        });
+
+        // Popover when "Sign in / Register" link is clicked, in the navigation bar.
+        $('#popover').popover({
+            html : true,
+            placement : 'bottom',
+            title: function() {
+                return $("#popover-head").html();
+            },
+            content: function() {
+                return $("#popover-content").html();
+            }
+        });
+
+        // Type-ahead for the item text field, in the main navigation bar.
+        // searched_ad_items object is initialized in home layout template.
+        $('#item').typeahead(null, {
+            name: 'item-search',
+            display: 'value',
+            source: searched_ad_items
+        });
+
+        // Navigation bar: changing the typeahead query, depending of user choice between "I'm giving away" and "I'm searching for"
+        $('#q').change(function(){
+            searched_ad_items.remote.url = '/getItems?item=QUERY&type=search_ad_items&q='+$('#q').val();
+            // As the type of search changes, the item name field needs to be reset.
+            $('#item').val('');
+        }).change();
+    },
+
+    // Scripts related to the home page and some other pages.
+    init_home_page_and_others: function() {
+        // Offcanvas related scripts
+        $('[data-toggle=offcanvas]').click(function() {
+            $('.row-offcanvas').toggleClass('active');
+        });
+
+        // This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,
+        // 'zoomToBoundsOnClick' would zoom in too much, and push the markers to the edge of the screen.
+        // This event underneath fixes this behaviour, the markers are not pushed to the boundaries of the map anymore.
+        if(markers.group != ''){
+         markers.group.on('clusterclick', function (a) {
+         var bounds = a.layer.getBounds().pad(0.5);
+         leaf.map.fitBounds(bounds);
+         });
+        }
+
+        // This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel, in the home page, the page would scroll down.
+        // When clicking on zoom in/zoom out, this will force to be at the top of the page
+        $('#home-map-canvas-wrapper .leaflet-control-zoom-out, #home-map-canvas-wrapper .leaflet-control-zoom-in').click(function(){
+            $("html, body").animate({ scrollTop: 0 }, 0);
+        });
+    },
+
+    // Scripts related to the admin pages.
+    init_admin_pages: function(){
+        // Map settings admin page: refreshing map, when "Map type" field is modified.
+        $('#maptype').change(function(){
+            var selected_map = "";
+            $( "select option:selected" ).each(function() {
+                selected_map = $(this).val();
+            });
+            map_settings['chosen_map'] = selected_map;
+            map_settings['tiles_url'] = map_settings[selected_map]['tiles_url']
+            map_settings['attribution'] = map_settings[selected_map]['attribution']
             initLeafletMap(map_settings);
-            init_location_form(districts_bounds, leaf.map);
         });
-    $('#new_location_form').bind("cocoon:after-remove", function() {
-            $("#locations_from_list").show();
-            $("#new_location_form a.add_fields").show();
-    });
 
-
-    // Function call to initialize the location form (Location edit form, all Ad forms).
-    if (typeof districts_bounds != "undefined") {
-        init_location_form(districts_bounds, leaf.map);
-    }
-
-
-    // This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,
-    // 'zoomToBoundsOnClick' would zoom in too much, and push the markers to the edge of the screen.
-    // This event underneath fixes this behaviour, the markers are not pushed to the boundaries of the map anymore.
-    if(markers.group != ''){
-        markers.group.on('clusterclick', function (a) {
-            var bounds = a.layer.getBounds().pad(0.5);
-            leaf.map.fitBounds(bounds);
+        // Area settings admin page: show either the "postal code" or the "district" section.
+        // "Create ad" form: show appropriate section when entering an exact address
+        $(".area_postal_code").click(function(){
+            $("#postal_code_section").toggle(0, function(){});
         });
+
+        if($('.area_postal_code').is(':checked')) {
+            $("#postal_code_section").css('display', 'block');
+        }
+
+        // Area settings page: show appropriate section when choosing an area
+        $(".area_district").click(function(){
+            $("#district_section").toggle(0, function(){});
+            initLeafletMap(map_settings);
+        });
+
+        if($('.area_district').is(':checked')) {
+            $("#district_section").css('display', 'block');
+            initLeafletMap(map_settings);
+        }
+
+        // "Edit ad" form: create message when image needs to be uploaded.
+        $('#ad-edit-form').submit(function() {
+            var image_path = $('#ad_image').val();
+            if (image_path != null && image_path != ''){
+                $('#upload-in-progress').html('<i>'+gon.vars['new_image_uploading']+'</i>');
+            }
+        });
+
+        // Character counter (class 'textarea_count'), for text area, in 'General settings'.
+        $( ".textarea_count" ).keyup(function() {
+            var maxlength = $(this).attr('maxlength');
+            var textlength = $(this).val().length;
+            $(".remaining_characters").html(maxlength - textlength);
+        });
+
+        $( ".textarea_count" ).keydown(function() {
+            var maxlength = $(this).attr('maxlength');
+            var textlength = $(this).val().length;
+            $(".remaining_characters").html(maxlength - textlength);
+        });
+
+        // Category edit page: opening up the icon modal window.
+        $(".btn-icon-modal").click(function (){
+            $('#myModalIcon').modal('show');
+        });
+
+        // Onclick event triggered when Icon clicked in modal window, in Category edit page.
+        $(".icon-for-category").click(function (){
+            var icon_key = $(this).attr('id');
+            $('#myModalIcon').modal('toggle');
+            $('#category_icon').val(icon_key);
+        });
+
+        // Manage record page: go to the right tab, if page loads with an anchor in url (like 'http://...#categories')
+        if (window.location.href.indexOf("managerecords") > -1 && window.location.hash){
+            $('#records-tabs a[href='+window.location.hash+']').tab('show')
+        }
     }
+}
 
-    // This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel, in the home page, the page would scroll down.
-    // When clicking on zoom in/zoom out, this will force to be at the top of the page
-    $('#home-map-canvas-wrapper .leaflet-control-zoom-out, #home-map-canvas-wrapper .leaflet-control-zoom-in').click(function(){
-        $("html, body").animate({ scrollTop: 0 }, 0);
-    });
+/**
+ * Loading scripts here.
+ */
+$(document).ready(function() {
 
-    // Navigation bar: changing the typeahead query, depending of user choice between "I'm giving away" and "I'm searching for"
-    $('#q').change(function(){
-        searched_ad_items.remote.url = '/getItems?item=QUERY&type=search_ad_items&q='+$('#q').val();
-        // As the type of search changes, the item name field needs to be reset.
-        $('#item').val('');
-    }).change();
+    events.init_home_page_and_others();
+    events.init_new_ad_page();
+    events.init_new_and_edit_pages();
+    events.init_navigation_bar();
+    events.init_setup_pages();
 
     // load additional scripts when user is in the admin panel.
     if (is_in_admin_panel()) {
-        load_admin_scripts();
+        events.init_admin_pages();
     }
 
 });
+
+
+/**
+ * Function that binds events to the item drop down list (in ads#new and ads#edit pages)
+ * These events consists of making ajax call to check what items exists, in order to
+ * create a type-ahead for the search bar of that drop drown box.
+ * @param object
+ */
+function bindTypeaheadToItemSelect(object){
+    object.selectpicker({
+        liveSearch: true
+    })
+        .ajaxSelectPicker({
+            ajax: {
+                url: '/getItems',
+                type: "GET",
+                dataType: 'json',
+                data: function () {
+                    var params = {item: '{{{q}}}', type: 'search_items'};
+                    return params;
+                }
+            },
+            locale: {
+                emptyTitle: gon.vars['search_for_items'],
+                statusInitialized: gon.vars['start_typing_item'],
+                statusNoResults: gon.vars['no_result_create_item']
+            },
+            preprocessData: function(data){
+                var items = [];
+                var len = data.length;
+                // Populating the item drop-down box
+                for(var i = 0; i < len; i++){
+                    var item = data[i];
+                    items.push({'value': item.id, 'text': item.value, 'disable': false});
+                }
+                return items;
+            },
+            preserveSelected: false
+        });
+}
+
 
 /**
  * This critical function initializes the location form (Location edit form, Ad forms)
@@ -524,86 +623,9 @@ function show_hide_up_arrow (){
     }
 }
 
-
 /**
  * Checks whether the user is in the admin panel (has '/user/' in the url)
  */
 function is_in_admin_panel(){
     return window.location.href.indexOf("/user/") > -1
-}
-
-/**
- * Script to load on an admin page
- */
-function load_admin_scripts (){
-    // Map settings admin page: refreshing map, when "Map type" field is modified.
-    $('#maptype').change(function(){
-        var selected_map = "";
-        $( "select option:selected" ).each(function() {
-            selected_map = $(this).val();
-        });
-        map_settings['chosen_map'] = selected_map;
-        map_settings['tiles_url'] = map_settings[selected_map]['tiles_url']
-        map_settings['attribution'] = map_settings[selected_map]['attribution']
-        initLeafletMap(map_settings);
-    });
-
-    // Area settings admin page: show either the "postal code" or the "district" section.
-    // "Create ad" form: show appropriate section when entering an exact address
-    $(".area_postal_code").click(function(){
-        $("#postal_code_section").toggle(0, function(){});
-    });
-
-    if($('.area_postal_code').is(':checked')) {
-        $("#postal_code_section").css('display', 'block');
-    }
-
-    // Area settings page: show appropriate section when choosing an area
-    $(".area_district").click(function(){
-        $("#district_section").toggle(0, function(){});
-        initLeafletMap(map_settings);
-    });
-
-    if($('.area_district').is(':checked')) {
-        $("#district_section").css('display', 'block');
-        initLeafletMap(map_settings);
-    }
-
-    // "Edit ad" form: create message when image needs to be uploaded.
-    $('#ad-edit-form').submit(function() {
-        var image_path = $('#ad_image').val();
-        if (image_path != null && image_path != ''){
-            $('#upload-in-progress').html('<i>'+gon.vars['new_image_uploading']+'</i>');
-        }
-    });
-
-    // Character counter (class 'textarea_count'), for text area, in 'General settings'.
-    $( ".textarea_count" ).keyup(function() {
-        var maxlength = $(this).attr('maxlength');
-        var textlength = $(this).val().length;
-        $(".remaining_characters").html(maxlength - textlength);
-    });
-
-    $( ".textarea_count" ).keydown(function() {
-        var maxlength = $(this).attr('maxlength');
-        var textlength = $(this).val().length;
-        $(".remaining_characters").html(maxlength - textlength);
-    });
-
-    // Category edit page: opening up the icon modal window.
-    $(".btn-icon-modal").click(function (){
-        $('#myModalIcon').modal('show');
-    });
-
-    // Onclick event triggered when Icon clicked in modal window, in Category edit page.
-    $(".icon-for-category").click(function (){
-        var icon_key = $(this).attr('id');
-        $('#myModalIcon').modal('toggle');
-        $('#category_icon').val(icon_key);
-    });
-
-    // Manage record page: go to the right tab, if page loads with an anchor in url (like 'http://...#categories')
-    if (window.location.href.indexOf("managerecords") > -1 && window.location.hash){
-        $('#records-tabs a[href='+window.location.hash+']').tab('show')
-    }
 }
