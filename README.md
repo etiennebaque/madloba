@@ -44,6 +44,7 @@ If you want run Madloba on your local machine, follow these steps:
 This project uses the following main gems:
 - Devise (authentication)
 - Pundit (authorization)
+- Faye Websocket (websockets)
 - Capistrano (deployment)
 - Delayed job (queue)
 - Carrierwave (file upload) and Carrierwave-backgrounder (file processing)
