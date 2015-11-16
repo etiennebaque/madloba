@@ -1,9 +1,9 @@
 <!-- Left-hand side: Items -->
 <div class="show_ad_paragraph">
   <% if @ad.is_giving %>
-      <label class="ad-label"><%= t('ad.giving_away') %></label>
+      <label class="ad-label"><%= t('ad.giving_away') %>: </label>
   <% else %>
-      <label class="ad-label"><%= t('ad.accepting') %></label>
+      <label class="ad-label"><%= t('ad.accepting') %>: </label>
   <% end %>
   <span>
     <ul>

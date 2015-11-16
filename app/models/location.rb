@@ -51,6 +51,7 @@ class Location < ActiveRecord::Base
     return locations
   end
 
+
   # This method creates the final longitudes and latitudes for each area to be displayed on the map.
   def self.define_area_geocodes (locations_postal, locations_district)
     area_geocodes = {}

@@ -172,6 +172,13 @@ span.disabled { color:gray; }
     font-weight: bold;
 }
 
+#sidebar{
+    border-radius: 20px;
+}
+
+.title_popup a {
+    font-weight: bold !important;
+}
 
 /*
  * Top navigation bar

@@ -361,6 +361,54 @@ var markers = {
     },
 
     // Method that creates markers representing ads tied to exact-type location.
+    place_exact_locations_markers_test: function (locations_exact, is_bouncing_on_add) {
+        for (var i=0; i<locations_exact.length; i++){
+
+            var ad = locations_exact[i];
+
+            for (var j=0; j<ad['markers'].length; j++){
+                var item = ad['markers'][j];
+
+                var marker_icon = L.AwesomeMarkers.icon({
+                    prefix: 'fa',
+                    markerColor: item['color'],
+                    icon: item['icon']
+                });
+
+                var marker = L.marker([ad['lat'], ad['lng']], {icon: marker_icon, bounceOnAdd: is_bouncing_on_add});
+                marker.ad_id = ad['ad_id'];
+                marker.item_id = item['item_id'];
+                var popup = L.popup({minWidth: 250, maxWidth: 300}).setContent('Loading...');
+                marker.bindPopup(popup);
+
+                // When a marker is clicked, an Ajax call is made to get the content of the popup to display
+                marker.on('click', function(e) {
+                    var popup = e.target.getPopup();
+                    $.ajax({
+                        url: "/showAdPopup",
+                        global: false,
+                        type: "GET",
+                        data: { ad_id: this.ad_id, item_id: this.item_id },
+                        dataType: "html",
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader("Accept", "text/html-partial");
+                        },
+                        success: function(data) {
+                            popup.setContent(data);
+                            popup.update();
+                        },
+                        error: function(data) {
+                            popup.setContent(data);
+                            popup.update();
+                        }
+                    });
+                });
+                markers.group.addLayer(marker);
+            }
+        }
+    },
+
+    // Method that creates markers representing ads tied to exact-type location.
     place_exact_locations_markers: function (locations_exact, is_bouncing_on_add) {
         for (var i=0; i<locations_exact.length; i++){
             var location = locations_exact[i];
@@ -493,7 +541,7 @@ function putLocationMarkers(locations_exact, locations_postal, locations_distric
     markers.marker_colors = marker_colors;
 
     // Displaying markers on map
-    markers.place_exact_locations_markers(locations_exact, false);
+    markers.place_exact_locations_markers_test(locations_exact, false);
 
     // Displaying postal code area circles on map
     markers.draw_postal_code_areas(locations_postal);
