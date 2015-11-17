@@ -59,7 +59,7 @@ class AdSocket
           response = {}
           response['status'] = 'mapok'
           response['map_info'] = {}
-          response['map_info']['markers'] = Location.search('exact', selected_categories, searched_item, selected_item_ids, nav_params[:q], nil)
+          response['map_info']['markers'] = Ad.search(selected_categories, searched_item, selected_item_ids, nav_params[:q], nil)
           response['map_info']['postal'] = Location.search('postal', selected_categories, searched_item, selected_item_ids, nav_params[:q], nil)
           response['map_info']['district'] = Location.search('district', selected_categories, searched_item, selected_item_ids, nav_params[:q], nil)
 
@@ -71,7 +71,7 @@ class AdSocket
           response = {}
           response['status'] = 'new_ad'
           response['map_info'] = {}
-          response['map_info']['markers'] = Location.search('exact', nil, nil, nil, nil, ad_id)
+          response['map_info']['markers'] = Ad.search(nil, nil, nil, nil, ad_id)
 
           @clients.reject { |client| client == socket }.each do |client|
             client.send response.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})
@@ -83,7 +83,7 @@ class AdSocket
         p e
         p e.backtrace
         response['status'] = 'error'
-        response['map_info'] = t('errors.ws_error')
+        response['map_info'] = I18n.t('errors.ws_error')
       end
     end
 

@@ -24,6 +24,42 @@ class Ad < ActiveRecord::Base
 
   apply_simple_captcha
 
+  # This method returns the right query to display relevant markers, on the home page.
+  def self.search(cat_nav_state, searched_item, selected_item_ids, user_action, ad_id)
+
+    if ad_id.present?
+      # Search by ad ids when adding ads on home page dynamically, when other user just created an ad (websocket)
+      ads = Ad.find(ad_id)
+    else
+      ads = Ad.select(:marker_info).where("expire_date >= ? and (marker_info->>'ad_id') is not null", Date.today)
+
+      if cat_nav_state || searched_item
+        if cat_nav_state
+          if searched_item
+            # We search for ads in relation to the searched item and the current category navigation state.
+            ads = ads.joins(:items).where(items: {category_id: cat_nav_state, id: selected_item_ids})
+          else
+            # We search for ads in relation to our current category navigation state.
+            ads = ads.joins(:items).where(items: {category_id: cat_nav_state})
+          end
+        elsif searched_item
+          ads = ads.joins(:items).where(items: {id: selected_item_ids})
+        end
+      end
+
+      if user_action
+        # If the user is searching for items, we need to show the posted ads, which people give stuff away.
+        ads = ads.where("ads.is_giving = ?", user_action == 'searching')
+      end
+
+    end
+
+    ads = ads.pluck(:marker_info)
+
+    ads
+
+  end
+
   # method used to save the ads#new form. A captcha is required when the user is anonymous.
   # In that case the save method is different than the classic one.
   def save_with_or_without_captcha(current_user)

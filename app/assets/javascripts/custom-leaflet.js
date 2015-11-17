@@ -361,7 +361,7 @@ var markers = {
     },
 
     // Method that creates markers representing ads tied to exact-type location.
-    place_exact_locations_markers_test: function (locations_exact, is_bouncing_on_add) {
+    place_exact_locations_markers: function (locations_exact, is_bouncing_on_add) {
         for (var i=0; i<locations_exact.length; i++){
 
             var ad = locations_exact[i];
@@ -369,6 +369,7 @@ var markers = {
             for (var j=0; j<ad['markers'].length; j++){
                 var item = ad['markers'][j];
 
+                // Creating the marker for this ad here.
                 var marker_icon = L.AwesomeMarkers.icon({
                     prefix: 'fa',
                     markerColor: item['color'],
@@ -404,50 +405,6 @@ var markers = {
                     });
                 });
                 markers.group.addLayer(marker);
-            }
-        }
-    },
-
-    // Method that creates markers representing ads tied to exact-type location.
-    place_exact_locations_markers: function (locations_exact, is_bouncing_on_add) {
-        for (var i=0; i<locations_exact.length; i++){
-            var location = locations_exact[i];
-
-            for (var j=0; j<location['ads'].length; j++){
-                var popup_html_text;
-                var marker;
-
-                var ad = location['ads'][j];
-
-                for (var k=0; k<ad['items'].length; k++){
-
-                    var item = ad['items'][k];
-
-                    var marker_icon = L.AwesomeMarkers.icon({
-                        prefix: 'fa',
-                        markerColor: item['category']['marker_color'],
-                        icon: item['category']['icon']
-                    });
-
-                    // HTML snippet for the popup
-                    if (location['name'] != ''){
-                        popup_html_text = createPopupHtml("<b>"+location['name']+"</b><br />" +location['street_number'] + " " + location['address'], ad, k);
-                    }else{
-                        popup_html_text = createPopupHtml("<b>" +location['street_number'] + " " + location['address'] + "</b>", ad, k);
-                    }
-
-                    var marker = '';
-                    if (is_bouncing_on_add){
-                        marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address'], bounceOnAdd: is_bouncing_on_add});
-                    }else{
-                        marker = L.marker([location['latitude'], location['longitude']], {icon: marker_icon, title: location['full_address']});
-                    }
-
-                    var popup = L.popup({minWidth: 250}).setContent(popup_html_text);
-
-                    marker.bindPopup(popup);
-                    markers.group.addLayer(marker);
-                }
             }
         }
     },
@@ -541,7 +498,7 @@ function putLocationMarkers(locations_exact, locations_postal, locations_distric
     markers.marker_colors = marker_colors;
 
     // Displaying markers on map
-    markers.place_exact_locations_markers_test(locations_exact, false);
+    markers.place_exact_locations_markers(locations_exact, false);
 
     // Displaying postal code area circles on map
     markers.draw_postal_code_areas(locations_postal);

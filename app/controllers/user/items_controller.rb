@@ -3,6 +3,7 @@ class User::ItemsController < ApplicationController
   before_action :authenticate_user!
   before_action :requires_user
   after_action :verify_authorized
+  after_action :update_ad_json, only: [:update]
 
   def show
     @item = Item.includes(:ads).where(id: params[:id]).first!
@@ -67,6 +68,26 @@ class User::ItemsController < ApplicationController
 
   def item_params
     params.require(:item).permit(:name, :category_id)
+  end
+
+  # Updates the relevant ads marker_info (jsonb) and update the category id in the 'markers' nested array.
+  def update_ad_json
+    ads = Ad.joins(:items).where('items.id = ?', params[:id])
+    new_chosen_category = Category.find(params[:category_id])
+    ads.each do |ad|
+      if !ad.marker_info.empty?
+        marker_info = ad.marker_info
+        marker_info['markers'].each do |item|
+          if item['item_id'] == params[:id].to_i
+            item['category_id'] = new_chosen_category.id
+            item['color'] = new_chosen_category.color
+            item['icon'] = new_chosen_category.icon
+          end
+        end
+        ad.marker_info = marker_info
+        ad.save
+      end
+    end
   end
 
 end
