@@ -226,7 +226,8 @@ If they do, it will affect the website's ability to work well (test carried out 
     <!-- Javascript function calls, related specifically to the home page -->
     <script>
         // specific script to render map markers and initialize the sidebar.
-        var locations_exact = <%= raw @locations_exact.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}}) %>;
+        var locations_exact = <%= raw @locations_exact.to_json %>
+
         var locations_postal = <%= raw @locations_postal.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}}) %>;
         var locations_district = <%= raw @locations_district.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}}) %>;
 

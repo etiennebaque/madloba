@@ -56,7 +56,7 @@ class HomeController < ApplicationController
 
     # Queries to get ads to be displayed on the map, based on their locations
     # First, we get the ads tied to an exact location.
-    @locations_exact = Location.search('exact', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
+    @locations_exact = Ad.search(cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
 
     area_types = settings['area_type'].split(',')
     if area_types.include?('postal')
@@ -90,6 +90,61 @@ class HomeController < ApplicationController
     end
 
     render 'home/about'
+  end
+
+  # Method called by Ajax call made when marker on the home page is clicked.
+  # Returns the HTML code that will create the popup linked to that marker.
+  def show_ad_popup
+
+    popup_html = ''
+
+    begin
+      ad_id = params['ad_id']
+      item_id = params['item_id']
+      ad = Ad.joins(:location, {items: :category}).where(id: ad_id).first
+      number_of_items = ad.items.count
+
+      popup_html = "<div style='overflow: auto;'>"
+
+      # Title (and image when available)
+      if ad.image?
+          popup_html += "<div class='col-xs-12 col-md-6 title_popup'>#{view_context.link_to(ad.title, ad)}</div>
+                         <div class='col-xs-12 col-md-6'>#{ActionController::Base.helpers.image_tag(ad.image.thumb.url, class: 'pull-right')}</div>"
+      else
+          popup_html += "<div class='col-xs-12 title_popup'>#{view_context.link_to(ad.title, ad)}</div>"
+      end
+
+      # Action (giving away or searching for) + item name
+      ad_action = ad.is_giving ? t('ad.giving_away') : t('ad.accepting')
+      item_name = ''
+      ad.items.each do |ad_item|
+        if ad_item.id == item_id.to_i
+          item_name = "<span style='color:" + MARKER_COLORS[ad_item.category.marker_color] + "';><strong>" + ad_item.name + "</strong></span>";
+          break
+        end
+      end
+
+      and_other_items = ''
+      if number_of_items > 1
+        and_other_items = "and #{number_of_items - 1} other item(s)"
+      end
+
+      popup_html += "<div class='col-xs-12' style='margin-top: 15px;'>#{ad_action} #{item_name} #{and_other_items}</div>"
+
+      # Location full address
+      popup_html += "<div class='col-xs-12' style='margin-bottom: 15px;'>#{ad.location.name_and_or_full_address}</div>"
+
+      # "Show details" button
+      popup_html += "<div class='col-xs-12' style='text-align: center'>#{view_context.link_to(t('home.show_details'), ad, class: 'btn btn-info btn-sm no-color' )}</div>"
+
+      popup_html += "</div>"
+
+    rescue
+      # An error occurred, we show a error message.
+      popup_html = "<i>#{t('home.error_get_popup_content')}</i>"
+    end
+
+    render json: popup_html
   end
 
   # Ajax call to show the ads related to 1 type of item and to 1 district/area.

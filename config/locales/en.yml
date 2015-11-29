@@ -96,6 +96,8 @@ en:
     footer_theme_html: Theme from %{charisma}
     log_out: Log out
     show_ads_districts: Show ads by areas
+    show_details: Show details
+    error_get_popup_content: Sorry, an error occurred. Please try again later.
     error:
       one: error
       more: errors
@@ -179,8 +181,8 @@ en:
     from: From
     get_back_to: You can directly get back to %{first_name} by replying to this e-mail.
     success_sent: Your message has been sent successfully.
-    giving_away: "Giving away:"
-    accepting: "Searching for:"
+    giving_away: Giving away
+    accepting: Searching for
     ad_create_expire: Your ad will expire in %{day_number} days, on %{expire_date}.
     ad_has_expired: Sorry, this ad has expired and is not visible anymore.
     no_ad_created_yet: You have not created any ad yet. Click on the button above to create your first one!
@@ -342,7 +344,7 @@ en:
       manage_ads_page: "'Manage your ads' page"
       giving_accepting_title: Giving away/Accepting
       giving_away: Giving away
-      accepting: Accepting
+      accepting: Searching for
       delete_ad: Delete this ad?
       delete_ad_permanently: Are you sure you want to delete this ad permanently?
       delete_this_ad: Yes, delete this ad
