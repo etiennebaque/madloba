@@ -85,19 +85,20 @@ class User::CategoriesController < ApplicationController
 
   # Updates the relevant ads marker_info (jsonb) and update the marker color and marker icon in the 'markers' nested array.
   def update_ad_json
-    category = Category.find(params[:id])
-    ads = Ad.joins(:items).where('items.category_id = ?', params[:id])
-    ads.each do |ad|
-      if !ad.marker_info.empty?
-        marker_info = ad.marker_info
-        marker_info['markers'].each do |item|
-          if item['category_id'] == params[:id].to_i
-            item['color'] = category.marker_color
-            item['icon'] = category.icon
+    if @category.errors.empty?
+      ads = Ad.joins(:items).where('items.category_id = ?', params[:id])
+      ads.each do |ad|
+        if !ad.marker_info.empty?
+          marker_info = ad.marker_info
+          marker_info['markers'].each do |item|
+            if item['category_id'] == params[:id].to_i
+              item['color'] = @category.marker_color
+              item['icon'] = @category.icon
+            end
           end
+          ad.marker_info = marker_info
+          ad.save
         end
-        ad.marker_info = marker_info
-        ad.save
       end
     end
   end

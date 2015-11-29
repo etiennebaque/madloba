@@ -163,25 +163,26 @@ class User::AdsController < ApplicationController
 
   # Create the json for the 'exact location' ad, which will be read to render markers on the home page.
   def generate_ad_json
-    #ad = Ad.find(params[:id])
-    type = @ad.location.loc_type
-    if type == 'exact'
-      marker_info = {ad_id: @ad.id, lat: @ad.location.latitude, lng: @ad.location.longitude}
-      marker_info[:markers] = []
-      @ad.items.each do |item|
-        item_info = {}
-        cat = item.category
-        item_info[:item_id] = item.id
-        item_info[:category_id] = cat.id
-        item_info[:color] = cat.marker_color
-        item_info[:icon] = cat.icon
-        marker_info[:markers] << item_info
+    if @ad.errors.empty?
+      type = @ad.location.loc_type
+      if type == 'exact'
+        marker_info = {ad_id: @ad.id, lat: @ad.location.latitude, lng: @ad.location.longitude}
+        marker_info[:markers] = []
+        @ad.items.each do |item|
+          item_info = {}
+          cat = item.category
+          item_info[:item_id] = item.id
+          item_info[:category_id] = cat.id
+          item_info[:color] = cat.marker_color
+          item_info[:icon] = cat.icon
+          marker_info[:markers] << item_info
+        end
+      else
+        marker_info = {}
       end
-    else
-      marker_info = {}
+      @ad.marker_info = marker_info
+      @ad.save
     end
-    @ad.marker_info = marker_info
-    @ad.save
   end
 
   # Initializes map related info (markers, clickable map...)
