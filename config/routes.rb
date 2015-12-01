@@ -73,6 +73,9 @@ Madloba::Application.routes.draw do
   # Ajax call to show the ads related to 1 type of item and to 1 district/area.
   get '/showSpecificAds', to: 'home#showSpecificAds'
 
+  # Ajax call to show popup content, when marker clicked on home page.
+  get '/showAdPopup', to: 'home#show_ad_popup'
+
   # Root
   root 'home#index'
 

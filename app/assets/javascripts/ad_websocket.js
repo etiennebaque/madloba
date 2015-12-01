@@ -220,13 +220,14 @@ AdSocket.prototype.error_map = function (message){
 
 // Method that place the new markers sent back from the server
 AdSocket.prototype.add_marker = function (new_map_info){
-    var ad_items = new_map_info['markers'][0]['ads'][0]['items'];
-    if (ad_items.length > 1){
+    var exactLocationsAds = new_map_info['markers'];
+    var isSeveralItems = (exactLocationsAds[0]['markers'].length > 1);
+    if (isSeveralItems){
         // There are several markers to add on the map. Let's not bounce them, as animation conflicts with MarkerClusterGroup.
-        markers.place_exact_locations_markers(new_map_info['markers'], false);
+        markers.place_exact_locations_markers(exactLocationsAds, false);
     }else{
         // 1 marker to add, let's make it bounce.
-        markers.place_exact_locations_markers(new_map_info['markers'], true);
+        markers.place_exact_locations_markers(exactLocationsAds, true);
     }
 
 };

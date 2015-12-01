@@ -5,13 +5,13 @@
 - <%= t('mailer.ad_title') %>: <%= @ad.title %>
 
 <% if @ad.is_giving %>
-    - <%= t('ad.giving_away') %>
+    - <%= t('ad.giving_away') %>:
     <% @ad.items.each do |item| %>
         - <%= item.name %>
     <% end %>
     - <%= t('mailer.where_pick_up') %>: <%= @ad.location.name_and_or_full_address %>
 <% else %>
-    - <%= t('ad.accepting') %>
+    - <%= t('ad.accepting') %>:
     <% @ad.items.each do |item| %>
         - <%= item.name %>
     <% end %>

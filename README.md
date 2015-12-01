@@ -19,7 +19,7 @@ If you want run Madloba on your local machine, follow these steps:
   - [Git](https://github.com/etiennebaque/madloba/wiki/Install-Git-on-your-local-machine)
   - [Ruby 2.2.2](https://github.com/etiennebaque/madloba/wiki/Install-Ruby-on-your-local-machine)
   - [Bundler](http://bundler.io/)
-  - [Postgresql](http://www.postgresql.org/download/)
+  - [Postgresql 9.4](http://www.postgresql.org/download/)
 
 2. Run the following commands:
     ```
@@ -48,7 +48,7 @@ This project uses the following main gems:
 - Capistrano (deployment)
 - Delayed job (queue)
 - Carrierwave (file upload) and Carrierwave-backgrounder (file processing)
-- Fog (cloud service)
+- Fog (cloud storage on Amazon S3)
 - Dalli (cache)
 - RSpec and Factory girl (testing)
 

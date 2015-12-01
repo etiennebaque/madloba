@@ -256,7 +256,7 @@
                               <% @ad.user.locations.each_with_index do |loc, index| %>
                                   <div class='radio existing_location'>
                                     <label>
-                                      <%= f.radio_button :location, loc.id, checked: index == 0, class: 'radio no-min-height' %><%= link_to(loc.location_full_name, edit_user_location_path(loc.id)) %> - <%= loc.location_type_address %>
+                                      <%= f.radio_button :location, loc.id, checked: @ad.location_id == loc.id, class: 'radio no-min-height' %><%= link_to(loc.location_full_name, edit_user_location_path(loc.id)) %> - <%= loc.location_type_address %>
                                     </label>
                                   </div>
                               <% end %>

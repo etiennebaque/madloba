@@ -3,6 +3,7 @@ class User::AdsController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create, :send_message, :show]
   before_action :requires_user, except: [:new, :create, :send_message, :show]
   after_action :verify_authorized, except: [:new, :create, :send_message, :send_message]
+  after_action :generate_ad_json, only: [:create, :update]
 
   include ApplicationHelper
 
@@ -159,6 +160,30 @@ class User::AdsController < ApplicationController
   end
 
   private
+
+  # Create the json for the 'exact location' ad, which will be read to render markers on the home page.
+  def generate_ad_json
+    if @ad.errors.empty?
+      type = @ad.location.loc_type
+      if type == 'exact'
+        marker_info = {ad_id: @ad.id, lat: @ad.location.latitude, lng: @ad.location.longitude}
+        marker_info[:markers] = []
+        @ad.items.each do |item|
+          item_info = {}
+          cat = item.category
+          item_info[:item_id] = item.id
+          item_info[:category_id] = cat.id
+          item_info[:color] = cat.marker_color
+          item_info[:icon] = cat.icon
+          marker_info[:markers] << item_info
+        end
+      else
+        marker_info = {}
+      end
+      @ad.marker_info = marker_info
+      @ad.save
+    end
+  end
 
   # Initializes map related info (markers, clickable map...)
   def get_map_settings_for_ad
