@@ -1,0 +1,16 @@
+#main.container-fluid.clear-top
+  .col-xs-8.col-xs-offset-2.error-vertical-align
+    %h1= t('errors.oops')
+    %h2= t('errors.server_error')
+    .error-paragraph
+      = t('errors.500_sorry')
+    .error-paragraph
+      %a.btn.btn-primary.btn-md{:href => "/"}
+        %span.glyphicon.glyphicon-home
+        = t('home.home')
+       
+      %a.btn.btn-default.btn-md{:href => "/about"}
+        %span.glyphicon.glyphicon-envelope
+        = t('home.contact_us')
+#push
+/ /.container

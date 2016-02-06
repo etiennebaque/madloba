@@ -1,0 +1,126 @@
+- content_for :head do
+  %script{:src => "https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"}
+  %link{:href => "https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css", :rel => "stylesheet"}/
+  :css
+    html,body,#map {
+        width: 100%;
+        height: 350px;
+        margin: 0;
+    }
+.row
+  = render 'shared/admin_left_menu'
+  #content.col-lg-10.col-sm-10
+    / content starts
+    %div
+      %ul.breadcrumb
+        %li
+          %a{:href => "/user"}= t('admin.dashboard')
+        - if current_user.admin?
+          %li
+            %a{:href => "/user/managerecords"}= t('admin.manage_records')
+        - else
+          %li
+            %a{:href => "/user/manageads"}= t('admin.manage_your_ads')
+        - if is_adding_new
+          %li= t('admin.add_location')
+        - else
+          %li= t('admin.edit_location')
+    .row
+      .box.col-md-12
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            %h2
+              - if is_adding_new
+                %i.glyphicon.glyphicon-plus
+                = t('admin.new_location')
+              - else
+                %i.glyphicon.glyphicon-edit
+                = t('admin.edit_location')
+          - if @location && @location.errors.any?
+            .alert.alert-danger
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              %strong
+                = t('admin.location.error_occurred', errors: pluralize(@location.errors.count, t('home.error.one'), t('home.error.more')))
+                \:
+              %ul
+                - @location.errors.full_messages.each do |msg|
+                  %li= msg
+          - if flash[:name]
+            .alert.alert-success
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              = t('admin.location.update_success', name: flash[:name])
+              - if current_user.admin?
+                %a{:href => "/user/managerecords#locations"}= t('admin.back_to_records')
+              - else
+                %a{:href => "/user/manageads#locations"}= t('admin.back_to_ads')
+          - if flash[:new_name]
+            .alert.alert-success
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              = t('admin.location.created_success', name: flash[:new_name])
+              - if current_user.admin?
+                %a{:href => "/user/managerecords#locations"}= t('admin.back_to_records')
+              - else
+                %a{:href => "/user/manageads#locations"}= t('admin.back_to_ads')
+          .box-content
+            = form_for [:user, @location], html: { id: 'locationForm', role: 'form' } do |f|
+              - if !is_adding_new
+                .form-group
+                  %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#"}= t('admin.location.delete')
+                .form-group
+                  = label_tag :nameId, t('admin.mandatory'), class:'control-label'
+                - if current_user.admin?
+                  .form-inline
+                    = label_tag :idId, 'Id:', class:'control-label'
+                    = @location.id
+                .form-group
+              / Partial that contains the location form
+              = render 'shared/location_form', form: f, location: @location,                                  |
+                label_class: 'control-label', col10: 'form-inline', col8: 'form-inline', col6: 'form-inline', |
+                col4: 'form-inline', col3: 'form-inline',                                                     |
+                col2: 'form-inline', col_radio: ''                                                            |
+              - if !is_adding_new
+                / List of items that can be found at this location
+                .form-group
+                  - if @location.ads.length > 0
+                    = label_tag :ad_linked, t('admin.location.linked_ads')+':', class:'control-label'
+                    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+                      %thead
+                        %tr
+                          %th ID
+                          %th= t('ad.title')
+                          %th= t('admin.items')
+                          %th= t('ad.description')
+                      %tbody
+                        - @location.ads.each do |ad|
+                          %tr
+                            %td= ad.id
+                            %td
+                              %a{:href => "/user/ads/#{ad.id}/edit"}= ad.title
+                            %td= ad.items.map{|i| i.name}.join(', ')
+                            %td= simple_format(ad.description)
+                  - else
+                    %strong= t('admin.location.no_ad')
+              / Submit button and cancel link
+              = render 'shared/submit_section'
+      / /span
+    / /row
+    / content ends
+  / /#content.span10
+/ /fluid-row
+- if !is_adding_new
+  / "Delete location" modal window
+  = render 'delete_modal_window'
+#myErrorModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myErrorModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"} ×
+        %h3= t('location.not_found')
+      .modal-body
+        %p= t('location.not_found_descr1')
+        %p= t('location.not_found_descr2')
+      .modal-footer
+        %a.btn.btn-default{"data-dismiss" => "modal", :href => "#"} OK
+- content_for :scripts do
+  / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that create the actual map
+  = render 'shared/map_scripts_after_body', include_all_scripts: false

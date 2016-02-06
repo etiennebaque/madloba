@@ -1,0 +1,7 @@
+/ Submit button
+.form-actions
+  = submit_tag(t('admin.save'), class: 'btn btn-success')
+  - if current_user.admin?
+    %a.btn{:href => "/user/managerecords"}= t('home.cancel')
+  - else
+    %a.btn{:href => "/user/manageads"}= t('home.cancel')

@@ -1,0 +1,66 @@
+- content_for :head do
+  / Includes the main Leaflet CSS and JS files, as well as Mapbox files
+  = render 'shared/map_scripts_before_body', include_all_scripts: true
+  :css
+    #map {
+        width: 100%;
+        height: 400px;
+        margin: 0;
+    }
+.container
+  .row
+    .col-lg-12
+      = form_tag '/setup/map/process', { class: 'form-horizontal' } do
+        %fieldset
+          .setup-padding
+            %h3= t('setup.map_settings')
+          .col-lg-10
+            / 'All fields mandatory' note
+            .form-group
+              .col-lg-6
+                %span= t('setup.city_country_mandatory')
+            / City
+            .form-group
+              = label_tag 'city', t('admin.map_settings.city'), class: 'col-lg-2 control-label'
+              .col-lg-6
+                = text_field_tag 'city', map_settings['city'], class: 'form-control help-message location_city', |
+                  autofocus: true, placeholder: t('setup.city_help'), :required => true                          |
+            / State/Province/Region
+            .form-group
+              = label_tag 'state', t('setup.state_province'), class: 'col-lg-2 control-label'
+              .col-lg-6
+                = text_field_tag 'state', map_settings['state'], class: 'form-control help-message location_state', |
+                  placeholder: t('setup.state_help')                                                                |
+            / Country
+            .form-group
+              = label_tag 'country', t('admin.map_settings.country'), class: 'col-lg-2 control-label'
+              .col-lg-6
+                = text_field_tag 'country', map_settings['country'], class: 'form-control help-message location_country', |
+                  placeholder: t('setup.country_help'), :required => true                                                 |
+            / "Find city on the map" button
+            .form-group
+              .col-lg-2
+              .col-lg-6
+                %a#findGeocodeAddressMapBtnId.btn.btn-info{:href => "#"}= t('setup.find_city_on_map')
+                %span#findGeocodeLoaderId
+            .form-group
+              = label_tag 'map-canvas-wrapper', "#{t('setup.map_description')}<br /><br />#{t('setup.map_description_2')}".html_safe, class:'col-lg-2 control-label'
+              .col-lg-10
+                #map
+                = hidden_field_tag 'hiddenLatId', map_settings['lat'], class: 'latitude_hidden'
+                = hidden_field_tag 'hiddenLngId', map_settings['lng'], class: 'longitude_hidden'
+            / Zoom level
+            = hidden_field_tag 'zoom_level', map_settings['zoom_level']
+            / Next button / Back link
+            .form-group
+              .col-lg-12
+                = submit_tag(t('setup.next'), class: 'btn btn-success pull-right')
+                %a.btn.btn-link.pull-right{:href => "/setup/general"}= t('setup.back')
+#push
+/ Loading JS scripts
+- content_for :scripts do
+  / Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and script that creates the actual map)
+  = render 'shared/map_scripts_after_body', include_all_scripts: false
+  :javascript
+    // Giving this page the possibility to find geocodes.
+    find_geocodes();

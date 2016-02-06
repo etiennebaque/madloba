@@ -1,0 +1,15 @@
+/ javascript_include_tag 'leaflet.js'
+- if include_all_scripts || @map_settings['chosen_map'] == 'mapquest'
+  %script{:src => "http://open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=#{@map_settings['mapquest_api_key']}", :type => "application/javascript"}
+/ Including Leaflet javascript files
+= javascript_include_tag 'leaflet.awesome-markers.js'
+= javascript_include_tag 'custom-leaflet.js'
+:javascript
+  // Initializing a bunch of variables used over the map-related scripts.
+  var map_settings = #{raw @map_settings.to_json};
+
+
+  // Call to the JS function that will initialize the map.
+  if ($("#map").length > 0){
+      initLeafletMap(map_settings);
+  }

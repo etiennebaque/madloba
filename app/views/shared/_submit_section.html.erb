@@ -1,9 +1,0 @@
-<!-- Submit button -->
-<div class="form-actions">
-  <%= submit_tag(t('admin.save'), class: 'btn btn-success') %>
-  <% if current_user.admin? %>
-      <a href="/user/managerecords" class="btn"><%= t('home.cancel') %></a>
-  <% else %>
-      <a href="/user/manageads" class="btn"><%= t('home.cancel') %></a>
-  <% end %>
-</div>

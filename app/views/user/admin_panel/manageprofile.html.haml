@@ -1,0 +1,41 @@
+.row
+  = render 'shared/admin_left_menu'
+  #content.col-lg-10.col-sm-10
+    / content starts
+    %div
+      %ul.breadcrumb
+        %li
+          %a{:href => "/user"}= t('admin.dashboard')
+        %li= t('admin.profile.title')
+    .row
+      .box.col-md-12
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            %h2
+              %i.glyphicon.glyphicon-user
+              = t('admin.profile.title')
+          .box-content
+            = form_for [:user, @user], html: { id: 'userForm', role: 'form' } do |f|
+              / E-mail
+              .form-group
+                = f.label :email, t('home.e-mail')+':', class:'control-label'
+                .form-inline
+                  = f.email_field :email, class: 'form-control'
+              / First name
+              .form-group
+                = f.label :first_name, t('admin.profile.first_name')+':', class:'control-label'
+                .form-inline
+                  = f.text_field :first_name, class: 'form-control'
+              / Last name
+              .form-group
+                = f.label :last_name, t('admin.profile.last_name')+':', class:'control-label'
+                .form-inline
+                  = f.text_field :last_name, class: 'form-control'
+              / Username
+              .form-group
+                = f.label :username, t('admin.profile.username')+':', class:'control-label'
+                .form-inline
+                  = f.text_field :username, class: 'form-control'
+    / content ends
+  / /#content.span10
+/ /row

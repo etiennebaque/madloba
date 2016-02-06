@@ -1,0 +1,17 @@
+.container.devise-section
+  .row
+    .col-lg-6
+      = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, :class => 'form-horizontal' }) do |f|
+        %fieldset
+          %legend= t('session.forgot')
+          = devise_error_messages!
+          .form-group
+            = f.label :email, class: 'col-lg-2 control-label'
+            .col-lg-10
+              = f.email_field :email, class: 'form-control', autofocus: true
+          .form-group
+            .col-lg-10.col-lg-offset-2
+              = f.submit t('session.reset_password'), class: 'btn btn-primary'
+  = render 'shared/links'
+#push
+/ /.container

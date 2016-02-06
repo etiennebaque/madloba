@@ -1,0 +1,58 @@
+.row
+  = render 'shared/admin_left_menu'
+  #content.col-lg-10.col-sm-10
+    / content starts
+    / Success/Error flash messages
+    - if flash[:error]
+      .box-content.alerts
+        .alert.alert-danger
+          %button.close{"data-dismiss" => "alert", :type => "button"} ×
+          = flash[:error]
+    - if flash[:success]
+      .box-content.alerts
+        .alert.alert-success
+          %button.close{"data-dismiss" => "alert", :type => "button"} ×
+          = t('admin.users.user_destroyed', email: flash[:success])
+    %div
+      %ul.breadcrumb
+        %li
+          %a{:href => "/user"}= t('admin.dashboard')
+        %li
+          = t('admin.users.title')
+    = t('admin.users.description')
+    .row
+      .box.col-md-12
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            %h2
+              %i.glyphicon.glyphicon-user
+              = t('admin.users.title')
+          .box-content
+            %p.left
+              %a.btn.btn-success{:href => "/user/users/new"}
+                %i.glyphicon.glyphicon-plus.icon-white
+                = t('admin.users.add')
+            %table.table.table-striped.table-bordered.bootstrap-datatable.datatable.responsive
+              %thead
+                %tr
+                  %th ID
+                  %th= t('admin.users.email')
+                  %th= t('admin.users.full_name')
+                  %th= t('admin.users.role')
+                  %th= t('admin.actions')
+              %tbody
+                - User.all.each do |user|
+                  %tr
+                    %td.vert-align= user.id
+                    %td.vert-align= user.email
+                    %td.vert-align
+                      = user.first_name
+                      = user.last_name
+                    %td.vert-align= user.role.capitalize
+                    %td.center
+                      %a.btn.btn-info{:href => "/user/users/#{user.id}/edit"}
+                        %i.glyphicon.glyphicon-edit>
+                         #{t('admin.edit_delete')}
+    / content ends
+  / /#content.span10
+/ /fluid-row

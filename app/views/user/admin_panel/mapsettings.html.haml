@@ -1,0 +1,99 @@
+- content_for :head do
+  / Includes the main Leaflet CSS and JS files, as well as Mapbox files
+  = render 'shared/map_scripts_before_body', include_all_scripts: true
+  :css
+    #map {
+        width: 100%;
+        height: 350px;
+        margin: 0;
+    }
+.row
+  = render 'shared/admin_left_menu'
+  #content.col-lg-10.col-sm-10
+    / content starts
+    %div
+      %ul.breadcrumb
+        %li
+          %a{:href => "/user"}= t('admin.dashboard')
+        %li
+          = t('admin.map_settings.title')
+    .row
+      .box.col-md-12
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            %h2
+              %i.glyphicon.glyphicon-map-marker
+              = t('admin.map_settings.title')
+          / Success/Error flash messages
+          - if flash[:page_error]
+            .box-content.alerts
+              .alert.alert-danger
+                %button.close{"data-dismiss" => "alert", :type => "button"} ×
+                = flash[:page_error]
+          - if flash[:setting_success]
+            .box-content.alerts
+              .alert.alert-success
+                %button.close{"data-dismiss" => "alert", :type => "button"} ×
+                = flash[:setting_success]
+          - if is_demo
+            .box-content.alerts
+              .alert.alert-info
+                = t('admin.map_settings.demo_message')
+          .box-content
+            = form_tag '/user/mapsettings/update', html: { id: 'mapSettingFormId', role: 'form' } do
+              / Choose Map drop down box
+              .form-group
+                = label_tag 'chosen_map', t('admin.map_settings.type'), class:'control-label'
+                .form-inline
+                  = select_tag 'chosen_map', options_for_select(options_for_maptype_select(@map_settings), @map_settings['chosen_map']), class: 'form-control'
+              %hr/
+              %h4= t('admin.map_settings.map_api_keys')
+              .form-group
+                %i= t('admin.map_settings.key_first')
+              / MapBox API key
+              .form-group
+                = label_tag 'map_box_api_key', t('admin.map_settings.mapbox'), class:'control-label'
+                .form-inline
+                  / Hidding key on demo website
+                  = text_field_tag 'map_box_api_key', is_demo ? '********' : @map_settings['map_box_api_key'], class: 'form-control'
+                  %a{:href => "https://www.mapbox.com/account/apps", :target => "_blank"}= t('admin.map_settings.mapbox_link')
+              / Map Quest API key
+              .form-group
+                = label_tag 'mapquest_api_key', t('admin.map_settings.mapquest'), class:'control-label'
+                .form-inline
+                  / Hidding key on demo website
+                  = text_field_tag 'mapquest_api_key', is_demo ? '********' : @map_settings['mapquest_api_key'], class: 'form-control'
+                  %a{:href => "http://developer.mapquest.com/web/info/account/app-keys", :target => "_blank"}= t('admin.map_settings.mapquest_link')
+              %hr/
+              %h4= t('admin.map_settings.location_info')
+              = hidden_field_tag 'hiddenLatId', @map_settings['lat'], class: 'latitude_hidden'
+              = hidden_field_tag 'hiddenLngId', @map_settings['lng'], class: 'longitude_hidden'
+              / City, State/Province and Country fields
+              .form-group
+                = label_tag 'cityCountry', t('admin.map_settings.find_city_map'), class:'control-label'
+                .form-inline
+                  = text_field_tag 'city', @map_settings['city'], class: 'form-control location_city', placeholder: t('admin.map_settings.city'), :required => true
+                  = text_field_tag 'state', @map_settings['state'], class: 'form-control location_state', placeholder: t('admin.map_settings.state')
+                  = text_field_tag 'country', @map_settings['country'], class: 'form-control location_country', placeholder: t('admin.map_settings.country'), :required => true
+                  %a#findGeocodeAddressMapBtnId.btn.btn-info{:href => "#", :style => "vertical-align: top"}= t('admin.map_settings.find_city')
+                  %span#findGeocodeLoaderId
+              / Zoom level
+              = hidden_field_tag 'zoom_level', @map_settings['zoom_level']
+              .form-group
+                = label_tag 'map-canvas-wrapper', t('admin.map_settings.map_description'), class:'control-label'
+                = label_tag 'map-canvas-wrapper-zoom', t('admin.map_settings.map_description_zoom'), class:'control-label'
+                .form-inline
+                  #map-canvas-wrapper
+                    #map
+              / Submit button and cancel link
+              = render 'shared/submit_section'
+      / /span
+    / content ends
+  / /#content.span10
+/ /fluid-row
+- content_for :scripts do
+  / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
+  = render 'shared/map_scripts_after_body', include_all_scripts: true
+  :javascript
+    // Giving this page the possibility to find geocodes.
+    find_geocodes();

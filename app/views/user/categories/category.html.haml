@@ -1,0 +1,137 @@
+- content_for :head do
+  / Font Awesome library used to choose icon for category
+  = stylesheet_link_tag 'font-awesome.min'
+.row
+  = render 'shared/admin_left_menu'
+  #content.col-lg-10.col-sm-10
+    / content starts
+    %div
+      %ul.breadcrumb
+        %li
+          %a{:href => "/user"} Home
+        %li
+          %a{:href => "/user/managerecords"}= t('admin.manage_records')
+        - if @isAdding
+          %li= t('admin.add_category')
+        - else
+          %li= t('admin.edit_category')
+    .row
+      .box.col-md-12
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            %h2
+              - if @isAdding
+                %i.glyphicon.glyphicon-plus
+                = t('admin.new_category')
+              - else
+                %i.glyphicon.glyphicon-edit
+                = t('admin.edit_category')
+          - if @category.errors.any?
+            .alert.alert-danger
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              %strong
+                = t('admin.category.cat_error_occurred', errors: pluralize(@category.errors.count, t('home.error.one'), t('home.error.more')))
+                \:
+              %ul
+                - @category.errors.full_messages.each do |msg|
+                  %li= msg
+          - if flash[:name]
+            .alert.alert-success
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              = t('admin.category.update_success', name: flash[:name])
+              %a{:href => "/user/managerecords#categories"}= t('admin.back_to_records')
+          - if flash[:new_name]
+            .alert.alert-success
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              = t('admin.category.created_success', name: flash[:new_name])
+              %a{:href => "/user/managerecords"}= t('admin.back_to_records')
+          - if flash[:icon_error]
+            .alert.alert-danger
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              = flash[:icon_error]
+          .box-content
+            = form_for [:user, @category], html: { id: 'categoryForm', role: 'form' } do |f|
+              / Category id
+              - if !@isAdding
+                .form-group
+                  %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#"}= t('admin.category.delete_category')
+                .form-group
+                  = label_tag :nameId, t('admin.mandatory'), class:'control-label'
+                .form-inline
+                  = label_tag :idId, 'Id:', class:'control-label'
+                  = @category.id
+                .form-group
+              / Category name
+              .form-group
+                = label_tag :name, t('admin.category_name')+'*:', class:'control-label'
+                .form-inline
+                  = f.text_field :name, class: 'form-control', maxlength:'90'
+              / Category description
+              .form-group
+                = label_tag :description, t('admin.description')+':', class:'control-label'
+                .form-group
+                  = f.text_area :description, cols: 40, rows: 6
+              %hr/
+              %h4= t('admin.category.your_marker_icon')
+              / Category marker
+              .form-inline
+                = label_tag 'marker_color_id', t('admin.category.marker')+'*:', class:'control-label'
+                - MARKER_COLORS.each_with_index do |(marker_color_name, marker_color_code), index|
+                  .radio
+                    %label
+                      - if (@category.marker_color && marker_color_name == @category.marker_color) || index == 0
+                        = f.radio_button :marker_color, marker_color_name, checked: true
+                      - else
+                        = f.radio_button :marker_color, marker_color_name
+                      = image_tag("images/marker-#{marker_color_name}.png")
+                         
+              / Category Font-Awesome icon
+              / More info here: http://fortawesome.github.io/Font-Awesome
+              .form-group
+                = label_tag 'category_icon', t('admin.category.icon')+'*:', class:'control-label'
+                - if @category.icon
+                  %p
+                    = t('admin.category.currently_selected')
+                    \: '#{@category.icon}'
+                    %i{:class => "fa #{@category.icon}"}
+                %p
+                  %i= t('admin.category.font_awesome_link_html', our_selection: link_to(t('admin.category.our_selection'), '#', class: 'btn-icon-modal'))
+                  %br/
+                  %i= t('admin.category.font_awesome_link2_html', fa_website: link_to('Font Awesome', 'http://fortawesome.github.io/Font-Awesome/icons/', target: '_blank'))
+                .form-inline
+                  = f.text_field :icon, class: 'form-control', maxlength:'90', autocomplete: 'off',     |
+                    :data => {:content => t('admin.category.font_awesome_help'), :placement => 'right', |
+                    :toggle => 'popover', :trigger => 'hover focus'}                                    |
+              - if !@isAdding
+                %hr/
+                / List of items this category is attached to
+                .form-group
+                  - if @category.items.length > 0
+                    = label_tag :items, t('admin.category.item_linked')+':', class:'control-label'
+                    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+                      %thead
+                        %tr
+                          %th ID
+                          %th= t('admin.category.item_name')
+                      %tbody
+                        - @category.items.each do |item|
+                          %tr
+                            %td= item.id
+                            %td
+                              %a{:href => "/user/items/#{item.id}"}= item.name
+                  - else
+                    %strong= t('admin.category.no_item')
+              %hr/
+              / Submit button and cancel link
+              = render 'shared/submit_section'
+        / /span
+    / /row
+    / content ends
+  / /#content.span10
+/ /fluid-row
+%hr/
+- if !@isAdding
+  / "Delete category" modal window
+  = render 'delete_modal_window'
+/ Category icon list - modal window
+= render 'icon_list_modal_window'

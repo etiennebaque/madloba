@@ -1,0 +1,12 @@
+%p
+  %strong= t('mailer.welcome', name: @site_name)
+%p
+  = t('mailer.confirmation_descr1')
+  %br/
+  = t('mailer.confirmation_descr2')
+  \:
+%p= link_to t('mailer.confirm_account'), confirmation_url(@resource, confirmation_token: @token)
+%p
+  = t('mailer.thanks')
+  %br/
+  = t('mailer.signature', name: @site_name)
