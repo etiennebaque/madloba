@@ -266,6 +266,11 @@ body {
     vertical-align: middle;
 }
 
+.middle-col{
+    float: none; 
+    margin: 0 auto;
+}
+
 .vert-align{
     vertical-align: middle !important;
 }

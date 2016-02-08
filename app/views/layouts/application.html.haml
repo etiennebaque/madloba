@@ -14,6 +14,7 @@
     = csrf_meta_tags
     = yield :head
   %body
+    
     - if notice && !(request.original_url.include? 'setup')
       / We're not displaying any Devise notification during the setup screens
       .alert.alert-dismissable.alert-success.no-margin-bottom
@@ -27,12 +28,14 @@
       .alert.alert-dismissable.alert-danger.no-margin-bottom
         %button.close{"data-dismiss" => "alert", :type => "button"} ×
         = flash[:error]
+
     / Main part of the body
     %div{:id => "#{is_in_admin_panel ? 'wrap-admin' : 'wrap'}"}
       = render 'shared/navigation'
       - if is_in_admin_panel
-        / Rendering admin panel and its footer in a 'ch-container' div
-        .ch-container
+        / Rendering admin panel, its second navigation bar and its footer in a 'ch-container' div
+        = render 'shared/navigation_admin'
+        .container-fluid
           = yield
           = render 'shared/footer'
       - else
@@ -41,6 +44,7 @@
     - if !is_in_admin_panel
       / Rendering footer for regular pages
       = render 'shared/footer'
+
     / Javascript files to be included in all pages.
     = javascript_include_tag 'application'
     / Javascript files specific to some pages, to be included here.

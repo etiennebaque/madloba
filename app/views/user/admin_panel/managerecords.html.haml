@@ -2,8 +2,7 @@
   / Font Awesome library used to choose icon for category
   = stylesheet_link_tag 'font-awesome.min'
 .row
-  = render 'shared/admin_left_menu'
-  #content.col-lg-10.col-sm-10
+  #content.middle-col.col-xs-12.col-md-10
     / content starts
     / Success/Error flash messages
     - if flash[:success]
@@ -11,12 +10,7 @@
         .alert.alert-success
           %button.close{"data-dismiss" => "alert", :type => "button"} ×
           = flash[:success]
-    %div
-      %ul.breadcrumb
-        %li
-          %a{:href => "/user"}= t('admin.dashboard')
-        %li
-          = t('admin.manage_records')
+    
     = t('admin.records_message')
     .row
       .box.col-md-12

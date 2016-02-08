@@ -2774,6 +2774,9 @@ textarea.input-group-sm>.form-control, textarea.input-group-sm>.input-group-addo
     margin-bottom: 20px;
     border: 1px solid transparent;
 }
+.admin-link-bar {
+    min-height: 0px;
+}
 @media (min-width:1060px) {
     .navbar {
     border-radius: 4px;
@@ -4874,13 +4877,16 @@ th.visible-print, td.visible-print {
 }
 }
 .navbar {
-    background-image: -webkit-linear-gradient(#fff, #eee 50%, #e4e4e4);
+    /*background-image: -webkit-linear-gradient(#fff, #eee 50%, #e4e4e4);
     background-image: -o-linear-gradient(#fff, #eee 50%, #e4e4e4);
-    background-image: linear-gradient(#fff, #eee 50%, #e4e4e4);
+    background-image: linear-gradient(#fff, #eee 50%, #e4e4e4);*/
+    background-image: -webkit-linear-gradient(#f4f4f4,#f4f4f4 50%, #f4f4f4);
+    background-image: -o-linear-gradient(#f4f4f4, #f4f4f4 50%, #f4f4f4);
+    background-image: linear-gradient(#f4f4f4, #f4f4f4 50%, #f4f4f4);
     background-repeat: no-repeat;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe4e4e4', GradientType=0);
     filter: none;
-    border: 1px solid #d5d5d5;
+    /*border: 1px solid #d5d5d5;*/
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 .navbar-inverse {
@@ -4906,6 +4912,10 @@ th.visible-print, td.visible-print {
     -webkit-transition: color ease-in-out .2s;
     -o-transition: color ease-in-out .2s;
     transition: color ease-in-out .2s;
+}
+.navbar-nav.admin_link>li>a, .navbar-nav.admin_link>li>a:hover {
+    padding-top: 4px;
+    padding-bottom: 2px;
 }
 .navbar-brand, .navbar-brand:hover {
     -webkit-transition: color ease-in-out .2s;

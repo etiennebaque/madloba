@@ -1,13 +1,10 @@
 - content_for :head do
   = stylesheet_link_tag 'font-awesome.min'
 .row
-  = render 'shared/admin_left_menu'
-  #content.col-lg-10.col-sm-10
+  #content.middle-col.col-xs-12.col-md-10
     / content starts
     %div
       %ul.breadcrumb
-        %li
-          %a{:href => "/user"}= t('admin.dashboard')
         %li
           %a{:href => "/user/managerecords"}= t('admin.manage_records')
         - if @isAdding

@@ -8,13 +8,10 @@
         margin: 0;
     }
 .row
-  = render 'shared/admin_left_menu'
-  #content.col-lg-10.col-sm-10
+  #content.middle-col.col-xs-12.col-md-10
     / content starts
     %div
       %ul.breadcrumb
-        %li
-          %a{:href => "/user"}= t('admin.dashboard')
         - if current_user.admin?
           %li
             %a{:href => "/user/managerecords"}= t('admin.manage_records')

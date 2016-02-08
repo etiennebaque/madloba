@@ -1,6 +1,5 @@
 .row
-  = render 'shared/admin_left_menu'
-  #content.col-lg-10.col-sm-10
+  #content.middle-col.col-xs-12.col-md-10
     / content starts
     / Success/Error flash messages
     - if flash[:error]
@@ -13,12 +12,7 @@
         .alert.alert-success
           %button.close{"data-dismiss" => "alert", :type => "button"} ×
           = t('admin.users.user_destroyed', email: flash[:success])
-    %div
-      %ul.breadcrumb
-        %li
-          %a{:href => "/user"}= t('admin.dashboard')
-        %li
-          = t('admin.users.title')
+    
     = t('admin.users.description')
     .row
       .box.col-md-12
