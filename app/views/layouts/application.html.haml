@@ -1,0 +1,51 @@
+!!!
+%html{:lang => "en"}
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "IE=Edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
+    = favicon_link_tag 'favicon.ico'
+    %title= site_name
+    / Main CSS files to be included in all pages.
+    = stylesheet_link_tag 'application', media: 'all'
+    / Gon gem - managing text in JS files
+    = include_gon
+    = csrf_meta_tags
+    = yield :head
+  %body
+    
+    - if notice && !(request.original_url.include? 'setup')
+      / We're not displaying any Devise notification during the setup screens
+      .alert.alert-dismissable.alert-success.no-margin-bottom
+        %button.close{"data-dismiss" => "alert", :type => "button"} ×
+        = notice
+    - elsif alert
+      .alert.alert-dismissable.alert-danger.no-margin-bottom
+        %button.close{"data-dismiss" => "alert", :type => "button"} ×
+        = alert
+    - elsif flash[:error]
+      .alert.alert-dismissable.alert-danger.no-margin-bottom
+        %button.close{"data-dismiss" => "alert", :type => "button"} ×
+        = flash[:error]
+
+    / Main part of the body
+    %div{:id => "#{is_in_admin_panel ? 'wrap-admin' : 'wrap'}"}
+      = render 'shared/navigation'
+      - if is_in_admin_panel
+        / Rendering admin panel, its second navigation bar and its footer in a 'ch-container' div
+        = render 'shared/navigation_admin'
+        .container-fluid
+          = yield
+          = render 'shared/footer'
+      - else
+        / Rendering regular pages (home page, show ad...)
+        = yield
+    - if !is_in_admin_panel
+      / Rendering footer for regular pages
+      = render 'shared/footer'
+
+    / Javascript files to be included in all pages.
+    = javascript_include_tag 'application'
+    / Javascript files specific to some pages, to be included here.
+    = yield :scripts

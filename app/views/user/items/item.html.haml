@@ -1,0 +1,107 @@
+- content_for :head do
+  = stylesheet_link_tag 'font-awesome.min'
+.row
+  #content.middle-col.col-xs-12.col-md-10
+    / content starts
+    %div
+      %ul.breadcrumb
+        %li
+          %a{:href => "/user/managerecords"}= t('admin.manage_records')
+        - if @isAdding
+          %li= t('admin.add_item')
+        - else
+          %li= t('admin.edit_item')
+    .row
+      .box.col-md-12
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            %h2
+              - if @isAdding
+                %i.glyphicon.glyphicon-plus
+                = t('admin.new_item')
+              - else
+                %i.glyphicon.glyphicon-edit
+                = t('admin.edit_item')
+          - if @item && @item.errors.any?
+            .alert.alert-danger
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              %strong
+                = t('admin.item.error_occurred', errors: pluralize(@item.errors.count, t('home.error.one'), t('home.error.more')))
+                \:
+              %ul
+                - @item.errors.full_messages.each do |msg|
+                  %li= msg
+          - if flash[:name]
+            .alert.alert-success
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              = t('admin.item.update_success', name: flash[:name])
+              %a{:href => "/user/managerecords#items"}= t('admin.back_to_records')
+          - if flash[:new_name]
+            .alert.alert-success
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              = t('admin.item.created_success', name: flash[:new_name])
+              %a{:href => "/user/managerecords"}= t('admin.back_to_records')
+          .box-content
+            = form_for [:user, @item], html: { id: 'itemForm', role: 'form' } do |f|
+              / Category id
+              - if !@isAdding
+                .form-group
+                  %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#"}= t('admin.item.delete_item')
+                .form-group
+                  = label_tag 'nameId', t('admin.mandatory'), class:'control-label'
+                .form-inline
+                  = label_tag 'id', 'Id:', class:'control-label'
+                  = @item.id
+                .form-group
+              / Item name
+              .form-group
+                = f.label :name, t('admin.item.name')+'*:', class:'control-label'
+                .form-inline
+                  = f.text_field :name, class: 'form-control', maxlength:'90'
+              / Category the item belongs to
+              .form-group
+                = f.label :marker_color, t('admin.item.category')+'*:', class:'control-label'
+                .form-inline
+                  - Category.all.each_with_index do |category, index|
+                    .radio
+                      %label
+                        - if (@item.category && category.marker_color == "#{@item.category.marker_color}") || index == 0
+                          = f.radio_button :category_id, category.id, checked: true
+                        - else
+                          = f.radio_button :category_id, category.id
+                        = succeed "\u{a0}" do
+                          %i{:class => "fa #{category.icon}", :style => "color: #{"#{MARKER_COLORS[category.marker_color]}"};"}
+                        = category.name
+                           
+              / List of locations the item can be found
+              .form-group
+                - if @item.ads.length > 0
+                  = f.label :ads, t('admin.item.ads_promoting')+':', class:'control-label'
+                  %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+                    %thead
+                      %tr
+                        %th ID
+                        %th= t('admin.item.ad_title')
+                        %th= t('admin.description')
+                    %tbody
+                      - @item.ads.each do |ad|
+                        %tr
+                          %td= ad.id
+                          %td
+                            %a{:href => "/user/ads/#{ad.id}/edit"}= ad.title
+                          %td= ad.description
+                - elsif !@isAdding
+                  %strong= t('admin.item.no_ad')
+              %hr/
+              / Submit button and cancel link
+              = render 'shared/submit_section'
+        / /span
+      / /row
+      / content ends
+    / /#content.span10
+  / /fluid-row
+  %hr/
+  - if !@isAdding
+    / "Delete item" modal window
+    = render 'delete_modal_window'
+/ /.fluid-container

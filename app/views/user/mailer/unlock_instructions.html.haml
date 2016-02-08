@@ -1,0 +1,9 @@
+%p
+  = t('session.hello')
+  = @resource.email
+  \!
+%p= t('mailer.account_locked')
+%p
+  = t('mailer.link_unlock')
+  \:
+%p= link_to t('mailer.unlock_account'), unlock_url(@resource, unlock_token: @token)

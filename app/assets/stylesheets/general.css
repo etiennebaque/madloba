@@ -218,7 +218,7 @@ html {
     overflow-x: hidden; /* Prevent scroll on narrow devices */
 }
 body {
-    padding-top: 58px;
+    padding-top: 50px;
 }
 
 @media only screen and (max-device-width: 991px) {
@@ -264,6 +264,11 @@ body {
 */
 .table tbody>tr>td.vert-align{
     vertical-align: middle;
+}
+
+.middle-col{
+    float: none; 
+    margin: 0 auto;
 }
 
 .vert-align{
@@ -446,7 +451,7 @@ body {
 
 .tt-menu {
     width: 242px;
-    margin: 12px 0;
+    margin: 6px 0;
     padding: 8px 0;
     background-color: #fff;
     border: 1px solid #ccc;

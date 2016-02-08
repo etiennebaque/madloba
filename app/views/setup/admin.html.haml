@@ -1,0 +1,79 @@
+.container
+  .row
+    .col-lg-12
+      = devise_error_messages!
+      = form_for(resource, as: resource_name, url: registration_path(resource_name), :html => {:class => 'form-horizontal'}) do |f|
+        %fieldset
+          .setup-padding
+            %h3= t('setup.creation_admin')
+          .col-lg-10
+            / 'Mandatory *' note
+            .form-group
+              .col-lg-6
+                %span= t('registration.all_mandatory')
+            / E-mail
+            .form-group
+              = f.label :email, t('home.e-mail'), class:'col-lg-2 control-label'
+              .col-lg-6
+                = f.email_field :email, class: 'form-control', required: true
+            / First name
+            .form-group
+              = f.label :first_name, t('admin.profile.first_name'), class:'col-lg-2 control-label'
+              .col-lg-6
+                = f.text_field :first_name, class: 'form-control', required: true
+            / Last name
+            .form-group
+              = f.label :last_name, t('admin.profile.last_name'), class:'col-lg-2 control-label'
+              .col-lg-6
+                = f.text_field :last_name, class: 'form-control', required: true
+            / Username
+            .form-group
+              = f.label :username, t('admin.profile.username'), class:'col-lg-2 control-label'
+              .col-lg-6
+                = f.text_field :username, class: 'form-control', required: true
+            / New password
+            .form-group
+              = f.label :password, t('admin.profile.new_password'), class:'col-lg-2 control-label'
+              .col-lg-6
+                = f.password_field :password, class: 'form-control', autocomplete: 'off', required: true, minlength: 8
+            / Confirm password
+            .form-group
+              = f.label :password_confirmation, t('admin.profile.confirm_password'), class: 'col-lg-2 control-label'
+              .col-lg-6
+                = f.password_field :password_confirmation, class: 'form-control', autocomplete: 'off', required: true, minlength: 8
+            %hr.col-lg-8/
+            / Note about GMail SMTP settings
+            .form-group
+              .col-lg-8
+                %a#gmail_modal_link{:href => "#"}= t('setup.note_for_gmail')
+            / Note about email being sent to new admin user
+            .form-group.setup-padding
+              .col-lg-8
+                %p= t('setup.confirm_email')
+                %p= t('setup.check_email')
+            / Role admin for this first user
+            = f.hidden_field :role, value: 'admin'
+            / Next button / Back link
+            .form-group
+              .col-lg-2
+              .col-lg-6.pull-right
+                - if is_on_heroku
+                  %a.btn.btn-link{:href => "/setup/map"}= t('setup.back')
+                - else
+                  %a.btn.btn-link{:href => "/setup/image"}= t('setup.back')
+                = submit_tag(t('setup.next'), class: 'btn btn-success')
+/ Modal popup that appears with OpenStreetMap address suggestions
+#gmail_modal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "basicModal", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h4#myModalLabel.modal-title SMTP settings - GMail
+      #modal-body-id.modal-body
+        %p= t('setup.gmail_note')
+        %ol
+          %li= t('setup.gmail_note2')
+          %li= t('setup.gmail_note3_html', here: link_to(t('setup.gmail_link_here'), 'https://accounts.google.com/DisplayUnlockCaptcha', {target: '_blank'}))
+        %p= t('setup.gmail_note4')
+      .modal-footer
+        %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"}= t('home.got_it')
+#push

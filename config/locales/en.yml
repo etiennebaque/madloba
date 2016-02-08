@@ -291,23 +291,24 @@ en:
     icon: Icon
     edit_delete: Edit details / Delete
     created_by_user: Created by user
-    manage_your_ads: Manage your ads
+    manage_your_ads: Your ads
     manage_records: Manage records
     records_message: From here, you can manage the ads posted on the website, as well as their locations, items, and categories.
     back_to_records: Back to the 'Manage records' page
-    back_to_ads: Back to 'Manage your ads' page
+    back_to_ads: Back to 'Your ads' page
     back_to_users: Back to 'Manage users' page
     create_ad: Create ad
     mandatory: (* mandatory fields)
-    general_settings_menu: General settings
+    general_settings_menu: General
     save: Save
+    settings_menu: Settings
     nothing_to_do: Yay! Nothing to worry about :)
-    no_mapbox_account_html: You don't have entered a Mapbox key yet, in "Map settings". You can get one by opening an account on <strong>%{mapbox_website}</strong>, to get a new map style for your website.
-    no_mapquest_account_html: You don't have entered a MapQuest key yet, in "Map settings". You can get one by opening an account on <strong>%{mapquest_website}</strong>, to get a new map style for your website.
-    no_social: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General settings". Specify some of them to increase your visibility.
+    no_mapbox_account_html: You don't have entered a Mapbox key yet, in "Map (Settings)". You can get one by opening an account on <strong>%{mapbox_website}</strong>, to get a new map style for your website.
+    no_mapquest_account_html: You don't have entered a MapQuest key yet, in "Map (Settings)". You can get one by opening an account on <strong>%{mapquest_website}</strong>, to get a new map style for your website.
+    no_social: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General (Settings)". Specify some of them to increase your visibility.
     one_category_html: <strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.
-    no_website_description: No website description has been written yet, in "General settings". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
-    no_area_type_html: <strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area settings", please indicate how an area is defined (by postal code or by district), to give the user more flexibility, when it comes to choose a location.
+    no_website_description: No website description has been written yet, in "General (Settings)". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
+    no_area_type_html: <strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area (Settings)", please indicate how an area is defined (by postal code or by district), to give the user more flexibility, when it comes to choose a location.
     you_admin: You're an administrator of this website.
     use_left_hand: Use the left-hand side menu to manage
     admin_descr1: the different components of this website (ads, locations, items, categories)
@@ -330,10 +331,10 @@ en:
     left_menu:
       admin_task: Admin tasks
       user_tasks: Regular user tasks
-      map_settings: Map settings
-      area_settings: Area settings
+      map_settings: Map
+      area_settings: Area
       manage_users: Manage users
-      manage_profile: Manage your profile
+      manage_profile: Your profile
     ad:
       manage_ads: Manage ads
       ad_edit: Ad details - Edit
@@ -341,7 +342,7 @@ en:
       error_update: "%{errors} occurred while updating this ad"
       delete: Delete this ad
       delete_ad_error_html: "Error occurred when updating this ad! Back to %{manage_ads_page}"
-      manage_ads_page: "'Manage your ads' page"
+      manage_ads_page: "'Your ads' page"
       giving_accepting_title: Giving away/Accepting
       giving_away: Giving away
       accepting: Searching for
@@ -437,7 +438,7 @@ en:
       delete_success: Deletion completed.
       delete_error: Error occured when deleting a district. Please try again later.
     map_settings:
-      title: Map settings
+      title: Map
       type: "Map type:"
       mapbox: "Mapbox API key:"
       mapbox_link: Go to your Mapbox account...
@@ -482,7 +483,7 @@ en:
       user_destroyed: The user '%{email}' and the ads they posted have been deleted.
       delete_not_possible: Demo - User deletion not available
     profile:
-      title: Manage your profile
+      title: Your profile
       title_manage_users: Manage users
       update_profile: Update profile
       new_user: New user
@@ -508,7 +509,7 @@ en:
     image_storage: Image storage
     name_description: The name of your website
     description_description: Write what your website is about...
-    map_settings: Map settings
+    map_settings: Map
     city_help: The city your Madloba website is about
     state_help: The state/province where this city is
     country_help: The country where this city is

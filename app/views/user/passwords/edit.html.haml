@@ -1,0 +1,22 @@
+.container.devise-section
+  .row
+    .col-lg-6
+      = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put, :class => 'form-horizontal' }) do |f|
+        %fieldset
+          %legend= t('session.change_your_password')
+          = devise_error_messages!
+          = f.hidden_field :reset_password_token
+          .form-group
+            = f.label :password, class:'col-lg-2 control-label'
+            .col-lg-10
+              = f.password_field :password, class: 'form-control', autocomplete: 'off', autofocus: true
+          .form-group
+            = f.label :password_confirmation, class:'col-lg-2 control-label'
+            .col-lg-10
+              = f.password_field :password_confirmation, class: 'form-control', autocomplete: 'off'
+          .form-group
+            .col-lg-10.col-lg-offset-2
+              = f.submit t('session.change_password'), class: 'btn btn-primary'
+  = render 'shared/links'
+#push
+/ /.container
