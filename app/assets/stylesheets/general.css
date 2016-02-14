@@ -92,7 +92,7 @@ body {
     position: fixed;
     top: 70px;
     right: 10px;
-    font-size: 14px;
+    font-size: 13px;
     max-width: 300px;
     z-index: 1;
 }
@@ -466,7 +466,7 @@ body {
 
 .tt-suggestion {
     padding: 3px 20px;
-    font-size: 15px;
+    font-size: 13px;
     line-height: 24px;
 }
 
