@@ -1,5 +1,5 @@
 // Object used for autocompletion when user searches for an item, in navigation bar
-searched_ad_items = new Bloodhound({
+searchedAdItems = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     remote: {
@@ -8,8 +8,8 @@ searched_ad_items = new Bloodhound({
     }
 });
 
-searched_ad_items.clearPrefetchCache();
-searched_ad_items.initialize();
+searchedAdItems.clearPrefetchCache();
+searchedAdItems.initialize();
 
 // Object containing the scripts to load on different pages of the application.
 // See 'custom-leaflet.js' file for map-related scripts.
@@ -33,8 +33,8 @@ var events = {
 
         // On the "New ad" form, open automatically the new location form, if the user is anonymous,
         // or never created any location as a signed in user.
-        if (typeof current_page != "undefined" && current_page == "new_ad"
-            && typeof can_choose_existing_locations != "undefined" && can_choose_existing_locations == false){
+        if (typeof current_page !== "undefined" && current_page === "new_ad"
+            && typeof can_choose_existing_locations !== "undefined" && can_choose_existing_locations === false){
             setTimeout(function() {
                 $("#new_location_form a.add_fields").trigger('click');
                 $("#locations_from_list").hide();
@@ -70,7 +70,7 @@ var events = {
         // "Create/Edit ad" form: create message when image needs to be uploaded.
         $('#new_ad').submit(function() {
             var image_path = $('#ad_image').val();
-            if (image_path != null && image_path != ''){
+            if (image_path !== null && image_path !== ''){
                 $('#upload-in-progress').html('<i>'+gon.vars['new_image_uploading']+'</i>');
             }
         });
@@ -105,7 +105,7 @@ var events = {
         );
 
         // Function call to initialize the location form (Location edit form, all Ad forms).
-        if (typeof districts_bounds != "undefined") {
+        if (typeof districts_bounds !== "undefined") {
             init_location_form(districts_bounds, leaf.map);
         }
     },
@@ -122,7 +122,7 @@ var events = {
     init_navigation_bar: function() {
         // Navigation bar: press Enter to valid form.
         $("#searchFormId input").keypress(function(event) {
-            if (event.which == 13) {
+            if (event.which === 13) {
                 event.preventDefault();
                 getLocationsPropositions();
             }
@@ -145,7 +145,7 @@ var events = {
 
         // Navigation bar on device: closes the navigation menu, when click.
         $('#about-nav-link').on('click', function(){
-            if($('.navbar-toggle').css('display') !='none'){
+            if($('.navbar-toggle').css('display') !=='none'){
                 $(".navbar-toggle").click()
             }
         });
@@ -174,12 +174,12 @@ var events = {
         $('#item').typeahead(null, {
             name: 'item-search',
             display: 'value',
-            source: searched_ad_items
+            source: searchedAdItems
         });
 
         // Navigation bar: changing the typeahead query, depending of user choice between "I'm giving away" and "I'm searching for"
         $('#q').change(function(){
-            searched_ad_items.remote.url = '/getItems?item=QUERY&type=search_ad_items&q='+$('#q').val();
+            searchedAdItems.remote.url = '/getItems?item=QUERY&type=search_ad_items&q='+$('#q').val();
             // As the type of search changes, the item name field needs to be reset.
             $('#item').val('');
         }).change();
@@ -195,7 +195,7 @@ var events = {
         // This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,
         // 'zoomToBoundsOnClick' would zoom in too much, and push the markers to the edge of the screen.
         // This event underneath fixes this behaviour, the markers are not pushed to the boundaries of the map anymore.
-        if(markers.group != ''){
+        if(markers.group !== ''){
          markers.group.on('clusterclick', function (a) {
          var bounds = a.layer.getBounds().pad(0.5);
          leaf.map.fitBounds(bounds);
@@ -247,7 +247,7 @@ var events = {
         // "Edit ad" form: create message when image needs to be uploaded.
         $('#ad-edit-form').submit(function() {
             var image_path = $('#ad_image').val();
-            if (image_path != null && image_path != ''){
+            if (image_path !== null && image_path !== ''){
                 $('#upload-in-progress').html('<i>'+gon.vars['new_image_uploading']+'</i>');
             }
         });
@@ -386,10 +386,10 @@ function init_location_form(districts_bounds, map){
             var postal_code = $('.location_type_postal_code').val();
             var postal_code_value = $('.location_postal_code').val();
 
-            if(typeof area_code_length == 'undefined' && typeof postal_code_length == 'undefined'){
+            if(typeof area_code_length === 'undefined' && typeof postal_code_length === 'undefined'){
 
                 $.get("/user/getAreaSettings", {}, function (data){
-                    if (data['code'] != null && data['area'] != null){
+                    if (data['code'] !== null && data['area'] !== null){
                         // Based on the retrieved settings, we display which area code will be used for this ad.
                         area_code_length = data['area'];
                         if (postal_code.length >= area_code_length){
@@ -446,7 +446,7 @@ function find_geocodes(){
                 $('#findGeocodeLoaderId').html(gon.vars['searching_location']);
             },
             success: function(data) {
-                if (data != null && data.status == 'ok'){
+                if (data !== null && data.status === 'ok'){
                     // Geocodes were found: the location is shown on the map.
                     var myNewLat = Math.round(data.lat*100000)/100000
                     var myNewLng = Math.round(data.lon*100000)/100000
@@ -475,9 +475,9 @@ function find_geocodes(){
  * or selected district.
  */
 function removes_location_layers(){
-    if (markers.new_marker != null){leaf.map.removeLayer(markers.new_marker);}
-    if (markers.selected_area != null){leaf.map.removeLayer(markers.selected_area);}
-    if (markers.postal_code_circle != null){leaf.map.removeLayer(markers.postal_code_circle);}
+    if (markers.new_marker !== null){leaf.map.removeLayer(markers.new_marker);}
+    if (markers.selected_area !== null){leaf.map.removeLayer(markers.selected_area);}
+    if (markers.postal_code_circle !== null){leaf.map.removeLayer(markers.postal_code_circle);}
 }
 
 /**
@@ -547,7 +547,7 @@ function show_district_section(){
  * the form is submitted.
  */
 function getLocationsPropositions(){
-    if ($('#location').val() != ''){
+    if ($('#location').val() !== ''){
         // A location has been entered, let's use the Nominatim web service
         var locationInput = $('#location').val();
         $.ajax({
@@ -563,8 +563,8 @@ function getLocationsPropositions(){
             },
             success: function(data) {
                 var modalHtmlText = "";
-                if (data != null && data.length > 0){
-                    if (typeof data[0]['error_key'] != 'undefined'){
+                if (data !== null && data.length > 0){
+                    if (typeof data[0]['error_key'] !== 'undefined'){
                         // There's been an error while retrieving info from Nominatim,
                         // or there is no result found for this address.
                         $('#search_error_message').html('<strong>'+data[0]['error_key']+'</strong>');
@@ -580,10 +580,10 @@ function getLocationsPropositions(){
                         for (var i = 0; i < data.length; i++) {
                             var proposed_location = data[i];
                             var url = "/search?lat="+proposed_location['lat']+"&lon="+proposed_location['lon']+"&loc="+proposed_location['display_name'];
-                            if (item != ''){
+                            if (item !== ''){
                                 url = url + "&item=" + item;
                             }
-                            if (search_action != ''){
+                            if (search_action !== ''){
                                 url = url + "&q=" + search_action;
                             }
 
@@ -605,7 +605,7 @@ function getLocationsPropositions(){
 
             }
         });
-    }else if (($('#item').val() != '') || ($('#user_action').val() != '')){
+    }else if (($('#item').val() !== '') || ($('#user_action').val() !== '')){
         // no location is being searched, but an item is. We need to submit the form with this information.
         $("#searchFormId").submit();
     }

@@ -28,7 +28,7 @@ var leaf = {
         leaf.my_lng = map_settings['lng'];
         leaf.searched_address = map_settings['searched_address'];
 
-        if (map_settings['chosen_map'] == 'mapbox' || map_settings['chosen_map'] == 'osm'){
+        if (map_settings['chosen_map'] === 'mapbox' || map_settings['chosen_map'] === 'osm'){
             // Mapbox or OSM
             leaf.map_tiles = L.tileLayer(map_settings['tiles_url'], {
                 attribution: map_settings['attribution']
@@ -41,7 +41,7 @@ var leaf = {
         leaf.map.setView([leaf.my_lat, leaf.my_lng], map_settings['zoom_level']);
 
         // Load districts when available (eg. on area settings page, when all of them need to show up on a map...)
-        if (typeof districts != 'undefined' && districts != null){
+        if (typeof districts !== 'undefined' && districts !== null){
             leaf.districts = districts;
         }
     },
@@ -49,10 +49,10 @@ var leaf = {
     // This method is used on the ad details page (ads#show) to display
     // the right feature on the map (eg. marker, district area or postal code area)
     show_features_on_ad_details_page: function(map_settings) {
-        if (map_settings['ad_show_is_area'] == true){
+        if (map_settings['ad_show_is_area'] === true){
             // Postal or district address (area type).
             // Shows an area icon on the map of the ads show page.
-            if (map_settings['loc_type'] == 'district'){
+            if (map_settings['loc_type'] === 'district'){
                 // Drawing the district related to this ad.
                 var district_latlng = leaf.show_single_district(map_settings['popup_message'], map_settings['bounds']);
                 leaf.map.setView(district_latlng, map_settings['zoom_level']);
@@ -81,7 +81,7 @@ var leaf = {
                 });
 
                 var map_center_marker = L.marker([leaf.my_lat, leaf.my_lng], {icon: icon_to_use});
-                if (map_settings['marker_message'] != ""){
+                if (map_settings['marker_message'] !== ""){
                     map_center_marker.bindPopup(map_settings['marker_message'] + ' - ' + item_category['item_name']).openPopup();
                 }
 
@@ -94,7 +94,7 @@ var leaf = {
 
     // Method showing a single feature on a map.
     show_single_marker: function(map_settings){
-        if (map_settings['loc_type'] == 'postal'){
+        if (map_settings['loc_type'] === 'postal'){
             // Drawing the postal code area circle related to this ad.
             markers.postal_code_circle = new L.circle([leaf.my_lat, leaf.my_lng], 600, {
                 color: markers.postal_code_area_color,
@@ -104,12 +104,12 @@ var leaf = {
 
             markers.postal_code_circle.addTo(leaf.map).bindPopup(map_settings['marker_message']).openPopup();
 
-        }else if (map_settings['loc_type'] == 'district'){
+        }else if (map_settings['loc_type'] === 'district'){
             leaf.show_single_district(map_settings['marker_message'], map_settings['bounds']);
         }else{
             // we are displaying the center point.
             var center_marker = L.marker([leaf.my_lat, leaf.my_lng], {icon: markers.default_icon});
-            if (map_settings['marker_message'] != ""){
+            if (map_settings['marker_message'] !== ""){
                 center_marker.addTo(leaf.map).bindPopup(map_settings['marker_message']).openPopup();
                 //center_marker.bindPopup(map_settings['marker_message']).openPopup();
             }else{
@@ -121,19 +121,19 @@ var leaf = {
     // Method defining different events bound to the map, depending on which page this map is displayed.
     // Also displaying specific markers, like searched location marker
     setup_custom_behaviors: function(map_settings){
-        if (map_settings['clickableMapMarker'] != 'none'){
+        if (map_settings['clickableMapMarker'] !== 'none'){
             // Getting latitude and longitude of clicked point on the map.
             leaf.map.on('click', onMapClickLocation);
         }
 
-        if (map_settings['page'] == 'mapsettings'){
+        if (map_settings['page'] === 'mapsettings'){
             leaf.map.on('zoomend', function() {
                 $('#zoom_level').val(leaf.map.getZoom());
             });
         }
 
         // Adding specific events on the 'Area settings' page, needed when drawing and saving districts.
-        if (map_settings['page'] == 'areasettings'){
+        if (map_settings['page'] === 'areasettings'){
             leaf.init_map_on_area_settings();
         }
     },
@@ -143,7 +143,7 @@ var leaf = {
     // Returns the center of the district, needed to center the feature on the map for ads#show
     show_single_district: function(district_name, bounds){
         // Before adding the selected district, we need to remove all the currently displayed districts.
-        if (markers.selected_area != ''){
+        if (markers.selected_area !== ''){
             leaf.map.removeLayer(markers.selected_area);
         }
 
@@ -176,7 +176,7 @@ var leaf = {
             edit: { featureGroup: leaf.drawn_items }
         }));
 
-        if (leaf.districts != null){
+        if (leaf.districts !== null){
             // Adding existing districts to the map
             for (var i=0; i<leaf.districts.length; i++){
                 // Adding the district id and name to the geoJson properties.
@@ -222,7 +222,7 @@ var leaf = {
 
             $.post("/user/areasettings/save_district", {bounds: JSON.stringify(district_bounds), name: district_name}, function (data){
                 $('#district_notification_message').html("<span class='"+data.style+"'><strong>"+data.message+"</strong></span>");
-                if (data.status == 'ok'){
+                if (data.status === 'ok'){
                     leaf.drawn_items.removeLayer(layer);
 
                     district_bounds['properties']['id'] = data.id;
@@ -251,7 +251,7 @@ var leaf = {
             // Going through the districts and checking which one to update.
             leaf.drawn_items.eachLayer(function (layer) {
                 district_bounds = layer.toGeoJSON();
-                if (district_id == district_bounds['properties']['id']){
+                if (district_id === district_bounds['properties']['id']){
                     layer.bindPopup("<input type='text' id='"+district_bounds['properties']['id']+"' class='update_district_text' style='margin-right:5px;' placeholder='District name' value='"+new_district_name+"'><button type='button' id='save_"+district_bounds['properties']['id']+"' class='btn btn-xs btn-success update_district'>OK</button><br /><div class='district_notif'></div>");
                     layer.closePopup();
                 }
@@ -384,7 +384,7 @@ var markers = {
 
                 // When a marker is clicked, an Ajax call is made to get the content of the popup to display
                 marker.on('click', function(e) {
-                    var popup = e.target.getPopup();
+                    var marker_popup = e.target.getPopup();
                     $.ajax({
                         url: "/showAdPopup",
                         global: false,
@@ -395,12 +395,12 @@ var markers = {
                             xhr.setRequestHeader("Accept", "text/html-partial");
                         },
                         success: function(data) {
-                            popup.setContent(data);
-                            popup.update();
+                            marker_popup.setContent(data);
+                            marker_popup.update();
                         },
                         error: function(data) {
-                            popup.setContent(data);
-                            popup.update();
+                            marker_popup.setContent(data);
+                            marker_popup.update();
                         }
                     });
                 });
@@ -411,7 +411,7 @@ var markers = {
 
     // Method that draws circles, representing ads tied to a postal code only.
     draw_postal_code_areas: function (locations_postal) {
-        if (locations_postal != null && Object.keys(locations_postal).length > 0){
+        if (locations_postal !== null && Object.keys(locations_postal).length > 0){
 
             markers.postal_group = L.featureGroup().addTo(leaf.map);
 
@@ -432,7 +432,7 @@ var markers = {
     // Method drawing the boundaries of districts on a map. Only the districts related to an active ad are drawn.
     draw_district_areas: function (locations_district) {
         // Snippet that creates markers, to represent ads tied to district-type location.
-        if (locations_district != null && Object.keys(locations_district).length > 0){
+        if (locations_district !== null && Object.keys(locations_district).length > 0){
             markers.district_group = L.featureGroup().addTo(leaf.map);
 
             // Adding event to show/hide these districts from the checkbox in the guided navigation.
@@ -456,7 +456,7 @@ var markers = {
  */
 function initLeafletMap(map_settings){
 
-    if (leaf != null && leaf.map != null){
+    if (leaf !== null && leaf.map !== null){
         leaf.map.remove();
     }
 
@@ -465,7 +465,7 @@ function initLeafletMap(map_settings){
     markers.init(map_settings);
 
 
-    if (map_settings['hasCenterMarker'] == true){
+    if (map_settings['hasCenterMarker'] === true){
         if (map_settings['ad_show']){
             // Showing markers, district area or postal code area on the ad details page (ads#show)
             leaf.show_features_on_ad_details_page(map_settings);
@@ -519,7 +519,7 @@ function putLocationMarkers(locations_exact, locations_postal, locations_distric
             html_to_append = html_to_append + '</ul>';
             $('#ads-modal-body-id').html(html_to_append);
             var icon = '';
-            if (typeof data['icon'] != 'undefined'){
+            if (typeof data['icon'] !== 'undefined'){
                 icon = '<i class="fa '+ data['icon'] +'" style="color: '+ data['hexa_color'] +'; padding-right: 10px;"></i>';
             }
 
@@ -534,7 +534,7 @@ function putLocationMarkers(locations_exact, locations_postal, locations_distric
     });
 
     var searched_location_marker = '';
-    if (typeof leaf.searched_address != 'undefined'){
+    if (typeof leaf.searched_address !== 'undefined'){
         // Adding marker for the searched address, on the home page.
         searched_location_marker = L.marker([ leaf.my_lat, leaf.my_lng ], {icon: markers.default_icon}).bindPopup(leaf.searched_address);
         searched_location_marker.addTo(leaf.map);
@@ -545,7 +545,7 @@ function putLocationMarkers(locations_exact, locations_postal, locations_distric
     // Adding all the markers to the map.
     leaf.map.addLayer(markers.group);
 
-    if (searched_location_marker != ''){
+    if (searched_location_marker !== ''){
         searched_location_marker.openPopup();
     }
 
@@ -567,13 +567,13 @@ function createPopupHtml(first_sentence, ad, index){
     var popup_ad_link = "<a href='/ads/"+ad['id']+"/'>"+ad['title']+"</a>";
     var popup_item_name = "<span style='color:" + marker_colors[item['category']['marker_color']] + "';><strong>" + item['name'].capitalizeFirstLetter() + "</strong></span>";
 
-    if (ad['is_giving'] == true){
+    if (ad['is_giving'] === true){
         second_sentence = gon.vars['items_given']+"<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
     }else{
         second_sentence = gon.vars['items_searched']+"<br />" + popup_item_name + ': ' + popup_ad_link + '<br />';
     }
 
-    if (ad['image']['thumb']['url'] != null && ad['image']['thumb']['url'] != ''){
+    if (ad['image']['thumb']['url'] !== null && ad['image']['thumb']['url'] !== ''){
         // Popup is created with a thumbnail image in it.
         var ad_image = "<img class='thumb_ad_image' onError=\"$('.thumb_ad_image').remove(); $('.image_notification').html('<i>"+gon.vars['image_not_available']+"</i>');\" src='"+ad['image']['thumb']['url']+"'><span class=\"image_notification\"></span>";
         result =  "<div style='overflow: auto;'><div class='col-sm-6'>"+first_sentence+"</div><div class='col-sm-6'>"+ad_image+"</div><div class='col-sm-12'><br>"+second_sentence+"</div></div>";
@@ -681,19 +681,19 @@ function createPopupHtmlArea(first_sentence, locations_from_same_area, area_type
     sorted_items = sorted_items.sort();
 
     // Popup for this area is created here.
-    for (var i=0; i<sorted_items.length; i++){
-        var item_marker_color = sorted_items[i];
+    for (var idx=0; i<sorted_items.length; i++){
+        var this_marker_color = sorted_items[idx];
 
-        var item_info = item_marker_color.split('|');
+        var item_info = this_marker_color.split('|');
         var item_name = item_info[0];
         var marker_color = item_info[1];
-        var number_of_ads = ad_number_per_item[item_marker_color]['number'];
+        var number_of_ads = ad_number_per_item[this_marker_color]['number'];
 
         var popup_item_name = "<span style='color:" + marker_color + ";' >" + item_name.capitalizeFirstLetter() + "</span>";
         var link_id = item_name+'|'+area_type+'|'+area_id;
         var popup_ad_link = "- <a href='#' class='area_link' id='"+link_id+"'>"+popup_item_name+" ("+number_of_ads+")</a>"
 
-        if (ad_number_per_item[item_marker_color]['is_giving'] == true){
+        if (ad_number_per_item[this_marker_color]['is_giving'] === true){
             is_giving_item = true;
             people_give = people_give + popup_ad_link + '<br />';
         }else{
@@ -723,7 +723,7 @@ function initializeSideBar(sidebar){
     // Side bar is shown, right before initializing it, after map is fully loaded.
     $('#sidebar').removeClass('hide');
 
-    var sidebar = L.control.sidebar('sidebar', {
+    var navSidebar = L.control.sidebar('sidebar', {
         closeButton: true,
         position: 'right'
     });
@@ -731,7 +731,7 @@ function initializeSideBar(sidebar){
     // Navigation toggle button
     var btn = L.functionButtons([{ content: 'Categories / Create ad' }]);
 
-    leaf.map.addControl(sidebar);
+    leaf.map.addControl(navSidebar);
 
     var isSidebarOpen = false;
     var window_width = $(window).width();
@@ -739,25 +739,25 @@ function initializeSideBar(sidebar){
     if (window_width < 768){
         leaf.map.addControl(btn);
     }else{
-        sidebar.show();
+        navSidebar.show();
         isSidebarOpen = true;
     }
 
     leaf.map.on('click', function () {
         if (isSidebarOpen){
-            sidebar.hide();
+            navSidebar.hide();
             leaf.map.addControl(btn);
             isSidebarOpen = false;
         }
     });
 
     btn.on('clicked', function(data) {
-        if( data.idx == 0 ) {
-            sidebar.show();
+        if( data.idx === 0 ) {
+            navSidebar.show();
             isSidebarOpen = true;
             leaf.map.removeControl(btn);
         }else{
-            sidebar.hide();
+            navSidebar.hide();
             isSidebarOpen = false;
             leaf.map.addControl(btn);
         }
@@ -777,15 +777,15 @@ function initializeSideBar(sidebar){
             // On mobile, window_width gets refreshed when we scroll on open naviagation menu.
             // We used a trick with old_window_width: if width does not change (ie. we're scrolling), the opened
             // nav menu remains open.
-            if (old_window_width != window_width){
-                sidebar.hide();
+            if (old_window_width !== window_width){
+                navSidebar.hide();
                 if (isSidebarOpen){
                     leaf.map.addControl(btn);
                     isSidebarOpen = false;
                 }
             }
         }else{
-            sidebar.show();
+            navSidebar.show();
             if (!isSidebarOpen){
                 leaf.map.removeControl(btn);
                 isSidebarOpen = true;
@@ -821,8 +821,8 @@ function onMapClickLocation(e) {
  */
 function onMapClick(e) {
 
-	if (markers.new_marker != ''){leaf.map.removeLayer(markers.new_marker);}
-    if (markers.postal_code_circle != ''){leaf.map.removeLayer(markers.postal_code_circle);}
+	if (markers.new_marker !== ''){leaf.map.removeLayer(markers.new_marker);}
+    if (markers.postal_code_circle !== ''){leaf.map.removeLayer(markers.postal_code_circle);}
 
 	var myNewLat = e.latlng.lat;
 	var myNewLng = e.latlng.lng;
@@ -831,10 +831,10 @@ function onMapClick(e) {
     myNewLat = Math.round(myNewLat*100000)/100000;
     myNewLng = Math.round(myNewLng*100000)/100000;
 
-    if (markers.location_marker_type == 'exact'){
+    if (markers.location_marker_type === 'exact'){
         markers.new_marker = new L.Marker(e.latlng, {icon: markers.new_icon}, {draggable:false});
         leaf.map.addLayer(markers.new_marker);
-    }else if (markers.location_marker_type == 'area'){
+    }else if (markers.location_marker_type === 'area'){
         markers.postal_code_circle = new L.circle(e.latlng, 600, {
             color: markers.postal_code_area_color,
             fillColor: markers.postal_code_area_color,

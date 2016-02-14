@@ -29,23 +29,23 @@ AdSocket.prototype.stringifyState = function() {
         complete_state += _this.nav_state.cat.join('+');
     }
 
-    if (_this.nav_state.item != ''){
+    if (_this.nav_state.item !== ''){
         complete_state = append_to_state(complete_state, 'item', _this.nav_state.item);
     }
-    if (_this.nav_state.q != ''){
+    if (_this.nav_state.q !== ''){
         complete_state = append_to_state(complete_state, 'q', _this.nav_state.q);
     }
-    if (_this.nav_state.lat != ''){
+    if (_this.nav_state.lat !== ''){
         complete_state = append_to_state(complete_state, 'lat', _this.nav_state.lat);
     }
-    if (_this.nav_state.lon != ''){
+    if (_this.nav_state.lon !== ''){
         complete_state = append_to_state(complete_state, 'lon', _this.nav_state.lon);
     }
     return complete_state
 };
 
 function append_to_state(complete_state, param, value){
-    if (complete_state != ''){
+    if (complete_state !== ''){
         complete_state = complete_state + '&' + param + '=' + value;
     }else{
         complete_state = param + '=' + value;
@@ -71,16 +71,16 @@ AdSocket.prototype.initBinds = function() {
             $(this).remove();
 
             _this.nav_state.cat = jQuery.grep(_this.nav_state.cat, function(value) {
-                return value != link_id;
+                return value !== link_id;
             });
 
-            if (_this.nav_state.cat.length == 0){
+            if (_this.nav_state.cat.length === 0){
                 $('#refinementsId').html('');
             }
 
         }else{
             // User is selecting this category to refine their search.
-            if ($('#refinementsId').html().trim() == ''){
+            if ($('#refinementsId').html().trim() === ''){
                 $('#refinementsId').html('<h4>Your selection</h4>')
             }
             selectedLinkHtml.append("<i class='glyphicon glyphicon-remove align-cross' style='float: right;'></i>");
@@ -99,7 +99,7 @@ AdSocket.prototype.initBinds = function() {
     // (ie. new ad notification message has been loaded on ads#show)
     $(document).ready(function() {
         var new_ad_id = $('#new_ad_id').val();
-        if (typeof new_ad_id != "undefined"){
+        if (typeof new_ad_id !== "undefined"){
             console.log($('#new_ad_id').val());
             _this.sendNewAdNotification(new_ad_id);
         }
@@ -143,26 +143,26 @@ AdSocket.prototype.sendNewAdNotification = function(value) {
 // After selection of a category in the guided navigation, we need to refresh the map accordingly.
 AdSocket.prototype.refresh_map = function (new_map_info, new_nav_state){
     // First we need to clear all the current layers.
-    if (markers.group != ''){
+    if (markers.group !== ''){
         markers.group.clearLayers();
     }
-    if (markers.postal_group != ''){
+    if (markers.postal_group !== ''){
         markers.postal_group.clearLayers();
     }
-    if (markers.district_group != ''){
+    if (markers.district_group !== ''){
         markers.district_group.clearLayers();
     }
 
     // Then we place the different markers and areas.
-    if (new_map_info['markers'] != ''){
+    if (new_map_info['markers'] !== ''){
         markers.place_exact_locations_markers(new_map_info['markers'], false);
     }
 
-    if (new_map_info['postal'] != ''){
+    if (new_map_info['postal'] !== ''){
         drawPostalCodeAreaOnMap(new_map_info['postal']);
     }
 
-    if (new_map_info['district'] != ''){
+    if (new_map_info['district'] !== ''){
         drawDistrictsOnMap(new_map_info['district']);
     }
 
@@ -178,7 +178,7 @@ AdSocket.prototype.updateURL = function (new_nav_state){
     var new_cat_params = 'cat='+new_nav_state.cat.join('+');
     var new_url = '';
 
-    if (params != ''){
+    if (params !== ''){
         var param_array = params.replace('?','').split('&');
         var cat_param = ''
         for (var i = 0; i < param_array.length; i++){
@@ -187,8 +187,8 @@ AdSocket.prototype.updateURL = function (new_nav_state){
                 break;
             }
         }
-        if (cat_param != ''){
-            if (new_cat_params == 'cat='){
+        if (cat_param !== ''){
+            if (new_cat_params === 'cat='){
                 new_url = current_url.replace(cat_param, '');
             }else{
                 new_url = current_url.replace(cat_param, new_cat_params);
@@ -198,7 +198,7 @@ AdSocket.prototype.updateURL = function (new_nav_state){
         }
 
     }else{
-        if (new_cat_params == 'cat='){
+        if (new_cat_params === 'cat='){
             new_url = current_url;
         }else{
             new_url = current_url + '?' + new_cat_params;
