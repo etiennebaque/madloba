@@ -13,7 +13,8 @@
     = include_gon
     = csrf_meta_tags
     = yield :head
-  %body
+
+  %body{class: (is_in_admin_panel ? 'body-admin' : 'body-normal') }
     
     - if notice && !(request.original_url.include? 'setup')
       / We're not displaying any Devise notification during the setup screens
