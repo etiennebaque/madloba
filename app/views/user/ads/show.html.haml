@@ -34,7 +34,7 @@
       %h3= @ad.title
       - if flash[:new_ad] && !@map_settings['is_area']
         /
-          Ad id added just when the ad has just been created. This is to be read by ad_websocket.js,
+          Ad id added just when the ad has just been created. This is to be read by ad_websocket.coffee,
           when it is an exact location
         = hidden_field_tag 'new_ad_id', @ad.id
       .ad-title
