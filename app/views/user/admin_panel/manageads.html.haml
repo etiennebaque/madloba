@@ -1,0 +1,104 @@
+.row
+  #content.middle-col.col-xs-12.col-md-10
+    / content starts
+    / Success/Error flash messages
+    - if flash[:error]
+      .box-content.alerts
+        .alert.alert-danger
+          %button.close{"data-dismiss" => "alert", :type => "button"} ×
+          = flash[:error]
+    - if flash[:success]
+      .box-content.alerts
+        .alert.alert-success
+          %button.close{"data-dismiss" => "alert", :type => "button"} ×
+          = flash[:success]
+    
+    .row
+      .box.col-md-12
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            %h2
+              %i.glyphicon.glyphicon-pencil
+              = t('admin.manage_your_ads')
+          %ul.nav.nav-tabs
+            %li.active
+              %a{"data-toggle" => "tab", :href => "#ads"}= t('admin.ads')
+            %li
+              %a{"data-toggle" => "tab", :href => "#locations"}= t('admin.locations')
+          .tab-content
+            / Ads tab pane
+            #ads.tab-pane.active
+              .box-content
+                %p.left
+                  %a.btn.btn-success{:href => "/ads/new"}
+                    %i.glyphicon.glyphicon-plus.icon-white
+                    = t('admin.create_ad')
+                - if @ads && @ads.length > 0
+                  %table.table.table-striped.table-bordered.bootstrap-datatable.datatable.responsive
+                    %thead
+                      %tr
+                        %th= t('admin.title')
+                        %th= t('admin.ad.giving_accepting_title')
+                        %th= t('admin.items')
+                        %th= t('admin.location_name').capitalize
+                        %th= t('admin.expiration_date')
+                        %th= t('admin.actions')
+                    %tbody
+                      - @ads.each do |ad|
+                        %tr
+                          %td.vert-align= ad.title
+                          %td.vert-align= ad.is_giving ? t('admin.ad.giving_away') : t('admin.ad.accepting')
+                          %td.vert-align= ad.item_list
+                          %td.vert-align
+                            %a{:href => "/user/locations/#{ad.location.id}/edit"}= ad.location.location_full_name
+                          - if ad.expire_date.to_s != '2100-01-01'
+                            %td.vert-align= ad.expire_date
+                          - else
+                            %td.vert-align N/A
+                          %td.center
+                            %a.btn.btn-info{:href => "/user/ads/#{ad.id}/edit"}
+                              %i.glyphicon.glyphicon-pencil
+                              = t('admin.edit_delete')
+                - else
+                  %p= t('ad.no_ad_created_yet')
+            / Ads tab pane end
+            / Location tab pane
+            #locations.tab-pane
+              .box-content
+                %p.left
+                  %a.btn.btn-success{:href => "/user/locations/new"}
+                    %i.glyphicon.glyphicon-plus.icon-white
+                    = t('admin.add_location')
+                - if @locations && @locations.length > 0
+                  %table.table.table-striped.table-bordered.bootstrap-datatable.datatable.responsive
+                    %thead
+                      %tr
+                        %th= t('admin.name')
+                        %th= t('admin.exact_area')
+                        %th= t('admin.address')
+                        %th= t('admin.ads')
+                        %th= t('admin.actions')
+                    %tbody
+                      - @locations.each do |location|
+                        %tr
+                          %td.vert-align= location.location_full_name
+                          %td.vert-align= location.is_area ? t('admin.location.area') : t('admin.location.exact_address')
+                          %td.vert-align= location.location_type_address
+                          %td
+                            - if location.ads.length == 0
+                              %i= t('admin.location.no_ad_tied')
+                            - else
+                              %ul
+                                - location.ads.each do |ad|
+                                  %li= ad.title
+                          %td.center
+                            %a.btn.btn-info{:href => "/user/locations/#{location.id}/edit"}
+                              %i.glyphicon.glyphicon-pencil
+                              = t('admin.edit_delete')
+                - else
+                  %p= t('ad.no_location_yet')
+            / Location tab pane end
+          / Tab panes end
+    / content ends
+  / /#content.span10
+/ /row

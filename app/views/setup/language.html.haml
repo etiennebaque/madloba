@@ -1,0 +1,20 @@
+.container
+  .row
+    .col-lg-12
+      %fieldset
+        .setup-padding
+           
+        .col-lg-6
+          .setup-padding
+            %p= t('setup.choose_language')
+          = form_tag '/setup/language/process', { class: 'form-horizontal' } do
+            %fieldset
+              / Language drop-down box
+              .form-group.setup-padding
+                .col-lg-6
+                  = select_tag 'language', options_for_select(available_languages, @current_language), class: 'form-control'
+              / OK button
+              .form-group
+                .col-lg-8
+                  = submit_tag('OK', class: 'btn btn-success pull-right')
+#push

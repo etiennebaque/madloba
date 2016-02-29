@@ -1,0 +1,6 @@
+/ Item drop-down box and "Create a new item" button, in create/edit ad page
+.nested-fields.ad-item-fields{:style => "padding-bottom: 10px;"}
+  .item_from_list{:style => "display: inline;"}
+    = f.select :item_id, options_from_collection_for_select(Item.where(id: f.object.item_id), 'id', 'name'), {}, {class: 'ad-item-select-list selectpicker selectpicker-items', data: {live_search: 'true'}}
+  = link_to_add_association t('ad.create_item'), f, :item, partial: 'shared/item_fields', class: 'btn btn-sm btn-info ad-create-item'
+  = link_to_remove_association '<i class="glyphicon glyphicon-remove" style="color: red;"></i>'.html_safe, f, class: 'vert-align'

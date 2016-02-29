@@ -1,0 +1,15 @@
+/ "Delete user" - modal window
+#myModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"data-dismiss" => "modal", :type => "button"} ×
+        %h3
+          = t('admin.users.delete')
+          ?
+      .modal-body
+        %p= t('admin.users.confirm_delete')
+        %p= t('admin.users.confirm_delete_2')
+      .modal-footer
+        %a.btn.btn-default{"data-dismiss" => "modal", :href => "#"}= t('home.cancel')
+        = link_to t('admin.users.delete_yes'), user_user_path(@user), method: :delete, class: 'btn btn-danger'

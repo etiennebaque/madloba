@@ -1,0 +1,20 @@
+.container
+  .row
+    .col-lg-12
+      %fieldset
+        .setup-padding
+          %h3= t('setup.welcome_madloba')
+        .col-lg-6
+          .setup-padding
+            %p
+              = t('setup.about_to_setup')
+              %br/
+              = t('setup.process_takes')
+          .setup-padding
+            %p
+              = t('setup.click_next')
+              %br/
+              = t('setup.back_language_html', here: (link_to t('ad.here'), setup_language_path))
+          .setup-padding
+            %a.btn.btn-success.pull-right{:href => "/setup/general"}= t('setup.next')
+#push

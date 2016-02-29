@@ -11,7 +11,7 @@
  *= require_self
  *= require ajax-bootstrap-select
  *= require bootstrap-select.min
- *= require bootstrap-spacelab.min.css.erb
+ *= require bootstrap-spacelab.css.erb
  *= require charisma-app
  *= require chosen.min
  *= require colorbox

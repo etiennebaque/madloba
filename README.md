@@ -1,6 +1,6 @@
 # Madloba
 
-[![Release Version](https://img.shields.io/github/release/etiennebaque/madloba.svg)](https://github.com/etiennebaque/madloba/releases) [![Build Status](https://travis-ci.org/etiennebaque/madloba.svg?branch=master)](https://travis-ci.org/etiennebaque/madloba)
+[![Build Status](https://travis-ci.org/etiennebaque/madloba.svg?branch=master)](https://travis-ci.org/etiennebaque/madloba)
 
 Madloba (beta) is a free, open-source solution that connects people who have things to exchange.
 

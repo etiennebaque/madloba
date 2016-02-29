@@ -1,0 +1,105 @@
+.row
+  #content.middle-col.col-xs-12.col-md-10
+    / content starts
+    .row
+      .box.col-md-12
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            %h2
+              %i.glyphicon.glyphicon-wrench
+              = t('admin.general_settings_menu')
+          / Success/Error flash messages
+          - if flash[:setting_success] && flash[:setting_success] == 0
+            .box-content.alerts
+              .alert.alert-danger
+                %button.close{"data-dismiss" => "alert", :type => "button"} ×
+                = t('admin.general_settings.error_message')
+          - if flash[:setting_success] && flash[:setting_success] == 1
+            .box-content.alerts
+              .alert.alert-success
+                %button.close{"data-dismiss" => "alert", :type => "button"} ×
+                = t('admin.general_settings.success_message')
+          .box-content
+            = form_tag '/user/generalsettings/update', html: { id: 'generalSettingFormId' } do
+              / Website name
+              .form-group
+                = label_tag 'app_name', t('admin.general_settings.name')+':', class:'control-label'
+                .form-inline
+                  = text_field_tag 'app_name', @settings['app_name'], class: 'form-control'
+              / Website description
+              .form-group
+                = label_tag 'description', t('admin.general_settings.description')+':', class:'control-label'
+                .form-inline
+                  = text_area_tag 'description', @settings['description'], {class: 'form-control textarea_count', size: '35x8', maxlength: 500}
+                %span.remaining_characters= @description_remaining
+                remaining charaters.
+              / Contact e-mail address
+              .form-group
+                = label_tag 'contact_email', t('admin.general_settings.contact_email')+':', class:'control-label'
+                .form-inline
+                  = email_field_tag 'contact_email', @settings['contact_email'], class: 'form-control', size: 35
+              %hr/
+              %h4= t('admin.ad_settings')
+              / Ad settings: Max. number of days before ad expiration
+              .form-group
+                = label_tag 'ad_max_expire', t('admin.general_settings.max_ad_expire')+':', class:'control-label'
+                .form-inline
+                  = number_field_tag 'ad_max_expire', @settings['ad_max_expire'], class: 'form-control', maxlength: '4', min: 0, max: 1000, |
+                    :data => {:content => t('admin.general_settings.max_ad_expire_help'), :placement => 'right',                            |
+                    :toggle => 'popover', :trigger => 'hover focus'}                                                                        |
+              %hr/
+              %h4= t('admin.useful_links')
+              .form-group
+                %i= t('admin.general_settings.link_help')
+              / Link 1
+              .form-group
+                = label_tag 'link_one', t('admin.general_settings.link_one')+':', class:'control-label'
+                .form-inline
+                  = text_field_tag 'link_one_label', @settings['link_one_label'], class: 'form-control', placeholder: 'Label'
+                   
+                  \#{text_field_tag 'link_one_url', @settings['link_one_url'], class: 'form-control', placeholder: 'URL'}
+              / Link 2
+              .form-group
+                = label_tag 'link_two', t('admin.general_settings.link_two')+':', class:'control-label'
+                .form-inline
+                  = text_field_tag 'link_two_label', @settings['link_two_label'], class: 'form-control', placeholder: 'Label'
+                   
+                  \#{text_field_tag 'link_two_url', @settings['link_two_url'], class: 'form-control', placeholder: 'URL'}
+              / Link 3
+              .form-group
+                = label_tag 'link_three', t('admin.general_settings.link_three')+':', class:'control-label'
+                .form-inline
+                  = text_field_tag 'link_three_label', @settings['link_three_label'], class: 'form-control', placeholder: 'Label'
+                   
+                  \#{text_field_tag 'link_three_url', @settings['link_three_url'], class: 'form-control', placeholder: 'URL'}
+              / Link 4
+              .form-group
+                = label_tag 'link_four', t('admin.general_settings.link_four')+':', class:'control-label'
+                .form-inline
+                  = text_field_tag 'link_four_label', @settings['link_four_label'], class: 'form-control', placeholder: 'Label'
+                   
+                  \#{text_field_tag 'link_four_url', @settings['link_four_url'], class: 'form-control', placeholder: 'URL'}
+              %hr/
+              %h4= t('admin.social_media')
+              / Facebook page URL
+              .form-group
+                = label_tag 'facebook', t('admin.general_settings.facebook')+':', class:'control-label'
+                .form-inline
+                  = text_field_tag 'facebook', @settings['facebook'], class: 'form-control'
+              / Twitter handle
+              .form-group
+                = label_tag 'twitter', t('admin.general_settings.twitter')+':', class:'control-label'
+                .form-inline
+                  @#{text_field_tag 'twitter', @settings['twitter'], class: 'form-control'}
+              / Pinterest url
+              .form-group
+                = label_tag 'pinterest', t('admin.general_settings.pinterest')+':', class:'control-label'
+                .form-inline
+                  = text_field_tag 'pinterest', @settings['pinterest'], class: 'form-control'
+              %hr/
+              / Submit button and cancel link
+              = render 'shared/submit_section'
+      / /span
+    / content ends
+  / /#content.span10
+/ /fluid-row

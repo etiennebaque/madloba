@@ -210,7 +210,7 @@ class User::AdminPanelController < ApplicationController
     @map_settings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
 
     # Adding this flag to add leaflet draw tool to the map, on the "Area settings" page.
-    # Drawing tool added in initLeafletMap(), in custom-leaflet.js
+    # Drawing tool added in initLeafletMap(), in custom-leaflet.coffee
     @map_settings['page'] = 'areasettings'
 
     districts = District.all.select(:id, :name, :bounds)

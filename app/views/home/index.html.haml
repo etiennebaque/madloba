@@ -1,0 +1,163 @@
+- content_for :head do
+  / Includes the main Leaflet CSS and JS files, as well as Mapbox files
+  = render 'shared/map_scripts_before_body', include_all_scripts: false
+  / Specific Leaflet files (plugins) to be loaded for this page
+  = stylesheet_link_tag 'leaflet.awesome-markers'
+  = stylesheet_link_tag 'leaflet-sidebar'
+  = stylesheet_link_tag 'MarkerCluster'
+  = stylesheet_link_tag 'MarkerCluster.Default'
+  = stylesheet_link_tag 'font-awesome.min'
+  :css
+    #map {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100% !important;
+        height: 100% !important;
+    }
+#main.container-fluid.clear-top
+  .row
+    / Leaflet sidebar section, with guided navigation - start
+    #sidebar.semi-transparent.hide
+      / Sidebar - 'Create ad' section
+      .list-group
+        .list-group-item.smaller-no-border-no-background
+          %a.btn.btn-success.no-color{:href => "/ads/new"}
+            %i.fa.fa-plus
+            = t('home.create_new_ad')
+      / Sidebar - Refinements section
+      - if (@categories && @categories.select{|cat| cat.is_refinement(params)}.length > 0) || @location_search_refinement_to_display || user_search_action
+        .list-group
+          - if @location_search_refinement_to_display
+            %h4= t('home.your_searched_location')
+            %a.list-group-item.smaller-no-border-no-background{:href => "/"}
+              %span= params[:loc]
+              %i.glyphicon.glyphicon-remove.align-cross{:style => "float: right"}
+          - if user_search_action
+            / "You're searching for: / You're giving away:" refinement
+            %h4= user_search_action
+            %a.list-group-item.smaller-no-border-no-background{:href => "/"}
+              %span= params[:item].capitalize
+              %i.glyphicon.glyphicon-remove.align-cross{:style => "float: right"}
+      / List of selected categories
+      #refinementsId
+        - if @categories.select{|cat| cat.is_refinement(params)}.length > 0
+          %h4= t('home.refinements')
+        - @categories.each do |category|
+          - if category.is_refinement(params)
+            %a.list-group-item.smaller-no-border-no-background.guided-nav-category{:href => "#{category.refinement_url(params)}"}
+              %label{:style => "width: 15px;"}
+                %i{:class => "fa #{category.icon}", :style => "color: #{category.marker_color_hexacode};"}
+              %span.guided-nav-label= category.name
+              %i.glyphicon.glyphicon-remove.align-cross{:style => "float: right"}
+      / Sidebar - list of Categories
+      .list-group
+        - if @categories.length > 0
+          - if @categories.length > 1
+            / No point in showing only one category
+            %h4= t('home.title_guided_nav')
+            #available_categories
+              - @categories.each do |category|
+                - if !category.is_refinement(params)
+                  %a.list-group-item.smaller-no-border-no-background.guided-nav-category{:href => "#", :id => "#{category.id}"}
+                    %label{:style => "width: 15px;"}
+                      %i{:class => "fa #{category.icon}", :style => "color: #{category.marker_color_hexacode};"}
+                    %span.guided-nav-label= category.name
+          - if (@locations_postal && @locations_postal.length > 0) || (@locations_district && @locations_district.length > 0)
+            %hr/
+            .checkbox
+              %label
+                = check_box_tag 'show_area_id', 'ok', true
+                = t('home.show_ads_districts')
+        - else
+          .list-group
+            .list-group-item.smaller-no-border-no-background
+              %p= t('home.no_ad')
+              %p= t('home.create_an_ad_now_html', create_new_ad: (link_to t('home.create_new_ad'), new_ad_url) )
+      / Sidebar - note with some explanation, for demo only
+      - if is_demo
+        %hr/
+        .list-group
+          %i= t('home.demo_sidebar_note_html', admin_panel: link_to(t('home.admin_panel'), '/user/managerecords#categories'))
+    / Leaflet sidebar section, with guided navigation - end
+    / Map section
+    .col-xs-12.no-left-right-border
+      #home-map-canvas-wrapper
+        #map
+  / Row with 3 columns, above the footer
+  #upper-footer-id.row.upper-footer
+    - if @links.nil? || @links.length == 0
+      / If there is no link to display, we span the description section over 2 columns
+      .col-lg-8
+        %h2= t('home.about_website', website_name: site_name)
+        %span
+          - @website_description_paragraph.each do |paragraph|
+            %p= paragraph
+          %p= link_to "More about #{site_name}...", about_path
+    - else
+      .col-lg-4
+        %h2= t('home.about_website', website_name: site_name)
+        %span
+          - @website_description_paragraph.each do |paragraph|
+            %p= paragraph
+          %p= link_to "More about #{site_name}...", about_path
+      .col-lg-4
+        %h2= t('home.links')
+        %span
+          %ul
+            - @links.each do |link|
+              - if link && link[:label] && link[:label] != ''
+                %li
+                  %a{:href => "#{link[:url]}"}= link[:label]
+    .col-lg-4
+      %h2= t('home.contact_us')
+      %span
+        - if @contact_email && @contact_email != ''
+          %p= t('home.send_us_message_html', email: (link_to @contact_email, "mailto:#{@contact_email}") )
+        - if @social_medias.length > 0
+          %p
+            - @social_medias.each do |media|
+              = link_to image_tag("#{media['name']}.png", size: '40x40'), media['url'], target: '_blank'
+                
+#push
+/ Modal popup that shows several ads promoting the same item, in a specific district/area
+#adsModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "basicModal", :role => "dialog", :tabindex => "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h4#adsModalTitle.modal-title
+      #ads-modal-body-id.modal-body
+      .modal-footer
+        %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"}= t('home.close')
+/
+  This div is to check whether or not the user has AdBlock on in their browser.
+  If they do, it will affect the website's ability to work well (test carried out in general.coffee)
+#ad-block{:style => "position: absolute; opacity: 1; top: 0; left: 0;"} adblock
+/ Loading JS scripts
+- content_for :scripts do
+  /
+    Includes all the Javascript related to map rendering, to be loaded after page
+    (Leaflet, MapQuest, and script that creates the actual map)
+  = render 'shared/map_scripts_after_body', include_all_scripts: false
+  / Leaflet plug-ins and library used on the home page
+  = javascript_include_tag 'leaflet-sidebar', 'leaflet-function-button'
+  = javascript_include_tag 'leaflet.markercluster', 'bouncemarker'
+  / Javascript function calls, related specifically to the home page
+  :javascript
+    // specific script to render map markers and initialize the sidebar.
+    var locations_exact = #{raw @locations_exact.to_json}
+
+    var locations_postal = #{raw @locations_postal.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})};
+    var locations_district = #{raw @locations_district.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})};
+
+    var area_geocodes = #{raw @area_geocodes.to_json};
+    var marker_colors = #{raw MARKER_COLORS.to_json};
+
+    // Put all markers and areas on the home page map
+    putLocationMarkers(locations_exact, locations_postal, locations_district, area_geocodes, marker_colors);
+
+    // Setup the guided navigation sidebar
+    initializeSideBar();
+
+    // Initialize the Web socket object
+    #{render 'shared/initialize_websocket.js'}

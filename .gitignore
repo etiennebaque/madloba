@@ -28,3 +28,4 @@
 /config/deploy/staging.rb
 
 .env
+tags
