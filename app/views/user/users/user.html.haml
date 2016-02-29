@@ -1,17 +1,15 @@
 .row
   #content.middle-col.col-xs-12.col-md-10
     / content starts
-    %div
-      %ul.breadcrumb
-        - if @is_managing_user
+    - if @is_managing_user
+      %div
+        %ul.breadcrumb
           %li
             %a{:href => "/user/manageusers/"}= t('admin.profile.title_manage_users')
           - if @is_adding
             %li= t('admin.profile.new_user')
           - else
             %li= t('admin.profile.update_profile')
-        - else
-          %li= t('admin.profile.title')
     .row
       .box.col-md-12
         .box-inner
