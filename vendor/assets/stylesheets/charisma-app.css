@@ -322,8 +322,8 @@ div.center, p.center, img.center {
 .navbar-brand {
     font-family: 'Lato', cursive, Arial, serif;
     letter-spacing: 2px;
-    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
-    font-size: 17px;
+    /*text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);*/
+    font-size: 15px;
 }
 
 .navbar-brand img {
@@ -535,9 +535,9 @@ ul.github-buttons li {
     .navbar-brand {
         font-family: 'Lato', cursive, Arial, serif;
         letter-spacing: 2px;
-        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
         width: 70%;
-        font-size: 14px;
+        font-size: 15px;
+        margin-top: 4px;
     }
 
     .nav-sm {

@@ -1,0 +1,18 @@
+%div{class: "navbar navbar-fixed-top navbar-default nav-margin-bottom admin-link-bar", role: "navigation"}
+  #navbarCollapse.navbar-collapse.collapse.navbar-responsive-collapse.navbar-collapse-admin
+    %ul.nav.navbar-nav.admin_link
+      %li= link_to t('admin.dashboard'), user_index_path
+      - if current_user.admin?
+        %li= link_to t('admin.manage_records'), user_managerecords_path
+        %li= link_to t('admin.left_menu.manage_users'), user_manageusers_path
+        %li.dropdown
+          %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+            = t('admin.settings_menu')
+            %b.caret
+          %ul.dropdown-menu
+            %li= link_to t('admin.general_settings_menu'), user_generalsettings_path
+            %li= link_to t('admin.left_menu.map_settings'), user_mapsettings_path
+            %li= link_to t('admin.left_menu.area_settings'), user_areasettings_path
+      %li= link_to t('admin.manage_your_ads'), user_manageads_path
+      %li= link_to t('admin.left_menu.manage_profile'), user_manageprofile_path
+

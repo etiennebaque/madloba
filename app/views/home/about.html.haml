@@ -1,0 +1,26 @@
+.container
+  .row
+    .col-lg-12
+      %div{:style => "padding-bottom: 30px"}
+        %h3= t('home.about_page', website_name: site_name)
+      .col-lg-12
+        / Website description paragraph - to be set in admin panel -> 'General Settings'
+        - if @website_description_paragraph
+          %div
+            - @website_description_paragraph.each do |paragraph|
+              %p= paragraph
+          %hr/
+        / General description
+        %div
+          %p
+            = t('home.about_description_1_html', website_name: site_name, madloba_link: link_to('Madloba', 'http://madloba.org', target: '_blank'))
+          %p
+            = t('home.about_description_2_html', madloba_link: link_to('Madloba', 'http://madloba.org', target: '_blank'))
+          %p
+            = t('home.about_description_3')
+        / Contact e-mail address
+        - if @contact_email
+          %hr/
+          %div
+            %p= t('home.about_send_message_html', email: (link_to @contact_email, "mailto:#{@contact_email}"))
+#push

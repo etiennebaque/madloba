@@ -1,0 +1,126 @@
+.row
+  #content.middle-col.col-xs-12.col-md-10
+    / content starts
+    - if @is_managing_user
+      %div
+        %ul.breadcrumb
+          %li
+            %a{:href => "/user/manageusers/"}= t('admin.profile.title_manage_users')
+          - if @is_adding
+            %li= t('admin.profile.new_user')
+          - else
+            %li= t('admin.profile.update_profile')
+    .row
+      .box.col-md-12
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            - if @is_managing_user
+              - if @is_adding
+                %h2
+                  %i.glyphicon.glyphicon-user
+                  = t('admin.profile.new_user')
+              - else
+                %h2
+                  %i.glyphicon.glyphicon-user
+                  = t('admin.profile.update_profile')
+            - else
+              %h2
+                %i.glyphicon.glyphicon-user
+                = t('admin.profile.title')
+          - if @user && @user.errors.any?
+            .alert.alert-danger
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              %strong
+                = t('admin.users.error_occurred', errors: pluralize(@user.errors.count, t('home.error.one'), t('home.error.more')))
+                \:
+              %ul
+                - @user.errors.full_messages.each do |msg|
+                  %li= msg
+          - if flash[:user]
+            .alert.alert-success
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              - if current_user.admin?
+                = t('admin.users.update_success', email: flash[:user])
+                %a{:href => "/user/manageusers"}= t('admin.back_to_users')
+              - else
+                = t('admin.users.myprofile_update_success')
+          - if flash[:new_user]
+            .alert.alert-success
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              = t('admin.users.created_success', email: flash[:new_user])
+              %a{:href => "/user/manageusers"}= t('admin.back_to_users')
+          .box-content
+            = form_for [:user, @user], html: { role: 'form' } do |f|
+              - if current_user.admin? && !@is_adding && current_user != @user
+                .form-group
+                  - if is_demo
+                    / User deletion not allowed on demo
+                    = link_to t('admin.users.delete_not_possible'), '#', class: 'btn btn-danger disabled'
+                  - else
+                    = link_to t('admin.users.delete'), '#', class: 'btn btn-danger btn-delete-right btn-setting'
+              - if @is_adding
+                .form-group
+                  = t('registration.all_mandatory')
+              / E-mail
+              .form-group
+                = f.label :email, t('home.e-mail')+':', class:'control-label'
+                .form-inline
+                  = f.email_field :email, class: 'form-control', size: '40'
+              / 'Make admin' checkbox
+              - if current_user.admin? && current_user != @user
+                .form-group
+                  .checkbox
+                    %label
+                      = f.check_box :role, {}, 'admin', 'user'
+                      = t('admin.profile.make_user_admin')
+              / First name
+              .form-group
+                = f.label :first_name, t('admin.profile.first_name')+':', class:'control-label'
+                .form-inline
+                  = f.text_field :first_name, class: 'form-control'
+              / Last name
+              .form-group
+                = f.label :last_name, t('admin.profile.last_name')+':', class:'control-label'
+                .form-inline
+                  = f.text_field :last_name, class: 'form-control'
+              / Username
+              .form-group
+                = f.label :username, t('admin.profile.username')+':', class:'control-label'
+                .form-inline
+                  = f.text_field :username, class: 'form-control'
+              / Current password
+              - if !@is_adding && !current_user.admin?
+                .form-group
+                  = f.label :current_password, t('admin.profile.current_password')+':', class:'control-label'
+                  %i= t('registration.need_current')
+                  %br/
+                  .form-inline
+                    = f.password_field :current_password, class: 'form-control', autocomplete: 'off'
+              %hr/
+              / New password
+              .form-group
+                = f.label :password, t('admin.profile.new_password')+':', class:'control-label'
+                - if !@is_adding
+                  %i= t('registration.leave_blank')
+                  %br/
+                .form-inline
+                  = f.password_field :password, class: 'form-control', autocomplete: 'off'
+              / Confirm password
+              .form-group
+                = f.label :password_confirmation, t('admin.profile.confirm_password')+':', class: 'control-label'
+                .form-inline
+                  = f.password_field :password_confirmation, class: 'form-control', autocomplete: 'off'
+              - if is_demo && action_name == 'edit'
+                / User creation and update is not allowed on Madloba demo website
+                .form-actions
+                  = link_to t('admin.save_not_possible'), '#', class: 'btn btn-success disabled'
+                  = link_to t('home.cancel'), '/user/index', class: 'btn'
+              - else
+                / Submit button and cancel link
+                = render 'shared/submit_section'
+    / content ends
+  / /#content.span10
+/ /row
+- if !@is_adding
+  / "Delete user" - modal window
+  = render 'delete_modal_window'

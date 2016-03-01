@@ -1,0 +1,73 @@
+/ left menu starts
+.col-sm-2.col-lg-2
+  .sidebar-nav
+    .nav-canvas
+      .nav-sm.nav.nav-stacked
+      %ul.nav.nav-pills.nav-stacked.main-menu
+        - if current_user.admin?
+          %li.nav-header= t('admin.left_menu.admin_task')
+          %li
+            %a.ajax-link{:href => "/user/index"}
+              %i.glyphicon.glyphicon-home
+              %span
+                = t('admin.dashboard')
+          %li
+            %a.ajax-link{:href => "/user/managerecords"}
+              %i.glyphicon.glyphicon-align-justify
+              %span
+                = t('admin.manage_records')
+          %li
+            %a.ajax-link{:href => "/user/manageusers"}
+              %i.glyphicon.glyphicon-user
+              %span
+                = t('admin.left_menu.manage_users')
+          %li
+            %a.ajax-link{:href => "/user/generalsettings"}
+              %i.glyphicon.glyphicon-wrench
+              %span
+                = t('admin.general_settings_menu')
+          %li
+            %a.ajax-link{:href => "/user/mapsettings"}
+              %i.glyphicon.glyphicon-map-marker
+              %span
+                = t('admin.left_menu.map_settings')
+          %li
+            %a.ajax-link{:href => "/user/areasettings"}
+              %i.glyphicon.glyphicon-globe
+              %span
+                = t('admin.left_menu.area_settings')
+          %li.nav-header.hidden-md= t('admin.left_menu.user_tasks')
+          %li
+            %a.ajax-link{:href => "/user/manageads"}
+              %i.glyphicon.glyphicon-pencil
+              %span
+                = t('admin.manage_your_ads')
+          %li
+            %a.ajax-link{:href => "/user/manageprofile"}
+              %i.glyphicon.glyphicon-user
+              %span
+                = t('admin.left_menu.manage_profile')
+        - else
+          %li
+            %a.ajax-link{:href => "/user/index"}
+              %i.glyphicon.glyphicon-home
+              %span
+                = t('admin.dashboard')
+          %li
+            %a.ajax-link{:href => "/user/manageads"}
+              %i.glyphicon.glyphicon-pencil
+              %span
+                = t('admin.manage_your_ads')
+          %li
+            %a.ajax-link{:href => "/user/manageprofile"}
+              %i.glyphicon.glyphicon-user
+              %span
+                = t('admin.left_menu.manage_profile')
+/ left menu ends
+%noscript
+  .alert.alert-block.col-md-12
+    %h4.alert-heading Warning!
+    %p
+      You need to have
+      %a{:href => "http://en.wikipedia.org/wiki/JavaScript", :target => "_blank"} JavaScript
+      enabled to use this site.

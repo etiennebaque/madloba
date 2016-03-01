@@ -315,6 +315,7 @@ fr:
     mandatory: (* champs obligatoires)
     general_settings_menu: Paramètres du site
     save: Enregistrer
+    settings_menu: Paramètres
     nothing_to_do: Super, rien à faire ! :)
     no_mapbox_account_html: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapbox_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
     no_mapquest_account_html: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapquest_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.

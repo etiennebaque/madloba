@@ -1,0 +1,90 @@
+- content_for :head do
+  / Includes the main Leaflet CSS and JS files, as well as Mapbox files
+  = render 'shared/map_scripts_before_body', include_all_scripts: false
+  / Specific map scripts loaded for this page
+  = stylesheet_link_tag 'leaflet.awesome-markers'
+  = stylesheet_link_tag 'font-awesome.min'
+  = stylesheet_link_tag 'MarkerCluster'
+  = stylesheet_link_tag 'MarkerCluster.Default'
+  :css
+    #map {
+        width: 100%;
+        height: 300px;
+        margin: 0;
+    }
+.container
+  - if flash[:new_ad]
+    #new_ad_success_message.alert.alert-dismissable.alert-success{:style => "margin-top: 21px;"}
+      %button.close{"data-dismiss" => "alert", :type => "button"} ×
+      = t('ad.create_success', title: flash[:new_ad])
+    - if flash[:ad_expire]
+      .alert.alert-dismissable.alert-info
+        %button.close{"data-dismiss" => "alert", :type => "button"} ×
+        = flash[:ad_expire]
+  - if flash[:success]
+    .alert.alert-dismissable.alert-success{:style => "margin-top: 21px;"}
+      %button.close{"data-dismiss" => "alert", :type => "button"} ×
+      = flash[:success]
+  - if flash[:error_message]
+    .alert.alert-dismissable.alert-danger{:style => "margin-top: 21px;"}
+      %button.close{"data-dismiss" => "alert", :type => "button"} ×
+      = flash[:error_message]
+  .row
+    .col-lg-12
+      %h3= @ad.title
+      - if flash[:new_ad] && !@map_settings['is_area']
+        /
+          Ad id added just when the ad has just been created. This is to be read by ad_websocket.coffee,
+          when it is an exact location
+        = hidden_field_tag 'new_ad_id', @ad.id
+      .ad-title
+        - if !is_owning(@ad)
+          / Ad publisher
+          %span
+            %strong= t('ad.published')
+            = publisher_name(@ad)
+        - else
+          - if @your_ad_has_expired
+            %strong= t('ad.you_own')
+            %br/
+            %span.ad-expiring= t('ad.has_expired', expire_date: @ad.expire_date)
+          - else
+            %strong= t('ad.you_own')
+            = t('ad.you_manage')
+            = succeed "." do
+              %a{:href => "/user/ads/#{@ad.id}/edit"}= t('ad.here')
+  .row
+    .col-lg-12.ad-paragraph
+      / Right-hand side: Map
+      #map
+  - if @ad.image?
+    .row
+      .col-lg-7.col-sm-12.ad-paragraph
+        / Partial showing info about the ad
+        = render 'shared/ad_summary'
+      / Ad image
+      .col-lg-5.col-sm-12.ad-image
+        - if is_image_available(@ad)
+          = image_tag @ad.image_url(:normal).to_s, width: '100%'
+        - else
+          .ad-processing
+            = t('ad.show_ad_image_processed')
+            %br/
+            = t('ad.will_show_up')
+  - else
+    .row
+      .col-lg-12.ad-paragraph
+        / Partial showing info about the ad
+        = render 'shared/ad_summary'
+  .row
+    / 'Send message' text area
+    = render 'shared/ads_send_message', ad: @ad
+#push
+/ Rendering JS scripts
+- content_for :scripts do
+  = javascript_include_tag 'leaflet.markercluster'
+  / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and scripts that creates the actual map
+  = render 'shared/map_scripts_after_body', include_all_scripts: false
+  :javascript
+    // Initialize the Web socket object
+    #{render 'shared/initialize_websocket.js'}

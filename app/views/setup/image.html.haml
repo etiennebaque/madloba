@@ -1,0 +1,41 @@
+.container
+  .row
+    .col-lg-12
+      = form_tag '/setup/image/process', { class: 'form-horizontal' } do
+        %fieldset
+          .setup-padding
+            %h3= t('setup.image_storage')
+          .col-lg-10
+            .form-group
+              .col-lg-8
+                %p
+                  = t('setup.image_description')
+                  %br/
+                  - if is_on_heroku
+                    = t('setup.image_s3_only_html', s3_link: link_to('Amazon S3', 'http://aws.amazon.com/s3/', target: '_blank'))
+                    \.
+                  - else
+                    = t('setup.image_server_or_s3_html', s3_link: link_to('Amazon S3', 'http://aws.amazon.com/s3/', target: '_blank'))
+                    \.
+                  = t('setup.image_no_storage')
+                %p= t('setup.image_select_option')
+            / Storage choices
+            .form-group
+              = label_tag 'image_storage', t('setup.image_strategy'), class: 'col-lg-2 control-label'
+              .col-lg-6
+                - @storage_choices.each_with_index do |choice, index|
+                  .radio
+                    %label
+                      = radio_button_tag 'storage_choice', choice[0], (index == 0 || @current_image_choice == choice[0])
+                      = choice[1]
+            %hr.col-lg-8/
+            .form-group
+              .col-lg-8
+                = t('setup.amazon_s3_warning_html', install_guide: link_to(t('setup.install_guide'), 'https://github.com/etiennebaque/madloba/wiki/Madloba-installation-guide', target: '_blank'))
+            / Next button / Back link
+            .form-group
+              .col-lg-2
+              .col-lg-6.pull-right
+                %a.btn.btn-link{:href => "/setup/map"}= t('setup.back')
+                = submit_tag(t('setup.next'), class: 'btn btn-success')
+#push

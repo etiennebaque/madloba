@@ -1,0 +1,20 @@
+- if is_in_admin_panel
+  / Footer of the admin panel
+  %hr/
+  %footer.row
+    %p.col-md-4.col-sm-4.col-xs-12
+      = t('home.footer_theme_html', charisma: (link_to 'Charisma', 'http://usman.it/free-responsive-admin-template', target: '_blank'))
+      \-
+      \#{t('home.footer_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank'))}
+- else
+  / Footer of the regular pages
+  %footer#footer
+    .container-fluid.lower-footer
+      - if is_in_setup_mode
+        / Footer for setup pages
+        %p.muted.footer-message= t('home.footer_new_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank'))
+      - else
+        / Footer for regular pages
+        %p.muted.footer-message
+          = site_name
+          \- #{t('home.footer_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank'))}
