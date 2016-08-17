@@ -80,6 +80,9 @@ gem 'simple_captcha2', require: 'simple_captcha'
 # Gem to enable use of websockets.
 gem 'faye-websocket'
 
+# Get inputs from madloba:install task
+gem 'highline'
+
 group :development, :test do
 
   # Mailcatcher
@@ -98,6 +101,8 @@ group :development, :test do
   gem 'factory_girl_rails'
 
   gem 'awesome_print'
+  gem 'spring'
+  gem 'spring-commands-rspec'
 
   gem 'haml-rails'
 end

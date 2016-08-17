@@ -56,6 +56,8 @@ module Madloba
     require Rails.root.join('lib/custom_public_exceptions')
     config.exceptions_app = CustomPublicExceptions.new(Rails.public_path)
 
+    config.autoload_paths << Rails.root.join('lib')
+
     # Adding Ad websocket class as a middleware
     config.middleware.use AdSocket
     config.middleware.delete Rack::Lock
