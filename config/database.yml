@@ -1,37 +1,24 @@
-development:
+default: &default
   # Set up your local environment variables in /config/app_environment_variables.rb
   # (you can rename the sample file provided in the same folder)
   adapter: postgresql
   encoding: unicode
+  host: db
+  port: 5432
   pool: 5
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
   database: <%= ENV["MADLOBA_DEV_DATABASE"] %>
   username: <%= ENV["MADLOBA_DEV_USERNAME"] %>
   password: <%= ENV["MADLOBA_DEV_PASSWORD"] %>
 
-test:
-  adapter: postgresql
-  encoding: unicode
-  pool: 5
-  database: <%= ENV["MADLOBA_TEST_DATABASE"] %>
-  username: <%= ENV["MADLOBA_TEST_USERNAME"] %>
-  password: <%= ENV["MADLOBA_TEST_PASSWORD"] %>
+development:
+  <<: *default
+  database: your_dev_db_name #CHANGE ME
 
-staging:
-  # Deployment on a staging server: please indicate your database credentials here
-  # (database name, username and password)
-  adapter: postgresql
-  encoding: unicode
-  pool: 5
-  database:
-  username:
-  password:
+test:
+  <<: *default
+  database: your_test_db_name #CHANGE ME
 
 production:
-  # Deployment on a production server: please indicate your database credentials here
-  # (database name, username and password)
-  adapter: postgresql
-  encoding: unicode
-  pool: 5
-  database:
-  username:
-  password:
+  <<: *default
+  database: your_production_db_name #CHANGE ME
