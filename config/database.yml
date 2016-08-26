@@ -4,16 +4,14 @@ default: &default
   adapter: postgresql
   encoding: unicode
   host: db
-  port: 5432
   pool: 5
-  password: <%= ENV['POSTGRES_PASSWORD'] %>
-  database: <%= ENV["MADLOBA_DEV_DATABASE"] %>
-  username: <%= ENV["MADLOBA_DEV_USERNAME"] %>
-  password: <%= ENV["MADLOBA_DEV_PASSWORD"] %>
+  password:
+  username: postgres
+
 
 development:
   <<: *default
-  database: your_dev_db_name #CHANGE ME
+  database: <%= ENV["MADLOBA_DEV_DATABASE"] %> #CHANGE ME
 
 test:
   <<: *default
@@ -21,4 +19,4 @@ test:
 
 production:
   <<: *default
-  database: your_production_db_name #CHANGE ME
+  database: madloba #CHANGE ME
