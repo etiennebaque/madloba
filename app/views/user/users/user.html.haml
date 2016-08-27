@@ -53,7 +53,7 @@
             = form_for [:user, @user], html: { role: 'form' } do |f|
               - if current_user.admin? && !@is_adding && current_user != @user
                 .form-group
-                  - if is_demo
+                  - if demo?
                     / User deletion not allowed on demo
                     = link_to t('admin.users.delete_not_possible'), '#', class: 'btn btn-danger disabled'
                   - else
@@ -110,7 +110,7 @@
                 = f.label :password_confirmation, t('admin.profile.confirm_password')+':', class: 'control-label'
                 .form-inline
                   = f.password_field :password_confirmation, class: 'form-control', autocomplete: 'off'
-              - if is_demo && action_name == 'edit'
+              - if demo? && action_name == 'edit'
                 / User creation and update is not allowed on Madloba demo website
                 .form-actions
                   = link_to t('admin.save_not_possible'), '#', class: 'btn btn-success disabled'

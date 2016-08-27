@@ -20,7 +20,7 @@ module ApplicationHelper
   end
 
   # Checks if we're on the Madloba demo website
-  def is_demo
+  def demo?
     request.original_url.include? ('demo.madloba.org')
   end
 
@@ -64,8 +64,8 @@ module ApplicationHelper
   end
 
 
-  # Geocoding methods
-  # -----------------
+  # Helpers for map related pages
+  # -----------------------------
   def getGeocodesFromAddress(address)
     geocodes = nil
     response = getNominatimWebserviceResponse(address)

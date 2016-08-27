@@ -146,7 +146,7 @@ class User::AdminPanelController < ApplicationController
   # ----------------------------------
   def mapsettings
     authorize :admin, :mapsettings?
-    @form ||= MapSettingsForm.new
+    @form = MapSettingsForm.new
     # @map_settings = getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
     #
     # # More settings to get, in addition to the one we already get in getMapSettings.
@@ -171,7 +171,7 @@ class User::AdminPanelController < ApplicationController
     lat = params['hiddenLatId']
     lng = params['hiddenLngId']
 
-    if is_demo
+    if demo?
       # If this is the Madloba Demo, then we update only the chosen_map. The other parameters cannot be changed.
       setting_record = Setting.find_by_key(:chosen_map)
       setting_record.update_attribute(:value, params['chosen_map'])

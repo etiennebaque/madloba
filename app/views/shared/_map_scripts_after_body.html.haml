@@ -1,6 +1,6 @@
 / javascript_include_tag 'leaflet.js'
 - if include_all_scripts || @map_settings['chosen_map'] == 'mapquest'
-  %script{:src => "http://open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=#{@map_settings['mapquest_api_key']}", :type => "application/javascript"}
+  %script{src: MapTile.mapquest.js_script_url, type: 'application/javascript'}
     
 / Including Leaflet javascript files
 = javascript_include_tag 'leaflet.awesome-markers.js'
