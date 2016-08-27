@@ -32,11 +32,8 @@ gem 'jquery-rails'
 #gem 'jbuilder', '~> 2.3.1'
 
 gem 'haml'
-
-group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
-end
+gem 'seed-fu', '~> 2.3'
+gem 'simple_form'
 
 # Used for API calls
 gem 'httparty', '~> 0.13.1'
@@ -115,6 +112,11 @@ group :test do
   gem 'database_cleaner'
 end
 
+group :doc do
+  # bundle exec rake doc:rails generates the API under doc/api.
+  gem 'sdoc', require: false
+end
+
 # For Heroku deployments
 gem 'rails_12factor', group: :production
 gem 'unicorn'
@@ -122,12 +124,3 @@ gem 'unicorn'
 # Gems related to translation
 gem 'i18n-tasks', '~> 0.8.3'
 gem 'rails-i18n', '~> 4.0.0'
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]

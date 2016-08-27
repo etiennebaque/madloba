@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151114114337) do
+ActiveRecord::Schema.define(version: 20160826014717) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20151114114337) do
     t.string   "image",            limit: 255
     t.string   "anon_name",        limit: 255
     t.string   "anon_email",       limit: 255
-    t.jsonb    "marker_info"
+    t.jsonb    "marker_info",                  default: {}
   end
 
   add_index "ads", ["location_id"], name: "index_ads_on_location_id", using: :btree
@@ -108,6 +108,16 @@ ActiveRecord::Schema.define(version: 20151114114337) do
 
   add_index "locations", ["district_id"], name: "index_locations_on_district_id", using: :btree
   add_index "locations", ["user_id"], name: "index_locations_on_user_id", using: :btree
+
+  create_table "map_tiles", force: :cascade do |t|
+    t.string   "name"
+    t.string   "tile_url"
+    t.string   "attribution"
+    t.string   "api_key"
+    t.string   "map_name"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "settings", force: :cascade do |t|
     t.string   "key",        limit: 255

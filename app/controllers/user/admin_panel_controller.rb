@@ -146,23 +146,24 @@ class User::AdminPanelController < ApplicationController
   # ----------------------------------
   def mapsettings
     authorize :admin, :mapsettings?
-    @map_settings = getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
-
-    # More settings to get, in addition to the one we already get in getMapSettings.
-    settings = Setting.where(key: %w(city state country))
-    if settings
-      settings.each do |setting|
-        @map_settings[setting.key] = setting.value
-        # Updating cache value
-        if setting.key == 'city'
-          Rails.cache.write(CACHE_CITY_NAME, setting.value)
-        end
-      end
-    end
-
-    # Adding this element to the hash, in order to get the 'zoomend' event working,
-    # only for the map settings page (needed to define zoom level).
-    @map_settings['page'] = 'mapsettings'
+    @form ||= MapSettingsForm.new
+    # @map_settings = getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
+    #
+    # # More settings to get, in addition to the one we already get in getMapSettings.
+    # settings = Setting.where(key: %w(city state country))
+    # if settings
+    #   settings.each do |setting|
+    #     @map_settings[setting.key] = setting.value
+    #     # Updating cache value
+    #     if setting.key == 'city'
+    #       Rails.cache.write(CACHE_CITY_NAME, setting.value)
+    #     end
+    #   end
+    # end
+    #
+    # # Adding this element to the hash, in order to get the 'zoomend' event working,
+    # # only for the map settings page (needed to define zoom level).
+    # @map_settings['page'] = 'mapsettings'
 
   end
 
