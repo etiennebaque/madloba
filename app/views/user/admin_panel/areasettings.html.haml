@@ -51,12 +51,12 @@
                 .form-group
                   = label_tag 'postal_code_length', t('admin.map_settings.postal_code_field1')+':', class:'control-label'
                   .form-inline
-                    = number_field_tag 'postal_code_length', @map_settings['postal_code_length'], class: 'form-control', min: 1
+                    = number_field_tag 'postal_code_length', @map_settings[:postal_code_length], class: 'form-control', min: 1
                     %i= t('admin.map_settings.postal_code_help1')
                 .form-group
                   = label_tag 'area_length', t('admin.map_settings.postal_code_field2')+':', class:'control-label'
                   .form-inline
-                    = number_field_tag 'area_length', @map_settings['area_length'], class: 'form-control', min: 1
+                    = number_field_tag 'area_length', @map_settings[:area_length], class: 'form-control', min: 1
                     %i= t('admin.map_settings.postal_code_help2')
               / "Postal code" area section - end
               / "District" area section - start

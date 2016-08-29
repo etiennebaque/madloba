@@ -47,8 +47,8 @@
               = label_tag 'map-canvas-wrapper', "#{t('setup.map_description')}<br /><br />#{t('setup.map_description_2')}".html_safe, class:'col-lg-2 control-label'
               .col-lg-10
                 #map
-                = hidden_field_tag 'hiddenLatId', map_settings['lat'], class: 'latitude_hidden'
-                = hidden_field_tag 'hiddenLngId', map_settings['lng'], class: 'longitude_hidden'
+                = hidden_field_tag 'hiddenLatId', map_settings['latitude'], class: 'latitude_hidden'
+                = hidden_field_tag 'hiddenLngId', map_settings['longitude'], class: 'longitude_hidden'
             / Zoom level
             = hidden_field_tag 'zoom_level', map_settings['zoom_level']
             / Next button / Back link

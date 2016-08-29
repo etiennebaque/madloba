@@ -83,6 +83,18 @@ class Location < ActiveRecord::Base
     ['postal','district'].include? self.loc_type
   end
 
+  def district?
+    loc_type == 'district'
+  end
+
+  def postal?
+    loc_type == 'postal'
+  end
+
+  def exact?
+    loc_type == 'exact'
+  end
+
   def type
     self.loc_type=='exact'?'exact':'area'
   end
@@ -90,6 +102,23 @@ class Location < ActiveRecord::Base
   def area
     area_length = Setting.find_by_key(:area_length).value.to_i
     self.postal_code[0..area_length-1]
+  end
+
+  def marker_message
+    if exact?
+      full_name
+    elsif district?
+      district.name
+    elsif postal?
+      area_code_length = Setting.where(key: %w(area_length)).pluck(:value).first
+      "#{postal_code[0..area_code_length.to_i-1]} #{t('ad.area')}"
+    else
+      ''
+    end
+  end
+
+  def full_name
+    name.present? ? name : full_address
   end
 
   def full_address

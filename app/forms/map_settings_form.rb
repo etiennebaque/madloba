@@ -1,20 +1,16 @@
 class MapSettingsForm < ApplicationForm
+  include MapHelper
 
-  ATTRIBUTES = [:mapbox_api_key, :mapbox_map_name, :mapquest_api_key]
-  SETTINGS_ATTRIBUTES = [:chosen_map, :latitude, :longitude, :city, :state, :country, :zoom_level]
+  attr_accessor(*(MAP_SERVICE_ATTRIBUTES+SETTINGS_ATTRIBUTES))
 
-  attr_accessor(*(ATTRIBUTES+SETTINGS_ATTRIBUTES))
-
-  def initialize
-    @osm = MapTile.osm
-    @mapbox = MapTile.mapbox
-    @mapquest = MapTile.mapquest
-    @settings = Setting.all
-
-    self.chosen_map = @settings.find_by_key('chosen_map')
-    %w(api_key map_name).each {|key| self.send("mapbox_#{key}=", @mapbox.send(key))}
-    self.mapquest_api_key = @mapquest.api_key
-    SETTINGS_ATTRIBUTES.each {|key| self.send("#{key}=", @settings.find_by_key(key).try(:value))}
+  def initialize(map_info = nil)
+    if map_info.present?
+      MAP_SERVICE_ATTRIBUTES+SETTINGS_ATTRIBUTES.each do |key|
+        self.send("#{key}=", map.info.send(key))
+      end
+    else
+      init_map_settings
+    end
   end
 
   def options_for_maptype_select

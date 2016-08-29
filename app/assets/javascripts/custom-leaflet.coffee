@@ -14,23 +14,30 @@ global.leaf =
   districts: null
   searched_address: ''
   init: (map_settings) ->
-    leaf.map = L.map('map', scrollWheelZoom: false)
+    if map_settings['chosen_map'] == 'mapbox'
+      L.mapbox.accessToken = map_settings['mapbox_api_key']
+      leaf.map = L.mapbox.map('map', map_settings['mapbox_map_name'], scrollWheelZoom: false)
+    else
+      leaf.map = L.map('map', scrollWheelZoom: false)
+
     leaf.map.on 'click', ->
       if leaf.map.scrollWheelZoom.enabled()
         leaf.map.scrollWheelZoom.disable()
       else
         leaf.map.scrollWheelZoom.enable()
       return
-    leaf.my_lat = map_settings['lat']
-    leaf.my_lng = map_settings['lng']
+    leaf.my_lat = map_settings['latitude']
+    leaf.my_lng = map_settings['longitude']
     leaf.searched_address = map_settings['searched_address']
-    if map_settings['chosen_map'] == 'mapbox' or map_settings['chosen_map'] == 'osm'
-      # Mapbox or OSM
+    if map_settings['chosen_map'] == 'osm'
       leaf.map_tiles = L.tileLayer(map_settings['tiles_url'], attribution: map_settings['attribution'])
-    else
+      leaf.map_tiles.addTo leaf.map
+    else if map_settings['chosen_map'] == 'mapquest'
       # Mapquest
       leaf.map_tiles = MQ.mapLayer()
-    leaf.map_tiles.addTo leaf.map
+      leaf.map_tiles.addTo leaf.map
+
+
     leaf.map.setView [
       leaf.my_lat
       leaf.my_lng
@@ -402,7 +409,7 @@ global.initLeafletMap = (map_settings) ->
   # Initialization of the map and markers.
   leaf.init map_settings
   markers.init map_settings
-  if map_settings['hasCenterMarker'] == true
+  if map_settings['has_center_marker'] == true
     if map_settings['ad_show']
       # Showing markers, district area or postal code area on the ad details page (ads#show)
       leaf.show_features_on_ad_details_page map_settings

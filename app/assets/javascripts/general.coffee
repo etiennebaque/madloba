@@ -447,17 +447,6 @@ events =
     return
 
   init_admin_pages: ->
-    # Map settings admin page: refreshing map, when "Map type" field is modified.
-    $('#maptype').change ->
-      selected_map = ''
-      $('select option:selected').each ->
-        selected_map = $(this).val()
-        return
-      map_settings['chosen_map'] = selected_map
-      map_settings['tiles_url'] = map_settings[selected_map]['tiles_url']
-      map_settings['attribution'] = map_settings[selected_map]['attribution']
-      initLeafletMap map_settings
-      return
     # Area settings admin page: show either the "postal code" or the "district" section.
     # "Create ad" form: show appropriate section when entering an exact address
     $('.area_postal_code').click ->

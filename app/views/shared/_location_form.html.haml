@@ -59,8 +59,8 @@
         = form.text_field :postal_code, class: 'form-control location_postal_code', maxlength:'8'
         %span#postal_code_notification
     / Geocode (latitude and longitude hidden fields)
-    = form.hidden_field :latitude, value: @map_settings['lat'], class: 'latitude_hidden'
-    = form.hidden_field :longitude, value: @map_settings['lng'], class: 'longitude_hidden'
+    = form.hidden_field :latitude, value: @map_settings[:latitude], class: 'latitude_hidden'
+    = form.hidden_field :longitude, value: @map_settings[:longitude], class: 'longitude_hidden'
   .exact_location_section
     / "Define geocodes & find address on the map" button
     .form-group
@@ -78,8 +78,8 @@
         = form.select :district_id, options_for_select(districts, form.object.district_id), {}, {class: 'form-control help-message district_dropdown', |
           :data => {:content => t('location.district_help'), :placement => 'top',                                                                      |
           :toggle => 'popover', :trigger => 'hover focus'}}                                                                                            |
-        = form.hidden_field :latitude, value: @map_settings['lat'], class: 'latitude_hidden'
-        = form.hidden_field :longitude, value: @map_settings['lng'], class: 'longitude_hidden'
+        = form.hidden_field :latitude, value: @map_settings[:latitude], class: 'latitude_hidden'
+        = form.hidden_field :longitude, value: @map_settings[:longitude], class: 'longitude_hidden'
   / Canvas for the map
   .form-group
     = form.label 'map-canvas-wrapper', t('location.map'), class: label_class

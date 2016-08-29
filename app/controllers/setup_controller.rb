@@ -90,8 +90,8 @@ class SetupController < ApplicationController
   # Methods for 'Map settings' page
   # -----------------------------------------
   def show_map
-    getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
-    @map_settings['page'] = 'mapsettings'
+    @map_settings = MapInfo.new.to_hash
+    @map_settings[:page] = 'mapsettings'
     @current_step = 3
 
     render 'setup/map'

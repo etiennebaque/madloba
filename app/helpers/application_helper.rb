@@ -117,8 +117,8 @@ module ApplicationHelper
   private
 
   # Info to display several markers on ads#show (1 marker per item)
-  def getMapSettingsWithSeveralItems(location, hasCenterMarker, clickableMapMarker, items)
-    getMapSettings(location, hasCenterMarker, clickableMapMarker)
+  def getMapSettingsWithSeveralItems(location, has_center_marker, clickableMapMarker, items)
+    c = MapInfo.new(lcoation: location, center_marker: has_center_marker, clickable: clickableMapMarker)
 
     # Specific info related to ads#show
     @map_settings['ad_show'] = []
@@ -163,90 +163,6 @@ module ApplicationHelper
 
     return result
     end
-
-  # ---------------------------------------------------
-  # Global function to get settings to initialize a map
-  # ---------------------------------------------------
-  def getMapSettings(location, hasCenterMarker, clickableMapMarker)
-    settings = Setting.where(key: %w(map_box_api_key map_center_geocode mapquest_api_key
-                                     chosen_map area_type postal_code_length area_length zoom_level))
-    @map_settings = {}
-
-    if settings
-      settings.each do |setting|
-        @map_settings[setting.key] = setting.value
-      end
-    end
-
-    # Used for text popup, tied to a map marker
-    @map_settings['marker_message'] = ''
-
-    # Default geocode and zoom values
-    @map_settings['lat'] = 0
-    @map_settings['lng'] = 0
-
-    if location
-      # Getting map-related information from an existing location.
-      location_type = location.loc_type
-      @map_settings['loc_type'] = location_type
-      @map_settings['is_area'] = ['postal','district'].include? location_type
-
-      if location_type == 'district'
-        # Information for district type locations
-        @map_settings['marker_message'] = location.district.name
-        @map_settings['bounds'] = location.district.bounds
-      else
-        # Postal code and exact address type locations (geocode based location)
-        @map_settings['lat'] = location.latitude
-        @map_settings['lng'] = location.longitude
-        if location_type == 'postal'
-          area_code_length = Setting.where(key: %w(area_length)).pluck(:value).first
-          @map_settings['marker_message'] = "#{location.postal_code[0..area_code_length.to_i-1]} #{t('ad.area')}"
-        else
-          if location.name && location.name != ''
-            @map_settings['marker_message'] = location.name
-          else
-            @map_settings['marker_message'] = location.full_address
-          end
-        end
-      end
-    else
-      # We're not dealing with any particular location.
-      # We're getting map default center then, to be used in this case.
-      if @map_settings['map_center_geocode'] && @map_settings['map_center_geocode'] != ''
-        # Using defined default map center
-        default_geocodes = @map_settings['map_center_geocode']
-        geocodes_split = default_geocodes.split(',')
-        @map_settings['lat'] = geocodes_split[0]
-        @map_settings['lng'] = geocodes_split[1]
-      end
-    end
-
-    # Setting up page-related map details (eg. should an event be triggered when map clicked? if so, what type of marker should appear?)
-    @map_settings['hasCenterMarker'] = hasCenterMarker
-    @map_settings['clickableMapMarker'] = clickableMapMarker
-
-    # Initializing specific settings for OSM and Mapbox maps.
-    api_keys = {}
-    api_keys['mapbox'] = @map_settings['map_box_api_key']
-    api_keys['mapquest'] = @map_settings['mapquest_api_key']
-    @map_settings.merge!(get_map_tiles_attribution(api_keys))
-
-    @map_settings['tiles_url'] = @map_settings[@map_settings['chosen_map']]['tiles_url']
-    @map_settings['attribution'] = @map_settings[@map_settings['chosen_map']]['attribution']
-
-    # We also need to get the different defined areas (as opposed to exact locations)
-    areas = Location.where(:loc_type => ['postal,district']).select(:id, :name, :postal_code, :latitude, :longitude)
-    @map_settings['areas'] = areas.as_json
-
-    # Other type of information needed for the map, like district area color, marker image path...
-    @map_settings['default_marker_icon'] = ActionController::Base.helpers.asset_path('images/marker-icon.png')
-    @map_settings['new_marker_icon'] = ActionController::Base.helpers.asset_path('images/marker-icon-red.png')
-    @map_settings['district_color'] = DISTRICT_COLOR
-    @map_settings['postal_code_area_color'] = POSTAL_CODE_AREA_COLOR
-
-    return @map_settings
-  end
 
   # Define whether the app is deployed on Heroku or not.
   def is_on_heroku

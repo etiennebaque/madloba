@@ -1,5 +1,5 @@
 / javascript_include_tag 'leaflet.js'
-- if include_all_scripts || @map_settings['chosen_map'] == 'mapquest'
+- if include_all_scripts || @map_settings[:chosen_map] == 'mapquest'
   %script{src: MapTile.mapquest.js_script_url, type: 'application/javascript'}
     
 / Including Leaflet javascript files
@@ -8,7 +8,6 @@
 :javascript
   // Initializing a bunch of variables used over the map-related scripts.
   var map_settings = #{raw @map_settings.to_json};
-
 
   // Call to the JS function that will initialize the map.
   if ($("#map").length > 0){

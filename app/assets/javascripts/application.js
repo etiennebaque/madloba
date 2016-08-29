@@ -17,7 +17,10 @@
 
 //= require typeahead.bundle.min
 //= require custom-leaflet
+
 //= require general
+//= require map_settings
+
 //= require bootstrap-select.min
 //= require ajax-bootstrap-select.min
 //= require bootstrap.min
