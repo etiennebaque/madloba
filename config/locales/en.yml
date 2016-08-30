@@ -440,9 +440,10 @@ en:
     map_settings:
       title: Map
       type: "Map type:"
-      mapbox: "Mapbox API key:"
+      mapbox_html: "Mapbox API key (%{account}):"
+      account: "account"
       mapbox_link: Go to your Mapbox account...
-      mapquest: "MapQuest API key:"
+      mapquest_html: "MapQuest API key (%{account}):"
       mapquest_link: Go to your MapQuest developer account...
       map_api_keys: Map API keys
       key_first: After entering a new API key, save the changes first. Then, in the drop down box above, select the type of the map related to that new key.

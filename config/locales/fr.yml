@@ -454,9 +454,10 @@ fr:
     map_settings:
       title: Paramètres de la carte
       type: "Type de carte :"
-      mapbox: "Clé API Mapbox :"
+      mapbox_html: "Clé API Mapbox %{account} :"
       mapbox_link: Aller sur votre compte Mapbox...
-      mapquest: "Clé API MapQuest :"
+      mapquest_html: "Clé API MapQuest %{account} :"
+      account: "Votre compte"
       mapquest_link: Aller sur votre compte développeur MapQuest...
       map_api_keys: Clés API carte
       key_first: After avoir entré une nouvelle clé API, enregistrez vos changements tout d'abord. Ensuite, choisissez le type de carte désiré dans la liste ci-dessus.

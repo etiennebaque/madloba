@@ -34,7 +34,7 @@ class MapInfo
     result = {}
     attrs = MAP_SERVICE_ATTRIBUTES+SETTINGS_ATTRIBUTES+MAP_INFO_ATTRIBUTES
     attrs.each do |attr|
-      result[attr] = self.send(attr)
+      result[attr] = self.send(attr).present? ? self.send(attr) : ''
     end
     result
   end

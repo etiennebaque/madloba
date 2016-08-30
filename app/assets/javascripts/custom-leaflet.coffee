@@ -124,7 +124,7 @@ global.leaf =
     return
 
   setup_custom_behaviors: (map_settings) ->
-    if map_settings['clickableMapMarker'] != 'none'
+    if map_settings['clickable_map_marker'] != 'none'
       # Getting latitude and longitude of clicked point on the map.
       leaf.map.on 'click', onMapClickLocation
     if map_settings['page'] == 'mapsettings'
@@ -305,7 +305,7 @@ global.markers =
         0
         -34
       ])
-    markers.location_marker_type = map_settings['clickableMapMarker']
+    markers.location_marker_type = map_settings['clickable_map_marker']
     markers.district_color = map_settings['district_color']
     markers.postal_code_area_color = map_settings['postal_code_area_color']
     return
@@ -690,12 +690,11 @@ global.initializeSideBar = (sidebar) ->
 onMapClickLocation = (e) ->
   new_geocodes = onMapClick(e)
   geocodeSplit = new_geocodes.split(',')
-  # latitude_text and longitude_text are classes used on area settings page.
-  $('.latitude_text').text geocodeSplit[0]
-  $('.longitude_text').text geocodeSplit[1]
+
+  # latitude and longitude are classes used on area settings page.
   $('#new_dynamic_button_add').removeClass 'disabled'
-  $('.latitude_hidden').val geocodeSplit[0]
-  $('.longitude_hidden').val geocodeSplit[1]
+  $('.latitude').val geocodeSplit[0]
+  $('.longitude').val geocodeSplit[1]
   return
 
 ###*

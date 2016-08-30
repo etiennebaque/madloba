@@ -43,17 +43,15 @@
 
               %i= t('admin.map_settings.key_first')
 
-              = f.input :mapbox_api_key, class: 'form-control', label: t('admin.map_settings.mapbox'), value: demo? ? '********' : f.object.mapbox_api_key
-              %a{:href => "https://www.mapbox.com/account/apps", :target => "_blank"}= t('admin.map_settings.mapbox_link')
+              = f.input :mapbox_api_key, input_html: {style:'width: 400px'}, label: t('admin.map_settings.mapbox_html', account: link_to(t('admin.map_settings.account'), 'https://www.mapbox.com/studio/account/tokens/', target: '_blank')), value: demo? ? '********' : f.object.mapbox_api_key
 
-              = f.input :mapquest_api_key, label: t('admin.map_settings.mapquest'), value: demo? ? '********' : f.object.mapquest_api_key
-              %a{:href => "http://developer.mapquest.com/web/info/account/app-keys", :target => "_blank"}= t('admin.map_settings.mapquest_link')
+              = f.input :mapquest_api_key, input_html: {style:'width: 400px'}, label: t('admin.map_settings.mapquest_html', account: link_to(t('admin.map_settings.account'), 'http://developer.mapquest.com/web/info/account/app-keys/', target: '_blank')), value: demo? ? '********' : f.object.mapquest_api_key
 
               %hr
               %h4= t('admin.map_settings.location_info')
 
-              = f.hidden_field :latitude
-              = f.hidden_field :longitude
+              = f.hidden_field :latitude, class: 'latitude'
+              = f.hidden_field :longitude, class: 'longitude'
 
 
               .form-inline
@@ -64,11 +62,13 @@
 
               = f.hidden_field :zoom_level
 
-              = f.label t('admin.map_settings.map_description')
-              = f.label t('admin.map_settings.map_description_zoom')
+
+              %i= t('admin.map_settings.map_description')
+              %br
+              %i= t('admin.map_settings.map_description_zoom')
 
               .form-inline
-                #map-canvas-wrapper
+                #map-canvas-wrapper{style: 'margin: 20px 0px'}
                   #map
 
               = render 'shared/submit_section'
@@ -79,12 +79,11 @@
 / /fluid-row
 
 / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
-= render 'shared/map_scripts_after_body', include_all_scripts: true
-:javascript
+- content_for :scripts do
+  = render 'shared/map_scripts_after_body', include_all_scripts: true
+  :javascript
 
-  "Let's use an Ajax call to get map data!!!!" ----
-
-  // Giving this page the possibility to find geocodes.
-  find_geocodes();
+    // Giving this page the possibility to find geocodes.
+    find_geocodes();
 
 
