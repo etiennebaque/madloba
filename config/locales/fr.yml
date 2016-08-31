@@ -455,6 +455,7 @@ fr:
       title: Paramètres de la carte
       type: "Type de carte :"
       mapbox_html: "Clé API Mapbox %{account} :"
+      mapbox_map_name: "Carte Mapbox"
       mapbox_link: Aller sur votre compte Mapbox...
       mapquest_html: "Clé API MapQuest %{account} :"
       account: "Votre compte"

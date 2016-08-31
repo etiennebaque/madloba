@@ -3,10 +3,14 @@ class MapSettingsForm < ApplicationForm
 
   attr_accessor(*(MAP_SERVICE_ATTRIBUTES+SETTINGS_ATTRIBUTES))
 
-  def initialize(map_info = nil)
-    if map_info.present?
+  def initialize(params = nil, map_info = nil)
+    if params.present?
+      params.each do |k,v|
+        self.send("#{k}=", v)
+      end
+    elsif map_info.present?
       MAP_SERVICE_ATTRIBUTES+SETTINGS_ATTRIBUTES.each do |key|
-        self.send("#{key}=", map.info.send(key))
+        self.send("#{key}=", map_info.send(key))
       end
     else
       init_map_settings
@@ -22,7 +26,39 @@ class MapSettingsForm < ApplicationForm
   end
 
   def submit
+    if demo?
+      # If this is the Madloba Demo, then we update only the chosen_map. The other parameters cannot be changed.
+      setting_record = Setting.find_by_key(:chosen_map)
+      setting_record.update_attribute(:value, chosen_map)
+      I18n.t('admin.map_settings.update_success_demo')
+    else
+      # All the information on the map settings page that can be saved
+      MapTile.mapbox.update_attributes(api_key: mapbox_api_key, map_name: mapbox_map_name)
+      MapTile.mapquest.update_attributes(api_key: mapquest_api_key)
 
+      SETTINGS_ATTRIBUTES.each do |key|
+        setting_record = Setting.find_by_key(key)
+        if setting_record
+          setting_record.update_attributes(value: self.send(key))
+        end
+      end
+
+      if fallback_on_osm?
+        # if there is no longer any Mapbox or MapQuest keys, we get back to the default map type, osm.
+        Setting.find_by_key('chosen_map').update_attributes(value: 'open_street_map')
+      end
+      I18n.t('admin.map_settings.update_success')
+    end
+  end
+
+  private
+
+  def demo?
+    self.demo == 'true'
+  end
+
+  def fallback_on_osm?
+    (mapbox_api_key.empty? && chosen_map == 'mapbox') || (mapquest_api_key.empty? && chosen_map == 'map_quest')
   end
 
 end

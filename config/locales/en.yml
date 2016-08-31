@@ -441,6 +441,7 @@ en:
       title: Map
       type: "Map type:"
       mapbox_html: "Mapbox API key (%{account}):"
+      mapbox_map_name: "Mapbox map name"
       account: "account"
       mapbox_link: Go to your Mapbox account...
       mapquest_html: "MapQuest API key (%{account}):"

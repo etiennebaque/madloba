@@ -152,35 +152,8 @@ class User::AdminPanelController < ApplicationController
   end
 
   def update_mapsettings
-    lat = params['hiddenLatId']
-    lng = params['hiddenLngId']
-
-    if demo?
-      # If this is the Madloba Demo, then we update only the chosen_map. The other parameters cannot be changed.
-      setting_record = Setting.find_by_key(:chosen_map)
-      setting_record.update_attribute(:value, params['chosen_map'])
-      flash[:setting_success] = t('admin.map_settings.update_success_demo')
-
-    elsif ((lat.is_a? Numeric) && (lng.is_a? Numeric)) || lat != nil || lng != nil
-      # All the information on the map settings page that can be saved
-      map_settings_keys.each do |key|
-        setting_record = Setting.find_by_key(key)
-        if setting_record
-          if key == 'map_center_geocode'
-            setting_record.update_attributes(value: "#{lat},#{lng}")
-          else
-            setting_record.update_attributes(value: params[key])
-          end
-        end
-      end
-
-      if ((params['map_box_api_key'] == '' && params['chosen_map'] == 'mapbox') || (params['mapquest_api_key'] == '' && params['chosen_map'] == 'mapquest'))
-        # if there is no longer any Mapbox or MapQuest keys, we get back to the default map type, osm.
-        setting_record = Setting.find_by_key('chosen_map')
-        setting_record.update_attributes(value: 'osm')
-      end
-      flash[:setting_success] = t('admin.map_settings.update_success')
-    end
+    @form = MapSettingsForm.new(params[:map_settings_form])
+    flash[:success] = @form.submit
 
     redirect_to user_mapsettings_path
   end
