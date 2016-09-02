@@ -2,14 +2,6 @@
   / Includes the main Leaflet CSS and JS files, as well as Mapbox files
   = render 'shared/map_scripts_before_body', include_all_scripts: false
 
-  :css
-    #map {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        width: 100% !important;
-        height: 100% !important;
-    }
 #main.container-fluid.clear-top
   .row
     / Leaflet sidebar section, with guided navigation - start
@@ -75,10 +67,12 @@
         .list-group
           %i= t('home.demo_sidebar_note_html', admin_panel: link_to(t('home.admin_panel'), '/user/managerecords#categories'))
     / Leaflet sidebar section, with guided navigation - end
+
     / Map section
     .col-xs-12.no-left-right-border
       #home-map-canvas-wrapper
-        #map
+        #map.home
+
   / Row with 3 columns, above the footer
   #upper-footer-id.row.upper-footer
     - if @links.nil? || @links.length == 0

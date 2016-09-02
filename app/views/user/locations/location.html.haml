@@ -1,13 +1,8 @@
 - content_for :head do
-  %script{:src => "https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js"}
-  %link{:href => "https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css", :rel => "stylesheet"}/
-  :css
-    html,body,#map {
-        width: 100%;
-        height: 350px;
-        margin: 0;
-    }
-.row
+  / Includes the main Leaflet CSS and JS files, as well as Mapbox files
+  = render 'shared/map_scripts_before_body', include_all_scripts: false
+
+.row#location
   #content.middle-col.col-xs-12.col-md-10
     / content starts
     %div
@@ -99,14 +94,12 @@
                     %strong= t('admin.location.no_ad')
               / Submit button and cancel link
               = render 'shared/submit_section'
-      / /span
-    / /row
-    / content ends
-  / /#content.span10
-/ /fluid-row
+
+
 - if !is_adding_new
   / "Delete location" modal window
   = render 'delete_modal_window'
+
 #myErrorModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myErrorModalLabel", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content
@@ -118,6 +111,7 @@
         %p= t('location.not_found_descr2')
       .modal-footer
         %a.btn.btn-default{"data-dismiss" => "modal", :href => "#"} OK
+
 - content_for :scripts do
   / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that create the actual map
   = render 'shared/map_scripts_after_body', include_all_scripts: false

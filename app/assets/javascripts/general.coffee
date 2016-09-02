@@ -46,26 +46,27 @@ bindTypeaheadToItemSelect = (object) ->
 # as well as all the events tied to its relevant elements.
 ###
 
-init_location_form = (districts_bounds, map) ->
+resetLocationForm = (districts_bounds, map) ->
   if $('#map').length > 0
     $('.location_type_exact').click ->
       removes_location_layers()
       show_exact_address_section()
-      return
+
     if $('.location_type_exact').is(':checked')
       show_exact_address_section()
     $('.location_type_postal_code').click ->
       removes_location_layers()
       show_postal_code_section()
-      return
+
     if $('.location_type_postal_code').is(':checked')
       show_postal_code_section()
     $('.location_type_district').click ->
       removes_location_layers()
       show_district_section()
-      return
+
     if $('.location_type_district').is(':checked')
       show_district_section()
+
   # "Postal code" functionality: display a help message to inform about what the area will be named,
   # after the postal code is entered.
   $('.location_postal_code').focusout ->
@@ -87,13 +88,12 @@ init_location_form = (districts_bounds, map) ->
   $('.help-message').popover()
   # Initializing onclick event on "Locate me on the map" button, when looking for location on map, based on user input.
   find_geocodes()
-  return
+
 
 ###*
 # Event triggered when click on "Locate me on the map" button,
 # on the "Create ad" form, and on the Ad edit form.
 ###
-
 global.find_geocodes = ->
   $('#findGeocodeAddressMapBtnId').button().click ->
     location_type = 'exact'
@@ -135,15 +135,12 @@ global.find_geocodes = ->
           $('#myErrorModal').modal 'show'
         # Displaying notification about location found.
         $('#findGeocodeLoaderId').html '<i>' + data.address_found + '</i>'
-        return
-    return
-  return
+
 
 ###*
 # On the location form, removes layers representing a previously clicked exact location, postal code area,
 # or selected district.
 ###
-
 removes_location_layers = ->
   if markers.new_marker != null
     leaf.map.removeLayer markers.new_marker
@@ -151,7 +148,6 @@ removes_location_layers = ->
     leaf.map.removeLayer markers.selected_area
   if markers.postal_code_circle != null
     leaf.map.removeLayer markers.postal_code_circle
-  return
 
 ###*
 # Function used in the location form - show appropriate section when entering an exact address
@@ -207,7 +203,6 @@ show_district_section = ->
     leaf.show_single_district name, bounds
     return
   ).change()
-  return
 
 ###*
 # Before submitting the form with the location, we first do an Ajax call to see
@@ -317,7 +312,7 @@ events =
         $('#locations_from_list').hide()
         $('#location a.add_fields').hide()
         initLeafletMap map_settings
-        init_location_form districts_bounds, leaf.map
+        resetLocationForm districts_bounds, leaf.map
         return
       ), 20
     # Create an ad: adding the location form dynamically, via Cocoon
@@ -327,7 +322,7 @@ events =
       $('#new_location_form a.add_fields').hide()
       # Call to the JS functions that will initialize the new location form and the map.
       initLeafletMap map_settings
-      init_location_form districts_bounds, leaf.map
+      resetLocationForm districts_bounds, leaf.map
       return
     $('#new_location_form').bind 'cocoon:after-remove', ->
       $('#locations_from_list').show()
@@ -342,7 +337,7 @@ events =
       image_path = $('#ad_image').val()
       if image_path != null and image_path != ''
         $('#upload-in-progress').html '<i>' + gon.vars['new_image_uploading'] + '</i>'
-      return
+
     # Events to be triggered when item field added or removed, in the ad form.
     $('#items a.add_fields').data('association-insertion-position', 'before').data 'association-insertion-node', 'this'
     $('#items').on 'cocoon:after-insert', ->
@@ -352,25 +347,22 @@ events =
       $('.ad-item-fields').on 'cocoon:after-insert', ->
         $(this).children('.item_from_list').remove()
         $(this).children('a.add_fields').hide()
-        return
-      return
+
     $('.ad-item-fields').bind 'cocoon:after-insert', (e) ->
       e.stopPropagation()
       $(this).find('.item_from_list').remove()
       $(this).find('a.add_fields').hide()
       $('.selectpicker').selectpicker 'refresh'
-      return
+
     # Function call to initialize the location form (Location edit form, all Ad forms).
     if typeof districts_bounds != 'undefined'
-      init_location_form districts_bounds, leaf.map
+      resetLocationForm districts_bounds, leaf.map
     return
 
   init_setup_pages: ->
     # Setup pages - event for modal window on Map page.
     $('#gmail_modal_link').click ->
       $('#gmail_modal').modal 'show'
-      return
-    return
 
   init_navigation_bar: ->
     # Navigation bar: press Enter to valid form.
@@ -378,17 +370,16 @@ events =
       if event.which == 13
         event.preventDefault()
         getLocationsPropositions()
-      return
+
     # Navigation bar: event tied to "up" arrow, to go back to the top of the page.
     $('#navbar-up-link').click ->
       $('html, body').animate { scrollTop: 0 }, 1000
-      return
+
     #Checks if we need to show the arrow up, in the navigation bar, on mobile devices.
     show_hide_up_arrow()
 
     $(window).on 'scroll', ->
       show_hide_up_arrow()
-      return
 
     # Navigation - Search form: Ajax call to get locations proposition, based on user input in this form.
     $('#btn-form-search').bind 'click', getLocationsPropositions
@@ -396,12 +387,11 @@ events =
     $('#about-nav-link').on 'click', ->
       if $('.navbar-toggle').css('display') != 'none'
         $('.navbar-toggle').click()
-      return
 
     # Home page: When clicking on about, scroll to the home page upper footer.
     $('#about-nav-link').click ->
       $('html, body').animate { scrollTop: $('#upper-footer-id').offset().top }, 2000
-      return
+
     # Popover when "Sign in / Register" link is clicked, in the navigation bar.
     $('#popover').popover
       html: true
@@ -431,7 +421,7 @@ events =
     # Offcanvas related scripts
     $('[data-toggle=offcanvas]').click ->
       $('.row-offcanvas').toggleClass 'active'
-      return
+
     # This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,
     # 'zoomToBoundsOnClick' would zoom in too much, and push the markers to the edge of the screen.
     # This event underneath fixes this behaviour, the markers are not pushed to the boundaries of the map anymore.
@@ -439,61 +429,60 @@ events =
       markers.group.on 'clusterclick', (a) ->
         bounds = a.layer.getBounds().pad(0.5)
         leaf.map.fitBounds bounds
-        return
+
     # This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel, in the home page, the page would scroll down.
     # When clicking on zoom in/zoom out, this will force to be at the top of the page
     $('#home-map-canvas-wrapper .leaflet-control-zoom-out, #home-map-canvas-wrapper .leaflet-control-zoom-in').click ->
       $('html, body').animate { scrollTop: 0 }, 0
-      return
-    return
 
   init_admin_pages: ->
     # Area settings admin page: show either the "postal code" or the "district" section.
     # "Create ad" form: show appropriate section when entering an exact address
     $('.area_postal_code').click ->
       $('#postal_code_section').toggle 0, ->
-      return
+
     if $('.area_postal_code').is(':checked')
       $('#postal_code_section').css 'display', 'block'
     # Area settings page: show appropriate section when choosing an area
     $('.area_district').click ->
       $('#district_section').toggle 0, ->
       initLeafletMap map_settings
-      return
+
     if $('.area_district').is(':checked')
       $('#district_section').css 'display', 'block'
       initLeafletMap map_settings
+
     # "Edit ad" form: create message when image needs to be uploaded.
     $('#ad-edit-form').submit ->
       image_path = $('#ad_image').val()
       if image_path != null and image_path != ''
         $('#upload-in-progress').html '<i>' + gon.vars['new_image_uploading'] + '</i>'
-      return
+
     # Character counter (class 'textarea_count'), for text area, in 'General settings'.
     $('.textarea_count').keyup ->
       maxlength = $(this).attr('maxlength')
       textlength = $(this).val().length
       $('.remaining_characters').html maxlength - textlength
-      return
+
     $('.textarea_count').keydown ->
       maxlength = $(this).attr('maxlength')
       textlength = $(this).val().length
       $('.remaining_characters').html maxlength - textlength
-      return
+
     # Category edit page: opening up the icon modal window.
     $('.btn-icon-modal').click ->
       $('#myModalIcon').modal 'show'
-      return
+
     # Onclick event triggered when Icon clicked in modal window, in Category edit page.
     $('.icon-for-category').click ->
       icon_key = $(this).attr('id')
       $('#myModalIcon').modal 'toggle'
       $('#category_icon').val icon_key
-      return
+
     # Manage record page: go to the right tab, if page loads with an anchor in url (like 'http://...#categories')
     if window.location.href.indexOf('managerecords') > -1 and window.location.hash
       $('#records-tabs a[href=' + window.location.hash + ']').tab 'show'
-    return
+
 
 ###*
 # Loading scripts here.
