@@ -1,4 +1,4 @@
-- if is_in_admin_panel
+- if admin_panel?
   / Footer of the admin panel
   %hr/
   %footer.row
@@ -10,7 +10,7 @@
   / Footer of the regular pages
   %footer#footer
     .container-fluid.lower-footer
-      - if is_in_setup_mode
+      - if setup_mode?
         / Footer for setup pages
         %p.muted.footer-message= t('home.footer_new_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank'))
       - else

@@ -1,28 +1,20 @@
-%div{:class => "#{is_in_admin_panel ? 'navbar' : 'navbar-inverse'} navbar-fixed-top navbar-default nav-margin-bottom", :role => "navigation"}
+%div{:class => "#{admin_panel? ? 'navbar' : 'navbar-inverse'} navbar-fixed-top navbar-default nav-margin-bottom", :role => "navigation"}
   .navbar-header
     %button.navbar-toggle{"data-target" => ".navbar-responsive-collapse", "data-toggle" => "collapse", :type => "button"}
       %span.icon-bar
       %span.icon-bar
       %span.icon-bar
-    - if is_in_setup_mode
-      = link_to "#{image_tag 'madloba_logo_50.png', class: 'madloba-img'} #{t('setup.madloba_setup')}".html_safe, setup_path, :class => 'navbar-brand'
-    - elsif is_in_admin_panel
-      = link_to "#{image_tag 'madloba_logo_green_40.png', class: 'madloba-img'} #{site_name}".html_safe, root_path, :class => 'navbar-brand'
-    - else
-      = link_to "#{image_tag 'madloba_logo_50.png', class: 'madloba-img'} #{site_name}".html_safe, root_path, :class => 'navbar-brand'
+    = link_to "#{image_tag madloba_logo_file_name, class: 'madloba-img'} #{navigation_madloba_title}".html_safe, navigation_madloba_icon_path, class: 'navbar-brand'
     / Up arrow: when clicked, screen scrolls automatically back up
     %span.navbar-arrow-up
       %a#navbar-up-link{:href => "#", :style => "display: none;"}
         %i.fa.fa-chevron-up
           
-  - if !is_in_setup_mode
+  - if !setup_mode?
     #navbarCollapse.navbar-collapse.collapse.navbar-responsive-collapse
       %ul.nav.navbar-nav
         / "About" link
-        - if current_page?(root_url) || current_page?('/search')
-          %li= link_to t('home.about'), '#', id: 'about-nav-link'
-        - else
-          %li= link_to t('home.about'), about_path, id: 'about-nav-link'
+        %li= link_to t('home.about'), about_path_to_use, id: 'about-nav-link'
         / Sign in/Register/User drop down menu - start
         - if user_signed_in?
           %li.dropdown
@@ -31,7 +23,7 @@
               = current_user.first_name
               %b.caret
             %ul.dropdown-menu
-              - if is_in_admin_panel
+              - if admin_panel?
                 %li= link_to t('home.page'), root_path
               - elsif current_user.user?
                 %li= link_to t('home.user_panel'), user_index_path
@@ -79,7 +71,7 @@
       / Search form - end
       
       / In admin panel, show admin actions in collapsed menu.
-      - if is_in_admin_panel
+      - if admin_panel?
         %ul.nav.navbar-nav
           %li.hidden-md.hidden-lg= link_to t('admin.dashboard'), user_index_path
           - if current_user.admin?

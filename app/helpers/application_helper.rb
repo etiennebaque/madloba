@@ -53,14 +53,30 @@ module ApplicationHelper
 
   # Defines whether or not the user is on the admin panel.
   # That will have an impact on the bootstrap class used for the navigation, for example
-  def is_in_admin_panel
+  def admin_panel?
     (request.original_url.include? ('/user')) && (current_user)
   end
 
   # Defines whether or not the user is going through the setup pages.
   # That will have an impact on the content of the navigation bar.
-  def is_in_setup_mode
+  def setup_mode?
     request.original_url.include? ('/setup')
+  end
+
+  def navigation_madloba_icon_path
+    setup_mode? ? setup_path : root_path
+  end
+
+  def madloba_logo_file_name
+    admin_panel? ? 'madloba_logo_green_40.png' : 'madloba_logo_50.png'
+  end
+
+  def navigation_madloba_title
+    setup_mode? ? I18n.t('setup.madloba_setup') : site_name
+  end
+
+  def about_path_to_use
+    (current_page?(root_url) || current_page?('/search')) ? '#' : about_path
   end
 
 
