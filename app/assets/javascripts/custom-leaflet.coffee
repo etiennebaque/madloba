@@ -13,6 +13,7 @@ global.leaf =
   drawn_items: null
   districts: null
   searched_address: ''
+
   init: (map_settings) ->
     if map_settings['chosen_map'] == 'mapbox'
       L.mapbox.accessToken = map_settings['mapbox_api_key']
@@ -29,10 +30,10 @@ global.leaf =
     leaf.my_lat = map_settings['latitude']
     leaf.my_lng = map_settings['longitude']
     leaf.searched_address = map_settings['searched_address']
-    if map_settings['chosen_map'] == 'osm'
+    if map_settings['chosen_map'] == 'open_street_map'
       leaf.map_tiles = L.tileLayer(map_settings['tiles_url'], attribution: map_settings['attribution'])
       leaf.map_tiles.addTo leaf.map
-    else if map_settings['chosen_map'] == 'mapquest'
+    else if map_settings['chosen_map'] == 'map_quest'
       # Mapquest
       leaf.map_tiles = MQ.mapLayer()
       leaf.map_tiles.addTo leaf.map
@@ -127,14 +128,6 @@ global.leaf =
     if map_settings['clickable_map_marker'] != 'none'
       # Getting latitude and longitude of clicked point on the map.
       leaf.map.on 'click', onMapClickLocation
-    if map_settings['page'] == 'mapsettings'
-      leaf.map.on 'zoomend', ->
-        $('#zoom_level').val leaf.map.getZoom()
-        return
-    # Adding specific events on the 'Area settings' page, needed when drawing and saving districts.
-    if map_settings['page'] == 'areasettings'
-      leaf.init_map_on_area_settings()
-    return
 
   show_single_district: (district_name, bounds) ->
     # Before adding the selected district, we need to remove all the currently displayed districts.
@@ -151,119 +144,7 @@ global.leaf =
       markers.selected_area = layer
       return
     latlng
-
-  init_map_on_area_settings: ->
-    leaf.drawn_items = L.featureGroup().addTo(leaf.map)
-    district_bounds = undefined
-    layer = undefined
-    # Adding drawing control panel to the map
-    leaf.map.addControl new (L.Control.Draw)(edit: featureGroup: leaf.drawn_items)
-    if leaf.districts != null
-      # Adding existing districts to the map
-      i = 0
-      while i < leaf.districts.length
-        # Adding the district id and name to the geoJson properties.
-        L.geoJson leaf.districts[i], onEachFeature: (feature, layer) ->
-          layer.bindPopup leaf.districts[i]['properties']['name']
-          layer.setStyle color: markers.district_color
-          leaf.drawn_items.addLayer layer
-          return
-        i++
-    # Event to activate 'Save district' button when district name not empty.
-    $('#map').on 'keyup', '.save_district_text', ->
-      if $('.save_district_text').val().length > 0
-        $('.save_district').removeClass 'disabled'
-      else
-        $('.save_district').addClass 'disabled'
-      return
-    # Events triggered once the polygon (district) has been drawn.
-    leaf.map.on 'draw:created', (e) ->
-      layer = e.layer
-      leaf.drawn_items.addLayer layer
-      # Text field and "Save district" button to show up in the popup.
-      popup = L.popup(closeButton: false).setContent('<input type=\'text\' class=\'save_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\'><button type=\'button\' class=\'btn btn-xs btn-success save_district disabled\'>Save district</button>')
-      layer.bindPopup popup
-      district_bounds = layer.toGeoJSON()
-      layer.openPopup layer.getBounds().getCenter()
-      return
-    # Necessity to unbind click on map, to make the "on click" event right below work.
-    $('#map').unbind 'click'
-    # Saving district drawing (bounds) and name.
-    $('#map').on 'click', '.save_district', ->
-      district_name = $('.save_district_text').val()
-      $.post '/user/areasettings/save_district', {
-        bounds: JSON.stringify(district_bounds)
-        name: district_name
-      }, (data) ->
-        $('#district_notification_message').html '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
-        if data.status == 'ok'
-          leaf.drawn_items.removeLayer layer
-          district_bounds['properties']['id'] = data.id
-          district_bounds['properties']['name'] = district_name
-          L.geoJson district_bounds, onEachFeature: (feature, layer) ->
-            layer.bindPopup district_name
-            layer.setStyle color: data.district_color
-            leaf.drawn_items.addLayer layer
-            return
-        return
-      return
-    # Update district name into the GeoJSON properties hash.
-    $('#map').on 'click', '.update_district', ->
-      new_district_name = $('.update_district_text').val()
-      district_id = $('.update_district_text').attr('id')
-      $.post '/user/areasettings/update_district_name', {
-        id: district_id
-        name: new_district_name
-      }, (data) ->
-        $('#district_notification_message').html '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
-        return
-      # Going through the districts and checking which one to update.
-      leaf.drawn_items.eachLayer (layer) ->
-        district_bounds = layer.toGeoJSON()
-        if district_id == district_bounds['properties']['id']
-          layer.bindPopup '<input type=\'text\' id=\'' + district_bounds['properties']['id'] + '\' class=\'update_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\' value=\'' + new_district_name + '\'><button type=\'button\' id=\'save_' + district_bounds['properties']['id'] + '\' class=\'btn btn-xs btn-success update_district\'>OK</button><br /><div class=\'district_notif\'></div>'
-          layer.closePopup()
-        return
-      return
-    # When starting to edit a district, create new popup for each district with current name in text field.
-    leaf.map.on 'draw:editstart', (e) ->
-      leaf.drawn_items.eachLayer (layer) ->
-        district_bounds = layer.toGeoJSON()
-        layer.bindPopup '<input type=\'text\' id=\'' + district_bounds['properties']['id'] + '\' class=\'update_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\' value=\'' + district_bounds['properties']['name'] + '\'><button type=\'button\' id=\'save_' + district_bounds['properties']['id'] + '\' class=\'btn btn-xs btn-success update_district\'>OK</button><br /><div class=\'district_notif\'></div>'
-        return
-      return
-    # After saving new name of district, remove the text input and display new name as text only.
-    leaf.map.on 'draw:editstop', (e) ->
-      leaf.drawn_items.eachLayer (layer) ->
-        district_bounds = layer.toGeoJSON()
-        layer.bindPopup district_bounds['properties']['name']
-        return
-      return
-    # Event triggered when polygon (district) has been edited, and "Save" has been clicked.
-    leaf.map.on 'draw:edited', (e) ->
-      layers = e.layers
-      updated_districts = []
-      layers.eachLayer (layer) ->
-        district_bounds = layer.toGeoJSON()
-        updated_districts.push district_bounds
-        return
-      $.post '/user/areasettings/update_districts', { districts: JSON.stringify(updated_districts) }, (data) ->
-        $('#district_notification_message').html '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
-        return
-      return
-    # Event triggered after deleting districts and clicking on 'Save'.
-    leaf.map.on 'draw:deleted', (e) ->
-      layers = e.layers
-      district_ids = []
-      layers.eachLayer (layer) ->
-        district = layer.toGeoJSON()
-        district_ids.push district['properties']['id']
-        return
-      $.post '/user/areasettings/delete_districts', { ids: district_ids }, (data) ->
-        $('#district_notification_message').html '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
-        return
-      return
-    return
+    
 
 ###*
 # Object gathering different markers and icons that are used on the Madloba maps.
@@ -409,6 +290,7 @@ global.initLeafletMap = (map_settings) ->
   # Initialization of the map and markers.
   leaf.init map_settings
   markers.init map_settings
+
   if map_settings['has_center_marker'] == true
     if map_settings['ad_show']
       # Showing markers, district area or postal code area on the ad details page (ads#show)

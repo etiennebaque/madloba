@@ -76,13 +76,15 @@
               .form-actions
                 = submit_tag(t('admin.save'), class: 'btn btn-success')
                 %a.btn{:href => "/user/index"}= t('home.cancel')
-      / /span
-    / content ends
-  / /#content.span10
-/ /fluid-row
+
+
 %hr/
 - content_for :scripts do
   / Inserting the Leaflet Draw plugin, in order to draw polygon to define districts
   = render 'shared/included_leafletdraw_scripts'
   / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
   = render 'shared/map_scripts_after_body', include_all_scripts: false
+
+  :javascript
+    areaSettings = new AreaSettings();
+    areaSettings.init();

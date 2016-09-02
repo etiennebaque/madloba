@@ -19,5 +19,12 @@
  *= require jquery.noty
  *= require noty_theme_default
  *= require responsive-tables
+
+ *= require 'leaflet.awesome-markers'
+ *= require 'leaflet-sidebar'
+ *= require 'MarkerCluster'
+ *= require 'MarkerCluster.Default'
+ *= require 'font-awesome.min'
+
  *= require_tree .
  */

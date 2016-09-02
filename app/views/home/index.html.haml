@@ -1,12 +1,7 @@
 - content_for :head do
   / Includes the main Leaflet CSS and JS files, as well as Mapbox files
   = render 'shared/map_scripts_before_body', include_all_scripts: false
-  / Specific Leaflet files (plugins) to be loaded for this page
-  = stylesheet_link_tag 'leaflet.awesome-markers'
-  = stylesheet_link_tag 'leaflet-sidebar'
-  = stylesheet_link_tag 'MarkerCluster'
-  = stylesheet_link_tag 'MarkerCluster.Default'
-  = stylesheet_link_tag 'font-awesome.min'
+
   :css
     #map {
         position: absolute;
@@ -140,16 +135,13 @@
     (Leaflet, MapQuest, and script that creates the actual map)
   = render 'shared/map_scripts_after_body', include_all_scripts: false
   / Leaflet plug-ins and library used on the home page
-  = javascript_include_tag 'leaflet-sidebar', 'leaflet-function-button'
-  = javascript_include_tag 'leaflet.markercluster', 'bouncemarker'
+
   / Javascript function calls, related specifically to the home page
   :javascript
     // specific script to render map markers and initialize the sidebar.
     var locations_exact = #{raw @locations_exact.to_json}
-
     var locations_postal = #{raw @locations_postal.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})};
     var locations_district = #{raw @locations_district.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})};
-
     var area_geocodes = #{raw @area_geocodes.to_json};
     var marker_colors = #{raw MARKER_COLORS.to_json};
 

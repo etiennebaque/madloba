@@ -1,9 +1,6 @@
 / javascript_include_tag 'leaflet.js'
 - if include_all_scripts || @map_settings[:chosen_map] == 'mapquest'
   %script{src: MapTile.mapquest.js_script_url, type: 'application/javascript'}
-    
-/ Including Leaflet javascript files
-= javascript_include_tag 'leaflet.awesome-markers.js'
 
 :javascript
   // Initializing a bunch of variables used over the map-related scripts.

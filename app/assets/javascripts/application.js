@@ -14,12 +14,7 @@
 //= require jquery_ujs
 
 //= require cocoon
-
 //= require typeahead.bundle.min
-//= require custom-leaflet
-
-//= require general
-//= require map_settings
 
 //= require bootstrap-select.min
 //= require ajax-bootstrap-select.min
@@ -39,6 +34,12 @@
 //= require jquery.autogrow-textarea
 // application script for Charisma theme
 //= require charisma
+
+//= require leaflet-sidebar
+//= require leaflet-function-button
+//= require leaflet.markercluster
+//= require leaflet.awesome-markers
+//= require bouncemarker
 
 //= require ad_websocket
 

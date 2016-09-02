@@ -297,6 +297,7 @@ searchedAdItems = new Bloodhound(
     wildcard: 'QUERY')
 searchedAdItems.clearPrefetchCache()
 searchedAdItems.initialize()
+
 # Object containing the scripts to load on different pages of the application.
 # See 'custom-leaflet.coffee' file for map-related scripts.
 events =
@@ -370,19 +371,6 @@ events =
       $('#gmail_modal').modal 'show'
       return
     return
-
-  init_map_settings_page: ->
-    # Map settings admin page: refreshing map, when "Map type" field is modified.
-    $('#maptype').change ->
-      selected_map = ''
-      $('select option:selected').each ->
-        selected_map = $(this).val()
-        return
-      map_settings['chosen_map'] = selected_map
-      map_settings['tiles_url'] = map_settings[selected_map]['tiles_url']
-      map_settings['attribution'] = map_settings[selected_map]['attribution']
-      initLeafletMap map_settings
-      return  
 
   init_navigation_bar: ->
     # Navigation bar: press Enter to valid form.
@@ -517,7 +505,6 @@ $(document).ready ->
   events.init_new_and_edit_pages()
   events.init_navigation_bar()
   events.init_setup_pages()
-  events.init_map_settings_page()
   # load additional scripts when user is in the admin panel.
   if is_in_admin_panel()
     events.init_admin_pages()

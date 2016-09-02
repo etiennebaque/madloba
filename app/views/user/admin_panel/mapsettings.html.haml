@@ -70,7 +70,8 @@
 - content_for :scripts do
   = render 'shared/map_scripts_after_body', include_all_scripts: true
   :javascript
-
+    mapSettings = new MapSettings();
+    mapSettings.init();
     // Giving this page the possibility to find geocodes.
     find_geocodes();
 
