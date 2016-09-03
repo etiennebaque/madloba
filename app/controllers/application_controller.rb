@@ -82,24 +82,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # Redirect after signing out.
-  def after_sign_out_path_for(resource)
-    return '/'
-  end
-
   # Method called on Ajax call, to define geocodes of a location.
   def getCityGeocodes
-    address = ''
-    address_found = ''
-
     if params['type'] != 'area'
-
-      if params['street_number'] && params['street_number'] != '' && params['address'] && params['address'] != ''
+      if params['street_number'].present? && params['address'].present?
         address_street = "#{params['street_number']} #{params['address']}"
       elsif params['address']
         address_street = params['address']
       end
-
     end
 
     if params['city'].nil? || params['country'].nil?
@@ -111,16 +101,7 @@ class ApplicationController < ActionController::Base
     end
 
     location_info = [address_street, params['postal_code'], params['city'], params['state'], params['country']]
-
-    location_info.each do |info|
-      if info && info != ''
-        if address != ''
-          address += ", #{info}"
-        else
-          address = info
-        end
-      end
-    end
+    address = build_up_address(location_info)
 
     # Getting geocodes for this address.
     response = getGeocodesFromAddress(address)
@@ -128,16 +109,7 @@ class ApplicationController < ActionController::Base
     if response.nil?
       # We're trying to get the geocodes again, but this time without the postal code and the street number
       location_info = [params['address'], params['city'], params['state'], params['country']]
-      address = ''
-      location_info.each do |info|
-        if info && info != ''
-          if address != ''
-            address += ", #{info}"
-          else
-            address = info
-          end
-        end
-      end
+      address = build_up_address(location_info)
       response = getGeocodesFromAddress(address)
 
       if response
@@ -224,7 +196,7 @@ class ApplicationController < ActionController::Base
     end
 
     result = []
-    if [PREFETCH_AD_ITEMS, SEARCH_IN_AD_ITEMS].include? (typeahead_type)
+    if [PREFETCH_AD_ITEMS, SEARCH_IN_AD_ITEMS].include? typeahead_type
       matched_items.each do |match|
         result << {value: match}
       end
@@ -244,6 +216,20 @@ class ApplicationController < ActionController::Base
   def user_not_authorized
     flash[:error] = t('config.not_authorized')
     redirect_to(request.referrer || root_path || user_path)
+  end
+
+  def build_up_address(location_info)
+    address = ''
+    location_info.each do |info|
+      if info.present?
+        if address != ''
+          address += ", #{info}"
+        else
+          address = info
+        end
+      end
+    end
+    address
   end
 
   protected

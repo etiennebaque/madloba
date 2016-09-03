@@ -21,7 +21,7 @@ module ApplicationHelper
 
   # Checks if we're on the Madloba demo website
   def demo?
-    request.original_url.include? ('demo.madloba.org')
+    request.original_url.include? 'demo.madloba.org'
   end
 
 
@@ -54,13 +54,13 @@ module ApplicationHelper
   # Defines whether or not the user is on the admin panel.
   # That will have an impact on the bootstrap class used for the navigation, for example
   def admin_panel?
-    (request.original_url.include? ('/user')) && (current_user)
+    (request.original_url.include? '/user') && (current_user)
   end
 
   # Defines whether or not the user is going through the setup pages.
   # That will have an impact on the content of the navigation bar.
   def setup_mode?
-    request.original_url.include? ('/setup')
+    request.original_url.include? '/setup'
   end
 
   def navigation_madloba_icon_path

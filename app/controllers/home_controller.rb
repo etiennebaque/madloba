@@ -230,7 +230,7 @@ class HomeController < ApplicationController
       @links << get_link(settings["link_#{number}_label"], settings["link_#{number}_url"])
     end
 
-    return settings
+    settings
   end
 
 end
