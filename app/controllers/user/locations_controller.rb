@@ -43,7 +43,7 @@ class User::LocationsController < ApplicationController
 
     authorize @location
 
-    if @location.is_area
+    if @location.area?
       getMapSettings(@location, HAS_CENTER_MARKER, CLICKABLE_MAP_AREA_MARKER)
     else
       getMapSettings(@location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
@@ -64,7 +64,7 @@ class User::LocationsController < ApplicationController
       location_params['longitude'] = newLon.round(5, :up)
     end
 
-    if @location.is_area
+    if @location.area?
       getMapSettings(@location, HAS_CENTER_MARKER, CLICKABLE_MAP_AREA_MARKER)
     else
       getMapSettings(@location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)

@@ -138,7 +138,7 @@ module ApplicationHelper
 
     # Specific info related to ads#show
     @map_settings['ad_show'] = []
-    if location.is_area
+    if location.area?
       # Getting information whether it's a postal code area, or a district
       @map_settings['ad_show_is_area'] = true
       items_to_show = []

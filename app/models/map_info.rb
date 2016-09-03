@@ -17,7 +17,7 @@ class MapInfo
   def init_map_info_for_(location)
     self.loc_type = location.loc_type
     self.marker_message = location.marker_message
-    self.is_area = location.is_area
+    self.is_area = location.area?
     self.bounds = location.district.bounds if location.district?
   end
 
