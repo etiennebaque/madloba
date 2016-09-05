@@ -109,7 +109,7 @@
           / Ad location section
           - if params['ad'] && params['ad']['location_attributes']
             / if location params already exists, we render directly the form they were created in.
-            .new_ad_new_location
+            .new-ad-new-location
               = f.fields_for :location, :html => {:class => 'form-horizontal'} do |loc|
                 = render 'shared/location_form', form: loc, location: @ad.location,
                 can_choose_existing_location: can_choose_existing_locations(current_user)

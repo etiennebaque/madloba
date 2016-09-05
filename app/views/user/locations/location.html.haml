@@ -50,7 +50,7 @@
               - else
                 %a{:href => "/user/manageads#locations"}= t('admin.back_to_ads')
           .box-content
-            = form_for [:user, @location], html: { id: 'locationForm', role: 'form' } do |f|
+            = form_for [:user, @location.becomes(Location)], html: { id: 'locationForm', role: 'form' } do |f|
               - if !is_adding_new
                 .form-group
                   %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#"}= t('admin.location.delete')
@@ -60,12 +60,11 @@
                   .form-inline
                     = label_tag :idId, 'Id:', class:'control-label'
                     = @location.id
-                .form-group
+
               / Partial that contains the location form
-              = render 'shared/location_form', form: f, location: @location,                                  |
-                label_class: 'control-label', col10: 'form-inline', col8: 'form-inline', col6: 'form-inline', |
-                col4: 'form-inline', col3: 'form-inline',                                                     |
-                col2: 'form-inline', col_radio: ''                                                            |
+              .edit-location
+                = render 'shared/location_form', form: f, location: @location
+
               - if !is_adding_new
                 / List of items that can be found at this location
                 .form-group

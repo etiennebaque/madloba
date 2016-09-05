@@ -1,5 +1,9 @@
 class Locations::ExactLocation < Location
 
+  def self.policy_class
+    LocationPolicy
+  end
+
   def exact?
     true
   end

@@ -40,14 +40,14 @@
     / Main part of the body
     - if admin_panel?
       / Rendering user/admin pages
-      %div#wrap-admin
+      #wrap-admin
         = render 'shared/navigation'
         .container-fluid
           = yield
           = render 'shared/footer'
     - else
       / Rendering regular pages (home page, show ad...)
-      %div#wrap
+      #wrap
         = render 'shared/navigation'
         = yield
         = render 'shared/footer'

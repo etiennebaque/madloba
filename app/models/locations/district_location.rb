@@ -1,5 +1,9 @@
 class Locations::DistrictLocation < Location
 
+  def self.policy_class
+    LocationPolicy
+  end
+
   def area?
     true
   end

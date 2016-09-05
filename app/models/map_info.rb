@@ -8,7 +8,7 @@ class MapInfo
 
   NO_CENTER_MARKER_PAGES = ['home','areasettings']
 
-  def initialize(location: nil, center_marker: true, clickable: CLICKABLE_MAP_EXACT_MARKER )
+  def initialize(location: nil, center_marker: HAS_CENTER_MARKER, clickable: CLICKABLE_MAP_EXACT_MARKER )
     init_map_settings
     init_map_info_for_(location) if location.present?
     init_other_map_info(center_marker, clickable)
