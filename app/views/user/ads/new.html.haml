@@ -1,7 +1,3 @@
-- content_for :head do
-  / Includes the main Leaflet CSS and JS files, as well as Mapbox files
-  = render 'shared/map_scripts_before_body', include_all_scripts: false
-
 / For anonymous user creating ads, we're adding a note saying that they can modify their ad, if they create an account.
 - if current_user.nil?
   .col-lg-12.ad-non-signed-warning.alert.alert-dismissible.alert-warning{:role => "alert"}

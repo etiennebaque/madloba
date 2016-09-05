@@ -6,9 +6,16 @@
     %meta{:content => "IE=Edge,chrome=1", "http-equiv" => "X-UA-Compatible"}/
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no", :name => "viewport"}/
     = favicon_link_tag 'favicon.ico'
+
     %title= site_name
+
     / Main CSS files to be included in all pages.
     = stylesheet_link_tag 'application', media: 'all'
+
+    / Mapbox scripts with Leaflet bundled in them.
+    %script{:src => "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js", :type => "application/javascript"}
+    %link{:href => "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css", :rel => "stylesheet"}
+
     / Gon gem - managing text in JS files
     = include_gon
     = csrf_meta_tags
