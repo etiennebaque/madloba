@@ -1,8 +1,10 @@
 @import "bootstrap-sprockets";
-@import "bootstrap-madloba";
-
 @import "font-awesome-sprockets";
+
+@import "bootstrap-madloba";
 @import "font-awesome";
+
+@import 'general';
 
 @import 'ajax-bootstrap-select';
 @import 'bootstrap-select.min';
@@ -13,6 +15,7 @@
 @import 'jquery.noty';
 @import 'noty_theme_default';
 @import 'responsive-tables';
+
 @import 'leaflet.awesome-markers';
 @import 'leaflet-sidebar';
 @import 'MarkerCluster';

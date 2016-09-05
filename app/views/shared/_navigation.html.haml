@@ -94,6 +94,12 @@
       %span.navbar-brand= t('setup.step_html', current_step: @current_step)
   / /.container
 
+
+- if admin_panel?
+  / Rendering admin panel, its second navigation bar and its footer in a 'ch-container' div
+  = render 'shared/navigation_admin'
+
+
 / Modal popup that appears with OpenStreetMap address suggestions
 #basicModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "basicModal", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
@@ -103,3 +109,4 @@
       #modal-body-id.modal-body
       .modal-footer
         %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"}= t('home.cancel')
+

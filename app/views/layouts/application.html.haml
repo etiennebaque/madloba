@@ -38,20 +38,19 @@
         = flash[:error]
 
     / Main part of the body
-    %div{:id => "#{admin_panel? ? 'wrap-admin' : 'wrap'}"}
-      = render 'shared/navigation'
-      - if admin_panel?
-        / Rendering admin panel, its second navigation bar and its footer in a 'ch-container' div
-        = render 'shared/navigation_admin'
+    - if admin_panel?
+      / Rendering user/admin pages
+      %div#wrap-admin
+        = render 'shared/navigation'
         .container-fluid
           = yield
           = render 'shared/footer'
-      - else
-        / Rendering regular pages (home page, show ad...)
+    - else
+      / Rendering regular pages (home page, show ad...)
+      %div#wrap
+        = render 'shared/navigation'
         = yield
-    - if !admin_panel?
-      / Rendering footer for regular pages
-      = render 'shared/footer'
+        = render 'shared/footer'
 
     / Javascript files to be included in all pages.
     = javascript_include_tag 'application'
