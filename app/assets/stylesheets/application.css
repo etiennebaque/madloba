@@ -8,23 +8,5 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
- *= require_self
- *= require ajax-bootstrap-select
- *= require bootstrap-select.min
- *= require bootstrap.css.erb
- *= require charisma-app
- *= require chosen.min
- *= require colorbox
- *= require jquery.iphone.toggle
- *= require jquery.noty
- *= require noty_theme_default
- *= require responsive-tables
-
- *= require 'leaflet.awesome-markers'
- *= require 'leaflet-sidebar'
- *= require 'MarkerCluster'
- *= require 'MarkerCluster.Default'
- *= require 'font-awesome.min'
-
- *= require_tree .
+ *= require main
  */

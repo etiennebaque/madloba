@@ -12,13 +12,13 @@
 //
 //= require jquery.min
 //= require jquery_ujs
+//= require bootstrap-sprockets
 
 //= require cocoon
 //= require typeahead.bundle.min
 
 //= require bootstrap-select.min
 //= require ajax-bootstrap-select.min
-//= require bootstrap.min
 
 // library for cookie management
 //= require jquery.cookie
@@ -43,4 +43,4 @@
 
 //= require ad_websocket
 
-////= require_tree .
+//= require_tree .

@@ -189,10 +189,9 @@ class User::AdsController < ApplicationController
   def get_map_settings_for_ad
     if %w(show send_message).include?(action_name)
       getMapSettingsWithSeveralItems(@ad.location, HAS_CENTER_MARKER, NOT_CLICKABLE_MAP, @ad.items)
-    elsif %w(create update).include?(action_name)
-      getMapSettings(@ad.location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
     else
-      getMapSettings(@ad.location, HAS_NOT_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
+      not_clickable_page = %w(create update).include?(action_name)
+      @map_settings = MapInfo.new(location: @ad.location, center_marker: not_clickable_page).to_hash
     end
   end
 
