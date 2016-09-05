@@ -1,5 +1,4 @@
-- content_for :head do
-  = stylesheet_link_tag 'font-awesome.min'
+- adding = current_page?(action: 'new') || current_page?(action: 'create')
 .row
   #content.middle-col.col-xs-12.col-md-10
     / content starts
@@ -7,16 +6,14 @@
       %ul.breadcrumb
         %li
           %a{:href => "/user/managerecords"}= t('admin.manage_records')
-        - if @isAdding
-          %li= t('admin.add_item')
-        - else
-          %li= t('admin.edit_item')
+        %li= "#{adding ? t('admin.add_item') : t('admin.edit_item')}"
+
     .row
       .box.col-md-12
         .box-inner
           .box-header.well{"data-original-title" => ""}
             %h2
-              - if @isAdding
+              - if adding
                 %i.glyphicon.glyphicon-plus
                 = t('admin.new_item')
               - else
@@ -44,7 +41,7 @@
           .box-content
             = form_for [:user, @item], html: { id: 'itemForm', role: 'form' } do |f|
               / Category id
-              - if !@isAdding
+              - if !adding
                 .form-group
                   %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#"}= t('admin.item.delete_item')
                 .form-group
@@ -90,18 +87,14 @@
                           %td
                             %a{:href => "/user/ads/#{ad.id}/edit"}= ad.title
                           %td= ad.description
-                - elsif !@isAdding
+                - elsif !adding
                   %strong= t('admin.item.no_ad')
               %hr/
               / Submit button and cancel link
               = render 'shared/submit_section'
-        / /span
-      / /row
-      / content ends
-    / /#content.span10
-  / /fluid-row
-  %hr/
-  - if !@isAdding
+
+  %hr
+  - if !adding
     / "Delete item" modal window
     = render 'delete_modal_window'
-/ /.fluid-container
+
