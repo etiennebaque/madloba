@@ -20,6 +20,7 @@
  *= require noty_theme_default
  *= require responsive-tables
 
+ *= require 'leaflet'
  *= require 'leaflet.awesome-markers'
  *= require 'leaflet-sidebar'
  *= require 'MarkerCluster'

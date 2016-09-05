@@ -1,7 +1,4 @@
 - content_for :head do
-  / Includes the main Leaflet CSS and JS files, as well as Mapbox files
-  = render 'shared/map_scripts_before_body', include_all_scripts: false
-
   :javascript
     var current_page = "new_ad";
     var location_number = #{user_locations_number};
