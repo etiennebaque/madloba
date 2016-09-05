@@ -1,6 +1,9 @@
 @import "bootstrap-sprockets";
 @import "bootstrap-madloba";
 
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
 @import 'ajax-bootstrap-select';
 @import 'bootstrap-select.min';
 @import 'charisma-app';
@@ -14,4 +17,3 @@
 @import 'leaflet-sidebar';
 @import 'MarkerCluster';
 @import 'MarkerCluster.Default';
-@import 'font-awesome.min';

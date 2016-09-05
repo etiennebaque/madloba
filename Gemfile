@@ -81,6 +81,8 @@ gem 'faye-websocket'
 # Get inputs from madloba:install task
 gem 'highline'
 
+gem 'font-awesome-sass'
+
 group :development, :test do
 
   # Mailcatcher

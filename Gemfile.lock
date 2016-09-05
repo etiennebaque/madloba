@@ -224,6 +224,8 @@ GEM
     fog-xml (0.1.2)
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
+    font-awesome-sass (4.6.2)
+      sass (>= 3.2)
     formatador (0.2.5)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
@@ -493,6 +495,7 @@ DEPENDENCIES
   faker
   faye-websocket
   fog
+  font-awesome-sass
   gon
   guard-rspec
   haml
