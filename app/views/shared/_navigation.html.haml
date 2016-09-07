@@ -13,8 +13,6 @@
   - if !setup_mode?
     #navbarCollapse.navbar-collapse.collapse.navbar-responsive-collapse
       %ul.nav.navbar-nav
-        / "About" link
-        %li= link_to t('home.about'), about_path_to_use, id: 'about-nav-link'
         / Sign in/Register/User drop down menu - start
         - if user_signed_in?
           %li.dropdown

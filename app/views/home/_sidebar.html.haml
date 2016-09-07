@@ -1,3 +1,4 @@
+- website_description = Setting.description
 #sidebar.sidebar.collapsed
   / Nav tabs
   .sidebar-tabs
@@ -8,20 +9,21 @@
       %li
         %a{:href => "#contact", :role => "tab"}
           %i.fa.fa-envelope
-    %ul{:role => "tablist"}
-      %li
-        %a{:href => "#settings", :role => "tab"}
-          %i.fa.fa-gear
+      - if website_description.present?
+        %li
+          %a{:href => "#about", :role => "tab"}
+            %i.fa.fa-question
+
 
   / Tab panes
   .sidebar-content
     #category.sidebar-pane
       %h1.sidebar-header
-        Categories
+        = site_city
         %span.sidebar-close
           %i.fa.fa-caret-right
 
-      .category-section
+      .inner-section
         .list-group.create-ad
           %a.btn.btn-success.no-color{:href => "/ads/new"}
             %i.fa.fa-plus
@@ -43,7 +45,7 @@
                 %i.glyphicon.glyphicon-remove.align-cross{:style => "float: right"}
 
         / List of selected categories
-        #refinementsId
+        #refinements
           - if @categories.select{|cat| cat.is_refinement(params)}.length > 0
             %h4= t('home.refinements')
           - @categories.each do |category|
@@ -54,12 +56,12 @@
                 %span.guided-nav-label= category.name
                 %i.glyphicon.glyphicon-remove.align-cross{:style => "float: right"}
 
+
         / Sidebar - list of Categories
         .list-group
-          - if @categories.length > 0
+          - if @categories.any?
             - if @categories.length > 1
               / No point in showing only one category
-              %h4= t('home.title_guided_nav')
               #available_categories
                 - @categories.each do |category|
                   - if !category.is_refinement(params)
@@ -91,8 +93,38 @@
         Contact us
         %span.sidebar-close
           %i.fa.fa-caret-left
-    #settings.sidebar-pane
-      %h1.sidebar-header
-        Settings
-        %span.sidebar-close
-          %i.fa.fa-caret-left
+
+      .inner-section
+        - contact_email = Setting.contact_email
+        - social_medias = Setting.social_medias
+        - if contact_email.present?
+          .send-us-message
+            %p= t('home.send_us_message')
+            %p= link_to contact_email.value, "mailto:#{contact_email.value}"
+
+        - if social_medias.any?
+          .social_media
+            %p
+              - social_medias.each do |media|
+                = link_to image_tag("#{media.key}.png", size: '40x40'), media.url, target: '_blank'
+
+    - if website_description.present?
+      #about.sidebar-pane
+        %h1.sidebar-header
+          About us
+          %span.sidebar-close
+            %i.fa.fa-caret-left
+
+        .inner-section
+          - website_description.each do |descr|
+            %p= descr
+
+          - if @links.any?
+            %hr
+            %p= 'More information:'
+            %ul
+              - @links.each do |link|
+                - if link && link[:label] && link[:label] != ''
+                  %li
+                    %a{:href => "#{link[:url]}"}= link[:label]
+

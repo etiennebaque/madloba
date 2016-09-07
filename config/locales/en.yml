@@ -76,7 +76,7 @@ en:
     about_description_2_html: "%{madloba_link} is an open-source platform that allows you to let your community know about what you want to give away."
     about_description_3: So many (still useful!) objects go to waste all the time! Luckily, as we increasingly live in an open-data and location driven world, we now have the technological means to solve this problem. Madloba will give your community a new way to recycle, give or dispose all "this stuff" :)
     contact_us: Contact us
-    send_us_message_html: Send us an email at %{email}
+    send_us_message: "Send us a message at:"
     about_send_message_html: If you want to contact us, feel free to send us a message at %{email}.
     loc_not_found: Sorry, this location was not found.
     server_error: Sorry, there was a server error. Please try again later.

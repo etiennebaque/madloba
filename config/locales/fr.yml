@@ -90,7 +90,7 @@ fr:
     about_description_2_html: "%{madloba_link} est un projet open-source qui vous permet de promouvoir à votre communauté ce que vous avez à donner."
     about_description_3: "Tellement d'objects partent constamment à la poubelle, alors qu'ils sont toujours utilisables ! Heureusement, comme nous vivons de plus en plus dans un monde connecté par des données de plus en plus ouvertes, nous avons maintenant les moyens technologiques de résoudre ce problème. Madloba permettra à votre communauté de recycler ou de donner tout ce qu'elle a à réutiliser."
     contact_us: Contactez-nous
-    send_us_message_html: Envoyez-nous un e-mail à %{email}
+    send_us_message: "Envoyez-nous un e-mail à :"
     about_send_message_html: Si vous voulez nous contacter, envoyez-nous un e-mail à %{email}.
     loc_not_found: Désolé, cet endroit n'a pas été trouvé.
     server_error: Désolé, il y a eu une erreur serveur. Veuillez essayer à nouveau plus tard.

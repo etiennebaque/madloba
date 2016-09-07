@@ -68,6 +68,9 @@
     / 'Send message' text area
     = render 'shared/ads_send_message', ad: @ad
 #push
+
+= render 'shared/footer'
+
 / Rendering JS scripts
 - content_for :scripts do
   / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and scripts that creates the actual map

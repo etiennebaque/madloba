@@ -67,14 +67,14 @@ AdSocket::initBinds = ->
         value != link_id
       )
       if _this.nav_state.cat.length == 0
-        $('#refinementsId').html ''
+        $('#refinements').html ''
     else
       # User is selecting this category to refine their search.
-      if $('#refinementsId').html().trim() == ''
+      if $('#refinerefinementsmentsId').html().trim() == ''
         headerTitle = '<h4>Your selection</h4>'
-        $('#refinementsId').html headerTitle
+        $('#refinements').html headerTitle
       selectedLinkHtml.append '<i class=\'glyphicon glyphicon-remove align-cross\' style=\'float: right;\'></i>'
-      $('#refinementsId').append selectedLinkHtml.prop('outerHTML')
+      $('#refinements').append selectedLinkHtml.prop('outerHTML')
       # Deleting the html of the selected category in initial list.
       $(this).remove()
       _this.nav_state.cat.push $(this).attr('id')

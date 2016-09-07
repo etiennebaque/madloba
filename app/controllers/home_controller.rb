@@ -198,25 +198,7 @@ class HomeController < ApplicationController
     settings = {}
     Setting.all.each do |setting|
       if %w(facebook twitter pinterest).include? setting['key']
-        # Website's social media
-        social = {}
-        if setting['value'] != ''
-          social['name'] = setting['key']
-          if setting['key'] == 'twitter'
-            social['url'] = "http://twitter.com/#{setting['value']}"
-          else
-            social['url'] = "http://#{setting['value']}"
-          end
-          @social_medias << social
-        end
-      elsif setting['key'] == 'description'
-        # Website description
-        @website_description_paragraph = []
-        if setting['value'] && setting['value'].length > 0
-          @website_description_paragraph = setting['value'].split(/[\r\n]+/)
-        end
-      elsif setting['key'] == 'contact_email'
-        @contact_email = setting['value']
+
       else
         # Settings hash
         settings[setting['key']]=setting['value']

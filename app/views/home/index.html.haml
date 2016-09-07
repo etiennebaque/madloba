@@ -1,5 +1,6 @@
 #main.container-fluid.clear-top
   .row
+    / Sidebar
     = render 'sidebar'
 
     / Map section
@@ -7,42 +8,7 @@
       #home-map-canvas-wrapper
         #map.home
 
-  / Row with 3 columns, above the footer
-  #upper-footer-id.row.upper-footer
-    - if @links.nil? || @links.length == 0
-      / If there is no link to display, we span the description section over 2 columns
-      .col-lg-8
-        %h2= t('home.about_website', website_name: site_name)
-        %span
-          - @website_description_paragraph.each do |paragraph|
-            %p= paragraph
-          %p= link_to "More about #{site_name}...", about_path
-    - else
-      .col-lg-4
-        %h2= t('home.about_website', website_name: site_name)
-        %span
-          - @website_description_paragraph.each do |paragraph|
-            %p= paragraph
-          %p= link_to "More about #{site_name}...", about_path
-      .col-lg-4
-        %h2= t('home.links')
-        %span
-          %ul
-            - @links.each do |link|
-              - if link && link[:label] && link[:label] != ''
-                %li
-                  %a{:href => "#{link[:url]}"}= link[:label]
-    .col-lg-4
-      %h2= t('home.contact_us')
-      %span
-        - if @contact_email && @contact_email != ''
-          %p= t('home.send_us_message_html', email: (link_to @contact_email, "mailto:#{@contact_email}") )
-        - if @social_medias.length > 0
-          %p
-            - @social_medias.each do |media|
-              = link_to image_tag("#{media['name']}.png", size: '40x40'), media['url'], target: '_blank'
-                
-#push
+
 / Modal popup that shows several ads promoting the same item, in a specific district/area
 #adsModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "basicModal", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
