@@ -35,7 +35,7 @@
 // application script for Charisma theme
 //= require charisma
 
-//= require leaflet-sidebar
+//= require leaflet-sidebar.min
 //= require leaflet-function-button
 //= require leaflet.markercluster
 //= require leaflet.awesome-markers
