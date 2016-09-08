@@ -38,16 +38,15 @@
         = flash[:error]
 
     / Main part of the body
-    - if admin_panel?
-      / Rendering user/admin pages
-      #wrap-admin
+    #wrap
+      - if admin_panel?
+        / Rendering user/admin pages
         = render 'shared/navigation'
         .container-fluid
           = yield
           = render 'shared/footer'
-    - else
-      / Rendering regular pages (home page, show ad...)
-      #wrap
+      - else
+        / Rendering regular pages (home page, show ad...)
         = render 'shared/navigation'
         = yield
 

@@ -505,64 +505,11 @@ createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area
 ###*
 # This method initialize the right-hand side navigation bar, on the home page.
 ###
-
 global.initializeSideBar = (sidebar) ->
   # Side bar is shown, right before initializing it, after map is fully loaded.
-  $('#sidebar').removeClass 'hide'
-  navSidebar = L.control.sidebar('sidebar',
-    closeButton: true
-    position: 'right')
-  # Navigation toggle button
-  btn = L.functionButtons([ { content: 'Categories / Create ad' } ])
+  navSidebar = L.control.sidebar('sidebar', position: 'right')
   leaf.map.addControl navSidebar
-  isSidebarOpen = false
-  window_width = $(window).width()
-  if window_width < 768
-    leaf.map.addControl btn
-  else
-    navSidebar.show()
-    isSidebarOpen = true
-  leaf.map.on 'click', ->
-    if isSidebarOpen
-      navSidebar.hide()
-      leaf.map.addControl btn
-      isSidebarOpen = false
-    return
-  btn.on 'clicked', (data) ->
-    if data.idx == 0
-      navSidebar.show()
-      isSidebarOpen = true
-      leaf.map.removeControl btn
-    else
-      navSidebar.hide()
-      isSidebarOpen = false
-      leaf.map.addControl btn
-    return
-  $('.leaflet-sidebar .close').click ->
-    leaf.map.addControl btn
-    isSidebarOpen = false
-    return
-  # By default, we hide the navigation bar on phones and tablets (width < 992).
-  # We should only see the map, when home page loads on mobile device.
-  $(window).resize ->
-    old_window_width = window_width
-    window_width = $(window).width()
-    if window_width < 768
-      # On mobile, window_width gets refreshed when we scroll on open naviagation menu.
-      # We used a trick with old_window_width: if width does not change (ie. we're scrolling), the opened
-      # nav menu remains open.
-      if old_window_width != window_width
-        navSidebar.hide()
-        if isSidebarOpen
-          leaf.map.addControl btn
-          isSidebarOpen = false
-    else
-      navSidebar.show()
-      if !isSidebarOpen
-        leaf.map.removeControl btn
-        isSidebarOpen = true
-    return
-  return
+
 
 ###*
 # Defines latitude and longitude, after a click on a map (eg on map settings page...).

@@ -2,21 +2,22 @@
 #sidebar.sidebar.collapsed
   / Nav tabs
   .sidebar-tabs
-    %ul{:role => "tablist"}
+    %ul{role: 'tablist'}
       %li
-        %a{:href => "#category", :role => "tab"}
-          %i.fa.fa-bars
-      %li
-        %a{:href => "#contact", :role => "tab"}
-          %i.fa.fa-envelope
+        %a{href: '#category', role: 'tab', style: 'font-size: 20px'}
+          %i.fa.fa-map-marker
       - if website_description.present?
         %li
-          %a{:href => "#about", :role => "tab"}
+          %a{href: '#about', role: 'tab'}
             %i.fa.fa-question
-
+      %li
+        %a{href: '#contact', role: 'tab'}
+          %i.fa.fa-envelope
 
   / Tab panes
   .sidebar-content
+
+    / Categories
     #category.sidebar-pane
       %h1.sidebar-header
         = site_city
@@ -46,8 +47,6 @@
 
         / List of selected categories
         #refinements
-          - if @categories.select{|cat| cat.is_refinement(params)}.length > 0
-            %h4= t('home.refinements')
           - @categories.each do |category|
             - if category.is_refinement(params)
               %a.list-group-item.smaller-no-border-no-background.guided-nav-category{:href => "#{category.refinement_url(params)}"}
@@ -56,9 +55,9 @@
                 %span.guided-nav-label= category.name
                 %i.glyphicon.glyphicon-remove.align-cross{:style => "float: right"}
 
-
         / Sidebar - list of Categories
         .list-group
+          %br
           - if @categories.any?
             - if @categories.length > 1
               / No point in showing only one category
@@ -88,11 +87,12 @@
             %i= t('home.demo_sidebar_note_html', admin_panel: link_to(t('home.admin_panel'), '/user/managerecords#categories'))
 
 
+    / Contact
     #contact.sidebar-pane
       %h1.sidebar-header
         Contact us
         %span.sidebar-close
-          %i.fa.fa-caret-left
+          %i.fa.fa-caret-right
 
       .inner-section
         - contact_email = Setting.contact_email
@@ -108,12 +108,13 @@
               - social_medias.each do |media|
                 = link_to image_tag("#{media.key}.png", size: '40x40'), media.url, target: '_blank'
 
+    / About us
     - if website_description.present?
       #about.sidebar-pane
         %h1.sidebar-header
           About us
           %span.sidebar-close
-            %i.fa.fa-caret-left
+            %i.fa.fa-caret-right
 
         .inner-section
           - website_description.each do |descr|

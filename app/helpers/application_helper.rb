@@ -134,7 +134,7 @@ module ApplicationHelper
 
   # Info to display several markers on ads#show (1 marker per item)
   def getMapSettingsWithSeveralItems(location, has_center_marker, clickable_map_marker, items)
-    c = MapInfo.new(lcoation: location, center_marker: has_center_marker, clickable: clickable_map_marker)
+    c = MapInfo.new(location: location, center_marker: has_center_marker, clickable: clickable_map_marker)
 
     # Specific info related to ads#show
     @map_settings['ad_show'] = []
