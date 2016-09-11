@@ -166,7 +166,7 @@ class User::AdminPanelController < ApplicationController
     authorize :admin, :areasettings?
 
     #@map_settings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
-    @map_settings = MapInfo.new(center_marker: HAS_NOT_CENTER_MARKER, clickable: NOT_CLICKABLE_MAP).to_hash
+    @map_settings = MapInfo.new(has_center_marker: false, clickable: NOT_CLICKABLE_MAP).to_hash
 
     # Adding this flag to add leaflet draw tool to the map, on the "Area settings" page.
     # Drawing tool added in initLeafletMap(), in custom-leaflet.coffee

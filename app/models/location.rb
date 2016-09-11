@@ -139,4 +139,8 @@ class Location < ActiveRecord::Base
     website.include?('http') ? website : "http://#{self.website}"
   end
 
+  def clickable_map_for_edit
+    area? ? CLICKABLE_MAP_AREA_MARKER : CLICKABLE_MAP_EXACT_MARKER
+  end
+
 end

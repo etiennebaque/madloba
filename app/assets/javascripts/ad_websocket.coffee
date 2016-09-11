@@ -70,10 +70,6 @@ AdSocket::initBinds = ->
         $('#refinements').html ''
     else
       # User is selecting this category to refine their search.
-      if $('#refinements').html().trim() == ''
-        headerTitle = '<h4>Your selection</h4>'
-        $('#refinements').html headerTitle
-
       selectedLinkHtml.append '<i class=\'glyphicon glyphicon-remove align-cross\' style=\'float: right;\'></i>'
       $('#refinements').append selectedLinkHtml.prop('outerHTML')
 

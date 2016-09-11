@@ -132,54 +132,6 @@ module ApplicationHelper
 
   private
 
-  # Info to display several markers on ads#show (1 marker per item)
-  def getMapSettingsWithSeveralItems(location, has_center_marker, clickable_map_marker, items)
-    c = MapInfo.new(location: location, center_marker: has_center_marker, clickable: clickable_map_marker)
-
-    # Specific info related to ads#show
-    @map_settings['ad_show'] = []
-    if location.area?
-      # Getting information whether it's a postal code area, or a district
-      @map_settings['ad_show_is_area'] = true
-      items_to_show = []
-      items.each do |item|
-        items_to_show << item.capitalized_name
-      end
-      @map_settings['popup_message'] = items_to_show.join(', ')
-    else
-      # Getting information as an exact address location
-      @map_settings['ad_show_is_area'] = false
-      items.each_with_index do |item, index|
-        @map_settings['ad_show'][index] = {}
-        @map_settings['ad_show'][index]['icon'] = item.category.icon
-        @map_settings['ad_show'][index]['color'] = item.category.marker_color
-        @map_settings['ad_show'][index]['item_name'] = item.name
-      end
-      # Overriding 'zoom_level' data from the database with the max zoom level,
-      # only for the ads@show page and if we're showing an exact address.
-      @map_settings['zoom_level'] = MAX_ZOOM_LEVEL;
-    end
-
-  end
-
-  # Map settings function that initialize hash to be used to create map tiles.
-  def get_map_tiles_attribution(api_keys)
-    result = {}
-    result['mapbox'] = {}
-    result['mapbox']['tiles_url'] = MAPBOX_TILES_URL % {api_key: api_keys['mapbox']}
-    result['mapbox']['attribution'] = MAPBOX_ATTRIBUTION
-
-    result['mapquest'] = {}
-    result['mapquest']['tiles_url'] = MAPQUEST_TILES_URL % {api_key: api_keys['mapquest']}
-    result['mapquest']['attribution'] = ''
-
-    result['osm'] = {}
-    result['osm']['tiles_url'] = OSM_TILES_URL
-    result['osm']['attribution'] = OSM_ATTRIBUTION
-
-    return result
-    end
-
   # Define whether the app is deployed on Heroku or not.
   def is_on_heroku
     ENV['MADLOBA_IS_ON_HEROKU'].downcase == 'true'

@@ -11,14 +11,14 @@ class User::LocationsController < ApplicationController
   def show
     @location = Location.includes(:ads => :item).includes(:district).where(id: params[:id]).first!
     authorize @location
-    getMapSettings(@location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
+    @map_settings = MapLocationInfo.new(location: @location)
     render 'location'
   end
 
   def new
     @location = Location.new
     authorize @location
-    @map_settings = MapInfo.new(location: @location).to_hash
+    @map_settings = MapLocationInfo.new(location: @location).to_hash
 
     render 'location'
   end
@@ -28,7 +28,7 @@ class User::LocationsController < ApplicationController
     @location.user = current_user
     authorize @location
 
-    @map_settings = MapInfo.new(location: @location).to_hash
+    @map_settings = MapLocationInfo.new(location: @location).to_hash
 
     if @location.save
       flash[:new_name] = @location.name
@@ -42,7 +42,7 @@ class User::LocationsController < ApplicationController
     @location = Location.includes(ads: :items).includes(:district).where(id: params[:id]).first!
 
     authorize @location
-    @map_settings = MapInfo.new(location: @location, clickable: @location.area? ? CLICKABLE_MAP_AREA_MARKER : CLICKABLE_MAP_EXACT_MARKER).to_hash
+    @map_settings = MapLocationInfo.new(location: @location, clickable: @location.clickable_map_for_edit).to_hash
 
     render 'location'
   end
@@ -59,7 +59,7 @@ class User::LocationsController < ApplicationController
       location_params['longitude'] = newLon.round(5, :up)
     end
 
-    @map_settings = MapInfo.new(location: @location, clickable: @location.area? ? CLICKABLE_MAP_AREA_MARKER : CLICKABLE_MAP_EXACT_MARKER)
+    @map_settings = MapLocationInfo.new(location: @location, clickable: @location.clickable_map_for_edit).to_hash
 
     if @location.update(location_params)
 
