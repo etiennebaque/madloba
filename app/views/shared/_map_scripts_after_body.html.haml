@@ -1,5 +1,5 @@
 / javascript_include_tag 'leaflet.js'
-- if include_all_scripts || @map_settings[:chosen_map] == 'mapquest'
+- if MapTile.mapquest.api_key.present?
   %script{src: MapTile.mapquest.js_script_url, type: 'application/javascript'}
 
 :javascript

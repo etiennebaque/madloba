@@ -49,6 +49,6 @@ Madloba::Application.configure do
                                              }
 
   # Variable used to debug setup mode at runtime
-  config.setup_debug_mode = true
+  config.setup_debug_mode = false
 
 end

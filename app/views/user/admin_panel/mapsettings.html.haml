@@ -43,7 +43,7 @@
                 = f.input :state, label: false, placeholder: t('admin.map_settings.state')
                 = f.input :country, label: false, placeholder: t('admin.map_settings.country')
 
-              = f.hidden_field :zoom_level
+              = f.hidden_field :zoom_level, class: 'zoom-level'
 
               %i= t('admin.map_settings.map_description')
               %br
@@ -60,8 +60,6 @@
 - content_for :scripts do
   = render 'shared/map_scripts_after_body', include_all_scripts: true
   :javascript
-    mapSettings = new MapSettings();
-    mapSettings.init();
     // Giving this page the possibility to find geocodes.
     find_geocodes();
 

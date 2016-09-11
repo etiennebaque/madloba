@@ -33,8 +33,8 @@ class MapSettingsForm < ApplicationForm
       I18n.t('admin.map_settings.update_success_demo')
     else
       # All the information on the map settings page that can be saved
-      MapTile.mapbox.update_attributes(api_key: mapbox_api_key, map_name: mapbox_map_name)
-      MapTile.mapquest.update_attributes(api_key: mapquest_api_key)
+      MapTile.mapbox.update_attributes(api_key: mapbox_api_key, map_name: mapbox_map_name) if mapbox_api_key.present?
+      MapTile.mapquest.update_attributes(api_key: mapquest_api_key) if mapquest_api_key.present?
 
       SETTINGS_ATTRIBUTES.each do |key|
         setting_record = Setting.find_by_key(key)
