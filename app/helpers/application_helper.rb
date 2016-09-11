@@ -133,7 +133,7 @@ module ApplicationHelper
   private
 
   # Define whether the app is deployed on Heroku or not.
-  def is_on_heroku
+  def on_heroku?
     ENV['MADLOBA_IS_ON_HEROKU'].downcase == 'true'
   end
 

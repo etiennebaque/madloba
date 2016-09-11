@@ -83,7 +83,7 @@
                 :toggle => 'popover', :trigger => 'hover focus'}                       |
 
           / Image upload - only possible when app deployed on server, for now
-          - if !is_on_heroku && can_upload_image
+          - if !on_heroku? && can_upload_image
             .form-group
               = f.label :description, t('ad.upload_image'), class: 'col-lg-2 control-label'
               .col-lg-6

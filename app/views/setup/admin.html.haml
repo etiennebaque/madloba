@@ -57,7 +57,7 @@
             .form-group
               .col-lg-2
               .col-lg-6.pull-right
-                - if is_on_heroku
+                - if on_heroku?
                   %a.btn.btn-link{:href => "/setup/map"}= t('setup.back')
                 - else
                   %a.btn.btn-link{:href => "/setup/image"}= t('setup.back')

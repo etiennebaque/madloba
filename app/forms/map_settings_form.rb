@@ -58,6 +58,7 @@ class MapSettingsForm < ApplicationForm
   end
 
   def fallback_on_osm?
+    return true if mapbox_api_key.nil? && mapquest_api_key.nil?
     (mapbox_api_key.empty? && chosen_map == 'mapbox') || (mapquest_api_key.empty? && chosen_map == 'map_quest')
   end
 

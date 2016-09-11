@@ -109,7 +109,7 @@
                     = f.fields_for :ad_items do |ad_item|
                       = render 'shared/ad_item_fields', f: ad_item
                     = link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success ad-add-item'
-              - if !is_on_heroku && can_upload_image
+              - if !on_heroku? && can_upload_image
                 / Image upload - only possible when app deployed on server, for now
                 .form-group
                   = f.label :description, t('ad.upload_image'), class: 'control-label'

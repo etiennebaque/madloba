@@ -99,35 +99,15 @@ class SetupController < ApplicationController
   end
 
   def process_map
-    lat = params['hiddenLatId']
-    lng = params['hiddenLngId']
-    if lat && lat != '' && lng && lng != ''
-      map_center = "#{lat},#{lng}"
-      settings_hash = {city: params['city'],
-                       state: params['state'],
-                       country: params['country'],
-                       zoom_level: params['zoom_level'],
-                       map_center_geocode: map_center}
-      settings_hash.each {|key, value|
-        setting_record = Setting.find_by_key(key)
-        if setting_record.nil?
-          setting_record = Setting.new(key: key, value: value)
-        else
-          setting_record.update_attribute(:value, value)
-        end
-        setting_record.save
-      }
+    @form = MapSettingsForm.new(params[:map_settings_form])
+    flash[:success] = @form.submit
 
-      if is_on_heroku
-        redirect_to setup_admin_path
-      else
-        redirect_to setup_image_path
-      end
+    if on_heroku?
+      redirect_to setup_admin_path
     else
-      flash[:error] = t('setup.select_geocodes')
-      @map_settings = MapInfo.new.to_hash
-      render 'setup/map'
+      redirect_to setup_image_path
     end
+
   end
 
   # -----------------------------------------
@@ -138,7 +118,7 @@ class SetupController < ApplicationController
     @storage_choices = [[IMAGE_NO_STORAGE, t('setup.option_no_storage')],
                         [IMAGE_AMAZON_S3, t('setup.option_s3')]]
 
-    if !is_on_heroku
+    if !on_heroku?
       @storage_choices << [IMAGE_ON_SERVER, t('setup.option_server')]
     else
       # If app deployed on Heroku, we should not be here. Redirection to next step, admin page.

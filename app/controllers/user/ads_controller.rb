@@ -58,7 +58,7 @@ class User::AdsController < ApplicationController
         user_info = {email: @ad.anon_email, name: @ad.anon_name, is_anon: true}
       end
 
-      if is_on_heroku
+      if on_heroku?
         UserMailer.created_ad(user_info, @ad, full_admin_url).deliver
       else
         # Queueing email sending, when not on heroku.
@@ -145,7 +145,7 @@ class User::AdsController < ApplicationController
           sender_info = {full_name: params['name'], email: params['email']}
         end
 
-        if is_on_heroku
+        if on_heroku?
           UserMailer.send_message_for_ad(sender_info, message, ad_info).deliver
         else
           UserMailer.delay.send_message_for_ad(sender_info, message, ad_info)
