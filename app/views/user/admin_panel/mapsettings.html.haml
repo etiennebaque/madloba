@@ -16,8 +16,7 @@
               .alert.alert-info
                 = t('admin.map_settings.demo_message')
           .box-content.form-inputs
-            = simple_form_for @form, url: '/user/mapsettings/update', html: {class: 'form-horizontal'},
-                wrapper: :horizontal_form do |f|
+            = simple_form_for @form, url: '/user/mapsettings/update', html: {class: 'form-horizontal'}, wrapper: :horizontal_form do |f|
 
               = f.input :chosen_map, input_html: {style:'width: 200px'}, label: t('admin.map_settings.type'), collection: @form.options_for_maptype_select, include_blank: false
 
@@ -40,9 +39,9 @@
 
               .form-inline
                 = f.label t('admin.map_settings.find_city_map'), class: 'col-sm-3 control-label'
-                = f.input :city, label: false, placeholder: 'City'
-                = f.input :state, label: false, placeholder: 'State'
-                = f.input :country, label: false, placeholder: 'Country'
+                = f.input :city, label: false, placeholder: t('admin.map_settings.city')
+                = f.input :state, label: false, placeholder: t('admin.map_settings.state')
+                = f.input :country, label: false, placeholder: t('admin.map_settings.country')
 
               = f.hidden_field :zoom_level
 

@@ -62,5 +62,8 @@ module Madloba
     config.middleware.use AdSocket
     config.middleware.delete Rack::Lock
 
+    # Variable used to debug setup mode at runtime
+    config.setup_debug_mode = false
+
   end
 end

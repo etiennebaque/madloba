@@ -526,7 +526,7 @@ en:
     select_geocodes: Please select a center point on the map.
     state_province: State/Province
     find_city_on_map: Find this city on the map
-    map_description: "Click somewhere in your city: the marker showing up will set the middle of the map, on the home page of your website."
+    map_description: "Click somewhere in your city: the marker showing up will set the middle of the map on the home page of your website."
     map_description_2: "Click also on '+/-' to choose the default level of zoom."
     gmail_note: "If you've set up a Gmail address as your SMTP username, you need to let Google know about it. So before submitting this form:"
     gmail_note2: Open a new tab right now, and log into your Gmail SMTP email account (log out from any other Gmail account).

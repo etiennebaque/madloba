@@ -6,10 +6,10 @@ class SetupController < ApplicationController
   # We first check that the user really has to go through the setup process.
   # The process finishes once the user reaches the 'All done' page.
   def check_setup_step
-    setup_step = Setting.find_or_create_by(key: 'setup_step')
-    setup_step_val = setup_step.value.to_i
-    if setup_step_val == 0
-      # The app is already good to go, the user must be redirected to root
+    setup_step_val = Setting.find_or_create_by(key: 'setup_step').value.to_i
+    setup_debug_mode = Rails.configuration.setup_debug_mode
+    if setup_step_val == 0 && !setup_debug_mode
+      # The app is already good to go, the user must be redirected to home page
       redirect_to root_path
     end
   end
@@ -91,6 +91,7 @@ class SetupController < ApplicationController
   # -----------------------------------------
   def show_map
     @map_settings = MapInfo.new.to_hash
+    @form = MapSettingsForm.new
     @map_settings[:page] = 'mapsettings'
     @current_step = 3
 
@@ -124,7 +125,7 @@ class SetupController < ApplicationController
       end
     else
       flash[:error] = t('setup.select_geocodes')
-      getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
+      @map_settings = MapInfo.new.to_hash
       render 'setup/map'
     end
   end

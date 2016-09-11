@@ -34,14 +34,21 @@ class ApplicationController < ActionController::Base
   def check_if_setup
     current_url = request.original_url
     chosen_language = Rails.cache.fetch(CACHE_CHOSEN_LANGUAGE) {Setting.where(key: 'chosen_language').pluck(:value).first}
-    if (chosen_language.empty? && !(current_url.include? 'setup/language'))
-      # If the locale has never been specified (even during the setup process), redirect to the setup language page.
+    no_chosen_language = chosen_language.empty? && !(current_url.include? 'setup/language')
+    setup_debug_mode = Rails.configuration.setup_debug_mode && !(current_url.include? 'setup')
+
+    if setup_debug_mode
       redirect_to setup_language_path
-    elsif !((current_url.include? 'setup') || (current_url.include? 'user/register') || (current_url.include? 'getCityGeocodes'))
-      # Redirect to the setup pages if it has never been completed.
-      setup_step_value = Rails.cache.fetch(CACHE_SETUP_STEP) {Setting.where(key: 'setup_step').pluck(:value).first.to_i}
-      if setup_step_value == 1
+    else
+      if no_chosen_language
+        # If the locale has never been specified (even during the setup process), redirect to the setup language page.
         redirect_to setup_language_path
+      elsif !((current_url.include? 'setup') || (current_url.include? 'user/register') || (current_url.include? 'getCityGeocodes'))
+        # Redirect to the setup pages if it has never been completed.
+        setup_step_value = Rails.cache.fetch(CACHE_SETUP_STEP) {Setting.where(key: 'setup_step').pluck(:value).first.to_i}
+        if setup_step_value == 1
+          redirect_to setup_language_path
+        end
       end
     end
   end
