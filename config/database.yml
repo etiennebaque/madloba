@@ -8,7 +8,7 @@ development:
   username: <%= ENV["MADLOBA_DEV_USERNAME"] %>
   password: <%= ENV["MADLOBA_DEV_PASSWORD"] %>
 
-test:
+test: &test
   adapter: postgresql
   encoding: unicode
   pool: 5
@@ -35,3 +35,6 @@ production:
   database:
   username:
   password:
+
+cucumber:
+  <<: *test

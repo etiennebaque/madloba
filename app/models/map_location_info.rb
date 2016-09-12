@@ -1,6 +1,6 @@
 class MapLocationInfo < MapInfo
 
-  def initialize(location: location, has_center_marker: true, clickable: CLICKABLE_MAP_EXACT_MARKER)
+  def initialize(location:, has_center_marker: true, clickable: CLICKABLE_MAP_EXACT_MARKER)
     super(has_center_marker: has_center_marker, clickable: clickable)
 
     if location.present?

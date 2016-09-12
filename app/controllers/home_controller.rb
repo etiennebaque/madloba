@@ -194,15 +194,9 @@ class HomeController < ApplicationController
   # (eg. Website description, contact email, social media links... )
   # Also returns a settings hash, that will be needed for the rest of HomeController#index execution.
   def get_footer_info
-    @social_medias = []
     settings = {}
     Setting.all.each do |setting|
-      if %w(facebook twitter pinterest).include? setting['key']
-
-      else
-        # Settings hash
-        settings[setting['key']]=setting['value']
-      end
+      settings[setting['key']]=setting['value']
     end
 
     # Useful links, for the footer section.
@@ -213,6 +207,7 @@ class HomeController < ApplicationController
     end
 
     settings
+
   end
 
 end

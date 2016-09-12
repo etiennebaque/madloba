@@ -103,6 +103,7 @@ group :development, :test do
   gem 'awesome_print'
   gem 'spring'
   gem 'spring-commands-rspec'
+  gem 'spring-commands-cucumber'
 
   gem 'haml-rails'
 end
@@ -112,7 +113,12 @@ group :test do
   gem 'capybara'
   gem 'guard-rspec'
   gem 'launchy'
+
+  gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
+  gem 'selenium-webdriver'
+  gem 'capybara-screenshot'
+  gem 'capybara-webkit'
 end
 
 group :doc do

@@ -72,7 +72,7 @@
               #items
                 = f.fields_for :ad_items do |ad_item|
                   = render 'shared/ad_item_fields', f: ad_item
-                = link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success'
+                = link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success add-item-button'
 
           / Ad description
           .form-group
