@@ -31,6 +31,8 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
     Rails.application.load_seed # loading seeds
+    SeedFu.quiet = true
+    SeedFu.seed
   end
 
 =begin

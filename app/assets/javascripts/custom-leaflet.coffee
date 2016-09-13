@@ -533,7 +533,7 @@ global.initializeSideBar = (sidebar) ->
 # Updates hidden fields, if needed, if the geocodes are part of a form.
 ###
 
-onMapClickLocation = (e) ->
+global.onMapClickLocation = (e) ->
   new_geocodes = onMapClick(e)
   geocodeSplit = new_geocodes.split(',')
 

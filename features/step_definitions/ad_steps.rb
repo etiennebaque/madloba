@@ -4,10 +4,16 @@ end
 
 Then(/^I should see '([^"]*)'$/) do |txt|
   page.should have_content(txt)
+  @latitude = page.find('#ad_location_attributes_latitude', visible: false).value
+  @longitude = page.find('#ad_location_attributes_longitude', visible: false).value
 end
 
 When(/^I fill in '([^"]*)' with '([^"]*)'$/) do |field, txt|
   fill_in field, with: txt
+end
+
+When(/^I fill in field with class '([^"]*)' with '([^"]*)'$/) do |klass, txt|
+  find(:css, "input.#{klass}").set(txt)
 end
 
 When(/^I choose '([^"]*)'$/) do |radio_label|
@@ -20,4 +26,15 @@ end
 
 When(/^I click on '([^"]*)'$/) do |txt|
   click_link(txt)
+end
+
+When(/^I search for this place$/) do
+  page.find('#findGeocodeAddressMapBtnId').click
+end
+
+Then(/^I should get new geocodes$/) do
+  new_latitude = page.find('#ad_location_attributes_latitude', visible: false).value
+  new_longitude = page.find('#ad_location_attributes_longitude', visible: false).value
+  new_latitude.should_not be(@latitude)
+  new_longitude.should_not be(@longitude)
 end

@@ -41,7 +41,8 @@ rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
 
-load File.join(Rails.root, 'db', 'seeds.rb')
+Rails.application.load_seed
+SeedFu.quiet = true
 SeedFu.seed
 
 Capybara::Webkit.configure do |config|
