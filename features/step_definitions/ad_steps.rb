@@ -1,11 +1,15 @@
 Given(/^I go to create a new ad page$/) do
   visit new_ad_path
+  @latitude = page.find('#ad_location_attributes_latitude', visible: false).value
+  @longitude = page.find('#ad_location_attributes_longitude', visible: false).value
 end
 
 Then(/^I should see '([^"]*)'$/) do |txt|
   page.should have_content(txt)
-  @latitude = page.find('#ad_location_attributes_latitude', visible: false).value
-  @longitude = page.find('#ad_location_attributes_longitude', visible: false).value
+end
+
+Then(/^I should not see '([^"]*)'$/) do |txt|
+  page.should_not have_content(txt)
 end
 
 When(/^I fill in '([^"]*)' with '([^"]*)'$/) do |field, txt|
@@ -26,6 +30,10 @@ end
 
 When(/^I click on '([^"]*)'$/) do |txt|
   click_link(txt)
+end
+
+When(/^I click on '([^"]*)' button$/) do |txt|
+  find_button(txt).click
 end
 
 When(/^I search for this place$/) do

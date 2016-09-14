@@ -7,3 +7,12 @@ Given(/^I am an anonymous user$/) do
     Capybara.current_driver = current_driver
   end
 end
+
+Given(/^I am a signed user$/) do
+  user = FactoryGirl.create(:user)
+  visit root_path
+  page.find('#popover').click
+  step("I fill in 'user[email]' with '#{user.email}'")
+  step("I fill in 'user[password]' with '#{user.password}'")
+  click_button 'Sign in'
+end

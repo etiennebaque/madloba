@@ -28,6 +28,7 @@ require 'capybara-screenshot/cucumber'
 # recommended as it will mask a lot of errors for you!
 #
 ActionController::Base.allow_rescue = false
+Cucumber::Rails::Database.autorun_database_cleaner = false
 
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
@@ -35,15 +36,14 @@ ActionController::Base.allow_rescue = false
 Capybara.javascript_driver = :webkit
 
 begin
-  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner.strategy = :truncation
   DatabaseCleaner.clean
+  Rails.application.load_seed
+  SeedFu.quiet = true
+  SeedFu.seed
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
-
-Rails.application.load_seed
-SeedFu.quiet = true
-SeedFu.seed
 
 Capybara::Webkit.configure do |config|
   config.allow_url("api.mapbox.com")

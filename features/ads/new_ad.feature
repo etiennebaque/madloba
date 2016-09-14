@@ -1,12 +1,12 @@
 Feature: Create a new ad
 
 @javascript
-Scenario: Create successfully a new ad with an anonymous user
-  Given I am an anonymous user
+Scenario: Create successfully a new ad with a signed in user
+  Given I am a signed user
   And I go to create a new ad page
   Then I should see 'New ad'
-  And I should see 'Create an account or sign in now before publishing your ad'
-  And I should see 'Location name'
+  And I should not see 'Create an account or sign in now before publishing your ad'
+  And I should see 'Which name would you like to show'
   When I fill in 'ad[title]' with 'Ad title example'
   And I choose 'I'm giving away items.'
   And I add an item
@@ -24,4 +24,21 @@ Scenario: Create successfully a new ad with an anonymous user
   Then I should see 'Click on the map to locate your exact address'
   When I click somewhere on the map
   Then I should get new geocodes
+  And I fill in 'ad[location_attributes][phone_number]' with '111222333'
+  And I fill in 'ad[location_attributes][website]' with 'google.ca'
+  And I fill in 'ad[location_attributes][description]' with 'This is how to get here.'
+  And I click on 'Create this ad!' button
+  Then I should see 'The ad 'Ad title example' has been created. You will shortly receive an e-mail, with the new ad details.'
+  And I should see 'This is how to get here.'
+  And I should see '111222333'
+  And I should see 'google.ca'
 
+@javascript
+Scenario: The new ad page with an anonymous user should show relevant field
+  Given I am an anonymous user
+  And I go to create a new ad page
+  Then I should see 'New ad'
+  And I should see 'Create an account or sign in now before publishing your ad'
+  And I should see 'Location name'
+  And I should see 'About you'
+  And I should see 'Captcha'
