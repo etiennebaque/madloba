@@ -3,14 +3,10 @@ class MapSettingsForm < ApplicationForm
 
   attr_accessor(*(MAP_SERVICE_ATTRIBUTES+SETTINGS_ATTRIBUTES))
 
-  def initialize(params = nil, map_info = nil)
+  def initialize(params = nil)
     if params.present?
       params.each do |k,v|
         self.send("#{k}=", v)
-      end
-    elsif map_info.present?
-      MAP_SERVICE_ATTRIBUTES+SETTINGS_ATTRIBUTES.each do |key|
-        self.send("#{key}=", map_info.send(key))
       end
     else
       init_map_settings

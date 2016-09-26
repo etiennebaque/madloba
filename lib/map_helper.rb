@@ -1,6 +1,6 @@
 module MapHelper
 
-  SETTINGS_ATTRIBUTES = [:chosen_map, :latitude, :longitude, :city, :state, :country, :zoom_level, :demo]
+  SETTINGS_ATTRIBUTES = [:chosen_map, :latitude, :longitude, :city, :state, :country, :zoom_level, :demo, :area_type]
   MAP_SERVICE_ATTRIBUTES = [:mapbox_api_key, :mapbox_map_name, :mapquest_api_key, :osm_tile_url, :osm_attribution]
 
   def init_map_settings

@@ -165,24 +165,8 @@ class User::AdminPanelController < ApplicationController
   def areasettings
     authorize :admin, :areasettings?
 
-    #@map_settings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
     @map_settings = MapInfo.new(has_center_marker: false, clickable: NOT_CLICKABLE_MAP).to_hash
-
-    # Adding this flag to add leaflet draw tool to the map, on the "Area settings" page.
-    # Drawing tool added in initLeafletMap(), in custom-leaflet.coffee
-    @map_settings[:page] = 'areasettings'
-
-    districts = District.all.select(:id, :name, :bounds)
-    @districts = []
-    districts.each do |d|
-      if d.bounds.present?
-        bounds = JSON.parse(d.bounds)
-        bounds['properties']['id'] = d.id
-        bounds['properties']['name'] = d.name
-        @districts.push(bounds)
-      end
-    end  
-    @area_types = @map_settings[:area_type].split(',')
+    @area_types = Setting.area_types
   end
 
   def update_areasettings

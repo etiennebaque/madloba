@@ -19,6 +19,7 @@
               .alert.alert-success
                 %button.close{"data-dismiss" => "alert", :type => "button"} ×
                 = flash[:setting_success]
+
           .box-content
             = form_tag '/user/areasettings/update', method: :post, id: 'areaSettingFormId', role: 'form' do
               / Choose between 'postal code' or 'district' type of area
@@ -32,6 +33,7 @@
                   %label
                     = check_box_tag 'area_type[]', 'district', (@area_types.include?'district'), class: 'area_district'
                     = t('admin.area_settings.by_district')
+
               / "Postal code" area section - start
               #postal_code_section{:style => "display: none;"}
                 %hr/
@@ -48,9 +50,10 @@
                     = number_field_tag 'area_length', @map_settings[:area_length], class: 'form-control', min: 1
                     %i= t('admin.map_settings.postal_code_help2')
               / "Postal code" area section - end
+
               / "District" area section - start
               #district_section{:style => "display: none;"}
-                %hr/
+                %hr
                 %h4= t('admin.area_settings.area_district')
                 / Map canvas
                 .form-group
@@ -60,7 +63,8 @@
                       #map.large
                   #district_notification_message
               / "District" area section - end
-              %hr/
+
+              %hr
               / Submit button
               .form-actions
                 = submit_tag(t('admin.save'), class: 'btn btn-success')
@@ -72,9 +76,8 @@
   / Inserting the Leaflet Draw plugin, in order to draw polygon to define districts
   = render 'shared/included_leafletdraw_scripts'
   / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
-  = render 'shared/map_scripts_after_body', include_all_scripts: false
+  = render 'shared/map_scripts_after_body'
 
   :javascript
-    var districts = #{raw @districts.to_json}
+    var districts = #{raw District.bounds.to_json}
     areaSettings = new AreaSettings();
-    areaSettings.init();

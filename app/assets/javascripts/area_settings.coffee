@@ -3,12 +3,16 @@ global = this
 global.AreaSettings = ->
 
   # Adding specific events on the 'Area settings' page, needed when drawing and saving districts.
-  init: ->
-    leaf.drawn_items = L.featureGroup().addTo(leaf.map)
+  init: (districts) ->
+    leaf.districts = districts
+    leaf.drawn_items = L.featureGroup()
+    leaf.map.addLayer(leaf.drawn_items)
+
     district_bounds = undefined
     layer = undefined
     # Adding drawing control panel to the map
-    leaf.map.addControl new (L.Control.Draw)(edit: featureGroup: leaf.drawn_items)
+    leaf.map.addControl(new (L.Control.Draw)(edit: featureGroup: leaf.drawn_items))
+
     if leaf.districts != null
       # Adding existing districts to the map
       i = 0

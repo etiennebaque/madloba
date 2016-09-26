@@ -39,14 +39,7 @@ global.leaf =
       leaf.map_tiles = MQ.mapLayer()
       leaf.map_tiles.addTo leaf.map
 
-    console.log('latitude: ' + leaf.my_lat)
-    console.log('longitude: ' + leaf.my_lng)
-    console.log('zoom_level: ' + map_settings['zoom_level'])
     leaf.map.setView [leaf.my_lat, leaf.my_lng], map_settings['zoom_level']
-    # Load districts when available (eg. on area settings page, when all of them need to show up on a map...)
-    if typeof districts != 'undefined' and districts != null
-      leaf.districts = districts
-    return
 
   show_features_on_ad_details_page: (map_settings) ->
     if map_settings['ad_show_is_area'] == true
@@ -139,7 +132,6 @@ global.leaf =
       map_settings['chosen_map'] = selected_map
       map_settings['tiles_url'] = map_settings[selected_map]['tiles_url']
       map_settings['attribution'] = map_settings[selected_map]['attribution']
-      initLeafletMap map_settings
 
     leaf.map.on 'zoomend', ->
       $('.zoom-level').val leaf.map.getZoom()
