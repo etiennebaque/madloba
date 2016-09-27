@@ -77,7 +77,7 @@ AdSocket::initBinds = ->
       $(this).remove()
       _this.nav_state.cat.push $(this).attr('id')
 
-    _this.sendNavState _this.stringifyState()
+    _this.sendNavState(_this.stringifyState())
 
   # Message sent to server when a new ad has just been created
   # (ie. new ad notification message has been loaded on ads#show)

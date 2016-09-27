@@ -436,25 +436,6 @@ events =
       $('html, body').animate { scrollTop: 0 }, 0
 
   init_admin_pages: ->
-    # Area settings admin page: show either the "postal code" or the "district" section.
-    # "Create ad" form: show appropriate section when entering an exact address
-    $('.area_postal_code').click ->
-      $('#postal_code_section').toggle 0, ->
-
-    if $('.area_postal_code').is(':checked')
-      $('#postal_code_section').css 'display', 'block'
-
-    # Area settings page: show appropriate section when choosing an area
-    $('.area_district').click ->
-      $('#district_section').toggle 0, ->
-      initLeafletMap map_settings
-      areaSettings.init(districts)
-
-    if $('.area_district').is(':checked')
-      $('#district_section').css 'display', 'block'
-      initLeafletMap map_settings
-      areaSettings.init(districts)
-
     # "Edit ad" form: create message when image needs to be uploaded.
     $('#ad-edit-form').submit ->
       image_path = $('#ad_image').val()
