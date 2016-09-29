@@ -315,68 +315,6 @@ global.initLeafletMap = (map_settings) ->
   return
 
 ###*
-# Populates the map with different markers (eg exact address and area-type markers, to show ads)
-# @param locations_hash - hash containing the info to create all different markers.
-###
-
-global.putLocationMarkers = (locations_exact, locations_postal, locations_district, area_geocodes, marker_colors) ->
-  # The MarkerClusterGroup object will allow to aggregate location markers (both 'exact location' and 'area' markers),
-  # when they get too close to one another, as the user zooms out, on the home page.
-  markers.group = new (L.MarkerClusterGroup)(
-    spiderfyDistanceMultiplier: 2
-    zoomToBoundsOnClick: false)
-  markers.area_geocodes = area_geocodes
-  markers.marker_colors = marker_colors
-  # Displaying markers on map
-  markers.place_exact_locations_markers locations_exact, false
-  # Displaying postal code area circles on map
-  markers.draw_postal_code_areas locations_postal
-  # Displaying district areas on map
-  markers.draw_district_areas locations_district
-  # Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
-  # Server side is in home_controller, method showSpecificAds.
-  $('#map').on 'click', '.area_link', ->
-    input = $(this).attr('id').split('|')
-    $.get '/showSpecificAds', {
-      item: input[0]
-      type: input[1]
-      area: input[2]
-    }, (data) ->
-      html_to_append = '<ul>'
-      i = 0
-      while i < data['ads'].length
-        ad = data['ads'][i]
-        html_to_append = html_to_append + '<li><a href="/ads/' + ad['id'] + '/">' + ad['title'] + '</a></li>'
-        i++
-      html_to_append = html_to_append + '</ul>'
-      $('#ads-modal-body-id').html html_to_append
-      icon = ''
-      if typeof data['icon'] != 'undefined'
-        icon = '<i class="fa ' + data['icon'] + '" style="color: ' + data['hexa_color'] + '; padding-right: 10px;"></i>'
-      $('#adsModalTitle').html icon + gon.vars['ads_for'] + ' \'' + input[0].capitalizeFirstLetter() + '\' - ' + data['area_name']
-      options =
-        'backdrop': 'static'
-        'show': 'true'
-      $('#adsModal').modal options
-      return
-    return
-  searched_location_marker = ''
-  if typeof leaf.searched_address != 'undefined'
-    # Adding marker for the searched address, on the home page.
-    searched_location_marker = L.marker([
-      leaf.my_lat
-      leaf.my_lng
-    ], icon: markers.default_icon).bindPopup(leaf.searched_address)
-    searched_location_marker.addTo leaf.map
-    #markers.group.addLayer(searched_location_marker);
-    #leaf.map.fitBounds(markers.group.getBounds().pad(0.1));
-  # Adding all the markers to the map.
-  leaf.map.addLayer markers.group
-  if searched_location_marker != ''
-    searched_location_marker.openPopup()
-  return
-
-###*
 # Creates the text to be shown in a marker popup, giving details about the selected exact location.
 # @param first_sentence
 # @param location
@@ -510,14 +448,6 @@ createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area
   else
     first_sentence = first_sentence + people_give + '<br />' + people_accept
   first_sentence
-
-###*
-# This method initialize the right-hand side navigation bar, on the home page.
-###
-global.initializeSideBar = (sidebar) ->
-  # Side bar is shown, right before initializing it, after map is fully loaded.
-  navSidebar = L.control.sidebar('sidebar', position: 'right')
-  leaf.map.addControl navSidebar
 
 
 ###*

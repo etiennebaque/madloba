@@ -22,6 +22,7 @@
   This div is to check whether or not the user has AdBlock on in their browser.
   If they do, it will affect the website's ability to work well (test carried out in general.coffee)
 #ad-block{:style => "position: absolute; opacity: 1; top: 0; left: 0;"} adblock
+
 / Loading JS scripts
 - content_for :scripts do
   /
@@ -32,6 +33,9 @@
 
   / Javascript function calls, related specifically to the home page
   :javascript
+    var map_settings = #{raw @map_settings.to_json};
+    initLeafletMap(map_settings);
+
     // specific script to render map markers and initialize the sidebar.
     var locations_exact = #{raw @locations_exact.to_json}
     var locations_postal = #{raw @locations_postal.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})};
@@ -39,11 +43,7 @@
     var area_geocodes = #{raw @area_geocodes.to_json};
     var marker_colors = #{raw MARKER_COLORS.to_json};
 
-    // Put all markers and areas on the home page map
-    putLocationMarkers(locations_exact, locations_postal, locations_district, area_geocodes, marker_colors);
-
-    // Setup the guided navigation sidebar
-    initializeSideBar();
+    var homePage = new Home(locations_exact, locations_postal, locations_district, area_geocodes, marker_colors);
 
     // Initialize the Web socket object
     #{render 'shared/initialize_websocket.js'}
