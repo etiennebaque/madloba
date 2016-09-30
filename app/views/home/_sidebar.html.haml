@@ -4,6 +4,10 @@
   .sidebar-tabs
     %ul{role: 'tablist'}
       %li
+        %a.collapse-sidebar{href: '#category'}
+          %i.fa.fa-caret-right
+          %i.fa.fa-caret-left.hide
+      %li
         %a{href: '#category', role: 'tab', style: 'font-size: 20px'}
           %i.fa.fa-map-marker#sidebar_category_icon
       - if website_description.present?

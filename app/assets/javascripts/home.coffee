@@ -33,6 +33,19 @@ Home::init = ->
   leaf.map.addControl navSidebar
   $('#sidebar_category_icon').trigger('click')
 
+  $('.collapse-sidebar').unbind('click')
+  $('.collapse-sidebar').click (e) ->
+    e.preventDefault()
+    $('.sidebar-tabs').find('.active a i').trigger('click')
+    $('.collapse-sidebar .fa-caret-right').hide()
+    $('.collapse-sidebar .fa-caret-left').show()
+
+  $('.open-sidebar').click (e) ->
+    e.preventDefault()
+    $('#sidebar_category_icon').trigger('click')
+    $('.collapse-sidebar .fa-caret-left').hide()
+    $('.collapse-sidebar .fa-caret-right').show()
+
 
 ###*
 # Populates the map with different markers (eg exact address and area-type markers, to show ads)
