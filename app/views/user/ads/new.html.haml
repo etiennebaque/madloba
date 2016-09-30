@@ -187,6 +187,9 @@
     var current_page = "new_ad";
     var location_number = #{user_locations_number};
     var can_choose_existing_locations = #{can_choose_existing_locations(current_user)};
+    adForm = new AdForm();
 
   / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
   = render 'shared/map_scripts_after_body', include_all_scripts: false
+
+

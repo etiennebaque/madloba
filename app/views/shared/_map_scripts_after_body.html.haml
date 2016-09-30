@@ -5,4 +5,6 @@
 :javascript
   // Initializing a bunch of variables used over the map-related scripts.
   var map_settings = #{raw @map_settings.to_json};
-  initLeafletMap(map_settings);
+  if ($("#map").length > 0){
+    initLeafletMap(map_settings);
+  }

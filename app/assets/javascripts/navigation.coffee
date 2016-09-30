@@ -17,7 +17,7 @@ NavigationBar::init = ->
   $('#searchFormId input').keypress (event) ->
     if event.which == 13
       event.preventDefault()
-      @getLocationsPropositions()
+      _this.getLocationsPropositions()
 
   # Event tied to "up" arrow, to go back to the top of the page.
   $('#navbar-up-link').click ->
@@ -31,7 +31,7 @@ NavigationBar::init = ->
 
   # Navigation - Search form: Ajax call to get locations proposition, based on user input in this form.
   $('#btn-form-search').click ->
-    @getLocationsPropositions()
+    _this.getLocationsPropositions()
 
   # Popover when "Sign in / Register" link is clicked, in the navigation bar.
   $('#popover').popover

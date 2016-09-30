@@ -150,14 +150,13 @@ global.leaf =
       latlng = layer.getBounds().getCenter()
       layer.openPopup latlng
       markers.selected_area = layer
-      return
+
     latlng
     
 
 ###*
 # Object gathering different markers and icons that are used on the Madloba maps.
 ###
-
 global.markers =
   new_marker: ''
   selected_area: ''
@@ -315,36 +314,9 @@ global.initLeafletMap = (map_settings) ->
   return
 
 ###*
-# Creates the text to be shown in a marker popup, giving details about the selected exact location.
-# @param first_sentence
-# @param location
-# @returns Popup text content.
-###
-
-createPopupHtml = (first_sentence, ad, index) ->
-  second_sentence = ''
-  result = ''
-  item = ad['items'][index]
-  popup_ad_link = '<a href=\'/ads/' + ad['id'] + '/\'>' + ad['title'] + '</a>'
-  popup_item_name = '<span style=\'color:' + marker_colors[item['category']['marker_color']] + '\';><strong>' + item['name'].capitalizeFirstLetter() + '</strong></span>'
-  if ad['is_giving'] == true
-    second_sentence = gon.vars['items_given'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
-  else
-    second_sentence = gon.vars['items_searched'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
-  if ad['image']['thumb']['url'] != null and ad['image']['thumb']['url'] != ''
-    # Popup is created with a thumbnail image in it.
-    ad_image = '<img class=\'thumb_ad_image\' onError="$(\'.thumb_ad_image\').remove(); $(\'.image_notification\').html(\'<i>' + gon.vars['image_not_available'] + '</i>\');" src=\'' + ad['image']['thumb']['url'] + '\'><span class="image_notification"></span>'
-    result = '<div style=\'overflow: auto;\'><div class=\'col-sm-6\'>' + first_sentence + '</div><div class=\'col-sm-6\'>' + ad_image + '</div><div class=\'col-sm-12\'><br>' + second_sentence + '</div></div>'
-  else
-    # Popup is created without any thumbnail image.
-    result = '<div style=\'overflow: auto;\'>' + first_sentence + '<br><br>' + second_sentence + '</div>'
-  result
-
-###*
 # This function draws districts (where at least one current ad is included)
 # on the map of the home page.
 ###
-
 global.drawDistrictsOnMap = (locations_district) ->
   Object.keys(locations_district).forEach (district_id) ->
     locations = locations_district[district_id]
@@ -364,7 +336,6 @@ global.drawDistrictsOnMap = (locations_district) ->
 # This function draws postal code areas (where at least a current ad is included)
 # on the map of the home page.
 ###
-
 global.drawPostalCodeAreaOnMap = (locations_postal) ->
   Object.keys(locations_postal).forEach (area_code) ->
     locations = locations_postal[area_code]
@@ -381,13 +352,98 @@ global.drawPostalCodeAreaOnMap = (locations_postal) ->
   return
 
 ###*
+# Defines latitude and longitude, after a click on a map (eg on map settings page...).
+# Updates hidden fields, if needed, if the geocodes are part of a form.
+###
+global.onMapClickLocation = (e) ->
+  new_geocodes = onMapClick(e)
+  geocodeSplit = new_geocodes.split(',')
+
+  # latitude and longitude are classes used on area settings page.
+  $('#new_dynamic_button_add').removeClass 'disabled'
+  $('.latitude').val geocodeSplit[0]
+  $('.longitude').val geocodeSplit[1]
+
+
+# Event triggered when click on "Locate me on the map" button,
+# on the "Create ad" form, and on the Ad edit form.
+global.find_geocodes = ->
+  $('#find_geocodes_from_address').button().click ->
+    location_type = 'exact'
+    if $('.location_type_postal_code').is(':checked')
+      # We're on the location edit page, and 'Postal code' or 'District' location type is checked.
+      location_type = 'area'
+      
+    # Ajax call to get geocodes (latitude, longitude) of an exact location defined by address, postal code, city...
+    # This call is triggered by "Find this city", "Find this general location" buttons,
+    # on Map settings page, location edit page, map setup page...
+    $.ajax
+      url: '/getCityGeocodes'
+      global: false
+      type: 'GET'
+      data:
+        street_number: $('.location_streetnumber').val()
+        address: $('.location_streetname').val()
+        city: $('.location_city').val()
+        postal_code: $('.location_postal_code').val()
+        state: $('.location_state').val()
+        country: $('.location_country').val()
+        type: location_type
+      cache: false
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader 'Accept', 'application/json'
+        xhr.setRequestHeader 'Content-Type', 'application/json'
+        $('#findGeocodeLoaderId').html gon.vars['searching_location']
+        return
+      success: (data) ->
+        if data != null and data.status == 'ok'
+          # Geocodes were found: the location is shown on the map.
+          myNewLat = Math.round(data.lat * 100000) / 100000
+          myNewLng = Math.round(data.lon * 100000) / 100000
+          $('.latitude_hidden').val myNewLat
+          $('.longitude_hidden').val myNewLng
+          # Update the center of map, to show the general area
+          leaf.map.setView new (L.LatLng)(myNewLat, myNewLng), data.zoom_level
+        else
+          # The address' geocodes were not found - the user has to pinpoint the location manually on the map.
+          $('#myErrorModal').modal 'show'
+        # Displaying notification about location found.
+        $('#findGeocodeLoaderId').html '<i>' + data.address_found + '</i>'  
+        
+  
+###*
+# Creates the text to be shown in a marker popup, giving details about the selected exact location.
+# @param first_sentence
+# @param location
+# @returns Popup text content.
+###
+createPopupHtml = (first_sentence, ad, index) ->
+  second_sentence = ''
+  result = ''
+  item = ad['items'][index]
+  popup_ad_link = '<a href=\'/ads/' + ad['id'] + '/\'>' + ad['title'] + '</a>'
+  popup_item_name = '<span style=\'color:' + marker_colors[item['category']['marker_color']] + '\';><strong>' + item['name'].capitalizeFirstLetter() + '</strong></span>'
+  if ad['is_giving'] == true
+    second_sentence = gon.vars['items_given'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
+  else
+    second_sentence = gon.vars['items_searched'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
+  if ad['image']['thumb']['url'] != null and ad['image']['thumb']['url'] != ''
+# Popup is created with a thumbnail image in it.
+    ad_image = '<img class=\'thumb_ad_image\' onError="$(\'.thumb_ad_image\').remove(); $(\'.image_notification\').html(\'<i>' + gon.vars['image_not_available'] + '</i>\');" src=\'' + ad['image']['thumb']['url'] + '\'><span class="image_notification"></span>'
+    result = '<div style=\'overflow: auto;\'><div class=\'col-sm-6\'>' + first_sentence + '</div><div class=\'col-sm-6\'>' + ad_image + '</div><div class=\'col-sm-12\'><br>' + second_sentence + '</div></div>'
+  else
+# Popup is created without any thumbnail image.
+    result = '<div style=\'overflow: auto;\'>' + first_sentence + '<br><br>' + second_sentence + '</div>'
+  result
+
+
+###*
 # Creates the text to be shown in a marker popup,
 # giving details about the selected area-type location (postal or district).
 # @param first_sentence
 # @param location
 # @returns Popup text content.
 ###
-
 createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area_id) ->
   is_giving_item = false
   is_accepting_item = false
@@ -449,28 +505,11 @@ createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area
     first_sentence = first_sentence + people_give + '<br />' + people_accept
   first_sentence
 
-
-###*
-# Defines latitude and longitude, after a click on a map (eg on map settings page...).
-# Updates hidden fields, if needed, if the geocodes are part of a form.
-###
-
-global.onMapClickLocation = (e) ->
-  new_geocodes = onMapClick(e)
-  geocodeSplit = new_geocodes.split(',')
-
-  # latitude and longitude are classes used on area settings page.
-  $('#new_dynamic_button_add').removeClass 'disabled'
-  $('.latitude').val geocodeSplit[0]
-  $('.longitude').val geocodeSplit[1]
-  return
-
 ###*
 # Callback function that returns geocodes of clicked location.
 # @param e
 # @returns "latitude,longitude"
 ###
-
 onMapClick = (e) ->
   if markers.new_marker != ''
     leaf.map.removeLayer markers.new_marker

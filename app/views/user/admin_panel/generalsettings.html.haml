@@ -1,6 +1,5 @@
 .row
   #content.middle-col.col-xs-12.col-md-10
-    / content starts
     .row
       .box.col-md-12
         .box-inner
@@ -38,7 +37,9 @@
                 = label_tag 'contact_email', t('admin.general_settings.contact_email')+':', class:'control-label'
                 .form-inline
                   = email_field_tag 'contact_email', @settings['contact_email'], class: 'form-control', size: 35
-              %hr/
+
+              %hr
+
               %h4= t('admin.ad_settings')
               / Ad settings: Max. number of days before ad expiration
               .form-group
@@ -47,7 +48,9 @@
                   = number_field_tag 'ad_max_expire', @settings['ad_max_expire'], class: 'form-control', maxlength: '4', min: 0, max: 1000, |
                     :data => {:content => t('admin.general_settings.max_ad_expire_help'), :placement => 'right',                            |
                     :toggle => 'popover', :trigger => 'hover focus'}                                                                        |
-              %hr/
+
+              %hr
+
               %h4= t('admin.useful_links')
               .form-group
                 %i= t('admin.general_settings.link_help')
@@ -79,7 +82,9 @@
                   = text_field_tag 'link_four_label', @settings['link_four_label'], class: 'form-control', placeholder: 'Label'
                    
                   \#{text_field_tag 'link_four_url', @settings['link_four_url'], class: 'form-control', placeholder: 'URL'}
-              %hr/
+
+              %hr
+
               %h4= t('admin.social_media')
               / Facebook page URL
               .form-group
@@ -96,10 +101,11 @@
                 = label_tag 'pinterest', t('admin.general_settings.pinterest')+':', class:'control-label'
                 .form-inline
                   = text_field_tag 'pinterest', @settings['pinterest'], class: 'form-control'
-              %hr/
+              %hr
+
               / Submit button and cancel link
               = render 'shared/submit_section'
-      / /span
-    / content ends
-  / /#content.span10
-/ /fluid-row
+
+- content_for :scripts do
+  :javascript
+    var generalSettings = new GeneralSettings();

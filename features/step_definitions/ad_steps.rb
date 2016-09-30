@@ -37,7 +37,7 @@ When(/^I click on '([^"]*)' button$/) do |txt|
 end
 
 When(/^I search for this place$/) do
-  page.find('#findGeocodeAddressMapBtnId').click
+  page.find('#find_geocodes_from_address').click
 end
 
 Then(/^I should get new geocodes$/) do

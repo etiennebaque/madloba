@@ -31,8 +31,9 @@ Home::init = ->
   # Initializing the right-hand side navigation bar, on the home page.
   navSidebar = L.control.sidebar('sidebar', position: 'right')
   leaf.map.addControl navSidebar
+  $('#sidebar_category_icon').trigger('click')
 
-  
+
 ###*
 # Populates the map with different markers (eg exact address and area-type markers, to show ads)
 # @param locations_hash - hash containing the info to create all different markers.

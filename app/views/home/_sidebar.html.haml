@@ -5,7 +5,7 @@
     %ul{role: 'tablist'}
       %li
         %a{href: '#category', role: 'tab', style: 'font-size: 20px'}
-          %i.fa.fa-map-marker
+          %i.fa.fa-map-marker#sidebar_category_icon
       - if website_description.present?
         %li
           %a{href: '#about', role: 'tab'}
@@ -87,7 +87,7 @@
             %i= t('home.demo_sidebar_note_html', admin_panel: link_to(t('home.admin_panel'), '/user/managerecords#categories'))
 
 
-    / Contact
+    / Contact us
     #contact.sidebar-pane
       %h1.sidebar-header
         Contact us
