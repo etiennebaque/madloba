@@ -109,7 +109,7 @@ class ApplicationController < ActionController::Base
       if response.to_a.any?
         # The response consists of several propositions, in terms of specific locations
         response.each do |response_location|
-          locations_results << response_location.select {|key,value| %w(lat lon display_name).include? key}
+          locations_results << response_location.select {|key, _| %w(lat lon display_name).include? key}
         end
       else
         # The search didn't return anything.

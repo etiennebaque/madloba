@@ -23,7 +23,8 @@ Home::init = ->
       bounds = a.layer.getBounds().pad(0.5)
       leaf.map.fitBounds bounds
 
-  # This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel, in the home page, the page would scroll down.
+  # This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel,
+  # in the home page, the page would scroll down.
   # When clicking on zoom in/zoom out, this will force to be at the top of the page
   $('#home-map-canvas-wrapper .leaflet-control-zoom-out, #home-map-canvas-wrapper .leaflet-control-zoom-in').click ->
     $('html, body').animate { scrollTop: 0 }, 0
@@ -74,7 +75,9 @@ Home::putLocationMarkers = ->
       icon = ''
       if typeof data['icon'] != 'undefined'
         icon = '<i class="fa ' + data['icon'] + '" style="color: ' + data['hexa_color'] + '; padding-right: 10px;"></i>'
-      $('#adsModalTitle').html icon + gon.vars['ads_for'] + ' \'' + input[0].capitalizeFirstLetter() + '\' - ' + data['area_name']
+
+      resultModalTitle = gon.vars['ads_for'] + ' \'' + input[0].capitalizeFirstLetter() + '\' - ' + data['area_name']
+      $('#adsModalTitle').html icon + resultModalTitle
       options =
         'backdrop': 'static'
         'show': 'true'

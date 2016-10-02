@@ -23,10 +23,16 @@ class MapInfo
 
   def to_hash
     result = {}
-    MAP_INFO_ATTRIBUTES.each do |attr|
+    attributes_to_read.each do |attr|
       result[attr] = self.send(attr).present? ? self.send(attr) : ''
     end
     result
+  end
+
+  protected
+
+  def attributes_to_read
+    MAP_INFO_ATTRIBUTES
   end
 
 end

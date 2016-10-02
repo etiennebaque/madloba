@@ -142,8 +142,14 @@ class Location < ActiveRecord::Base
 
   def address_geocode_lookup(short: false)
     location_info = short ? [self.address] : [self.full_address, self.postal_code]
-    location_info += [self.city, self.province, self.country]
+    this_city = self.city.nil? ? Rails.cache.fetch(CACHE_CITY_NAME) {Setting.find_by_key(:city).value} : self.city
+    this_country = self.country.nil? ? Rails.cache.fetch(CACHE_COUNTRY_NAME) {Setting.find_by_key(:country).value} : self.country
+    location_info += [this_city, self.province, this_country]
     location_info.reject{|e| e.to_s.empty?}.join(',')
+  end
+
+  def define_subclass
+    self.type = "Locations::#{self.loc_type.capitalize}Location"
   end
 
 end

@@ -36,6 +36,7 @@ class User::AdsController < ApplicationController
 
     # we tie now the user to the ad (if it is an anonymous user, current_user is nil)
     @ad.user = current_user
+    @ad.location.define_subclass
 
     if @ad.save_with_or_without_captcha(current_user)
       flash[:new_ad] = @ad.title
@@ -83,6 +84,7 @@ class User::AdsController < ApplicationController
     authorize @ad
 
     # Performing the update.
+    @ad.location.define_subclass
     if @ad.update(ad_params)
       flash[:ad_updated] = @ad.title
       redirect_to edit_user_ad_path(@ad.id)
@@ -114,7 +116,7 @@ class User::AdsController < ApplicationController
     params.require(:ad).permit(:title, :description, :is_username_used, :location_id, :is_giving,
                                :image, :image_cache, :remove_image, :anon_name, :anon_email, :captcha, :captcha_key,
                                :ad_items_attributes => [:id, :item_id, :_destroy, :item_attributes => [:id, :name, :category_id, :_destroy] ],
-                               :location_attributes => [:id, :user_id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :loc_type, :latitude, :longitude, :phone_number, :website, :description, :_destroy])
+                               :location_attributes => [:id, :user_id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :loc_type, :type, :latitude, :longitude, :phone_number, :website, :description, :_destroy])
   end
 
   # This method is called when a user replies and sends a message to another user, who posted an ad.

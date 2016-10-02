@@ -299,7 +299,7 @@ global.initLeafletMap = (map_settings) ->
   markers.init map_settings
 
   if map_settings['has_center_marker'] == true
-    if map_settings['ad_show']
+    if $('#show_ad_page').length > 0
       # Showing markers, district area or postal code area on the ad details page (ads#show)
       leaf.show_features_on_ad_details_page map_settings
     else
@@ -400,15 +400,15 @@ global.find_geocodes = ->
           # Geocodes were found: the location is shown on the map.
           myNewLat = Math.round(data.lat * 100000) / 100000
           myNewLng = Math.round(data.lon * 100000) / 100000
-          $('.latitude_hidden').val myNewLat
-          $('.longitude_hidden').val myNewLng
+          $('.latitude').val myNewLat
+          $('.longitude').val myNewLng
           # Update the center of map, to show the general area
           leaf.map.setView new (L.LatLng)(myNewLat, myNewLng), data.zoom_level
         else
           # The address' geocodes were not found - the user has to pinpoint the location manually on the map.
           $('#myErrorModal').modal 'show'
         # Displaying notification about location found.
-        $('#findGeocodeLoaderId').html '<i>' + data.address_found + '</i>'  
+        $('#findGeocodeLoaderId').html '<i>' + data.address_found + '</i>'
         
   
 ###*
@@ -422,7 +422,9 @@ createPopupHtml = (first_sentence, ad, index) ->
   result = ''
   item = ad['items'][index]
   popup_ad_link = '<a href=\'/ads/' + ad['id'] + '/\'>' + ad['title'] + '</a>'
-  popup_item_name = '<span style=\'color:' + marker_colors[item['category']['marker_color']] + '\';><strong>' + item['name'].capitalizeFirstLetter() + '</strong></span>'
+  markerColor = marker_colors[item['category']['marker_color']]
+  itemName = item['name'].capitalizeFirstLetter()
+  popup_item_name = '<span style=\'color:' + markerColor + '\';><strong>' + itemName + '</strong></span>'
   if ad['is_giving'] == true
     second_sentence = gon.vars['items_given'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
   else
@@ -476,7 +478,8 @@ createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area
         k++
       j++
     i++
-  # We now sort all the items we worked with right above (they are appended with marker colors, but still, items get sorted).
+  # We now sort all the items we worked with right above
+  # (they are appended with marker colors, but still, items get sorted).
   sorted_items = sorted_items.sort()
   # Popup for this area is created here.
   idx = 0
@@ -488,7 +491,8 @@ createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area
     number_of_ads = ad_number_per_item[this_marker_color]['number']
     popup_item_name = '<span style=\'color:' + marker_color + ';\' >' + item_name.capitalizeFirstLetter() + '</span>'
     link_id = item_name + '|' + area_type + '|' + area_id
-    popup_ad_link = '- <a href=\'#\' class=\'area_link\' id=\'' + link_id + '\'>' + popup_item_name + ' (' + number_of_ads + ')</a>'
+    itemNumberAds = popup_item_name + ' (' + number_of_ads + ')'
+    popup_ad_link = '- <a href=\'#\' class=\'area_link\' id=\'' + link_id + '\'>' + itemNumberAds + '</a>'
     if ad_number_per_item[this_marker_color]['is_giving'] == true
       is_giving_item = true
       people_give = people_give + popup_ad_link + '<br />'

@@ -19,6 +19,12 @@ class MapAdInfo < MapInfo
       items.each {|item| self.ad_show << {icon: item.category.icon, color: item.category.marker_color, item_name: item.name}}
     end
 
+    self.latitude = ad.location.latitude
+    self.longitude = ad.location.longitude
     self.zoom_level = MAX_ZOOM_LEVEL
+  end
+
+  def attributes_to_read
+    MAP_INFO_ATTRIBUTES+MAP_AD_INFO_ATTRIBUTES
   end
 end

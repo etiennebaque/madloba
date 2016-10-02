@@ -85,9 +85,9 @@ AreaSettings::initMapEvents = ->
   # Update district name into the GeoJSON properties hash.
   $('#map').on 'click', '.update_district', ->
     new_district_name = $('.update_district_text').val()
-    district_id = $('.update_district_text').attr('id')
+    districtId = $('.update_district_text').attr('id')
     $.post '/user/areasettings/update_district_name', {
-      id: district_id
+      id: districtId
       name: new_district_name
     }, (data) ->
       msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
@@ -96,8 +96,8 @@ AreaSettings::initMapEvents = ->
     # Going through the districts and checking which one to update.
     leaf.drawn_items.eachLayer (layer) ->
       _this.district_bounds = layer.toGeoJSON()
-      if district_id == _this.district_bounds['properties']['id']
-        layer.bindPopup '<input type=\'text\' id=\'' + _this.district_bounds['properties']['id'] + '\' class=\'update_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\' value=\'' + new_district_name + '\'><button type=\'button\' id=\'save_' + _this.district_bounds['properties']['id'] + '\' class=\'btn btn-xs btn-success update_district\'>OK</button><br /><div class=\'district_notif\'></div>'
+      if districtId == _this.district_bounds['properties']['id']
+        layer.bindPopup '<input type=\'text\' id=\'' + districtId + '\' class=\'update_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\' value=\'' + new_district_name + '\'><button type=\'button\' id=\'save_' + _this.district_bounds['properties']['id'] + '\' class=\'btn btn-xs btn-success update_district\'>OK</button><br /><div class=\'district_notif\'></div>'
         layer.closePopup()
 
 

@@ -60,6 +60,7 @@ ICON_SELECTION =
 CACHE_SETUP_STEP = 'cache_setup_step'
 CACHE_APP_NAME = 'cache_app_name'
 CACHE_CITY_NAME = 'cache_city_name'
+CACHE_COUNTRY_NAME = 'cache_country_name'
 CACHE_IMAGE_STORAGE = 'cache_image_storage'
 CACHE_MAX_DAYS_EXPIRE = 'cache_max_days_expire'
 CACHE_AREA_TYPE = 'cache_area_type'

@@ -1,4 +1,4 @@
-.container
+.container#show_ad_page
   - if flash[:new_ad]
     #new_ad_success_message.alert.alert-dismissable.alert-success{:style => "margin-top: 21px;"}
       %button.close{"data-dismiss" => "alert", :type => "button"} ×
@@ -74,7 +74,9 @@
 / Rendering JS scripts
 - content_for :scripts do
   / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and scripts that creates the actual map
-  = render 'shared/map_scripts_after_body', include_all_scripts: false
+  = render 'shared/map_scripts_after_body'
   :javascript
     // Initialize the Web socket object
     #{render 'shared/initialize_websocket.js'}
+    adForm = new AdForm();
+

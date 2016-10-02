@@ -66,8 +66,8 @@
         %span#postal_code_notification
 
     / Geocode (latitude and longitude hidden fields)
-    = form.hidden_field :latitude, value: @map_settings[:latitude], class: 'latitude_hidden'
-    = form.hidden_field :longitude, value: @map_settings[:longitude], class: 'longitude_hidden'
+    = form.hidden_field :latitude, value: @map_settings[:latitude], class: 'latitude'
+    = form.hidden_field :longitude, value: @map_settings[:longitude], class: 'longitude'
 
   .exact_location_section
     / "Define geocodes & find address on the map" button

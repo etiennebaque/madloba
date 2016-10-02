@@ -8,6 +8,8 @@ class MapLocationInfo < MapInfo
       self.marker_message = location.marker_message
       self.is_area = location.area?
       self.bounds = location.district.bounds if location.district?
+      self.latitude = location.latitude
+      self.longitude = location.longitude
     end
   end
 end
