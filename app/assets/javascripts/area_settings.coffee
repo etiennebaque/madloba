@@ -5,7 +5,8 @@ global.AreaSettings = (districts) ->
   @layer = {}
   @init(districts)
 
-  # Adding specific events on the 'Area settings' page, needed when drawing and saving districts.
+# Adding specific events on the 'Area settings' page,
+# needed when drawing and saving districts.
 AreaSettings::init = (districts) ->
   leaf.districts = districts
 
@@ -59,7 +60,8 @@ AreaSettings::initMapEvents = ->
     else
       $('.save_district').addClass 'disabled'
 
-  # Necessity to unbind click on map, to make the "on click" event right below work.
+  # Necessity to unbind click on map, to make
+  # the "on click" event right below work.
   $('#map').unbind 'click'
   # Saving district drawing (bounds) and name.
   $('#map').on 'click', '.save_district', ->
@@ -68,7 +70,8 @@ AreaSettings::initMapEvents = ->
       bounds: JSON.stringify(_this.district_bounds)
       name: district_name
     }, (data) ->
-      $('#district_notification_message').html '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
+      msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
+      $('#district_notification_message').html msg
       if data.status == 'ok'
         leaf.drawn_items.removeLayer _this.layer
         _this.district_bounds['properties']['id'] = data.id
@@ -87,7 +90,8 @@ AreaSettings::initMapEvents = ->
       id: district_id
       name: new_district_name
     }, (data) ->
-      $('#district_notification_message').html '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
+      msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
+      $('#district_notification_message').html msg
 
     # Going through the districts and checking which one to update.
     leaf.drawn_items.eachLayer (layer) ->
@@ -109,19 +113,22 @@ AreaSettings::initDrawingTools = ->
     _this.district_bounds = _this.layer.toGeoJSON()
     _this.layer.openPopup(_this.layer.getBounds().getCenter())
 
-  # When starting to edit a district, create new popup for each district with current name in text field.
+  # When starting to edit a district, create new popup
+  # for each district with current name in text field.
   leaf.map.on 'draw:editstart', (e) ->
     leaf.drawn_items.eachLayer (layer) ->
       _this.district_bounds = layer.toGeoJSON()
       layer.bindPopup '<input type=\'text\' id=\'' + _this.district_bounds['properties']['id'] + '\' class=\'update_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\' value=\'' + _this.district_bounds['properties']['name'] + '\'><button type=\'button\' id=\'save_' + _this.district_bounds['properties']['id'] + '\' class=\'btn btn-xs btn-success update_district\'>OK</button><br /><div class=\'district_notif\'></div>'
 
-  # After saving new name of district, remove the text input and display new name as text only.
+  # After saving new name of district,
+  # remove the text input and display new name as text only.
   leaf.map.on 'draw:editstop', (e) ->
     leaf.drawn_items.eachLayer (layer) ->
       _this.district_bounds = layer.toGeoJSON()
       layer.bindPopup _this.district_bounds['properties']['name']
 
-  # Event triggered when polygon (district) has been edited, and "Save" has been clicked.
+  # Event triggered when polygon (district) has been edited,
+  # and "Save" has been clicked.
   leaf.map.on 'draw:edited', (e) ->
     layers = e.layers
     updated_districts = []
@@ -130,7 +137,8 @@ AreaSettings::initDrawingTools = ->
       updated_districts.push _this.district_bounds
 
     $.post '/user/areasettings/update_districts', { districts: JSON.stringify(updated_districts) }, (data) ->
-      $('#district_notification_message').html '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
+      msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
+      $('#district_notification_message').html msg
 
   # Event triggered after deleting districts and clicking on 'Save'.
   leaf.map.on 'draw:deleted', (e) ->
@@ -141,5 +149,6 @@ AreaSettings::initDrawingTools = ->
       district_ids.push district['properties']['id']
 
     $.post '/user/areasettings/delete_districts', { ids: district_ids }, (data) ->
-      $('#district_notification_message').html '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
+      msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
+      $('#district_notification_message').html msg
 

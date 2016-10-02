@@ -33,9 +33,9 @@ class MapSettingsForm < ApplicationForm
       MapTile.mapquest.update_attributes(api_key: mapquest_api_key) if mapquest_api_key.present?
 
       SETTINGS_ATTRIBUTES.each do |key|
-        setting_record = Setting.find_by_key(key)
-        if setting_record
-          setting_record.update_attributes(value: self.send(key))
+        setting = Setting.find_by_key(key)
+        if !self.send(key).nil? && setting.present?
+          setting.update_attributes(value: self.send(key))
         end
       end
 

@@ -25,7 +25,7 @@ class MapTile < ActiveRecord::Base
   end
 
   def display_name
-    name.titleize.gsub(' ','')
+    name.titleize.delete(' ')
   end
 
 end
