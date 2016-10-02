@@ -89,62 +89,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # Method called on Ajax call, to define geocodes of a location.
-  def getCityGeocodes
-    if params['type'] != 'area'
-      if params['street_number'].present? && params['address'].present?
-        address_street = "#{params['street_number']} #{params['address']}"
-      elsif params['address']
-        address_street = params['address']
-      end
-    end
-
-    if params['city'].nil? || params['country'].nil?
-      # If this inforamtion doesn't come from the page, we get it from the Settings table
-      settings = Setting.where(key: %w(city state country))
-      settings.each do |setting|
-        params[setting.key] = setting.value
-      end
-    end
-
-    location_info = [address_street, params['postal_code'], params['city'], params['state'], params['country']]
-    address = build_up_address(location_info)
-
-    # Getting geocodes for this address.
-    response = getGeocodesFromAddress(address)
-
-    if response.nil?
-      # We're trying to get the geocodes again, but this time without the postal code and the street number
-      location_info = [params['address'], params['city'], params['state'], params['country']]
-      address = build_up_address(location_info)
-      response = getGeocodesFromAddress(address)
-
-      if response
-        address_found = t('home.full_not_found_map_position', address: address)
-        response['zoom_level'] = CLOSER_ZOOM_LEVEL
-        response['status'] = 'ok'
-      else
-        address_found = t('home.not_found_map_position')
-        response = {}
-        response['zoom_level'] = Setting.find_by_key('zoom_level').value
-        response['status'] = 'not_found'
-      end
-    else
-      address_found = t('home.map_positioned_found', address: address)
-      response['zoom_level'] = CLOSER_ZOOM_LEVEL
-      response['status'] = 'ok'
-    end
-
-    response['address_found'] = address_found
-
-    render json: response
-  end
-
   # Method used by the Ajax call, when onclick on the home page "Search" button, when
   # the location field is not empty
   # This method returns the Nominatim ws responses, like the ones returned when a location is
   # searched on http://www.openstreetmap.org
-  def getNominatimLocationResponses
+  def nominatim_location_responses
     # We append the city and the country to the searched location.
     location_value = params['location']
     additional_locations = {}
@@ -161,7 +110,7 @@ class ApplicationController < ActionController::Base
     end
 
     locations_results = []
-    response = getNominatimWebserviceResponse(location_value)
+    response = nominatim_ws_response_for(location_value)
     if response
       if response.to_a.any?
         # The response consists of several propositions, in terms of specific locations

@@ -12,6 +12,7 @@ class Location < ActiveRecord::Base
 
   scope :type, -> (location_type) { where('ads.expire_date >= ? AND loc_type = ?', Date.today, location_type)}
 
+  attr_accessor :country
 
   # This method returns the right query to display relevant markers, on the home page.
   def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action, ad_id)
@@ -95,10 +96,6 @@ class Location < ActiveRecord::Base
     false
   end
 
-  #def type
-    #self.loc_type=='exact'?'exact':'area'
-  #end
-
   def area
     area_length = Setting.find_by_key(:area_length).value.to_i
     self.postal_code[0..area_length-1]
@@ -141,6 +138,12 @@ class Location < ActiveRecord::Base
 
   def clickable_map_for_edit
     area? ? CLICKABLE_MAP_AREA_MARKER : CLICKABLE_MAP_EXACT_MARKER
+  end
+
+  def address_geocode_lookup(short: false)
+    location_info = short ? [self.address] : [self.full_address, self.postal_code]
+    location_info += [self.city, self.province, self.country]
+    location_info.reject(&:empty?).join(',')
   end
 
 end

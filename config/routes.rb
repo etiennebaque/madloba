@@ -64,8 +64,8 @@ Madloba::Application.routes.draw do
   post 'ads/send_message', to: 'user/ads#send_message'
 
   # Ajax calls to get details about a location (geocodes, exact address)
-  get '/getCityGeocodes', to: 'application#getCityGeocodes'
-  get '/getNominatimLocationResponses', to: 'application#getNominatimLocationResponses'
+  get '/getCityGeocodes', to: 'location#retrieve_geocodes'
+  get '/getNominatimLocationResponses', to: 'application#nominatim_location_responses'
 
   # Ajax call to get the list of items, for autocomplete, when searching for an item, or creating/editing an ad.
   get '/getItems', to: 'application#get_items'

@@ -1,7 +1,7 @@
 class User::LocationsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  before_action :authenticate_user!
-  before_action :requires_user
+  before_action :authenticate_user!, except: [:retrieve_geocodes]
+  before_action :requires_user, except: [:retrieve_geocodes]
   before_action :is_location_controller
   after_action :verify_authorized
   after_action :update_ad_json, only: [:update]
@@ -86,10 +86,57 @@ class User::LocationsController < ApplicationController
     else
       render 'location'
     end
+  end
 
+  def retrieve_geocodes
+    location = Location.new(params)
+
+    # Getting geocodes for this location.
+    address = location.address_geocode_lookup
+    response = geocodes_from_address(address)
+    exact_found = true
+
+    if response.nil?
+      # We're trying to get the geocodes again, but this time without the postal code and the street number
+      address = location.address_geocode_lookup(short: true)
+      response = geocodes_from_address(address)
+      exact_found = false
+    end
+
+    if response
+      msg_key = exact_found ? 'map_positioned_found' : 'full_not_found_map_position'
+      address_found = t("home.#{msg_key}", address: address)
+      response['zoom_level'] = CLOSER_ZOOM_LEVEL
+      response['status'] = 'ok'
+    else
+      address_found = t('home.not_found_map_position')
+      response = {}
+      response['zoom_level'] = Setting.find_by_key('zoom_level').value
+      response['status'] = 'not_found'
+    end
+
+    response['address_found'] = address_found
+
+    render json: response
   end
 
   private
+
+  def geocodes_from_address(address)
+    geocodes = nil
+    response = nominatim_ws_response_for(address)
+    if response
+      if response[0]
+        geocodes = {}
+        response_node = response[0]
+        if (response_node['lat'] && response_node['lon'])
+          geocodes['lat'] = response_node['lat']
+          geocodes['lon'] = response_node['lon']
+        end
+      end
+    end
+    geocodes
+  end
 
   def location_params
     params.require(:location).permit(:name, :street_number, :address, :postal_code, :province, :city, :latitude, :longitude, :phone_number, :website, :description, :loc_type, :district_id)

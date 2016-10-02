@@ -386,9 +386,9 @@ global.find_geocodes = ->
         address: $('.location_streetname').val()
         city: $('.location_city').val()
         postal_code: $('.location_postal_code').val()
-        state: $('.location_state').val()
+        province: $('.location_state').val()
         country: $('.location_country').val()
-        type: location_type
+        loc_type: location_type
       cache: false
       beforeSend: (xhr) ->
         xhr.setRequestHeader 'Accept', 'application/json'

@@ -39,10 +39,9 @@ class MapSettingsForm < ApplicationForm
         end
       end
 
-      if fallback_on_osm?
-        # if there is no longer any Mapbox or MapQuest keys, we get back to the default map type, osm.
-        Setting.find_by_key('chosen_map').update_attributes(value: 'open_street_map')
-      end
+      # if there is no longer any Mapbox or MapQuest keys, we get back to the default map type, osm.
+      Setting.find_by_key('chosen_map').update_attributes(value: 'open_street_map') if fallback_on_osm?
+
       I18n.t('admin.map_settings.update_success')
     end
   end

@@ -82,23 +82,9 @@ module ApplicationHelper
 
   # Helpers for map related pages
   # -----------------------------
-  def getGeocodesFromAddress(address)
-    geocodes = nil
-    response = getNominatimWebserviceResponse(address)
-    if response
-      if response[0]
-        geocodes = {}
-        response_node = response[0]
-        if (response_node['lat'] && response_node['lon'])
-          geocodes['lat'] = response_node['lat']
-          geocodes['lon'] = response_node['lon']
-        end
-      end
-    end
-    return geocodes
-  end
 
-  def getNominatimWebserviceResponse(location)
+
+  def nominatim_ws_response_for(location)
     url = OSM_NOMINATIM_URL % {location: location}
     safeurl = URI.parse(URI.encode(url))
     response = HTTParty.get(safeurl)
