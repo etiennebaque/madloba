@@ -39,9 +39,11 @@
 
               .form-inline
                 = f.label t('admin.map_settings.find_city_map'), class: 'col-sm-3 control-label'
-                = f.input :city, label: false, placeholder: t('admin.map_settings.city')
-                = f.input :state, label: false, placeholder: t('admin.map_settings.state')
-                = f.input :country, label: false, placeholder: t('admin.map_settings.country')
+                = f.input :city, label: false, input_html: {class: 'location_city'}, placeholder: t('admin.map_settings.city')
+                = f.input :state, label: false, input_html: {class: 'location_state'}, placeholder: t('admin.map_settings.state')
+                = f.input :country, label: false, input_html: {class: 'location_country'}, placeholder: t('admin.map_settings.country')
+                %a.btn.btn-info#find_geocodes_from_address{:href => "#", :style => "vertical-align: top"}
+                  = t('admin.map_settings.find_city')
 
               = f.hidden_field :zoom_level, class: 'zoom-level'
 

@@ -3,7 +3,7 @@ class User::LocationsController < ApplicationController
   before_action :authenticate_user!, except: [:retrieve_geocodes]
   before_action :requires_user, except: [:retrieve_geocodes]
   before_action :is_location_controller
-  after_action :verify_authorized
+  after_action :verify_authorized, except: [:retrieve_geocodes]
   after_action :update_ad_json, only: [:update]
 
   include ApplicationHelper
@@ -89,7 +89,7 @@ class User::LocationsController < ApplicationController
   end
 
   def retrieve_geocodes
-    location = Location.new(params)
+    location = Location.new(simple_location_params)
 
     # Getting geocodes for this location.
     address = location.address_geocode_lookup
@@ -139,7 +139,11 @@ class User::LocationsController < ApplicationController
   end
 
   def location_params
-    params.require(:location).permit(:name, :street_number, :address, :postal_code, :province, :city, :latitude, :longitude, :phone_number, :website, :description, :loc_type, :district_id)
+    params.require(:location).permit(:name, :street_number, :address, :postal_code, :province, :city, :country, :latitude, :longitude, :phone_number, :website, :description, :loc_type, :district_id)
+  end
+
+  def simple_location_params
+    params.permit(:name, :street_number, :address, :postal_code, :province, :city, :country, :loc_type)
   end
 
   # Updates the relevant ads marker_info (jsonb)

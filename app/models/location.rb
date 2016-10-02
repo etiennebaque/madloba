@@ -143,7 +143,7 @@ class Location < ActiveRecord::Base
   def address_geocode_lookup(short: false)
     location_info = short ? [self.address] : [self.full_address, self.postal_code]
     location_info += [self.city, self.province, self.country]
-    location_info.reject(&:empty?).join(',')
+    location_info.reject{|e| e.to_s.empty?}.join(',')
   end
 
 end
