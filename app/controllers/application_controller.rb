@@ -33,24 +33,18 @@ class ApplicationController < ActionController::Base
   # is not complete. Redirects to setup screens if it is the case.
   def check_if_setup
     current_url = request.original_url
+    setup_debug_mode = Rails.configuration.setup_debug_mode && !(current_url.include? 'setup')
+    redirect_to setup_language_path if setup_debug_mode
+
     chosen_language = Rails.cache.fetch(CACHE_CHOSEN_LANGUAGE) {Setting.where(key: 'chosen_language').pluck(:value).first}
     no_chosen_language = chosen_language.empty? && !(current_url.include? 'setup/language')
-    setup_debug_mode = Rails.configuration.setup_debug_mode && !(current_url.include? 'setup')
+    # If the locale has never been specified (even during the setup process), redirect to the setup language page.
+    redirect_to setup_language_path if no_chosen_language
 
-    if setup_debug_mode
-      redirect_to setup_language_path
-    else
-      if no_chosen_language
-        # If the locale has never been specified (even during the setup process), redirect to the setup language page.
-        redirect_to setup_language_path
-      elsif !((current_url.include? 'setup') || (current_url.include? 'user/register') || (current_url.include? 'getCityGeocodes'))
-        # Redirect to the setup pages if it has never been completed.
-        setup_step_value = Rails.cache.fetch(CACHE_SETUP_STEP) {Setting.where(key: 'setup_step').pluck(:value).first.to_i}
-        if setup_step_value == 1
-          redirect_to setup_language_path
-        end
-      end
-    end
+    setup_url = %w(setup user/register getCityGeocodes).any? {|term| current_url.include?(term)}
+    setup_step_value = Rails.cache.fetch(CACHE_SETUP_STEP) {Setting.where(key: 'setup_step').pluck(:value).first.to_i}
+    # Redirect to the setup pages if it has never been completed.
+    redirect_to setup_language_path if !setup_url && setup_step_value == 1
   end
 
   # Uses the 'gon' gem to load the text that appears in javascript files.
@@ -172,20 +166,6 @@ class ApplicationController < ActionController::Base
   def user_not_authorized
     flash[:error] = t('config.not_authorized')
     redirect_to(request.referrer || root_path || user_path)
-  end
-
-  def build_up_address(location_info)
-    address = ''
-    location_info.each do |info|
-      if info.present?
-        if address != ''
-          address += ", #{info}"
-        else
-          address = info
-        end
-      end
-    end
-    address
   end
 
   protected

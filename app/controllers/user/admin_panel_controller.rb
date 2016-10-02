@@ -1,8 +1,6 @@
 class User::AdminPanelController < ApplicationController
   before_action :authenticate_user!, except: [:getAreaSettings]
   before_filter :requires_user, except: [:getAreaSettings]
-
-  before_action :latitude_longitude_should_be_numeric, only: [:update_mapsettings]
   before_action :postal_code_greater_than_area_code, only: [:update_areasettings]
 
   include ApplicationHelper
@@ -305,24 +303,6 @@ class User::AdminPanelController < ApplicationController
     %w(facebook twitter pinterest)
   end
 
-
-  def latitude_longitude_should_be_numeric
-    # before-filter check used on map setting page.
-    lat = params['latId']
-    lng = params['lngId']
-
-    if (lat != nil && lng != nil)
-      if (!(lat.empty?) && !(lng.empty?))
-        if !(valid_float?(lat)) || !(valid_float?(lng))
-          flash[:page_error] = t('admin.map_settings.should_be_numeric')
-          redirect_to user_mapsettings_path
-        end
-      else
-        flash[:page_error] = t('admin.map_settings.cannot_be_empty')
-        redirect_to user_mapsettings_path
-      end
-    end
-  end
 
   def postal_code_greater_than_area_code
     postal_code_length = params['postal_code_length']
