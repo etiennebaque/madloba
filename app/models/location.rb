@@ -150,6 +150,7 @@ class Location < ActiveRecord::Base
 
   def define_subclass
     self.type = "Locations::#{self.loc_type.capitalize}Location"
+    self.save
   end
 
 end

@@ -36,9 +36,11 @@ class User::AdsController < ApplicationController
 
     # we tie now the user to the ad (if it is an anonymous user, current_user is nil)
     @ad.user = current_user
-    @ad.location.define_subclass
 
     if @ad.save_with_or_without_captcha(current_user)
+      # Update location type if needed
+      @ad.location.define_subclass
+
       flash[:new_ad] = @ad.title
 
       # Letting the user know when their ad will expire.
@@ -84,8 +86,8 @@ class User::AdsController < ApplicationController
     authorize @ad
 
     # Performing the update.
-    @ad.location.define_subclass
     if @ad.update(ad_params)
+      @ad.location.define_subclass
       flash[:ad_updated] = @ad.title
       redirect_to edit_user_ad_path(@ad.id)
     else
