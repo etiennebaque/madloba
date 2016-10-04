@@ -15,14 +15,6 @@ Home::init = ->
   $('[data-toggle=offcanvas]').click ->
     $('.row-offcanvas').toggleClass 'active'
 
-  # This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,
-  # 'zoomToBoundsOnClick' would zoom in too much, and push the markers to the edge of the screen.
-  # This event underneath fixes this behaviour, the markers are not pushed to the boundaries of the map anymore.
-  if markers.group != ''
-    markers.group.on 'clusterclick', (a) ->
-      bounds = a.layer.getBounds().pad(0.5)
-      leaf.map.fitBounds bounds
-
   # This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel,
   # in the home page, the page would scroll down.
   # When clicking on zoom in/zoom out, this will force to be at the top of the page
@@ -91,6 +83,8 @@ Home::putLocationMarkers = ->
       leaf.my_lng
     ], icon: markers.default_icon).bindPopup(leaf.searched_address)
     searched_location_marker.addTo leaf.map
+
+  spiderifyMarkerGroups()
 
   # Adding all the markers to the map.
   leaf.map.addLayer markers.group

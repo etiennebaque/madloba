@@ -5,6 +5,9 @@ global.AdForm = ->
 
 AdForm::init = ->
 
+  if $('#locations_from_list').length > 0
+    $('.location-form-for-ad').hide()
+
   # This is a test to see if the user is using clients like AdBlock.
   # The use of AdBlock blocks a lot of markups on this website, unfortunately
   # (eg. everything that has 'ad' in the class name). When AdBlock is detected, we display a popup indicating
@@ -16,29 +19,29 @@ AdForm::init = ->
 
   # On the "New ad" form, open automatically the new location form, if the user is anonymous,
   # or never created any location as a signed in user.
-  cannotChooseLocations = typeof canPickExistingLocs != 'undefined' and canPickExistingLocs == false
-  if typeof current_page != 'undefined' and current_page == 'new_ad' and cannotChooseLocations
-    setTimeout (->
-      $('#new_location_form a.add_fields').trigger 'click'
-      $('#locations_from_list').hide()
-      $('#location a.add_fields').hide()
-      initLeafletMap map_settings
-      resetLocationForm districts_bounds, leaf.map
-    ), 20
+#  cannotChooseLocations = typeof canPickExistingLocs != 'undefined' and canPickExistingLocs == false
+#  if typeof current_page != 'undefined' and current_page == 'new_ad' and cannotChooseLocations
+#    setTimeout (->
+#      $('#new_location_form a.add_fields').trigger 'click'
+#      $('#locations_from_list').hide()
+#      $('#location a.add_fields').hide()
+#      initLeafletMap map_settings
+#      resetLocationForm districts_bounds, leaf.map
+#    ), 20
 
   # Create an ad: adding the location form dynamically, via Cocoon
-  $('#new_location_form a.add_fields').data('association-insertion-position', 'before').data 'association-insertion-node', 'this'
-  $('#new_location_form').bind 'cocoon:after-insert', ->
-    $('#locations_from_list').hide()
-    $('#new_location_form a.add_fields').hide()
-    # Call to the JS functions that will initialize the new location form and the map.
-    initLeafletMap map_settings
-    resetLocationForm districts_bounds, leaf.map
+#  $('#new_location_form a.add_fields').data('association-insertion-position', 'before').data 'association-insertion-node', 'this'
+#  $('#new_location_form').bind 'cocoon:after-insert', ->
+#    $('#locations_from_list').hide()
+#    $('#new_location_form a.add_fields').hide()
+#    # Call to the JS functions that will initialize the new location form and the map.
+#    initLeafletMap map_settings
+#    resetLocationForm districts_bounds, leaf.map
 
-  $('#new_location_form').bind 'cocoon:after-remove', ->
-    $('#locations_from_list').show()
-    $('#new_location_form a.add_fields').show()
-    
+#  $('#new_location_form').bind 'cocoon:after-remove', ->
+#    $('#locations_from_list').show()
+#    $('#new_location_form a.add_fields').show()
+
   bindTypeaheadToItemSelect $('#items .selectpicker-items')
   
   # "Create/Edit ad" form: create message when image needs to be uploaded.
@@ -72,6 +75,19 @@ AdForm::init = ->
     image_path = $('#ad_image').val()
     if image_path != null and image_path != ''
       $('#upload-in-progress').html '<i>' + gon.vars['new_image_uploading'] + '</i>'
+
+  # "New ad" form: open location form when clicking on "Enter new location" button
+  $('.add-new-location').click ->
+    $('.location-form-for-ad').show()
+    $('.add-new-location').hide()
+    $('.location-form-for-ad :input').attr("disabled", false)
+    $('#locations_from_list :input').attr('disabled', true)
+
+  $('.remove-new-location').click ->
+    $('.location-form-for-ad').hide()
+    $('.add-new-location').show()
+    $('.location-form-for-ad :input').attr("disabled", true)
+    $('#locations_from_list :input').attr('disabled', false)
 
 
 ###*

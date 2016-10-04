@@ -1,150 +1,152 @@
-.row
-  #content.middle-col.col-xs-12.col-md-10
-    / content starts
-    %div
-      %ul.breadcrumb
-        - if current_user.admin?
-          %li
-            %a{:href => "/user/managerecords"}= t('admin.manage_records')
-        - else
-          %li
-            %a{:href => "/user/manageads"}= t('admin.ad.manage_ads')
-        %li= t('admin.update_ad')
-    .row
-      .box.col-md-12
-        .box-inner
-          .box-header.well{"data-original-title" => ""}
-            %h2
-              %i.glyphicon.glyphicon-edit
-              = t('admin.ad.ad_edit')
-          - if flash[:ad_updated]
-            .alert.alert-success
-              %button.close{"data-dismiss" => "alert", :type => "button"} ×
-              = t('admin.ad.ad_updated', title: flash[:ad_updated])
-              - if current_user.admin?
-                %a{:href => "/user/managerecords#ads"}= t('admin.back_to_records')
-              - else
-                %a{:href => "/user/manageads"}= t('admin.back_to_ads')
-          - if flash[:error_ad] || flash[:error_delete_ad]
-            .alert.alert-danger
-              %button.close{"data-dismiss" => "alert", :type => "button"} ×
-              - if @ad && @ad.errors.any?
-                %strong
-                  = t('admin.ad.error_update', errors: pluralize(@ad.errors.count, t('home.error.one'), t('home.error.more')))
-                  \:
-                %ul
-                  - @ad.errors.full_messages.each do |msg|
-                    %li= msg
-              - else
-                - if flash[:error_delete_ad]
-                  = t('admin.ad.delete_ad_error_html', manage_ads_page: link_to(t('admin.ad.manage_ads_page'), '/user/manageads'))
-          .box-content
-            = form_for [:user, @ad], html: { id: 'ad-edit-form', role: 'form', multipart: true } do |f|
-              / "Delete Ad" and "See published ad" buttons
-              .form-group
-                %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#", :style => "margin-right: 10px;"}= t('admin.ad.delete')
-                = link_to t('ad.see_published'), ad_path(@ad.id), {target: '_blank', class: 'btn btn-info'}
-              %hr/
-              / "Mandatory fields" note
-              .form-group
-                = label_tag :field, t('admin.mandatory'), class:'control-label'
-              .form-group
-              / Ad expiration date (2100-01-01: Ad does not expire)
-              - if @ad.expire_date.to_s != '2100-01-01'
-                .form-group
-                  .form-inline
-                    - if Date.today > @ad.expire_date
-                      %span.ad-expiring= t('ad.has_expired', expire_date: @ad.expire_date.to_s)
-                    - elsif Date.today < @ad.expire_date
-                      = t('ad.expiration_date', expire_date: @ad.expire_date.to_s)
-                    - else
-                      %span.ad-expiring= t('ad.expires_today')
-              / Ad title
-              .form-group
-                = f.label :title, t('ad.title'), class: 'control-label'
-                .form-inline
-                  = f.text_field :title, class: 'form-control help-message', autofocus: true, |
-                    :data => {:content => t('ad.title_help'), :placement => 'right',          |
-                    :toggle => 'popover', :trigger => 'hover'}, maxlength:'90'                |
-              / Name to use
-              - if @ad.is_anonymous
-                .form-group
-                  = f.label :anon_user, t('location.anon_publisher_name_note'), class: 'control-label'
+.container
+  .row
+    #content.middle-col.col-xs-12.col-md-10
+      / content starts
+      %div
+        %ul.breadcrumb
+          - if current_user.admin?
+            %li
+              %a{:href => "/user/managerecords"}= t('admin.manage_records')
+          - else
+            %li
+              %a{:href => "/user/manageads"}= t('admin.ad.manage_ads')
+          %li= t('admin.update_ad')
+      .row
+        .box.col-md-12
+          .box-inner
+            .box-header.well{"data-original-title" => ""}
+              %h2
+                %i.glyphicon.glyphicon-edit
+                = t('admin.ad.ad_edit')
+            - if flash[:ad_updated]
+              .alert.alert-success
+                %button.close{"data-dismiss" => "alert", :type => "button"} ×
+                = t('admin.ad.ad_updated', title: flash[:ad_updated])
+                - if current_user.admin?
+                  %a{:href => "/user/managerecords#ads"}= t('admin.back_to_records')
+                - else
+                  %a{:href => "/user/manageads"}= t('admin.back_to_ads')
+            - if flash[:error_ad] || flash[:error_delete_ad]
+              .alert.alert-danger
+                %button.close{"data-dismiss" => "alert", :type => "button"} ×
+                - if @ad && @ad.errors.any?
+                  %strong
+                    = t('admin.ad.error_update', errors: pluralize(@ad.errors.count, t('home.error.one'), t('home.error.more')))
+                    \:
                   %ul
-                    %li
-                      = f.label :anon_user, t('admin.name'), class: 'control-label'
-                      \: #{@ad.anon_name}
-                    %li
-                      = f.label :anon_user, t('admin.users.email'), class: 'control-label'
-                      \: #{@ad.anon_email}
-              - else
+                    - @ad.errors.full_messages.each do |msg|
+                      %li= msg
+                - else
+                  - if flash[:error_delete_ad]
+                    = t('admin.ad.delete_ad_error_html', manage_ads_page: link_to(t('admin.ad.manage_ads_page'), '/user/manageads'))
+            .box-content
+              = form_for [:user, @ad], html: { id: 'ad-edit-form', role: 'form', multipart: true } do |f|
+                / "Delete Ad" and "See published ad" buttons
                 .form-group
-                  = f.label :is_username_used, t('location.name_to_use'), class: 'control-label'
+                  %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#", :style => "margin-right: 10px;"}= t('admin.ad.delete')
+                  = link_to t('ad.see_published'), ad_path(@ad.id), {target: '_blank', class: 'btn btn-info'}
+                %hr/
+                / "Mandatory fields" note
+                .form-group
+                  = label_tag :field, t('admin.mandatory'), class:'control-label'
+                .form-group
+                / Ad expiration date (2100-01-01: Ad does not expire)
+                - if @ad.expire_date.to_s != '2100-01-01'
+                  .form-group
+                    .form-inline
+                      - if Date.today > @ad.expire_date
+                        %span.ad-expiring= t('ad.has_expired', expire_date: @ad.expire_date.to_s)
+                      - elsif Date.today < @ad.expire_date
+                        = t('ad.expiration_date', expire_date: @ad.expire_date.to_s)
+                      - else
+                        %span.ad-expiring= t('ad.expires_today')
+
+                / Ad title
+                .form-group
+                  = f.label :title, t('ad.title'), class: 'control-label'
+                  .form-inline
+                    = f.text_field :title, class: 'form-control help-message', autofocus: true, |
+                      :data => {:content => t('ad.title_help'), :placement => 'right',          |
+                      :toggle => 'popover', :trigger => 'hover'}, maxlength:'90'                |
+                / Name to use
+                - if @ad.is_anonymous
+                  .form-group
+                    = f.label :anon_user, t('location.anon_publisher_name_note'), class: 'control-label'
+                    %ul
+                      %li
+                        = f.label :anon_user, t('admin.name'), class: 'control-label'
+                        \: #{@ad.anon_name}
+                      %li
+                        = f.label :anon_user, t('admin.users.email'), class: 'control-label'
+                        \: #{@ad.anon_email}
+                - else
+                  .form-group
+                    = f.label :is_username_used, t('location.name_to_use'), class: 'control-label'
+                    .radio
+                      %label
+                        = f.radio_button :is_username_used, true, value: true
+                        = t('location.name_username')
+                        (#{@ad.user.username})
+                    .radio
+                      %label
+                        = f.radio_button :is_username_used, false, value: false
+                        = t('location.name_fullname')
+                        (#{@ad.user.first_name} #{@ad.user.last_name})
+                / Giving / Accepting items
+                .form-group
+                  = f.label :is_giving, t('location.ad_action'), class: 'control-label'
                   .radio
                     %label
-                      = f.radio_button :is_username_used, true, value: true
-                      = t('location.name_username')
-                      (#{@ad.user.username})
+                      = f.radio_button :is_giving, true, checked: true
+                      = t('location.ad_action_giving')
                   .radio
                     %label
-                      = f.radio_button :is_username_used, false, value: false
-                      = t('location.name_fullname')
-                      (#{@ad.user.first_name} #{@ad.user.last_name})
-              / Giving / Accepting items
-              .form-group
-                = f.label :is_giving, t('location.ad_action'), class: 'control-label'
-                .radio
-                  %label
-                    = f.radio_button :is_giving, true, checked: true
-                    = t('location.ad_action_giving')
-                .radio
-                  %label
-                    = f.radio_button :is_giving, false
-                    = t('location.ad_action_accepting')
-              / Items
-              .form-group
-                = f.label :item, t('ad.item'), class: 'control-label'
-                .form-inline
-                  #items
-                    = f.fields_for :ad_items do |ad_item|
-                      = render 'shared/ad_item_fields', f: ad_item
-                    = link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success ad-add-item'
-              - if !on_heroku? && can_upload_image
-                / Image upload - only possible when app deployed on server, for now
+                      = f.radio_button :is_giving, false
+                      = t('location.ad_action_accepting')
+                / Items
                 .form-group
-                  = f.label :description, t('ad.upload_image'), class: 'control-label'
-                  .col-inline
-                    = f.file_field :image, class: 'form-control', style: 'border: 0px; box-shadow: none; height: auto;'
-                    = f.hidden_field :image_cache, value: params[:image_cache]
-                  - if @ad.image?
-                    / if model validation fails on other fields, display image that was loaded previously
-                    - if is_image_available(@ad)
-                      #image-section
-                        = image_tag @ad.image_url(:normal).to_s
-                      .checkbox
-                        %label
-                          = f.check_box :remove_image
-                          = t('ad.remove_image')
-                    - elsif @ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0)
-                      .ad-processing
-                        = t('ad.image_currently_processed')
-                        %br/
-                        = t('ad.will_show_up')
-                  - else
-                    = t('ad.less_than_limit')
-              / Ad description
-              .form-group
-                = f.label :description, t('ad.description')+'*:', class: 'control-label'
-                .form-inline
-                  = f.text_area :description, class: 'form-control help-message', rows: 6, cols: 40, |
-                    :data => {:content => t('ad.description_help'), :placement => 'right',           |
-                    :toggle => 'popover', :trigger => 'hover'}                                       |
-              / List of all the different locations previously entered by the current user
-              .form-group
-                - if current_user == @ad.user
-                  / Case where a user edits their own ad
-                  / "Choose a location" section
+                  = f.label :item, t('ad.item'), class: 'control-label'
+                  .form-inline
+                    #items
+                      = f.fields_for :ad_items do |ad_item|
+                        = render 'shared/ad_item_fields', f: ad_item
+                      = link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success ad-add-item'
+                - if !on_heroku? && can_upload_image
+                  / Image upload - only possible when app deployed on server, for now
+                  .form-group
+                    = f.label :description, t('ad.upload_image'), class: 'control-label'
+                    .col-inline
+                      = f.file_field :image, class: 'form-control', style: 'border: 0px; box-shadow: none; height: auto;'
+                      = f.hidden_field :image_cache, value: params[:image_cache]
+                    - if @ad.image?
+                      / if model validation fails on other fields, display image that was loaded previously
+                      - if is_image_available(@ad)
+                        #image-section
+                          = image_tag @ad.image_url(:normal).to_s
+                        .checkbox
+                          %label
+                            = f.check_box :remove_image
+                            = t('ad.remove_image')
+                      - elsif @ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0)
+                        .ad-processing
+                          = t('ad.image_currently_processed')
+                          %br/
+                          = t('ad.will_show_up')
+                    - else
+                      = t('ad.less_than_limit')
+                / Ad description
+                .form-group
+                  = f.label :description, t('ad.description')+'*:', class: 'control-label'
+                  .form-inline
+                    = f.text_area :description, class: 'form-control help-message', rows: 6, cols: 40, |
+                      :data => {:content => t('ad.description_help'), :placement => 'right',           |
+                      :toggle => 'popover', :trigger => 'hover'}                                       |
+                / List of all the different locations previously entered by the current user
+                .form-group
                   #new_location_form
+                  - if current_user == @ad.user
+                    / Case where a user edits their own ad
+                    / "Choose a location" section
                     - if user_locations_number > 0
                       / List of all the different locations previously entered by the current user
                       #locations_from_list.form-group
@@ -154,13 +156,13 @@
                             %label
                               = f.radio_button :location, loc.id, checked: @ad.location_id == loc.id, class: 'radio no-min-height'
                               = "#{loc.location_full_name} - #{loc.location_type_address}"
+
                     / "Enter a new location" link
-                    = link_to_add_association t('ad.new_location'), f, :location, partial: 'shared/location_form', class: 'btn btn-sm btn-info', style: 'margin-bottom: 30px;', form_name: 'form', |
-                      render_options: {locals: {label_class: 'control-label', col10: 'form-inline', col8: 'form-inline', col6: 'form-inline', col4: 'form-inline', col3: 'form-inline',            |
-                      col2: 'form-inline', col_radio: '', can_choose_existing_location: (current_user != nil && current_user.locations.length > 0)}}                                               |
-                - else
-                  / Case where an admin edits someone else's ad. We don't let admin create a new location for them
-                  #new_location_form
+                    = link_to_add_association t('ad.new_location'), f, :location, partial: 'shared/location_form', class: 'btn btn-sm btn-info', style: 'margin-bottom: 30px;', form_name: 'form',
+                      render_options: {locals: {can_choose_existing_location: (current_user != nil && current_user.locations.length > 0)}}
+
+                  - else
+                    / Case where an admin edits someone else's ad. We don't let admin create a new location for them
                     - if @ad.is_anonymous
                       / Show this anonymous user's location
                       #locations_from_list.form-group
@@ -187,11 +189,11 @@
                               = f.radio_button :location, loc.id, checked: index == 0, class: 'radio no-min-height'
                               = link_to(loc.location_full_name, edit_user_location_path(loc.id))
                               \- #{loc.location_type_address}
-              / Submit form
-              = render 'shared/submit_section'
-              / After submit, a notification shows up here, if a new image is being uploaded
-              .form-group{:style => "margin-top: 15px;"}
-                %span#upload-in-progress
+                / Submit form
+                = render 'shared/submit_section'
+                / After submit, a notification shows up here, if a new image is being uploaded
+                .form-group{:style => "margin-top: 15px;"}
+                  %span#upload-in-progress
 
 
 / "Delete ad" - modal window

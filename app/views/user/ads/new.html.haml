@@ -1,4 +1,4 @@
-/ For anonymous user creating ads, we're adding a note saying that they can modify their ad, if they create an account.
+-# For anonymous user creating ads, we're adding a note saying that they can modify their ad, if they create an account.
 - if current_user.nil?
   .col-lg-12.ad-non-signed-warning.alert.alert-dismissible.alert-warning{:role => "alert"}
     %button.close{"data-dismiss" => "alert", :type => "button"} ×
@@ -28,7 +28,7 @@
               .col-lg-6
                 %i= t('ad.once_created_expire_html', max_expire_days: max_expire_days)
 
-          / Ad title
+          -# Ad title
           .form-group
             = f.label :title, t('ad.title'), class: 'col-lg-2 control-label'
             .col-lg-6
@@ -36,7 +36,7 @@
                 :data => {:content => t('ad.title_help'), :placement => 'top',            |
                 :toggle => 'popover', :trigger => 'hover focus'}                          |
 
-          / Name to use (it user is not anonymous)
+          -# Name to use (it user is not anonymous)
           - if user_signed_in?
             .form-group
               = f.label :is_username_used, t('location.name_to_use'), class: 'col-lg-2 control-label'
@@ -52,7 +52,7 @@
                     = t('location.name_fullname')
                     (#{current_user.first_name} #{current_user.last_name})
 
-          / Giving / Accepting items
+          -# Giving / Accepting items
           .form-group
             = f.label :is_giving, t('location.ad_action'), class: 'col-lg-2 control-label'
             .col-lg-6
@@ -65,7 +65,7 @@
                   = f.radio_button :is_giving, false
                   = t('location.ad_action_accepting')
 
-          / Items
+          -# Items
           .form-group
             = f.label :ad_items, t('ad.item'), class: 'col-lg-2 control-label'
             .col-lg-6
@@ -74,7 +74,7 @@
                   = render 'shared/ad_item_fields', f: ad_item
                 = link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success add-item-button'
 
-          / Ad description
+          -# Ad description
           .form-group
             = f.label :description, t('ad.description')+'*:', class: 'col-lg-2 control-label'
             .col-lg-6
@@ -82,7 +82,7 @@
                 :data => {:content => t('ad.description_help'), :placement => 'top',   |
                 :toggle => 'popover', :trigger => 'hover focus'}                       |
 
-          / Image upload - only possible when app deployed on server, for now
+          -# Image upload - only possible when app deployed on server, for now
           - if !on_heroku? && can_upload_image
             .form-group
               = f.label :description, t('ad.upload_image'), class: 'col-lg-2 control-label'
@@ -105,91 +105,79 @@
                     .ad-processing
                       = t('ad.image_selected')
 
+          -# Ad location section
+          - if current_user.locations.any?
+            -# List of all the different locations previously entered by the current user
+            #locations_from_list
+              .form-group
+                = f.label :location_id, t('location.location')+'*:', class: 'col-lg-2 control-label'
+                .col-lg-6
+                  - current_user.locations.each_with_index do |loc, index|
+                    .radio.existing_location
+                      %label
+                        - if index == 0
+                          = f.radio_button :location_id, loc.id, checked: true
+                          = "#{loc.location_full_name} - #{loc.location_type_address}"
+                        - else
+                          = f.radio_button :location_id, loc.id
+                          = "#{loc.location_full_name} - #{loc.location_type_address}"
 
-          / Ad location section
-          - if params['ad'] && params['ad']['location_attributes']
-            / if location params already exists, we render directly the form they were created in.
-            .new-ad-new-location
-              = f.fields_for :location, :html => {:class => 'form-horizontal'} do |loc|
-                = render 'shared/location_form', form: loc, location: @ad.location,
-                can_choose_existing_location: can_choose_existing_locations(current_user)
-          - else
-            / "Choose a location" section
-            #new_location_form
-              - if user_locations_number > 0
-                / List of all the different locations previously entered by the current user
-                #locations_from_list.form-group
-                  = f.label :location_id, t('location.location')+'*:', class: 'col-lg-2 control-label'
-                  .col-lg-6
-                    - current_user.locations.each_with_index do |loc, index|
-                      .radio.existing_location
-                        %label
-                          - if index == 0
-                            = f.radio_button :location_id, loc.id, checked: true
-                            = "#{loc.location_full_name} - #{loc.location_type_address}"
-                          - else
-                            = f.radio_button :location_id, loc.id
-                            = "#{loc.location_full_name} - #{loc.location_type_address}"
-              - if can_choose_existing_locations(current_user)
-                .col-lg-2{:style => "display: inline-block"}  
+              .form-group
+                .col-lg-6.col-lg-offset-2
+                  %a.btn.btn-sm.btn-info.add-new-location
+                    = t('ad.new_location')
 
-              / "Enter a new location" link
-              = link_to_add_association t('ad.new_location'), f, :location, partial: 'shared/location_form', class: 'btn btn-sm btn-info', style: 'margin-bottom: 30px;', form_name: 'form', |
-                render_options: {locals: {label_class: 'col-lg-2 control-label', col10: 'col-lg-10', col8: 'col-lg-8', col6: 'col-lg-6', col4: 'col-lg-4', col3: 'col-lg-3',                 |
-                col2: 'col-lg-2', col_radio: 'col-lg-6', can_choose_existing_location: (current_user != nil && current_user.locations.length > 0)}}                                          |
+          -# Location form partial
+          .location-form-for-ad
+            = f.fields_for :location, Location.new, html: {class: 'form-horizontal'} do |loc|
+              = render 'shared/location_form', form: loc, location: @ad.location
 
-          / if anonymous user creates an ad, we need to ask for their name and email
-          / They need to provide a response to a captcha
+          -# if anonymous user creates an ad, we need to ask for their name and email
+          -# They need to provide a response to a captcha
           - if !user_signed_in?
             %h4= t('ad.about_you')
-            / Anonymous user's name
+            -# Anonymous user's name
             .form-group
               = f.label :anon_name, t('ad.name'), class: 'col-lg-2 control-label'
               .col-lg-6
                 = f.text_field :anon_name, class: 'form-control help-message',  |
                   :data => {:content => t('ad.name_help'), :placement => 'top', |
                   :toggle => 'popover', :trigger => 'hover focus'}              |
-            / Anonymous user's email
+            -# Anonymous user's email
             .form-group
               = f.label :anon_email, t('ad.your_email')+'*:', class: 'col-lg-2 control-label'
               .col-lg-6
                 = f.email_field :anon_email, class: 'form-control help-message', autofocus: true, |
                   :data => {:content => t('ad.email_help'), :placement => 'top',                  |
                   :toggle => 'popover', :trigger => 'hover focus'}                                |
-            / Captcha for anonymous user
+            -# Captcha for anonymous user
             .form-group
               = f.label :anon_captcha, t('ad.captcha'), class: 'col-lg-2 control-label'
               .col-lg-6
                 = f.show_simple_captcha
             %hr/
 
-          .form-group
+          -# Submit section
+          .form-group{style: 'margin-top: 35px'}
             .col-lg-10.col-lg-offset-2
               = f.submit t('ad.create_this_ad'), class: 'btn btn-success'
               %a.btn{:href => "/"}= t('home.cancel')
-          / After submit, a notification shows up here, if a new image is being uploaded
+
+          -# After submit, a notification shows up here, if a new image is being uploaded
           .form-group
             .col-lg-10.col-lg-offset-2
               %span#upload-in-progress
 
-
-#push
-
-= render 'shared/footer'
-
-/ Modal window to show, when a location is not found on the map, in the location form
+-# Modal window to show, when a location is not found on the map, in the location form
 = render 'error_modal'
 
-/ Loading JS scripts
+-# Loading JS scripts
 - content_for :scripts do
 
+  -# Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
+  = render 'shared/map_scripts_after_body'
+
   :javascript
-    var current_page = "new_ad";
     var location_number = #{user_locations_number};
     var canPickExistingLocs = #{can_choose_existing_locations(current_user)};
     adForm = new AdForm();
-
-  / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
-  = render 'shared/map_scripts_after_body', include_all_scripts: false
-
-

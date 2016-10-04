@@ -6,7 +6,7 @@
       = t('home.footer_theme_html', charisma: (link_to 'Charisma', 'http://usman.it/free-responsive-admin-template', target: '_blank'))
       \-
       \#{t('home.footer_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank'))}
-- else
+- elsif !root_url
   / Footer of the regular pages
   %footer#footer
     .container-fluid.lower-footer

@@ -67,9 +67,10 @@ global.leaf =
       # Exact address. Potentially several center markers on the map.
       # Displays a marker for each item tied to the ad we're showing the details of.
       # Using the Marker Cluster plugin to spiderfy this ad's item marker.
-      markers.group = new (L.MarkerClusterGroup)(
+      markers.group = new (L.markerClusterGroup)(
         spiderfyDistanceMultiplier: 2
         zoomToBoundsOnClick: false)
+
       i = 0
       while i < map_settings['ad_show'].length
         item_category = map_settings['ad_show'][i]
@@ -77,19 +78,25 @@ global.leaf =
           prefix: 'fa'
           markerColor: item_category['color']
           icon: item_category['icon'])
+
         map_center_marker = L.marker([
           leaf.my_lat
           leaf.my_lng
         ], icon: icon_to_use)
+
         if map_settings['marker_message'] != ''
           map_center_marker.bindPopup(map_settings['marker_message'] + ' - ' + item_category['item_name']).openPopup()
+
         markers.group.addLayer map_center_marker
         i++
+
       leaf.map.addLayer markers.group
       leaf.map.setView [
         leaf.my_lat
         leaf.my_lng
       ], map_settings['zoom_level']
+
+      spiderifyMarkerGroups()
     return
 
   show_single_marker: (map_settings) ->
@@ -294,6 +301,7 @@ global.markers =
 global.initLeafletMap = (map_settings) ->
   if leaf != null and leaf.map != null
     leaf.map.remove()
+
   # Initialization of the map and markers.
   leaf.init map_settings
   markers.init map_settings
@@ -409,8 +417,18 @@ global.find_geocodes = ->
           $('#myErrorModal').modal 'show'
         # Displaying notification about location found.
         $('#findGeocodeLoaderId').html '<i>' + data.address_found + '</i>'
-        
-  
+
+
+# This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,
+# 'zoomToBoundsOnClick' would zoom in too much, and push the markers to the edge of the screen.
+# This event underneath fixes this behaviour, the markers are not pushed to the boundaries of the map anymore.
+global.spiderifyMarkerGroups = ->
+  if markers.group != ''
+    markers.group.on 'clusterclick', (a) ->
+      bounds = a.layer.getBounds().pad(0.5)
+      leaf.map.fitBounds bounds
+
+
 ###*
 # Creates the text to be shown in a marker popup, giving details about the selected exact location.
 # @param first_sentence

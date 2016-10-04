@@ -39,16 +39,9 @@
 
     / Main part of the body
     #wrap
-      - if admin_panel?
-        / Rendering user/admin pages
-        = render 'shared/navigation'
-        .container-fluid
-          = yield
-          = render 'shared/footer'
-      - else
-        / Rendering regular pages (home page, show ad...)
-        = render 'shared/navigation'
-        = yield
+      = render 'shared/navigation'
+      = yield
+      = render 'shared/footer'
 
     / Javascript files to be included in all pages.
     = javascript_include_tag 'application'
