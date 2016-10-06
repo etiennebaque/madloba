@@ -16,12 +16,11 @@ class MapTile < ActiveRecord::Base
     self.send(Setting.find_by_key('chosen_map').value)
   end
 
-  def js_script_url
-    url_needs_api_key? ? tile_url.gsub('<api_key>', api_key) : tile_url
-  end
-
-  def url_needs_api_key?
-    tile_url.include?('<api_key>')
+  def url_builder
+    url = tile_url.dup
+    url.gsub!('<api_key>', api_key) if url.include?('<api_key>')
+    url.gsub!('<map_id>', map_name) if url.include?('<map_id>')
+    url
   end
 
   def display_name

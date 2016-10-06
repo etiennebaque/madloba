@@ -15,30 +15,28 @@ global.leaf =
   searched_address: ''
 
   init: (map_settings) ->
-    if map_settings['chosen_map'] == 'mapbox'
-      L.mapbox.accessToken = map_settings['mapbox_api_key']
-      leaf.map = L.mapbox.map('map', map_settings['mapbox_map_name'], scrollWheelZoom: false)
-    else
-      leaf.map = L.map('map', scrollWheelZoom: false)
+
+    leaf.map = L.map('map', scrollWheelZoom: false)
 
     leaf.map.on 'click', ->
       if leaf.map.scrollWheelZoom.enabled()
         leaf.map.scrollWheelZoom.disable()
       else
         leaf.map.scrollWheelZoom.enable()
-      return
+
     leaf.my_lat = map_settings['latitude']
     leaf.my_lng = map_settings['longitude']
     leaf.searched_address = map_settings['searched_address']
 
-    if map_settings['chosen_map'] == 'open_street_map'
-      leaf.map_tiles = L.tileLayer(map_settings['osm_tile_url'], attribution: map_settings['osm_attribution'])
-      leaf.map_tiles.addTo leaf.map
-    else if map_settings['chosen_map'] == 'map_quest'
+    if map_settings['chosen_map'] == 'map_quest'
       # Mapquest
       leaf.map_tiles = MQ.mapLayer()
-      leaf.map_tiles.addTo leaf.map
+    else if map_settings['chosen_map'] == 'open_street_map'
+      leaf.map_tiles = L.tileLayer(map_settings['osm_tile_url'], attribution: map_settings['osm_attribution'])
+    else if map_settings['chosen_map'] == 'mapbox'
+      leaf.map_tiles = L.tileLayer(map_settings['mapbox_tile_url'], attribution: map_settings['mapbox_attribution'])
 
+    leaf.map_tiles.addTo leaf.map  
     leaf.map.setView [leaf.my_lat, leaf.my_lng], map_settings['zoom_level']
 
   show_features_on_ad_details_page: (map_settings) ->
@@ -68,8 +66,7 @@ global.leaf =
       # Displays a marker for each item tied to the ad we're showing the details of.
       # Using the Marker Cluster plugin to spiderfy this ad's item marker.
       markers.group = new (L.markerClusterGroup)(
-        spiderfyDistanceMultiplier: 2
-        zoomToBoundsOnClick: false)
+        spiderfyDistanceMultiplier: 2)
 
       i = 0
       while i < map_settings['ad_show'].length
@@ -91,12 +88,12 @@ global.leaf =
         i++
 
       leaf.map.addLayer markers.group
+
       leaf.map.setView [
         leaf.my_lat
         leaf.my_lng
       ], map_settings['zoom_level']
 
-      spiderifyMarkerGroups()
     return
 
   show_single_marker: (map_settings) ->
@@ -217,12 +214,14 @@ global.markers =
           prefix: 'fa'
           markerColor: item['color']
           icon: item['icon'])
+
         marker = L.marker([
           ad['lat']
           ad['lng']
         ],
           icon: marker_icon
           bounceOnAdd: is_bouncing_on_add)
+
         marker.ad_id = ad['ad_id']
         marker.item_id = item['item_id']
         popup = L.popup(
@@ -252,6 +251,7 @@ global.markers =
               marker_popup.update()
               return
           return
+
         markers.group.addLayer marker
         j++
       i++

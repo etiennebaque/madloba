@@ -35,9 +35,8 @@ Home::putLocationMarkers = ->
   _this = this
   # The MarkerClusterGroup object will allow to aggregate location markers (both 'exact location' and 'area' markers),
   # when they get too close to one another, as the user zooms out, on the home page.
-  markers.group = new (L.MarkerClusterGroup)(
-    spiderfyDistanceMultiplier: 2
-    zoomToBoundsOnClick: false)
+  markers.group = new (L.markerClusterGroup)(
+    spiderfyDistanceMultiplier: 2)
 
   markers.area_geocodes = _this.area_geocodes
   markers.marker_colors = _this.marker_colors
@@ -84,9 +83,8 @@ Home::putLocationMarkers = ->
     ], icon: markers.default_icon).bindPopup(leaf.searched_address)
     searched_location_marker.addTo leaf.map
 
-  spiderifyMarkerGroups()
-
   # Adding all the markers to the map.
   leaf.map.addLayer markers.group
+
   if searched_location_marker != ''
     searched_location_marker.openPopup()

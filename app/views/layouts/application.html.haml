@@ -12,10 +12,6 @@
     / Main CSS files to be included in all pages.
     = stylesheet_link_tag 'application', media: 'all'
 
-    / Mapbox scripts with Leaflet bundled in them.
-    %script{:src => "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.js", :type => "application/javascript"}
-    %link{:href => "https://api.mapbox.com/mapbox.js/v2.4.0/mapbox.css", :rel => "stylesheet"}
-
     / Gon gem - managing text in JS files
     = include_gon
     = csrf_meta_tags

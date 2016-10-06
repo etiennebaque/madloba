@@ -34,9 +34,6 @@
 
   / Javascript function calls, related specifically to the home page
   :javascript
-    var map_settings = #{raw @map_settings.to_json};
-    initLeafletMap(map_settings);
-
     // specific script to render map markers and initialize the sidebar.
     var locations_exact = #{raw @locations_exact.to_json}
     var locations_postal = #{raw @locations_postal.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})};
