@@ -17,31 +17,6 @@ AdForm::init = ->
   # Initially created in 'application.html.haml' layout, this div is now removed.
   $('#ad-block').remove()
 
-  # On the "New ad" form, open automatically the new location form, if the user is anonymous,
-  # or never created any location as a signed in user.
-#  cannotChooseLocations = typeof canPickExistingLocs != 'undefined' and canPickExistingLocs == false
-#  if typeof current_page != 'undefined' and current_page == 'new_ad' and cannotChooseLocations
-#    setTimeout (->
-#      $('#new_location_form a.add_fields').trigger 'click'
-#      $('#locations_from_list').hide()
-#      $('#location a.add_fields').hide()
-#      initLeafletMap map_settings
-#      resetLocationForm districts_bounds, leaf.map
-#    ), 20
-
-  # Create an ad: adding the location form dynamically, via Cocoon
-#  $('#new_location_form a.add_fields').data('association-insertion-position', 'before').data 'association-insertion-node', 'this'
-#  $('#new_location_form').bind 'cocoon:after-insert', ->
-#    $('#locations_from_list').hide()
-#    $('#new_location_form a.add_fields').hide()
-#    # Call to the JS functions that will initialize the new location form and the map.
-#    initLeafletMap map_settings
-#    resetLocationForm districts_bounds, leaf.map
-
-#  $('#new_location_form').bind 'cocoon:after-remove', ->
-#    $('#locations_from_list').show()
-#    $('#new_location_form a.add_fields').show()
-
   bindTypeaheadToItemSelect $('#items .selectpicker-items')
   
   # "Create/Edit ad" form: create message when image needs to be uploaded.

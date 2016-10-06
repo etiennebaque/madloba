@@ -19,7 +19,7 @@ class MapTile < ActiveRecord::Base
   def url_builder
     url = tile_url.dup
     if url.present?
-      url.gsub('<api_key>', api_key) if api_key.present?
+      url.gsub!('<api_key>', api_key) if api_key.present?
       url.gsub!('<map_id>', map_name) if map_name.present?
     end
     url
