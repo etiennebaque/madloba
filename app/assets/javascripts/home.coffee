@@ -22,7 +22,7 @@ Home::init = ->
     $('html, body').animate { scrollTop: 0 }, 0
 
   # Initializing the right-hand side navigation bar, on the home page.
-  navSidebar = L.control.sidebar('sidebar', position: 'right')
+  navSidebar = L.control.sidebar('sidebar')
   leaf.map.addControl navSidebar
   $('#sidebar_category_icon').trigger('click')
 

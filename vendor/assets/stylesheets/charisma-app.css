@@ -305,20 +305,6 @@ div.center, p.center, img.center {
 }
 
 
-.sidebar-nav {
-    min-height: 0;
-    box-shadow: 0 0 10px #BDBDBD;
-    border-radius: 5px;
-    margin-bottom: 0;
-    padding-bottom: 0;
-    max-height: none;
-}
-
-.sidebar-nav > ul > li:not(.nav-header) {
-    margin-right: -2px;
-    margin-left: -2px;
-}
-
 .navbar-brand {
     font-family: 'Lato', cursive, Arial, serif;
     letter-spacing: 2px;
@@ -443,52 +429,8 @@ ul.ajax-loaders {
     min-height: 297px;
 }
 
-.main-menu > li > a {
-    border: 1px solid rgba(221, 221, 221, 0.46);
-}
-
-.main-menu > li {
-    margin-top: 0 !important;
-}
-
-.sidebar-nav .nav-header {
-    display: block;
-    padding: 3px 15px;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 18px;
-    color: #999999;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    text-transform: uppercase;
-}
-
 .navbar {
     border-radius: 0;
-}
-
-ul.main-menu li:hover {
-    margin-left: 8px;
-}
-
-ul.main-menu li.active {
-    margin-left: 8px;
-}
-
-ul.main-menu li.nav-header:hover {
-    margin-left: 0;
-}
-
-ul.main-menu li:not(.nav-header) {
-    -webkit-transition: .3s;
-    -moz-transition: .3s;
-    -ms-transition: .3s;
-    -o-transition: .3s;
-    transition: .3s;
-}
-
-.accordion > ul {
-    display: none;
-    margin-left: 10px;
 }
 
 .nav-sm {
@@ -547,32 +489,6 @@ ul.github-buttons li {
         padding-bottom: 10px;
     }
 
-    .sidebar-nav .nav-canvas {
-        top: -20px;
-        left: -90%;
-        position: absolute;
-        width: 80%;
-        z-index: 2;
-        background: rgba(0, 0, 0, 0.8);
-        margin: 0 !important;
-        border-radius: 0 0 20px 0;
-        padding-bottom: 10px;
-        will-change: left;
-    }
-
-    .sidebar-nav.active .nav-canvas {
-        left: -20px;
-        border-right: solid 1px white;
-        border-bottom: solid 1px white;
-    }
-
-    .sidebar-nav {
-        position: relative;
-        z-index: 3;
-        margin: 0 !important;
-        padding: 0;
-    }
-
     .nav-canvas {
         -webkit-transition: .2s;
         -moz-transition: .2s;
@@ -581,26 +497,9 @@ ul.github-buttons li {
         transition: .2s;
     }
 
-    .sidebar-nav a {
-        border: none !important;
-        color: white;
-    }
-
     #for-is-ajax {
         color: white;
         margin-top: 15px;
-    }
-
-    .main-menu .nav-header {
-        color: white;
-    }
-
-    ul.main-menu li:hover {
-        margin-left: inherit;
-    }
-
-    ul.main-menu li.active {
-        margin-left: inherit;
     }
 
     ul.main-menu a:hover, .nav-sm a:hover {
@@ -649,27 +548,10 @@ ul.github-buttons li {
         font-size: 11px !important;
     }
 
-    .main-menu-span {
-        width: 6.2% !important;
-        margin-right: 4%;
-    }
-
     .top-menu > li i {
         display: none;
     }
 
-    .sidebar-nav li span {
-        display: block !important;
-    }
-
-    .sidebar-nav li a, .sidebar-nav .nav-header {
-        text-align: center
-    }
-
-    .sidebar-nav {
-        padding: 0;
-        margin-bottom: 0;
-    }
 }
 
 /* Computer */
