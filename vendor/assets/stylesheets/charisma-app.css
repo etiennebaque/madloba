@@ -359,11 +359,6 @@ ul.ajax-loaders {
     list-style: none;
 }
 
-#for-is-ajax {
-    padding-left: 12px;
-    cursor: pointer;
-}
-
 #loading {
     margin-top: 20px;
     width: 128px;
@@ -414,15 +409,6 @@ ul.ajax-loaders {
 
 .yellow {
     color: #F99406;
-}
-
-.login-box .input-prepend {
-    margin-bottom: 10px;
-}
-
-.login-box .btn {
-    margin-top: 15px;
-    width: 100%
 }
 
 .box-content.buttons {
@@ -495,11 +481,6 @@ ul.github-buttons li {
         -ms-transition: .2s;
         -o-transition: .2s;
         transition: .2s;
-    }
-
-    #for-is-ajax {
-        color: white;
-        margin-top: 15px;
     }
 
     ul.main-menu a:hover, .nav-sm a:hover {

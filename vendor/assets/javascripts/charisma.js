@@ -4,41 +4,15 @@ $(document).ready(function () {
     var defaultTheme = 'cerulean';
 
     var currentTheme = $.cookie('currentTheme') == null ? defaultTheme : $.cookie('currentTheme');
-    var msie = navigator.userAgent.match(/msie/i);
     $.browser = {};
     $.browser.msie = {};
-    switchTheme(currentTheme);
 
     $('.navbar-toggle').click(function (e) {
         e.preventDefault();
         $('.nav-sm').html($('.navbar-collapse').html());
         $(this).toggleClass('active');
     });
-
-
-    function switchTheme(themeName) {
-        if (themeName == 'classic') {
-            $('#bs-css').attr('href', 'bower_components/bootstrap/dist/css/bootstrap.min.css');
-        } else {
-            $('#bs-css').attr('href', 'css/bootstrap-' + themeName + '.min.css');
-        }
-    }
-
-    //ajax menu checkbox
-    $('#is-ajax').click(function (e) {
-        $.cookie('is-ajax', $(this).prop('checked'), {expires: 365});
-    });
-    $('#is-ajax').prop('checked', $.cookie('is-ajax') === 'true' ? true : false);
-
-    //disbaling some functions for Internet Explorer
-    if (msie) {
-        $('#is-ajax').prop('checked', false);
-        $('#for-is-ajax').hide();
-        $('#toggle-fullscreen').hide();
-        $('.login-box').find('.input-large').removeClass('span10');
-
-    }
-
+    
     //other things to do on document ready, separated for ajax calls
     docReady();
 });
@@ -50,23 +24,8 @@ function docReady() {
         e.preventDefault();
     });
 
-    //notifications
-    $('.noty').click(function (e) {
-        e.preventDefault();
-        var options = $.parseJSON($(this).attr('data-noty-options'));
-        noty(options);
-    });
-
     //chosen - improves select
     $('[data-rel="chosen"],[rel="chosen"]').chosen();
-
-    //tabs
-    $('#myTab a:first').tab('show');
-    $('#myTab a').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-    });
-
 
     //tooltip
     $('[data-toggle="tooltip"]').tooltip();
@@ -102,7 +61,6 @@ function docReady() {
     });
 
 }
-
 
 //additional functions for data table
 $.fn.dataTableExt.oApi.fnPagingInfo = function (oSettings) {

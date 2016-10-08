@@ -1,5 +1,5 @@
 - website_description = Setting.description
-#sidebar.sidebar.collapsed
+#sidebar.sidebar.sidebar-left.collapsed
   / Nav tabs
   .sidebar-tabs
     %ul{role: 'tablist'}
@@ -9,7 +9,7 @@
       - if website_description.present?
         %li
           %a{href: '#about', role: 'tab'}
-            %i.fa.fa-question
+            %i.fa.fa-info
       %li
         %a{href: '#contact', role: 'tab'}
           %i.fa.fa-envelope

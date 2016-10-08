@@ -21,9 +21,8 @@ Home::init = ->
   $('#home-map-canvas-wrapper .leaflet-control-zoom-out, #home-map-canvas-wrapper .leaflet-control-zoom-in').click ->
     $('html, body').animate { scrollTop: 0 }, 0
 
-  # Initializing the right-hand side navigation bar, on the home page.
-  navSidebar = L.control.sidebar('sidebar')
-  leaf.map.addControl navSidebar
+  # Initialize the right-hand side navigation bar, on the home page, on open it on load.
+  L.control.sidebar('sidebar').addTo(leaf.map)
   $('#sidebar_category_icon').trigger('click')
 
 

@@ -1,12 +1,13 @@
 #main.container-fluid.clear-top
   .row
-    / Sidebar
-    = render 'sidebar'
-
     / Map section
     .col-xs-12.no-left-right-border
       #home-map-canvas-wrapper
-        #map.home
+
+        / Sidebar
+        = render 'sidebar'
+
+        #map.home.sidebar-map
 
 
 / Modal popup that shows several ads promoting the same item, in a specific district/area

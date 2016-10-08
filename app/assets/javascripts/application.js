@@ -26,8 +26,6 @@
 //= require jquery.dataTables.min
 // select or dropdown enhancer
 //= require chosen.jquery.min
-// notification plugin
-//= require jquery.noty
 // library for making tables responsive
 //= require responsive-tables
 // autogrowing textarea plugin
