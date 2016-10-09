@@ -54,8 +54,8 @@ en:
     cancel: Cancel
     close: Close
     sign_register: Sign in / Create account
-    e-mail: E-mail
-    password: Password
+    e-mail: "Email:"
+    password: "Password:"
     record_not_exist: Sorry, this page does not exist!
     got_it: Got it!
     giving: "I'm giving away:"

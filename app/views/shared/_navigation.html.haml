@@ -12,6 +12,20 @@
           
   - if !setup_mode?
     #navbarCollapse.navbar-collapse.collapse.navbar-responsive-collapse
+      / Search form - start
+      %form#searchFormId.navbar-form.navbar-left{:action => "/search", :method => "get", :role => "search"}
+        .form-group
+          = select_tag :q, options_for_select([[t('home.searching'),'searching'], [t('home.giving'),'giving']], params['q']), class: 'form-control selectpicker'
+        .form-group
+          = text_field_tag :item, params['item'], class:'typeahead form-control', placeholder: t('home.search_items'), autocomplete: 'off'
+        .form-group
+          = text_field_tag :location,'', class:'form-control', placeholder: t('home.location_example')
+        .form-group
+          = button_tag t('home.search'), :id => 'btn-form-search', :type => 'button',:class => 'btn btn-default'
+        .form-group
+          %span#search_error_message{:style => "color: #d9534f; margin-left: 5px;"}
+      / Search form - end
+
       %ul.nav.navbar-nav
         / Sign in/Register/User drop down menu - start
         - if user_signed_in?
@@ -34,39 +48,23 @@
             #popover-content.hide.popover-larger
               = form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-horizontal'}) do |f|
                 = t('home.e-mail')
-                \:
-                %br/
+                %br
                 = f.email_field :email, {size: 30}
-                %br/
+                %br
                 = t('home.password')
-                \:
-                %br/
+                %br
                 = f.password_field :password, {size: 30}
-                %br/
+                %br
                 = f.submit t('home.sign_in').capitalize, class: 'btn btn-primary btn-xs', style: 'margin-top: 5px'
-                %br/
-                %br/
+                %br
+                %br
                 = t('home.not_have_account_yet_html', sign_up_here: "#{link_to t('home.sign_up'), new_registration_path(resource_name)}".html_safe )
-                %br/
+                %br
                 - if demo?
                   %br/
                   %span{:style => "font-size: 12px;"}
                     %i= t('home.demo_instructions_html', here: link_to(t('ad.here'), 'https://github.com/etiennebaque/madloba/wiki/Madloba-demo-instructions', target: '_blank') )
       / Sign in/Register/User drop down menu - end
-      
-      / Search form - start
-      %form#searchFormId.navbar-form.navbar-left{:action => "/search", :method => "get", :role => "search"}
-        .form-group
-          = select_tag :q, options_for_select([[t('home.searching'),'searching'], [t('home.giving'),'giving']], params['q']), class: 'form-control selectpicker'
-        .form-group
-          = text_field_tag :item, params['item'], class:'typeahead form-control', placeholder: t('home.search_items'), autocomplete: 'off'
-        .form-group
-          = text_field_tag :location,'', class:'form-control', placeholder: t('home.location_example')
-        .form-group
-          = button_tag t('home.search'), :id => 'btn-form-search', :type => 'button',:class => 'btn btn-default'
-        .form-group
-          %span#search_error_message{:style => "color: #d9534f; margin-left: 5px;"}
-      / Search form - end
       
       / In admin panel, show admin actions in collapsed menu.
       - if admin_panel?

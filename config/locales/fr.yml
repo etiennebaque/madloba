@@ -68,8 +68,8 @@ fr:
     cancel: Annuler
     close: Fermer
     sign_register: S'identifier / Créer un compte
-    e-mail: E-mail
-    password: Mot de passe
+    e-mail: "Email :"
+    password: "Mot de passe :"
     record_not_exist: Désolé, cette page n'existe pas.
     got_it: OK
     giving: "Je donne :"
