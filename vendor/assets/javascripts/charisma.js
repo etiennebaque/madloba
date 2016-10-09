@@ -1,9 +1,4 @@
 $(document).ready(function () {
-    //themes, change CSS with JS
-    //default theme(CSS) is cerulean, change it if needed
-    var defaultTheme = 'cerulean';
-
-    var currentTheme = $.cookie('currentTheme') == null ? defaultTheme : $.cookie('currentTheme');
     $.browser = {};
     $.browser.msie = {};
 

@@ -46,71 +46,6 @@ select {
     text-decoration: none;
 }
 
-.notification {
-    display: block;
-    position: absolute;
-    top: -10px;
-    right: -5px;
-    line-height: 16px;
-    height: 16px;
-    padding: 0 5px;
-    font-family: Arial, sans-serif;
-    color: white !important;
-    text-shadow: 0 1px hsla(0, 0%, 0%, 0.25);
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-box-shadow: 0 1px 1px hsla(0, 0%, 0%, 0.08), inset 0 1px hsla(0, 100%, 100%, 0.3);
-    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), inset 0 1px rgba(255, 255, 255, 0.3);
-    box-shadow: 0 1px 1px hsla(0, 0%, 0%, 0.08), inset 0 1px hsla(0, 100%, 100%, 0.3);
-}
-
-.notification {
-    border-color: #2FABE9;
-    background-color: #67C2EF;
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, hsl(200, 80%, 82%)), color-stop(100%, hsl(200, 81%, 67%)));
-    background-image: -webkit-linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
-    background-image: -moz-linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
-    background-image: -ms-linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
-    background-image: -o-linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
-    background-image: linear-gradient(top, hsl(200, 80%, 82%), hsl(200, 81%, 67%));
-}
-
-.notification.green {
-    border-color: #5AAD34;
-    background-color: #78CD51;
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, hsl(101, 54%, 71%)), color-stop(100%, hsl(101, 55%, 56%)));
-    background-image: -webkit-linear-gradient(top, hsl(101, 54%, 71%), hsl(101, 55%, 56%));
-    background-image: -moz-linear-gradient(top, hsl(101, 54%, 71%), hsl(101, 55%, 56%));
-    background-image: -ms-linear-gradient(top, hsl(101, 54%, 71%), hsl(101, 55%, 56%));
-    background-image: -o-linear-gradient(top, hsl(101, 54%, 71%), hsl(101, 55%, 56%));
-    background-image: linear-gradient(top, hsl(101, 54%, 71%), hsl(101, 55%, 56%));
-}
-
-.notification.yellow {
-    border-color: #F4A506;
-    background-color: #FABB3D;
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, hsl(40, 95%, 76%)), color-stop(100%, hsl(40, 95%, 61%)));
-    background-image: -webkit-linear-gradient(top, hsl(40, 95%, 76%), hsl(40, 95%, 61%));
-    background-image: -moz-linear-gradient(top, hsl(40, 95%, 76%), hsl(40, 95%, 61%));
-    background-image: -ms-linear-gradient(top, hsl(40, 95%, 76%), hsl(40, 95%, 61%));
-    background-image: -o-linear-gradient(top, hsl(40, 95%, 76%), hsl(40, 95%, 61%));
-    background-image: linear-gradient(top, hsl(40, 95%, 76%), hsl(40, 95%, 61%));
-}
-
-.notification.red {
-    border-color: #FA5833;
-    background-color: #FA603D;
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, hsl(11, 95%, 76%)), color-stop(100%, hsl(11, 95%, 61%)));
-    background-image: -webkit-linear-gradient(top, hsl(11, 95%, 76%), hsl(11, 95%, 61%));
-    background-image: -moz-linear-gradient(top, hsl(11, 95%, 76%), hsl(11, 95%, 61%));
-    background-image: -ms-linear-gradient(top, hsl(11, 95%, 76%), hsl(11, 95%, 61%));
-    background-image: -o-linear-gradient(top, hsl(11, 95%, 76%), hsl(11, 95%, 61%));
-    background-image: linear-gradient(top, hsl(11, 95%, 76%), hsl(11, 95%, 61%));
-}
-
 .box {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -228,60 +163,6 @@ ul.dashboard-list li a span {
     zoom: 1;
 }
 
-.dashboard-avatar {
-    height: 50px;
-    width: 50px;
-    padding: 1px;
-    float: left;
-    margin-left: 15px;
-    margin-right: 15px;
-    border: 1px solid #EBEBEB;
-    border-radius: 50%;
-}
-
-.thumbnail {
-    background-color: white;
-    z-index: 2;
-    position: relative;
-    margin-bottom: 40px !important;
-}
-
-.thumbnails > li {
-    display: inline-block;
-    margin-left: 15px;
-}
-
-.thumbnail img, .thumbnail > a {
-    z-index: 2;
-    height: 100px;
-    width: 100px;
-    position: relative;
-    display: block;
-}
-
-img.grayscale {
-    -webkit-filter: grayscale(1);
-    -webkit-filter: grayscale(100%);
-    -moz-filter: grayscale(100%);
-    -ms-filter: grayscale(100%);
-    -o-filter: grayscale(100%);
-}
-
-.thumbnail .gallery-controls {
-    position: absolute;
-    z-index: 1;
-    margin-top: -30px;
-    height: 30px;
-    min-height: 30px;
-    padding: 0 6.5px;
-}
-
-.thumbnail .gallery-controls p {
-    display: block;
-    margin: auto;
-    width: 100%;
-}
-
 div.uploader {
     border-radius: 14px;
     -webkit-border-radius: 14px;
@@ -308,7 +189,6 @@ div.center, p.center, img.center {
 .navbar-brand {
     font-family: 'Lato', cursive, Arial, serif;
     letter-spacing: 2px;
-    /*text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);*/
     font-size: 15px;
 }
 
@@ -357,19 +237,6 @@ ul.ajax-loaders {
 
 .bs-icons li {
     list-style: none;
-}
-
-#loading {
-    margin-top: 20px;
-    width: 128px;
-    font-weight: bold;
-}
-
-#loading div.center {
-    margin-top: 10px;
-    height: 15px;
-    width: 128px;
-    background: url(../img/ajax-loaders/ajax-loader-6.gif);
 }
 
 .box-content .nav-tabs {
@@ -563,30 +430,3 @@ ul.github-buttons li {
     padding: 20px 0 0 20px;
     text-align: center;
 }
-
-.mc_embed_signup {
-    font: 14px Helvetica,Arial,sans-serif;
-}
-.power_field{position: absolute; left: -5000px;display: none;}
-.mc_embed_signup form {display:block; position:relative; text-align:left; padding:10px 0 10px 3%}
-.mc_embed_signup h2 {font-weight:bold; padding:0; margin:15px 0; font-size:1.4em;}
-.mc_embed_signup input {border:1px solid #999; -webkit-appearance:none;}
-.mc_embed_signup input[type=checkbox]{-webkit-appearance:checkbox;}
-.mc_embed_signup input[type=radio]{-webkit-appearance:radio;}
-.mc_embed_signup input:focus {border-color:#333;}
-.mc_embed_signup .button {clear:both; background-color: #aaa; border: 0 none; border-radius:4px; color: #FFFFFF; cursor: pointer; display: inline-block; font-size:15px; font-weight: bold; height: 32px; line-height: 32px; margin: 0 5px 10px 0; padding:0; text-align: center; text-decoration: none; vertical-align: top; white-space: nowrap; width: auto;}
-.mc_embed_signup .button:hover {background-color:#777;}
-.mc_embed_signup .small-meta {font-size: 11px;}
-.mc_embed_signup .nowrap {white-space:nowrap;}
-.mc_embed_signup .clear {clear:none; display:inline;}
-
-.mc_embed_signup label {display:block; font-size:16px; padding-bottom:10px; font-weight:bold;}
-.mc_embed_signup input.email {display:block; padding:8px 0; margin:0 4% 10px 0; text-indent:5px; width:58%; min-width:130px;}
-.mc_embed_signup input.button {display:block; width:35%; margin:0 0 10px 0; min-width:90px;}
-
-.mc_embed_signup div#mce-responses {float:left; top:-1.4em; padding:0em .5em 0em .5em; overflow:hidden; width:90%;margin: 0 5%; clear: both;}
-.mc_embed_signup div.response {margin:1em 0; padding:1em .5em .5em 0; font-weight:bold; float:left; top:-1.5em; z-index:1; width:80%;}
-.mc_embed_signup #mce-error-response {display:none;}
-.mc_embed_signup #mce-success-response {color:#529214; display:none;}
-.mc_embed_signup label.error {display:block; float:none; width:auto; margin-left:1.05em; text-align:left; padding:.5em 0;}
-
