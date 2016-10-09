@@ -18,7 +18,7 @@ Home::init = ->
   # This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel,
   # in the home page, the page would scroll down.
   # When clicking on zoom in/zoom out, this will force to be at the top of the page
-  $('#home-map-canvas-wrapper .leaflet-control-zoom-out, #home-map-canvas-wrapper .leaflet-control-zoom-in').click ->
+  $('.leaflet-control-zoom-out, .leaflet-control-zoom-in').click ->
     $('html, body').animate { scrollTop: 0 }, 0
 
   # Initialize the right-hand side navigation bar, on the home page, on open it on load.

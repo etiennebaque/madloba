@@ -1,16 +1,11 @@
-#main.container-fluid.clear-top
-  .row
-    / Map section
-    .col-xs-12.no-left-right-border
-      #home-map-canvas-wrapper
+-# Sidebar
+= render 'sidebar'
 
-        / Sidebar
-        = render 'sidebar'
-
-        #map.home.sidebar-map
+-# Map
+#map.home.sidebar-map
 
 
-/ Modal popup that shows several ads promoting the same item, in a specific district/area
+-# Modal popup that shows several ads promoting the same item, in a specific district/area
 #adsModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "basicModal", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content
@@ -20,20 +15,19 @@
       .modal-footer
         %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"}= t('home.close')
 
-/
-  This div is to check whether or not the user has AdBlock on in their browser.
-  If they do, it will affect the website's ability to work well.
+-# This div is to check whether or not the user has AdBlock on in their browser.
+-# If they do, it will affect the website's ability to work well.
 #ad-block{:style => "position: absolute; opacity: 1; top: 0; left: 0;"} adblock
 
-/ Loading JS scripts
+-# Loading JS scripts
 - content_for :scripts do
-  /
-    Includes all the Javascript related to map rendering, to be loaded after page
-    (Leaflet, MapQuest, and script that creates the actual map)
-  = render 'shared/map_scripts_after_body', include_all_scripts: false
-  / Leaflet plug-ins and library used on the home page
 
-  / Javascript function calls, related specifically to the home page
+  -# Includes all the Javascript related to map rendering, to be loaded after page
+  -# (Leaflet, MapQuest, and script that creates the actual map)
+  = render 'shared/map_scripts_after_body', include_all_scripts: false
+
+
+  -# Javascript function calls, related specifically to the home page
   :javascript
     // specific script to render map markers and initialize the sidebar.
     var locations_exact = #{raw @locations_exact.to_json}
