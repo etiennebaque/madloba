@@ -38,7 +38,7 @@ global.leaf =
       # Loading Mapbox tiles
       leaf.map_tiles = L.tileLayer(map_settings['mapbox_tile_url'], attribution: map_settings['mapbox_attribution'])
 
-    leaf.map_tiles.addTo leaf.map  
+    leaf.map_tiles.addTo leaf.map
     leaf.map.setView [leaf.my_lat, leaf.my_lng], map_settings['zoom_level']
 
     if map_settings['clickable_map_marker'] != 'none'
@@ -313,7 +313,9 @@ global.drawDistrictsOnMap = (locations_district) ->
     locations = locations_district[district_id]
     district_name = markers.area_geocodes[district_id]['name']
     district_bounds = markers.area_geocodes[district_id]['bounds']
-    popup_html_text = createPopupHtmlArea(gon.vars['in_this_district'] + ' (<b>' + district_name + '</b>)<br /><br />', locations, 'district', district_id)
+    popup_html_text = createPopupHtmlArea(gon.vars['in_this_district'] + ' (<b>' + district_name + '</b>)' +
+        '<br /><br />', locations, 'district', district_id)
+
     # Adding the districts (which have ads) to the home page map.
     L.geoJson JSON.parse(district_bounds), onEachFeature: (feature, layer) ->
       layer.bindPopup popup_html_text
@@ -330,7 +332,8 @@ global.drawDistrictsOnMap = (locations_district) ->
 global.drawPostalCodeAreaOnMap = (locations_postal) ->
   Object.keys(locations_postal).forEach (area_code) ->
     locations = locations_postal[area_code]
-    popup_html_text = createPopupHtmlArea('In this area (<b>' + area_code + '</b>)<br /><br />', locations, 'postal', area_code)
+    popup_html_text = createPopupHtmlArea('In this area (<b>' + area_code + '</b>)' +
+        '<br /><br />', locations, 'postal', area_code)
     area = L.circle([
       markers.area_geocodes[area_code]['latitude']
       markers.area_geocodes[area_code]['longitude']
@@ -431,11 +434,17 @@ createPopupHtml = (first_sentence, ad, index) ->
   else
     second_sentence = gon.vars['items_searched'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
   if ad['image']['thumb']['url'] != null and ad['image']['thumb']['url'] != ''
-# Popup is created with a thumbnail image in it.
-    ad_image = '<img class=\'thumb_ad_image\' onError="$(\'.thumb_ad_image\').remove(); $(\'.image_notification\').html(\'<i>' + gon.vars['image_not_available'] + '</i>\');" src=\'' + ad['image']['thumb']['url'] + '\'><span class="image_notification"></span>'
-    result = '<div style=\'overflow: auto;\'><div class=\'col-sm-6\'>' + first_sentence + '</div><div class=\'col-sm-6\'>' + ad_image + '</div><div class=\'col-sm-12\'><br>' + second_sentence + '</div></div>'
+    # Popup is created with a thumbnail image in it.
+    ad_image = '<img class=\'thumb_ad_image\' onError="$(\'.thumb_ad_image\').remove(); ' +
+      '$(\'.image_notification\').html(\'<i>' + gon.vars['image_not_available'] + '</i>\');" src=\'' +
+      ad['image']['thumb']['url'] + '\'><span class="image_notification"></span>'
+
+    result = '<div style=\'overflow: auto;\'><div class=\'col-sm-6\'>' + first_sentence + '</div>' +
+        '<div class=\'col-sm-6\'>' + ad_image + '</div><div class=\'col-sm-12\'><br>' +
+        second_sentence + '</div></div>'
+
   else
-# Popup is created without any thumbnail image.
+    # Popup is created without any thumbnail image.
     result = '<div style=\'overflow: auto;\'>' + first_sentence + '<br><br>' + second_sentence + '</div>'
   result
 

@@ -97,7 +97,13 @@ AreaSettings::initMapEvents = ->
     leaf.drawn_items.eachLayer (layer) ->
       _this.district_bounds = layer.toGeoJSON()
       if districtId == _this.district_bounds['properties']['id']
-        layer.bindPopup '<input type=\'text\' id=\'' + districtId + '\' class=\'update_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\' value=\'' + new_district_name + '\'><button type=\'button\' id=\'save_' + _this.district_bounds['properties']['id'] + '\' class=\'btn btn-xs btn-success update_district\'>OK</button><br /><div class=\'district_notif\'></div>'
+        layer.bindPopup '<input type=\'text\' id=\'' + districtId + '\' ' +
+            'class=\'update_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\' ' +
+            'value=\'' + new_district_name + '\'>' +
+            '<button type=\'button\' id=\'save_' + _this.district_bounds['properties']['id'] + '\' ' +
+            'class=\'btn btn-xs btn-success update_district\'>OK</button>' +
+            '<br /><div class=\'district_notif\'></div>'
+
         layer.closePopup()
 
 
@@ -108,7 +114,9 @@ AreaSettings::initDrawingTools = ->
     _this.layer = e.layer
     leaf.drawn_items.addLayer _this.layer
     # Text field and "Save district" button to show up in the popup.
-    popup = L.popup(closeButton: false).setContent('<input type=\'text\' class=\'save_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\'><button type=\'button\' class=\'btn btn-xs btn-success save_district disabled\'>Save district</button>')
+    popup = L.popup(closeButton: false).setContent('<input type=\'text\' class=\'save_district_text\' ' +
+        'style=\'margin-right:5px;\' placeholder=\'District name\'><button type=\'button\' ' +
+        'class=\'btn btn-xs btn-success save_district disabled\'>Save district</button>')
     _this.layer.bindPopup popup
     _this.district_bounds = _this.layer.toGeoJSON()
     _this.layer.openPopup(_this.layer.getBounds().getCenter())
@@ -118,7 +126,11 @@ AreaSettings::initDrawingTools = ->
   leaf.map.on 'draw:editstart', (e) ->
     leaf.drawn_items.eachLayer (layer) ->
       _this.district_bounds = layer.toGeoJSON()
-      layer.bindPopup '<input type=\'text\' id=\'' + _this.district_bounds['properties']['id'] + '\' class=\'update_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\' value=\'' + _this.district_bounds['properties']['name'] + '\'><button type=\'button\' id=\'save_' + _this.district_bounds['properties']['id'] + '\' class=\'btn btn-xs btn-success update_district\'>OK</button><br /><div class=\'district_notif\'></div>'
+      layer.bindPopup '<input type=\'text\' id=\'' + _this.district_bounds['properties']['id'] + '\' ' +
+          'class=\'update_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\' ' +
+          'value=\'' + _this.district_bounds['properties']['name'] + '\'>' +
+          '<button type=\'button\' id=\'save_' + _this.district_bounds['properties']['id'] + '\' ' +
+          'class=\'btn btn-xs btn-success update_district\'>OK</button><br /><div class=\'district_notif\'></div>'
 
   # After saving new name of district,
   # remove the text input and display new name as text only.

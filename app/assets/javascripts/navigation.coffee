@@ -49,7 +49,7 @@ NavigationBar::init = ->
     display: 'value'
     source: _this.searchedAdItems
 
-  # Navigation bar: changing the typeahead query, depending of user choice between "I'm giving away" and "I'm searching for"
+  # Changing the typeahead query, depending of user choice between "I'm giving away" and "I'm searching for".
   $('#q').change(->
     _this.searchedAdItems.remote.url = '/getItems?item=QUERY&type=search_ad_items&q=' + $('#q').val()
     # As the type of search changes, the item name field needs to be reset.
@@ -105,12 +105,15 @@ NavigationBar::getLocationsPropositions = ->
             i = 0
             while i < data.length
               proposed_location = data[i]
-              url = '/search?lat=' + proposed_location['lat'] + '&lon=' + proposed_location['lon'] + '&loc=' + proposed_location['display_name']
+              url = '/search?lat=' + proposed_location['lat'] +
+                '&lon=' + proposed_location['lon'] + '&loc=' + proposed_location['display_name']
               if item != ''
                 url = url + '&item=' + item
               if search_action != ''
                 url = url + '&q=' + search_action
-              modalHtmlText = modalHtmlText + '<li><a href=\'' + encodeURI(url) + '\'>' + proposed_location['display_name'] + '</a></li>'
+              modalHtmlText = modalHtmlText + '<li><a href=\'' + encodeURI(url) + '\'>' +
+                  proposed_location['display_name'] + '</a></li>'
+              
               i++
             modalHtmlText = modalHtmlText + '</ul>'
             $('#modal-body-id').html modalHtmlText

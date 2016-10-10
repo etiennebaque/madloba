@@ -13,7 +13,11 @@ AdForm::init = ->
   # (eg. everything that has 'ad' in the class name). When AdBlock is detected, we display a popup indicating
   # that AdBlock should be deactivated for this Madloba website.
   if $('#ad-block').length and !$('#ad-block').height()
-    $('#wrap').append '<div class="blocking-notification alert alert-dismissible alert-warning" role="alert">' + '<button type="button" class="close" data-dismiss="alert">×</button>' + '<h5>' + gon.vars['adblock_warning'] + '</h5>' + '<p>' + gon.vars['adblock_browser'] + '<br />' + gon.vars['adblock_affecting'] + '</p>' + '<p>' + gon.vars['adblock_turnoff'] + '</p>' + '</div>'
+    $('#wrap').append '<div class="blocking-notification alert alert-dismissible alert-warning" role="alert">' + \
+        '<button type="button" class="close" data-dismiss="alert">×</button>' + \
+        '<h5>' + gon.vars['adblock_warning'] + '</h5>' + \
+        '<p>' + gon.vars['adblock_browser'] + '<br />' + gon.vars['adblock_affecting'] + '</p>' + \
+        '<p>' + gon.vars['adblock_turnoff'] + '</p>' + '</div>'
   # Initially created in 'application.html.haml' layout, this div is now removed.
   $('#ad-block').remove()
 
@@ -28,7 +32,8 @@ AdForm::init = ->
   # Events to be triggered when item field added or removed, in the ad form.
   $('#items a.add_fields').data('association-insertion-position', 'before').data 'association-insertion-node', 'this'
   $('#items').on 'cocoon:after-insert', ->
-    $('.ad-item-fields a.add_fields').data('association-insertion-position', 'before').data 'association-insertion-node', 'this'
+    $('.ad-item-fields a.add_fields').data('association-insertion-position', 'before').data \
+      'association-insertion-node', 'this'
     $('.selectpicker').selectpicker 'refresh'
     bindTypeaheadToItemSelect $('#items .selectpicker-items')
     $('.ad-item-fields').on 'cocoon:after-insert', ->
