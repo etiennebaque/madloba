@@ -152,6 +152,7 @@ class SetupController < ApplicationController
   # -----------------------------------------
   def show_admin
     @user = User.new
+    @user.skip_confirmation!
     @user.role = 1 # New user will be admin.
     @current_step = 5
     render 'setup/admin'
