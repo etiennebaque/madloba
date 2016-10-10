@@ -23,7 +23,9 @@
               %hr
               %h4= t('admin.map_settings.map_api_keys')
 
-              %i= t('admin.map_settings.key_first')
+              .form-group
+                .col-sm-offset-3.col-sm-9
+                  %i= t('admin.map_settings.key_first')
 
               = f.input :mapbox_api_key, input_html: {style:'width: 400px'}, label: t('admin.map_settings.mapbox_html', account: link_to(t('admin.map_settings.account'), 'https://www.mapbox.com/studio/account/tokens/', target: '_blank')), value: demo? ? '********' : f.object.mapbox_api_key
               = f.input :mapbox_map_name, input_html: {style:'width: 200px'}, label: t('admin.map_settings.mapbox_map_name'), value: demo? ? '********' : f.object.mapbox_map_name
@@ -37,19 +39,18 @@
               = f.hidden_field :longitude, class: 'longitude'
               = f.hidden_field :demo, value: demo?
 
-              .form-inline
+              .form-inline.form-group
                 = f.label t('admin.map_settings.find_city_map'), class: 'col-sm-3 control-label'
-                = f.input :city, label: false, input_html: {class: 'location_city'}, placeholder: t('admin.map_settings.city')
-                = f.input :state, label: false, input_html: {class: 'location_state'}, placeholder: t('admin.map_settings.state')
-                = f.input :country, label: false, input_html: {class: 'location_country'}, placeholder: t('admin.map_settings.country')
-                %a.btn.btn-info#find_geocodes_from_address{:href => "#", :style => "vertical-align: top"}
-                  = t('admin.map_settings.find_city')
+                .col-sm-9
+                  = f.input :city, label: false, input_html: {class: 'location_city'}, placeholder: t('admin.map_settings.city')
+                  = f.input :state, label: false, input_html: {class: 'location_state'}, placeholder: t('admin.map_settings.state')
+                  = f.input :country, label: false, input_html: {class: 'location_country'}, placeholder: t('admin.map_settings.country')
+                  %a.btn.btn-info#find_geocodes_from_address{:href => "#", :style => "vertical-align: top"}
+                    = t('admin.map_settings.find_city')
 
-              = f.hidden_field :zoom_level, class: 'zoom-level'
+              = f.input :zoom_level, label: t('admin.map_settings.map_description_zoom'), input_html: {style:'width: 100px'}, class: 'zoom-level', collection: @form.options_for_zoom_level, include_blank: false
 
               %i= t('admin.map_settings.map_description')
-              %br
-              %i= t('admin.map_settings.map_description_zoom')
 
               .form-inline
                 #map-canvas-wrapper{style: 'margin: 20px 0px'}
@@ -63,6 +64,6 @@
   = render 'shared/map_scripts_after_body', include_all_scripts: true
   :javascript
     // Giving this page the possibility to find geocodes.
-    find_geocodes();
+    new MapSettings();
 
 

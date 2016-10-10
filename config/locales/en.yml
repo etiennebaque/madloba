@@ -441,13 +441,13 @@ en:
       title: Map
       type: "Map type:"
       mapbox_html: "Mapbox API key (%{account}):"
-      mapbox_map_name: "Mapbox map name"
+      mapbox_map_name: "Mapbox map name:"
       account: "account"
       mapbox_link: Go to your Mapbox account...
       mapquest_html: "MapQuest API key (%{account}):"
       mapquest_link: Go to your MapQuest developer account...
       map_api_keys: Map API keys
-      key_first: After entering a new API key, save the changes first. Then, in the drop down box above, select the type of the map related to that new key.
+      key_first: After entering a new API key, save changes first. Then select the type of the map related to that new key above.
       location_info: Location information
       postal_code_field1: Postal code length
       postal_code_field2: Area length
@@ -458,8 +458,8 @@ en:
       state: State/Region (optional)
       country: Country
       find_city: Find this city
-      map_description: "- Choose the map default center by clicking on this map. The selected location will be used when no address is entered by the user."
-      map_description_zoom: "- Set also the desired default level of zoom (by clicking on '-' or '+')."
+      map_description: "Click on the map to define its default center"
+      map_description_zoom: "Default zoom level:"
       should_be_numeric: Latitude and longitude should be numeric values.
       cannot_be_empty: Latitude or longitude cannot be empty.
       postal_area_error: The postal code length should be greater or equals to the area code.

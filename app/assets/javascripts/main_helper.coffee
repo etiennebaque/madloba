@@ -29,15 +29,21 @@ global.leaf =
     leaf.searched_address = map_settings['searched_address']
 
     if map_settings['chosen_map'] == 'map_quest'
-      # Mapquest
+      # Loading Mapquest tiles
       leaf.map_tiles = MQ.mapLayer()
     else if map_settings['chosen_map'] == 'open_street_map'
+      # Loading Openstreetmap tiles
       leaf.map_tiles = L.tileLayer(map_settings['osm_tile_url'], attribution: map_settings['osm_attribution'])
     else if map_settings['chosen_map'] == 'mapbox'
+      # Loading Mapbox tiles
       leaf.map_tiles = L.tileLayer(map_settings['mapbox_tile_url'], attribution: map_settings['mapbox_attribution'])
 
     leaf.map_tiles.addTo leaf.map  
     leaf.map.setView [leaf.my_lat, leaf.my_lng], map_settings['zoom_level']
+
+    if map_settings['clickable_map_marker'] != 'none'
+      # Getting latitude and longitude when map is clicked
+      leaf.map.on 'click', onMapClickLocation
 
   show_features_on_ad_details_page: (map_settings) ->
     if map_settings['ad_show_is_area'] == true
@@ -121,25 +127,6 @@ global.leaf =
         center_marker.addTo leaf.map
     return
 
-  setup_custom_behaviors: (map_settings) ->
-    if map_settings['clickable_map_marker'] != 'none'
-      # Getting latitude and longitude of clicked point on the map.
-      leaf.map.on 'click', onMapClickLocation
-
-    # Map settings admin page: refreshing map, when "Map type" field is modified.
-    $('#map_settings_form_chosen_map').change ->
-      selected_map = ''
-      $('select option:selected').each ->
-        selected_map = $(this).val()
-        return
-
-      map_settings['chosen_map'] = selected_map
-      map_settings['tiles_url'] = map_settings[selected_map]['tiles_url']
-      map_settings['attribution'] = map_settings[selected_map]['attribution']
-
-    leaf.map.on 'zoomend', ->
-      $('.zoom-level').val leaf.map.getZoom()
-      
 
   show_single_district: (district_name, bounds) ->
     # Before adding the selected district, we need to remove all the currently displayed districts.
@@ -316,10 +303,6 @@ global.initLeafletMap = (map_settings) ->
       # Define first if it should be the area icon (for addresses based only on postal codes), or the default icon.
       leaf.show_single_marker map_settings
 
-  # Depending of the page, the map might react differently (eg. marker showing on onClick...)
-  # This method sets up the map behavior in relation to the page the user's on.
-  leaf.setup_custom_behaviors map_settings
-  return
 
 ###*
 # This function draws districts (where at least one current ad is included)

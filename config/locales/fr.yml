@@ -473,7 +473,7 @@ fr:
       country: Pays
       find_city: Chercher cette ville
       map_description: "- Choisissez le centre de la carte par défaut, en cliquant sur cette carte. L'emplacement choisi sera affiché au chargement de la page d'accueil."
-      map_description_zoom: "- Chiosissez aussi le niveau de zoom par défaut (en cliquant sur '-' ou '+')."
+      map_description_zoom: "Niveau de zoom par défaut"
       should_be_numeric: Latitude et longitude doivent être des valeurs numeriques.
       cannot_be_empty: Latitude et longitude ne peuvent pas être vides.
       postal_area_error: La longueur du code postal doit être égale ou supérieure à la longueur du code de zone.

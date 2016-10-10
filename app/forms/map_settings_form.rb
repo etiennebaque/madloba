@@ -21,6 +21,12 @@ class MapSettingsForm < ApplicationForm
     options
   end
 
+  def options_for_zoom_level
+    options = []
+    (1..18).each {|n| options << [n,n]}
+    options
+  end
+
   def submit
     if demo?
       # If this is the Madloba Demo, then we update only the chosen_map. The other parameters cannot be changed.
