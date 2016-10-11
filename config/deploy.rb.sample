@@ -1,4 +1,5 @@
 SSHKit.config.command_map[:rake] = 'bundle exec rake'
+require 'seed-fu/capistrano3'
 
 # --------------------------------------------------
 
@@ -88,6 +89,8 @@ namespace :deploy do
   after :finishing, 'deploy:cleanup'
 
 end
+
+before 'deploy:publishing', 'db:seed_fu'
 
 after 'deploy:published', 'restart' do
   invoke 'delayed_job:restart'
