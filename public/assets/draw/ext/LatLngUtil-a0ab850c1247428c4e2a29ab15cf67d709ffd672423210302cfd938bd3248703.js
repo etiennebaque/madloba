@@ -1,0 +1,1 @@
+L.LatLngUtil={cloneLatLngs:function(n){for(var t=[],L=0,l=n.length;l>L;L++)t.push(this.cloneLatLng(n[L]));return t},cloneLatLng:function(n){return L.latLng(n.lat,n.lng)}};
