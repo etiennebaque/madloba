@@ -1,1 +1,0 @@
-(function(){var o;o=this,o.CategoryForm=function(){return this.init()},CategoryForm.prototype.init=function(){return $(".btn-icon-modal").click(function(){return $("#myModalIcon").modal("show")}),$(".icon-for-category").click(function(){var o;return o=$(this).attr("id"),$("#myModalIcon").modal("toggle"),$("#category_icon").val(o)})}}).call(this);

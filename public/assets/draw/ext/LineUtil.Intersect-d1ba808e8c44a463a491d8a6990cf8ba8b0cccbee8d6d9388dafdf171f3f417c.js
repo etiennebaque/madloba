@@ -1,1 +1,0 @@
-L.Util.extend(L.LineUtil,{segmentsIntersect:function(e,c,t,n){return this._checkCounterclockwise(e,t,n)!==this._checkCounterclockwise(c,t,n)&&this._checkCounterclockwise(e,c,t)!==this._checkCounterclockwise(e,c,n)},_checkCounterclockwise:function(e,c,t){return(t.y-e.y)*(c.x-e.x)>(c.y-e.y)*(t.x-e.x)}});

@@ -1,1 +1,0 @@
-(function(){var n;n=this,n.ManageRecords=function(){return this.init()},ManageRecords.prototype.init=function(){return window.location.href.indexOf("managerecords")>-1&&window.location.hash?$("#records-tabs a[href="+window.location.hash+"]").tab("show"):void 0}}).call(this);
