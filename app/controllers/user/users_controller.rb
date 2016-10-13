@@ -19,29 +19,35 @@ class User::UsersController < ApplicationController
 
   def create
     setup_step = Setting.where(key: 'setup_step').pluck(:value).first.to_i
+    setup_mode = (setup_step == 1) || Rails.configuration.setup_debug_mode
+    setup_mode ? create_first_admin_during_setup : create_new_user
+  end
 
+  def create_first_admin_during_setup
+    # We're registering the first admin user, during the website setup process.
+    # Redirection to the "All done" setup page, after creation of the admin user
+    @user = User.new(user_params)
+    authorize @user
+    @user.skip_confirmation!
+    if @user.save
+      redirect_to setup_done_path
+    else
+      redirect_to 'setup/admin'
+    end
+  end
+
+  def create_new_user
     @user = User.new(user_params)
     authorize @user
 
     if @user.save
-      if setup_step == 1
-        # We're registering the first admin user, during the website setup process.
-        # Redirection to the "All done" setup page, after creation of the admin user
-        redirect_to setup_done_path
-      else
-        # We're creating a new user, from the admin panel
-        # Redirection to the 'Manage user' edit page (admin panel)
-        flash[:new_user] = @user.email
-        redirect_to edit_user_user_path(@user.id)
-      end
-
+      # We're creating a new user, from the admin panel
+      # Redirection to the 'Manage user' edit page (admin panel)
+      flash[:new_user] = @user.email
+      redirect_to edit_user_user_path(@user.id)
     else
-      if setup_step == 1
-        render 'setup/admin'
-      else
-        @is_adding = true
-        render 'user'
-      end
+      @is_adding = true
+      render 'user'
     end
   end
 

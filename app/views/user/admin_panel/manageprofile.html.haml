@@ -12,7 +12,7 @@
             = form_for [:user, @user], html: { id: 'userForm', role: 'form' } do |f|
               / E-mail
               .form-group
-                = f.label :email, t('home.e-mail')+':', class:'control-label'
+                = f.label :email, t('home.e-mail'), class:'control-label'
                 .form-inline
                   = f.email_field :email, class: 'form-control'
               / First name

@@ -12,15 +12,13 @@
 //
 //= require jquery.min
 //= require jquery_ujs
+//= require bootstrap-sprockets
 
 //= require cocoon
-
 //= require typeahead.bundle.min
-//= require custom-leaflet
-//= require general
+
 //= require bootstrap-select.min
 //= require ajax-bootstrap-select.min
-//= require bootstrap.min
 
 // library for cookie management
 //= require jquery.cookie
@@ -28,8 +26,6 @@
 //= require jquery.dataTables.min
 // select or dropdown enhancer
 //= require chosen.jquery.min
-// notification plugin
-//= require jquery.noty
 // library for making tables responsive
 //= require responsive-tables
 // autogrowing textarea plugin
@@ -37,6 +33,14 @@
 // application script for Charisma theme
 //= require charisma
 
+//= require leaflet
+
+//= require leaflet-sidebar.min
+//= require leaflet-function-button
+//= require leaflet.markercluster
+//= require leaflet.awesome-markers
+//= require bouncemarker
+
 //= require ad_websocket
 
-////= require_tree .
+//= require_tree .

@@ -12,7 +12,7 @@ class User::ItemsController < ApplicationController
   end
 
   def new
-    @isAdding = true
+    @adding = true
     @item = Item.new
     authorize @item
     render 'item'

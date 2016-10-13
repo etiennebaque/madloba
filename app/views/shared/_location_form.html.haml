@@ -1,29 +1,33 @@
 - content_for :head do
   :javascript
     var districts_bounds = #{raw districts_bounds.to_json};
+
 .nested-fields.location-fields{:style => "padding-bottom: 10px;"}
-  - if can_choose_existing_locations(current_user) && %w(new create edit update).include?(action_name) && !@is_location_edit
+  - if current_user.locations.any? && %w(new create edit update).include?(action_name) && !@is_location_edit
     .form-group
       %hr/
     .form-group
-      %div{:class => col4}
+      .col-lg-4
         %h4= t('location.new_location')
       /
         if the user is not anonymous and has created locations in the past, then give the possibility
         to remove the whole "new location" section to choose an existing location
-      %div{:class => col4, :style => "line-height: 40px;"}
-        = link_to_remove_association t('ad.choose_existing'), form, class: 'btn btn-danger btn-sm', style: 'float: right;'
+      .col-lg-4{style: "line-height: 40px;"}
+        %a.btn.btn-danger.btn-sm.remove-new-location{style: 'float: right;'}
+          = t('ad.choose_existing')
+
   / Location name
   .form-group
-    = form.label :name, t('location.name'), class: label_class
-    %div{:class => col6}
+    = form.label :name, t('location.name'), class: 'col-lg-2 control-label'
+    .col-lg-6
       = form.text_field :name, class: 'form-control help-message', maxlength:'90', |
         :data => {:content => t('location.name_help'),                             |
         :placement => 'top', :toggle => 'popover', :trigger => 'hover focus'}      |
+
   / Choose between 'exact location (address)' or 'area location (postal code or district)'
   .form-group
-    = form.label :loc_type, t('location.definition'), class: "#{col2} #{label_class}"
-    %div{:class => col_radio}
+    = form.label :loc_type, t('location.definition'), class: 'col-lg-2 control-label'
+    .col-lg-6
       .radio
         %label
           = form.radio_button :loc_type, 'exact', {checked: true, class: 'location_type_exact'}
@@ -38,73 +42,83 @@
           %label
             = form.radio_button :loc_type, 'district', {class: 'location_type_district'}
             = t('location.definition_district')
+
   .exact_location_section
     / Street number
     .form-group
-      = form.label :street_number, t('location.street_number'), class: label_class
-      %div{:class => col2}
+      = form.label :street_number, t('location.street_number'), class: 'col-lg-2 control-label'
+      .col-lg-2
         = form.text_field :street_number, class: 'form-control location_streetnumber', maxlength:'6'
+
     / Street name
     .form-group
-      = form.label :address, t('location.street_name'), class: label_class
-      %div{:class => col6}
+      = form.label :address, t('location.street_name'), class: 'col-lg-2 control-label'
+      .col-lg-6
         = form.text_field :address, class: 'form-control help-message location_streetname', maxlength:'90', |
           :data => {:content => t('location.street_name_help'),                                             |
           :placement => 'top', :toggle => 'popover', :trigger => 'hover focus'}                             |
+
   #postal_code_section
     / Postal code ('area' type or 'exact' type address)
     .form-group
-      = form.label :postal_code, t('location.postal_code'), class: label_class
-      %div{:class => col4}
+      = form.label :postal_code, t('location.postal_code'), class: 'col-lg-2 control-label'
+      .col-lg-4
         = form.text_field :postal_code, class: 'form-control location_postal_code', maxlength:'8'
         %span#postal_code_notification
+
     / Geocode (latitude and longitude hidden fields)
-    = form.hidden_field :latitude, value: @map_settings['lat'], class: 'latitude_hidden'
-    = form.hidden_field :longitude, value: @map_settings['lng'], class: 'longitude_hidden'
+    = form.hidden_field :latitude, value: @map_settings[:latitude], class: 'latitude'
+    = form.hidden_field :longitude, value: @map_settings[:longitude], class: 'longitude'
+
   .exact_location_section
     / "Define geocodes & find address on the map" button
     .form-group
-      %span{:class => label_class}
-      %div{:class => col8}
-        %a#findGeocodeAddressMapBtnId.btn.btn-info{"data-content" => "#{t('home.click_on_map_after')}", "data-placement" => "right", "data-toggle" => "popover", "data-trigger" => "hover"}
+      %span.col-lg-2.control-label
+      .col-lg-8
+        %a#find_geocodes_from_address.btn.btn-info{"data-content" => "#{t('home.click_on_map_after')}", "data-placement" => "right", "data-toggle" => "popover", "data-trigger" => "hover"}
           = t('location.define_geocode_button')
         %span#findGeocodeLoaderId
         %span#geocodeErrorMessageId
+
   #district_section
     / List of district ('area' type address only)
     .form-group
-      = form.label :district_id, t('location.district'), class: label_class
-      %div{:class => col3}
+      = form.label :district_id, t('location.district'), class: 'col-lg-2 control-label'
+      .col-lg-3
         = form.select :district_id, options_for_select(districts, form.object.district_id), {}, {class: 'form-control help-message district_dropdown', |
           :data => {:content => t('location.district_help'), :placement => 'top',                                                                      |
           :toggle => 'popover', :trigger => 'hover focus'}}                                                                                            |
-        = form.hidden_field :latitude, value: @map_settings['lat'], class: 'latitude_hidden'
-        = form.hidden_field :longitude, value: @map_settings['lng'], class: 'longitude_hidden'
+
   / Canvas for the map
   .form-group
-    = form.label 'map-canvas-wrapper', t('location.map'), class: label_class
-    %div{:class => col10}
+    = form.label 'map-canvas-wrapper', t('location.map'), class: 'col-lg-2 control-label'
+    .col-lg-10
       %span#map_notification_exact.map_notification
         %i= t('admin.location.map_notification_exact')
       %span#map_notification_postal_code_only.map_notification
         %i= t('admin.location.map_notification_postal_code')
-      #map
+
+      #map.large
+
   / Phone number
   .form-group
-    = form.label :phone_number, t('location.phone_number'), class: label_class
-    %div{:class => col3}
+    = form.label :phone_number, t('location.phone_number'), class: 'col-lg-2 control-label'
+    .col-lg-3
       = form.text_field :phone_number, class: 'form-control', maxlength:'15'
+
   / Website
   .form-group
-    = form.label :website, t('location.website'), class: label_class
-    %div{:class => col4}
+    = form.label :website, t('location.website'), class: 'col-lg-2 control-label'
+    .col-lg-4
       = form.text_field :website, class: 'form-control', maxlength:'60'
+
   / Description
   .form-group
-    = form.label :description, t('ad.location_description'), class: label_class
-    %div{:class => col6}
+    = form.label :description, t('ad.location_description'), class: 'col-lg-2 control-label'
+    .col-lg-6
       = form.text_area :description, class: 'help-message', cols: 40, rows: 6, |
         :data => {:content => t('location.description_help'),                  |
         :placement => 'top', :toggle => 'popover', :trigger => 'hover focus'}  |
+
   - if current_user
     = form.hidden_field :user_id, value: current_user.id

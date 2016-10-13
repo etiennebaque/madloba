@@ -19,9 +19,6 @@ ADMIN_FLAG_FOR_MAP = 'admin'
 AREA_FLAG_FOR_MAP = 'area'
 SHOW_AD_FLAG_FOR_MAP = 'show_ad'
 
-HAS_CENTER_MARKER = true
-HAS_NOT_CENTER_MARKER = false
-
 NOT_CLICKABLE_MAP = 'none'
 CLICKABLE_MAP_EXACT_MARKER = 'exact'
 CLICKABLE_MAP_AREA_MARKER = 'area'
@@ -63,6 +60,7 @@ ICON_SELECTION =
 CACHE_SETUP_STEP = 'cache_setup_step'
 CACHE_APP_NAME = 'cache_app_name'
 CACHE_CITY_NAME = 'cache_city_name'
+CACHE_COUNTRY_NAME = 'cache_country_name'
 CACHE_IMAGE_STORAGE = 'cache_image_storage'
 CACHE_MAX_DAYS_EXPIRE = 'cache_max_days_expire'
 CACHE_AREA_TYPE = 'cache_area_type'

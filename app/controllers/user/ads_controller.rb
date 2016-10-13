@@ -31,13 +31,16 @@ class User::AdsController < ApplicationController
   end
 
   def create
-    @ad = Ad.new(ad_params)
+    @ad = Ad.new(sanitize_ad_params)
     authorize @ad
 
     # we tie now the user to the ad (if it is an anonymous user, current_user is nil)
     @ad.user = current_user
 
     if @ad.save_with_or_without_captcha(current_user)
+      # Update location type if needed
+      @ad.location.define_subclass
+
       flash[:new_ad] = @ad.title
 
       # Letting the user know when their ad will expire.
@@ -58,7 +61,7 @@ class User::AdsController < ApplicationController
         user_info = {email: @ad.anon_email, name: @ad.anon_name, is_anon: true}
       end
 
-      if is_on_heroku
+      if on_heroku?
         UserMailer.created_ad(user_info, @ad, full_admin_url).deliver
       else
         # Queueing email sending, when not on heroku.
@@ -84,6 +87,7 @@ class User::AdsController < ApplicationController
 
     # Performing the update.
     if @ad.update(ad_params)
+      @ad.location.define_subclass
       flash[:ad_updated] = @ad.title
       redirect_to edit_user_ad_path(@ad.id)
     else
@@ -114,7 +118,7 @@ class User::AdsController < ApplicationController
     params.require(:ad).permit(:title, :description, :is_username_used, :location_id, :is_giving,
                                :image, :image_cache, :remove_image, :anon_name, :anon_email, :captcha, :captcha_key,
                                :ad_items_attributes => [:id, :item_id, :_destroy, :item_attributes => [:id, :name, :category_id, :_destroy] ],
-                               :location_attributes => [:id, :user_id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :loc_type, :latitude, :longitude, :phone_number, :website, :description, :_destroy])
+                               :location_attributes => [:id, :user_id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :loc_type, :type, :latitude, :longitude, :phone_number, :website, :description])
   end
 
   # This method is called when a user replies and sends a message to another user, who posted an ad.
@@ -145,7 +149,7 @@ class User::AdsController < ApplicationController
           sender_info = {full_name: params['name'], email: params['email']}
         end
 
-        if is_on_heroku
+        if on_heroku?
           UserMailer.send_message_for_ad(sender_info, message, ad_info).deliver
         else
           UserMailer.delay.send_message_for_ad(sender_info, message, ad_info)
@@ -160,6 +164,14 @@ class User::AdsController < ApplicationController
   end
 
   private
+
+  def sanitize_ad_params
+    sanitized_params = ad_params.dup
+    if params[:location_id].present?
+      sanitized_params.delete(:location_attributes)
+    end
+    sanitized_params
+  end
 
   # Create the json for the 'exact location' ad, which will be read to render markers on the home page.
   def generate_ad_json
@@ -188,11 +200,10 @@ class User::AdsController < ApplicationController
   # Initializes map related info (markers, clickable map...)
   def get_map_settings_for_ad
     if %w(show send_message).include?(action_name)
-      getMapSettingsWithSeveralItems(@ad.location, HAS_CENTER_MARKER, NOT_CLICKABLE_MAP, @ad.items)
-    elsif %w(create update).include?(action_name)
-      getMapSettings(@ad.location, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
+      @map_settings = MapAdInfo.new(@ad).to_hash
     else
-      getMapSettings(@ad.location, HAS_NOT_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
+      location = @ad.location
+      @map_settings = MapLocationInfo.new(location: location, has_center_marker: %w(create update).include?(action_name), clickable: location.try(:clickable_map_for_edit)).to_hash
     end
   end
 

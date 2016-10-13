@@ -1,8 +1,6 @@
 class User::AdminPanelController < ApplicationController
   before_action :authenticate_user!, except: [:getAreaSettings]
   before_filter :requires_user, except: [:getAreaSettings]
-
-  before_action :latitude_longitude_should_be_numeric, only: [:update_mapsettings]
   before_action :postal_code_greater_than_area_code, only: [:update_areasettings]
 
   include ApplicationHelper
@@ -146,56 +144,14 @@ class User::AdminPanelController < ApplicationController
   # ----------------------------------
   def mapsettings
     authorize :admin, :mapsettings?
-    @map_settings = getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
-
-    # More settings to get, in addition to the one we already get in getMapSettings.
-    settings = Setting.where(key: %w(city state country))
-    if settings
-      settings.each do |setting|
-        @map_settings[setting.key] = setting.value
-        # Updating cache value
-        if setting.key == 'city'
-          Rails.cache.write(CACHE_CITY_NAME, setting.value)
-        end
-      end
-    end
-
-    # Adding this element to the hash, in order to get the 'zoomend' event working,
-    # only for the map settings page (needed to define zoom level).
-    @map_settings['page'] = 'mapsettings'
+    @form = MapSettingsForm.new
+    @map_settings = MapInfo.new.to_hash
 
   end
 
   def update_mapsettings
-    lat = params['hiddenLatId']
-    lng = params['hiddenLngId']
-
-    if is_demo
-      # If this is the Madloba Demo, then we update only the chosen_map. The other parameters cannot be changed.
-      setting_record = Setting.find_by_key(:chosen_map)
-      setting_record.update_attribute(:value, params['chosen_map'])
-      flash[:setting_success] = t('admin.map_settings.update_success_demo')
-
-    elsif ((lat.is_a? Numeric) && (lng.is_a? Numeric)) || lat != nil || lng != nil
-      # All the information on the map settings page that can be saved
-      map_settings_keys.each do |key|
-        setting_record = Setting.find_by_key(key)
-        if setting_record
-          if key == 'map_center_geocode'
-            setting_record.update_attributes(value: "#{lat},#{lng}")
-          else
-            setting_record.update_attributes(value: params[key])
-          end
-        end
-      end
-
-      if ((params['map_box_api_key'] == '' && params['chosen_map'] == 'mapbox') || (params['mapquest_api_key'] == '' && params['chosen_map'] == 'mapquest'))
-        # if there is no longer any Mapbox or MapQuest keys, we get back to the default map type, osm.
-        setting_record = Setting.find_by_key('chosen_map')
-        setting_record.update_attributes(value: 'osm')
-      end
-      flash[:setting_success] = t('admin.map_settings.update_success')
-    end
+    @form = MapSettingsForm.new(params[:map_settings_form])
+    flash[:success] = @form.submit
 
     redirect_to user_mapsettings_path
   end
@@ -207,23 +163,8 @@ class User::AdminPanelController < ApplicationController
   def areasettings
     authorize :admin, :areasettings?
 
-    @map_settings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
-
-    # Adding this flag to add leaflet draw tool to the map, on the "Area settings" page.
-    # Drawing tool added in initLeafletMap(), in custom-leaflet.coffee
-    @map_settings['page'] = 'areasettings'
-
-    districts = District.all.select(:id, :name, :bounds)
-    @districts = []
-    districts.each do |d|
-      if d.bounds.present?
-        bounds = JSON.parse(d.bounds)
-        bounds['properties']['id'] = d.id
-        bounds['properties']['name'] = d.name
-        @districts.push(bounds)
-      end
-    end  
-    @area_types = @map_settings['area_type'].split(',')
+    @map_settings = MapInfo.new(has_center_marker: false, clickable: NOT_CLICKABLE_MAP).to_hash
+    @area_types = Setting.area_types
   end
 
   def update_areasettings
@@ -362,24 +303,6 @@ class User::AdminPanelController < ApplicationController
     %w(facebook twitter pinterest)
   end
 
-
-  def latitude_longitude_should_be_numeric
-    # before-filter check used on map setting page.
-    lat = params['latId']
-    lng = params['lngId']
-
-    if (lat != nil && lng != nil)
-      if (!(lat.empty?) && !(lng.empty?))
-        if !(valid_float?(lat)) || !(valid_float?(lng))
-          flash[:page_error] = t('admin.map_settings.should_be_numeric')
-          redirect_to user_mapsettings_path
-        end
-      else
-        flash[:page_error] = t('admin.map_settings.cannot_be_empty')
-        redirect_to user_mapsettings_path
-      end
-    end
-  end
 
   def postal_code_greater_than_area_code
     postal_code_length = params['postal_code_length']
