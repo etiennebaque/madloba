@@ -1,8 +1,9 @@
 @import "bootstrap-sprockets";
 @import "font-awesome-sprockets";
 
-@import "bootstrap-madloba";
+@import "bootstrap-madloba.css.scss";
 @import "font-awesome";
+
 
 @import 'general';
 
@@ -16,7 +17,7 @@
 
 @import 'leaflet';
 
-@import 'leaflet.awesome-markers';
+@import 'leaflet.awesome-markers.css.scss';
 @import 'leaflet-sidebar';
 @import 'MarkerCluster';
 @import 'MarkerCluster.Default';
