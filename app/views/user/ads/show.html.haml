@@ -1,18 +1,4 @@
-- content_for :head do
-  / Includes the main Leaflet CSS and JS files, as well as Mapbox files
-  = render 'shared/map_scripts_before_body', include_all_scripts: false
-  / Specific map scripts loaded for this page
-  = stylesheet_link_tag 'leaflet.awesome-markers'
-  = stylesheet_link_tag 'font-awesome.min'
-  = stylesheet_link_tag 'MarkerCluster'
-  = stylesheet_link_tag 'MarkerCluster.Default'
-  :css
-    #map {
-        width: 100%;
-        height: 300px;
-        margin: 0;
-    }
-.container
+.container#show_ad_page
   - if flash[:new_ad]
     #new_ad_success_message.alert.alert-dismissable.alert-success{:style => "margin-top: 21px;"}
       %button.close{"data-dismiss" => "alert", :type => "button"} ×
@@ -32,7 +18,7 @@
   .row
     .col-lg-12
       %h3= @ad.title
-      - if flash[:new_ad] && !@map_settings['is_area']
+      - if flash[:new_ad] && !@map_settings[:is_area]
         /
           Ad id added just when the ad has just been created. This is to be read by ad_websocket.coffee,
           when it is an exact location
@@ -53,10 +39,12 @@
             = t('ad.you_manage')
             = succeed "." do
               %a{:href => "/user/ads/#{@ad.id}/edit"}= t('ad.here')
+
+  / Map
   .row
     .col-lg-12.ad-paragraph
-      / Right-hand side: Map
-      #map
+      #map.small
+
   - if @ad.image?
     .row
       .col-lg-7.col-sm-12.ad-paragraph
@@ -79,12 +67,13 @@
   .row
     / 'Send message' text area
     = render 'shared/ads_send_message', ad: @ad
-#push
+
 / Rendering JS scripts
 - content_for :scripts do
-  = javascript_include_tag 'leaflet.markercluster'
   / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and scripts that creates the actual map
-  = render 'shared/map_scripts_after_body', include_all_scripts: false
+  = render 'shared/map_scripts_after_body'
   :javascript
     // Initialize the Web socket object
     #{render 'shared/initialize_websocket.js'}
+    adForm = new AdForm();
+

@@ -1,6 +1,4 @@
-- content_for :head do
-  / Font Awesome library used to choose icon for category
-  = stylesheet_link_tag 'font-awesome.min'
+- adding = current_page?(action: 'new') || current_page?(action: 'create')
 .row
   #content.middle-col.col-xs-12.col-md-10
     / content starts
@@ -10,16 +8,14 @@
           %a{:href => "/user"} Home
         %li
           %a{:href => "/user/managerecords"}= t('admin.manage_records')
-        - if @isAdding
-          %li= t('admin.add_category')
-        - else
-          %li= t('admin.edit_category')
+        %li= "#{adding ? t('admin.add_category') : t('admin.edit_category')}"
+
     .row
       .box.col-md-12
         .box-inner
           .box-header.well{"data-original-title" => ""}
             %h2
-              - if @isAdding
+              - if adding
                 %i.glyphicon.glyphicon-plus
                 = t('admin.new_category')
               - else
@@ -51,7 +47,7 @@
           .box-content
             = form_for [:user, @category], html: { id: 'categoryForm', role: 'form' } do |f|
               / Category id
-              - if !@isAdding
+              - if !adding
                 .form-group
                   %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#"}= t('admin.category.delete_category')
                 .form-group
@@ -70,7 +66,7 @@
                 = label_tag :description, t('admin.description')+':', class:'control-label'
                 .form-group
                   = f.text_area :description, cols: 40, rows: 6
-              %hr/
+              %hr
               %h4= t('admin.category.your_marker_icon')
               / Category marker
               .form-inline
@@ -101,8 +97,8 @@
                   = f.text_field :icon, class: 'form-control', maxlength:'90', autocomplete: 'off',     |
                     :data => {:content => t('admin.category.font_awesome_help'), :placement => 'right', |
                     :toggle => 'popover', :trigger => 'hover focus'}                                    |
-              - if !@isAdding
-                %hr/
+              - if !adding
+                %hr
                 / List of items this category is attached to
                 .form-group
                   - if @category.items.length > 0
@@ -120,17 +116,18 @@
                               %a{:href => "/user/items/#{item.id}"}= item.name
                   - else
                     %strong= t('admin.category.no_item')
-              %hr/
+              %hr
               / Submit button and cancel link
               = render 'shared/submit_section'
-        / /span
-    / /row
-    / content ends
-  / /#content.span10
-/ /fluid-row
-%hr/
-- if !@isAdding
+
+%hr
+- if !adding
   / "Delete category" modal window
   = render 'delete_modal_window'
+
 / Category icon list - modal window
 = render 'icon_list_modal_window'
+
+- content_for :scripts do
+  :javascript
+    var categoryForm = new CategoryForm();

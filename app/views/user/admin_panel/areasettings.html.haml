@@ -1,14 +1,3 @@
-- content_for :head do
-  / Includes the main Leaflet CSS and JS files, as well as Mapbox files
-  = render 'shared/map_scripts_before_body', include_all_scripts: false
-  :css
-    #map {
-        width: 100%;
-        height: 400px;
-        margin: 0;
-    }
-  :javascript
-    var districts = #{raw @districts.to_json}
 .row
   #content.middle-col.col-xs-12.col-md-10
     / content starts
@@ -30,6 +19,7 @@
               .alert.alert-success
                 %button.close{"data-dismiss" => "alert", :type => "button"} ×
                 = flash[:setting_success]
+
           .box-content
             = form_tag '/user/areasettings/update', method: :post, id: 'areaSettingFormId', role: 'form' do
               / Choose between 'postal code' or 'district' type of area
@@ -43,6 +33,7 @@
                   %label
                     = check_box_tag 'area_type[]', 'district', (@area_types.include?'district'), class: 'area_district'
                     = t('admin.area_settings.by_district')
+
               / "Postal code" area section - start
               #postal_code_section{:style => "display: none;"}
                 %hr/
@@ -51,38 +42,42 @@
                 .form-group
                   = label_tag 'postal_code_length', t('admin.map_settings.postal_code_field1')+':', class:'control-label'
                   .form-inline
-                    = number_field_tag 'postal_code_length', @map_settings['postal_code_length'], class: 'form-control', min: 1
+                    = number_field_tag 'postal_code_length', @map_settings[:postal_code_length], class: 'form-control', min: 1
                     %i= t('admin.map_settings.postal_code_help1')
                 .form-group
                   = label_tag 'area_length', t('admin.map_settings.postal_code_field2')+':', class:'control-label'
                   .form-inline
-                    = number_field_tag 'area_length', @map_settings['area_length'], class: 'form-control', min: 1
+                    = number_field_tag 'area_length', @map_settings[:area_length], class: 'form-control', min: 1
                     %i= t('admin.map_settings.postal_code_help2')
               / "Postal code" area section - end
+
               / "District" area section - start
               #district_section{:style => "display: none;"}
-                %hr/
+                %hr
                 %h4= t('admin.area_settings.area_district')
                 / Map canvas
                 .form-group
                   = label_tag 'map-canvas-wrapper', t('admin.area_settings.map_description'), class:'control-label'
                   .form-inline
                     #map-canvas-wrapper
-                      #map
+                      #map.large
                   #district_notification_message
               / "District" area section - end
-              %hr/
+
+              %hr
               / Submit button
               .form-actions
                 = submit_tag(t('admin.save'), class: 'btn btn-success')
                 %a.btn{:href => "/user/index"}= t('home.cancel')
-      / /span
-    / content ends
-  / /#content.span10
-/ /fluid-row
+
+
 %hr/
 - content_for :scripts do
   / Inserting the Leaflet Draw plugin, in order to draw polygon to define districts
   = render 'shared/included_leafletdraw_scripts'
   / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
-  = render 'shared/map_scripts_after_body', include_all_scripts: false
+  = render 'shared/map_scripts_after_body'
+
+  :javascript
+    var districts = #{raw District.bounds.to_json}
+    var areaSettings = new AreaSettings(districts);

@@ -3,7 +3,7 @@ class Location < ActiveRecord::Base
   belongs_to :user
   belongs_to :district
 
-  validates_presence_of :address, :postal_code, if: lambda { self.loc_type == 'exact'}
+  validates_presence_of :address, :postal_code, if: lambda { self.exact? }
   validates_presence_of :latitude, :longitude
   # 'Postal code' field is not necessary only if user chooses a district name instead.
   validates_presence_of :postal_code, if: lambda { self.district == nil}
@@ -12,6 +12,7 @@ class Location < ActiveRecord::Base
 
   scope :type, -> (location_type) { where('ads.expire_date >= ? AND loc_type = ?', Date.today, location_type)}
 
+  attr_accessor :country
 
   # This method returns the right query to display relevant markers, on the home page.
   def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action, ad_id)
@@ -79,12 +80,20 @@ class Location < ActiveRecord::Base
     return area_geocodes
   end
 
-  def is_area
-    ['postal','district'].include? self.loc_type
+  def area?
+    false
   end
 
-  def type
-    self.loc_type=='exact'?'exact':'area'
+  def district?
+    false
+  end
+
+  def postal?
+    false
+  end
+
+  def exact?
+    false
   end
 
   def area
@@ -92,59 +101,56 @@ class Location < ActiveRecord::Base
     self.postal_code[0..area_length-1]
   end
 
+  def marker_message
+  end
+
+  def full_name
+    name.present? ? name : full_address
+  end
+
   def full_address
-    if self.street_number
-      "#{self.street_number} #{self.address}"
-    else
-      self.address
-    end
+    a = []
+    a << street_number if street_number.present?
+    a << address
+    a.join(' ')
   end
 
   def name_and_or_full_address
-    if self.name && self.name != ''
-      "#{self.name} - #{self.location_type_address_public}"
-    else
-      self.location_type_address_public
-    end
+    name.present? ? "#{name} - #{location_type_address_public}" : location_type_address_public
   end
 
   # if the location has no name, return "unnamed location"
   def location_full_name
-    if self.name && self.name != ''
-      return self.name
-    else
-      return "(#{I18n.t('admin.location.unnamed')})"
-    end
+    name.present? ? name : "(#{I18n.t('admin.location.unnamed')})"
   end
 
   def location_type_address
-    if self.loc_type == 'exact'
-      full_address
-    elsif self.loc_type == 'postal'
-      self.postal_code
-    elsif self.loc_type == 'district'
-      self.district.name
-    end
   end
 
   # On the ads/show page, we're not necessarily showing the full address,
   # depending of how the location type.
   def location_type_address_public
-    if self.loc_type == 'exact'
-      full_address
-    elsif self.loc_type == 'postal'
-      I18n.t('admin.location.area_name', area_name: self.area)
-    elsif self.loc_type == 'district'
-      self.district.name
-    end
   end
 
   def full_website_url
-    if self.website && !self.website.include?('http')
-      "http://#{self.website}"
-    else
-      self.website
-    end
+    website.include?('http') ? website : "http://#{self.website}"
+  end
+
+  def clickable_map_for_edit
+    area? ? CLICKABLE_MAP_AREA_MARKER : CLICKABLE_MAP_EXACT_MARKER
+  end
+
+  def address_geocode_lookup(short: false)
+    location_info = short ? [self.address] : [self.full_address, self.postal_code]
+    this_city = self.city.nil? ? Rails.cache.fetch(CACHE_CITY_NAME) {Setting.find_by_key(:city).value} : self.city
+    this_country = self.country.nil? ? Rails.cache.fetch(CACHE_COUNTRY_NAME) {Setting.find_by_key(:country).value} : self.country
+    location_info += [this_city, self.province, this_country]
+    location_info.reject{|e| e.to_s.empty?}.join(',')
+  end
+
+  def define_subclass
+    self.type = "Locations::#{self.loc_type.capitalize}Location"
+    self.save
   end
 
 end

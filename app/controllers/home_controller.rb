@@ -7,7 +7,8 @@ class HomeController < ApplicationController
   def index
     # Initializing the map, in relation to its center, defined in the settings table.
     # Map on the home page does not focus on 1 specific marker, and is not clickable (ie no marker appears on clicl on the map)
-    @map_settings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
+    #@map_settings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
+    @map_settings = MapInfo.new(has_center_marker: false, clickable: NOT_CLICKABLE_MAP).to_hash
 
     # Initializing links, and social media information, for the footer of the home page.
     settings = get_footer_info
@@ -20,8 +21,8 @@ class HomeController < ApplicationController
 
     if (params[:lat] && params[:lon])
         # The center of the map is now represented by the searched location.
-        @map_settings['lat'] = params[:lat]
-        @map_settings['lng'] = params[:lon]
+        @map_settings[:latitude] = params[:lat]
+        @map_settings[:longitude] = params[:lon]
 
         if params[:loc]
           # A location search was just performed, with the name of the searched location (given back from Nominatim ws) in it.
@@ -34,7 +35,7 @@ class HomeController < ApplicationController
           end
         end
 
-        @map_settings['searched_address'] = current_location
+        @map_settings[:searched_address] = current_location
         @location_search_refinement_to_display = current_location
 
     end
@@ -193,33 +194,9 @@ class HomeController < ApplicationController
   # (eg. Website description, contact email, social media links... )
   # Also returns a settings hash, that will be needed for the rest of HomeController#index execution.
   def get_footer_info
-    @social_medias = []
     settings = {}
     Setting.all.each do |setting|
-      if %w(facebook twitter pinterest).include? setting['key']
-        # Website's social media
-        social = {}
-        if setting['value'] != ''
-          social['name'] = setting['key']
-          if setting['key'] == 'twitter'
-            social['url'] = "http://twitter.com/#{setting['value']}"
-          else
-            social['url'] = "http://#{setting['value']}"
-          end
-          @social_medias << social
-        end
-      elsif setting['key'] == 'description'
-        # Website description
-        @website_description_paragraph = []
-        if setting['value'] && setting['value'].length > 0
-          @website_description_paragraph = setting['value'].split(/[\r\n]+/)
-        end
-      elsif setting['key'] == 'contact_email'
-        @contact_email = setting['value']
-      else
-        # Settings hash
-        settings[setting['key']]=setting['value']
-      end
+      settings[setting['key']]=setting['value']
     end
 
     # Useful links, for the footer section.
@@ -229,7 +206,8 @@ class HomeController < ApplicationController
       @links << get_link(settings["link_#{number}_label"], settings["link_#{number}_url"])
     end
 
-    return settings
+    settings
+
   end
 
 end

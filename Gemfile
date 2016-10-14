@@ -7,8 +7,9 @@ gem 'rails', '4.2.4'
 # Use Postgresql as the database for Active Record
 gem 'pg'
 
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+# Use Bootstrap and SCSS for stylesheets
+gem 'bootstrap-sass', '~> 3.3.6'
+gem 'sass-rails', '>= 3.2'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -32,11 +33,8 @@ gem 'jquery-rails'
 #gem 'jbuilder', '~> 2.3.1'
 
 gem 'haml'
-
-group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
-end
+gem 'seed-fu', '~> 2.3'
+gem 'simple_form'
 
 # Used for API calls
 gem 'httparty', '~> 0.13.1'
@@ -83,6 +81,8 @@ gem 'faye-websocket'
 # Get inputs from madloba:install task
 gem 'highline'
 
+gem 'font-awesome-sass'
+
 group :development, :test do
 
   # Mailcatcher
@@ -103,6 +103,7 @@ group :development, :test do
   gem 'awesome_print'
   gem 'spring'
   gem 'spring-commands-rspec'
+  gem 'spring-commands-cucumber'
 
   gem 'haml-rails'
 end
@@ -112,7 +113,17 @@ group :test do
   gem 'capybara'
   gem 'guard-rspec'
   gem 'launchy'
+
+  gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
+  gem 'selenium-webdriver'
+  gem 'capybara-screenshot'
+  gem 'capybara-webkit'
+end
+
+group :doc do
+  # bundle exec rake doc:rails generates the API under doc/api.
+  gem 'sdoc', require: false
 end
 
 # For Heroku deployments
@@ -122,12 +133,3 @@ gem 'unicorn'
 # Gems related to translation
 gem 'i18n-tasks', '~> 0.8.3'
 gem 'rails-i18n', '~> 4.0.0'
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]

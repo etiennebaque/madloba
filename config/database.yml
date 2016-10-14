@@ -8,6 +8,13 @@ default: &default
   password:
   username: postgres
 
+#test: &test
+#  adapter: postgresql
+#  encoding: unicode
+#  pool: 5
+#  database: <%= ENV["MADLOBA_TEST_DATABASE"] %>
+#  username: <%= ENV["MADLOBA_TEST_USERNAME"] %>
+#  password: <%= ENV["MADLOBA_TEST_PASSWORD"] %>
 
 development:
   <<: *default
@@ -20,3 +27,16 @@ test:
 production:
   <<: *default
   database: madloba #CHANGE ME
+
+  # Deployment on a production server: please indicate your database credentials here
+  # (database name, username and password)
+#  adapter: postgresql
+#  encoding: unicode
+#  pool: 5
+#  database:
+#  username:
+#  password:
+
+cucumber:
+  <<: *test
+

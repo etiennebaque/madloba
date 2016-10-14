@@ -4,28 +4,36 @@
 // Home page - General layout
 // **************************
 
-
 html, body
   height: 100%
-  // The html and body elements cannot have any padding or margin.
 
-// Wrapper for page content to push down footer
 #wrap
-  min-height: 100%
-  overflow: auto
-  padding-bottom: 60px
-
-#wrap-admin
-  min-height: 100%
+  height: 100%
   overflow: auto
 
 #footer
-  height: 60px
+  height: 50px
   position: relative
-  margin-top: -60px
-  // negative value of footer height
   clear: both
   background-color: #f5f5f5
+
+#map
+  width: 100%
+  margin: 0
+  &.home
+    position: relative
+    top: 0px
+    left: 0px
+    height: 100% !important
+  &.small
+    height: 300px
+  &.medium
+    height: 350px
+  &.large
+    height: 400px
+
+#searchFormId
+  padding-left: 160px
 
 .devise-section
   padding: 20px 0px
@@ -45,19 +53,8 @@ html, body
   max-width: 340px
   width: auto
 
-.no-left-right-border
-  padding-left: 0px
-  padding-right: 0px
-
-.upper-footer
-  background-color: #0C5A2E
-  color: white
-  min-height: 200px
-  h2
-    color: white
-
 .lower-footer
-  min-height: 60px
+  min-height: 50px
   background-color: #0C5A2E
   color: white
   text-align: center
@@ -80,26 +77,7 @@ html, body
 .show_ad_paragraph
   margin-bottom: 20px
 
-
 // Home page
-
-#home-map-canvas-wrapper
-  position: relative
-  padding-bottom: 45%
-  height: 0
-  overflow: hidden
-  min-height: 660px
-
-.guided-nav-circle
-  width: 17px
-  height: 17px
-  border-radius: 50px
-  color: #000
-  line-height: 100px
-  text-align: center
-  float: left
-  border-right: 2px
-
 .guided-nav-label
   padding: 0 0 0 5px
 
@@ -110,9 +88,6 @@ html, body
 
 .semi-transparent
   background-color: rgba(255, 255, 255, 0.75)
-
-.ad_new_number_items_col
-  width: 20%
 
 .align-cross
   padding-top: 3px
@@ -139,14 +114,31 @@ span.disabled
   font-weight: bold
 
 #sidebar
-  border-radius: 20px
+  top: 60px
+  .inner-section
+    padding-top: 15px
+    font-size: 14px
+    .send-us-message
+      text-align: center
+      padding: 20px 0px
+      font-size: 14px
+      font-weight: bold
+    .social_media
+      text-align: center
+      padding: 20px
+      a
+        margin: 0px 5px
+  .create-ad
+    padding-left: 14px
+    span
+      font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
+      font-size: 14px
 
 .title_popup a
   font-weight: bold !important
 
 
 // Top navigation bar
-
 .no-margin-bottom
   margin-bottom: 0px
 
@@ -170,7 +162,6 @@ span.disabled
 
 
 // Off canvas and style tweaks
-
 html
   overflow-x: hidden
 
@@ -206,9 +197,7 @@ html
   .guided-nav-category
     margin: 10px 0px
 
-
 // Admin panel - various styles
-
 .table tbody > tr > td.vert-align
   vertical-align: middle
 
@@ -262,28 +251,11 @@ html
     padding: 10px 12px 10px 0px
     font-size: 20px
 
-@media (min-width: 768px)
-  .sidebar-nav .navbar
-    .navbar-collapse
-      padding: 0
-      max-height: none
-    ul
-      float: none
-      /*&:not
-        display: block*/
-    li
-      float: none
-      display: block
-      a
-        padding-top: 12px
-        padding-bottom: 12px
-
 .list-group h4
   margin-top: 10px !important
 
 
 // Styling for Madloba setup screens
-
 .setup-padding
   padding-bottom: 20px
 
@@ -330,9 +302,7 @@ html
 .ad-remove-association
   padding-top: 4px
 
-
 // Miscellaneous styles
-
 .popover
   width: 340px
   height: auto
@@ -350,7 +320,6 @@ html
   display: inline-block
 
 // Style for typeahead suggestions
-
 .typeahead
   background-color: #fff
   &:focus

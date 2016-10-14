@@ -33,17 +33,18 @@ class ApplicationController < ActionController::Base
   # is not complete. Redirects to setup screens if it is the case.
   def check_if_setup
     current_url = request.original_url
+    setup_debug_mode = Rails.configuration.setup_debug_mode && !(current_url.include? 'setup')
+    redirect_to setup_language_path if setup_debug_mode
+
     chosen_language = Rails.cache.fetch(CACHE_CHOSEN_LANGUAGE) {Setting.where(key: 'chosen_language').pluck(:value).first}
-    if (chosen_language.empty? && !(current_url.include? 'setup/language'))
-      # If the locale has never been specified (even during the setup process), redirect to the setup language page.
-      redirect_to setup_language_path
-    elsif !((current_url.include? 'setup') || (current_url.include? 'user/register') || (current_url.include? 'getCityGeocodes'))
-      # Redirect to the setup pages if it has never been completed.
-      setup_step_value = Rails.cache.fetch(CACHE_SETUP_STEP) {Setting.where(key: 'setup_step').pluck(:value).first.to_i}
-      if setup_step_value == 1
-        redirect_to setup_language_path
-      end
-    end
+    no_chosen_language = chosen_language.empty? && !(current_url.include? 'setup/language')
+    # If the locale has never been specified (even during the setup process), redirect to the setup language page.
+    redirect_to setup_language_path if no_chosen_language
+
+    setup_url = %w(setup user/register getCityGeocodes).any? {|term| current_url.include?(term)}
+    setup_step_value = Rails.cache.fetch(CACHE_SETUP_STEP) {Setting.where(key: 'setup_step').pluck(:value).first.to_i}
+    # Redirect to the setup pages if it has never been completed.
+    redirect_to setup_language_path if !setup_url && setup_step_value == 1
   end
 
   # Uses the 'gon' gem to load the text that appears in javascript files.
@@ -70,7 +71,7 @@ class ApplicationController < ActionController::Base
 
   # Redirects after signing in.
   def after_sign_in_path_for(resource)
-    sign_in_url = url_for(:action => 'new', :controller => 'sessions', :only_path => false, :protocol => 'http')
+    sign_in_url = new_user_session_url
     if request.referer == sign_in_url
       super
     else
@@ -82,90 +83,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # Redirect after signing out.
-  def after_sign_out_path_for(resource)
-    return '/'
-  end
-
-  # Method called on Ajax call, to define geocodes of a location.
-  def getCityGeocodes
-    address = ''
-    address_found = ''
-
-    if params['type'] != 'area'
-
-      if params['street_number'] && params['street_number'] != '' && params['address'] && params['address'] != ''
-        address_street = "#{params['street_number']} #{params['address']}"
-      elsif params['address']
-        address_street = params['address']
-      end
-
-    end
-
-    if params['city'].nil? || params['country'].nil?
-      # If this inforamtion doesn't come from the page, we get it from the Settings table
-      settings = Setting.where(key: %w(city state country))
-      settings.each do |setting|
-        params[setting.key] = setting.value
-      end
-    end
-
-    location_info = [address_street, params['postal_code'], params['city'], params['state'], params['country']]
-
-    location_info.each do |info|
-      if info && info != ''
-        if address != ''
-          address += ", #{info}"
-        else
-          address = info
-        end
-      end
-    end
-
-    # Getting geocodes for this address.
-    response = getGeocodesFromAddress(address)
-
-    if response.nil?
-      # We're trying to get the geocodes again, but this time without the postal code and the street number
-      location_info = [params['address'], params['city'], params['state'], params['country']]
-      address = ''
-      location_info.each do |info|
-        if info && info != ''
-          if address != ''
-            address += ", #{info}"
-          else
-            address = info
-          end
-        end
-      end
-      response = getGeocodesFromAddress(address)
-
-      if response
-        address_found = t('home.full_not_found_map_position', address: address)
-        response['zoom_level'] = CLOSER_ZOOM_LEVEL
-        response['status'] = 'ok'
-      else
-        address_found = t('home.not_found_map_position')
-        response = {}
-        response['zoom_level'] = Setting.find_by_key('zoom_level').value
-        response['status'] = 'not_found'
-      end
-    else
-      address_found = t('home.map_positioned_found', address: address)
-      response['zoom_level'] = CLOSER_ZOOM_LEVEL
-      response['status'] = 'ok'
-    end
-
-    response['address_found'] = address_found
-
-    render json: response
-  end
-
   # Method used by the Ajax call, when onclick on the home page "Search" button, when
   # the location field is not empty
   # This method returns the Nominatim ws responses, like the ones returned when a location is
   # searched on http://www.openstreetmap.org
-  def getNominatimLocationResponses
+  def nominatim_location_responses
     # We append the city and the country to the searched location.
     location_value = params['location']
     additional_locations = {}
@@ -182,12 +104,12 @@ class ApplicationController < ActionController::Base
     end
 
     locations_results = []
-    response = getNominatimWebserviceResponse(location_value)
+    response = nominatim_ws_response_for(location_value)
     if response
       if response.to_a.any?
         # The response consists of several propositions, in terms of specific locations
         response.each do |response_location|
-          locations_results << response_location.select {|key,value| %w(lat lon display_name).include? key}
+          locations_results << response_location.select {|key, _| %w(lat lon display_name).include? key}
         end
       else
         # The search didn't return anything.
@@ -224,7 +146,7 @@ class ApplicationController < ActionController::Base
     end
 
     result = []
-    if [PREFETCH_AD_ITEMS, SEARCH_IN_AD_ITEMS].include? (typeahead_type)
+    if [PREFETCH_AD_ITEMS, SEARCH_IN_AD_ITEMS].include? typeahead_type
       matched_items.each do |match|
         result << {value: match}
       end

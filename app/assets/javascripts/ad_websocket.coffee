@@ -67,25 +67,23 @@ AdSocket::initBinds = ->
         value != link_id
       )
       if _this.nav_state.cat.length == 0
-        $('#refinementsId').html ''
+        $('#refinements').html ''
     else
       # User is selecting this category to refine their search.
-      if $('#refinementsId').html().trim() == ''
-        headerTitle = '<h4>Your selection</h4>'
-        $('#refinementsId').html headerTitle
       selectedLinkHtml.append '<i class=\'glyphicon glyphicon-remove align-cross\' style=\'float: right;\'></i>'
-      $('#refinementsId').append selectedLinkHtml.prop('outerHTML')
+      $('#refinements').append selectedLinkHtml.prop('outerHTML')
+
       # Deleting the html of the selected category in initial list.
       $(this).remove()
       _this.nav_state.cat.push $(this).attr('id')
-    _this.sendNavState _this.stringifyState()
-    return
+
+    _this.sendNavState(_this.stringifyState())
+
   # Message sent to server when a new ad has just been created
   # (ie. new ad notification message has been loaded on ads#show)
   $(document).ready ->
     new_ad_id = $('#new_ad_id').val()
     if typeof new_ad_id != 'undefined'
-      console.log $('#new_ad_id').val()
       _this.sendNewAdNotification new_ad_id
     return
 

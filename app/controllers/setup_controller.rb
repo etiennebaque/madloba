@@ -6,10 +6,10 @@ class SetupController < ApplicationController
   # We first check that the user really has to go through the setup process.
   # The process finishes once the user reaches the 'All done' page.
   def check_setup_step
-    setup_step = Setting.find_or_create_by(key: 'setup_step')
-    setup_step_val = setup_step.value.to_i
-    if setup_step_val == 0
-      # The app is already good to go, the user must be redirected to root
+    setup_step_val = Setting.find_or_create_by(key: 'setup_step').value.to_i
+    setup_debug_mode = Rails.configuration.setup_debug_mode
+    if setup_step_val == 0 && !setup_debug_mode
+      # The app is already good to go, the user must be redirected to home page
       redirect_to root_path
     end
   end
@@ -90,43 +90,24 @@ class SetupController < ApplicationController
   # Methods for 'Map settings' page
   # -----------------------------------------
   def show_map
-    getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
-    @map_settings['page'] = 'mapsettings'
+    @map_settings = MapInfo.new.to_hash
+    @form = MapSettingsForm.new
+    @map_settings[:page] = 'mapsettings'
     @current_step = 3
 
     render 'setup/map'
   end
 
   def process_map
-    lat = params['hiddenLatId']
-    lng = params['hiddenLngId']
-    if lat && lat != '' && lng && lng != ''
-      map_center = "#{lat},#{lng}"
-      settings_hash = {city: params['city'],
-                       state: params['state'],
-                       country: params['country'],
-                       zoom_level: params['zoom_level'],
-                       map_center_geocode: map_center}
-      settings_hash.each {|key, value|
-        setting_record = Setting.find_by_key(key)
-        if setting_record.nil?
-          setting_record = Setting.new(key: key, value: value)
-        else
-          setting_record.update_attribute(:value, value)
-        end
-        setting_record.save
-      }
+    @form = MapSettingsForm.new(params[:map_settings_form])
+    flash[:success] = @form.submit
 
-      if is_on_heroku
-        redirect_to setup_admin_path
-      else
-        redirect_to setup_image_path
-      end
+    if on_heroku?
+      redirect_to setup_admin_path
     else
-      flash[:error] = t('setup.select_geocodes')
-      getMapSettings(nil, HAS_CENTER_MARKER, CLICKABLE_MAP_EXACT_MARKER)
-      render 'setup/map'
+      redirect_to setup_image_path
     end
+
   end
 
   # -----------------------------------------
@@ -137,7 +118,7 @@ class SetupController < ApplicationController
     @storage_choices = [[IMAGE_NO_STORAGE, t('setup.option_no_storage')],
                         [IMAGE_AMAZON_S3, t('setup.option_s3')]]
 
-    if !is_on_heroku
+    if !on_heroku?
       @storage_choices << [IMAGE_ON_SERVER, t('setup.option_server')]
     else
       # If app deployed on Heroku, we should not be here. Redirection to next step, admin page.
@@ -171,6 +152,7 @@ class SetupController < ApplicationController
   # -----------------------------------------
   def show_admin
     @user = User.new
+    @user.skip_confirmation!
     @user.role = 1 # New user will be admin.
     @current_step = 5
     render 'setup/admin'

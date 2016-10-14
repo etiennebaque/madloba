@@ -17,7 +17,7 @@ module SetupHelper
 
   def total_setup_pages
     # Total number of setup pages
-    if is_on_heroku
+    if on_heroku?
       5 # Skipping the image storage page, while on Heroku (functionality not developed for Heroku yet)
     else
       6

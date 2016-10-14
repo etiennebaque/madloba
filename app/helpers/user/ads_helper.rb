@@ -54,4 +54,20 @@ module User::AdsHelper
     current_user != nil && current_user.locations.length > 0
   end
 
+  def expire_date_for(ad)
+    return '' if ad.expire_date.to_s == '2100-01-01'
+
+    if Date.today > ad.expire_date
+      I18n.t('ad.has_expired', expire_date: ad.expire_date.to_s)
+    elsif Date.today < ad.expire_date
+      I18n.t('ad.expiration_date', expire_date: ad.expire_date.to_s)
+    else
+      I18n.t('ad.expires_today')
+    end
+  end
+
+  def expire_date_for_new_ad
+    max_expire_days.to_i > 0 ? t('ad.once_created_expire_html', max_expire_days: max_expire_days) : ''
+  end
+
 end

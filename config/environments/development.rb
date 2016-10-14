@@ -47,4 +47,8 @@ Madloba::Application.configure do
                                                  :exception_recipients => Rails.application.secrets.error_recipients_email,
                                                  :delivery_method => :smtp
                                              }
+
+  # Variable used to debug setup mode at runtime
+  config.setup_debug_mode = false
+
 end

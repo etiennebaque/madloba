@@ -57,15 +57,14 @@ Madloba::Application.routes.draw do
 
     # This POST method is called when the deletion of a category is made through a form
     post 'categories/:id', to: 'categories#destroy'
-
   end
 
   resources :ads, :only => [:show, :index, :new, :create], :controller => 'user/ads'
   post 'ads/send_message', to: 'user/ads#send_message'
 
   # Ajax calls to get details about a location (geocodes, exact address)
-  get '/getCityGeocodes', to: 'application#getCityGeocodes'
-  get '/getNominatimLocationResponses', to: 'application#getNominatimLocationResponses'
+  get '/getNominatimLocationResponses', to: 'application#nominatim_location_responses'
+  get '/getCityGeocodes', to: 'user/locations#retrieve_geocodes'
 
   # Ajax call to get the list of items, for autocomplete, when searching for an item, or creating/editing an ad.
   get '/getItems', to: 'application#get_items'

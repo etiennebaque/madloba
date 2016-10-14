@@ -12,7 +12,6 @@ class User::CategoriesController < ApplicationController
   end
 
   def new
-    @isAdding = true
     @category = Category.new
     authorize @category
 
@@ -29,7 +28,6 @@ class User::CategoriesController < ApplicationController
       flash[:new_name] = @category.name
       redirect_to edit_user_category_path(@category.id)
     else
-      @isAdding = true
       render 'category'
     end
   end
