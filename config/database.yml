@@ -20,7 +20,7 @@ development:
   <<: *default
   database: <%= ENV["MADLOBA_DEV_DATABASE"] %> #CHANGE ME
 
-test:
+test: &test
   <<: *default
   database: your_test_db_name #CHANGE ME
 
