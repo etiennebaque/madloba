@@ -41,7 +41,7 @@
                     = t('admin.ad.delete_ad_error_html', manage_ads_page: link_to(t('admin.ad.manage_ads_page'), '/user/manageads'))
 
             .box-content
-              = render 'user/ads/form', page: 'edit'
+              = render 'user/ads/form', page: 'edit', obj: [:user, @ad]
 
 
 / "Delete ad" - modal window

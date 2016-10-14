@@ -1,5 +1,7 @@
 - page ||= 'new'
-= form_for @ad, html: { class: 'form-horizontal', role: 'form', multipart: true } do |f|
+- form_id = "ad_#{page}_form"
+- obj ||= @ad
+= form_for obj, html: { id: form_id, class: 'form-horizontal', role: 'form', multipart: true } do |f|
   - note_about_expiration_date = page == 'new' ? expire_date_for_new_ad : expire_date_for(@ad)
   %fieldset
 
@@ -150,7 +152,7 @@
     -# Submit section
     .form-group{style: 'margin-top: 35px'}
       .col-lg-10.col-lg-offset-2
-        = f.submit t('ad.create_this_ad'), class: 'btn btn-success'
+        = f.submit t("ad.submit_ad_#{page}"), class: 'btn btn-success'
         %a.btn{:href => "/"}= t('home.cancel')
 
     -# After submit, a notification shows up here, if a new image is being uploaded

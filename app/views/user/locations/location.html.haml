@@ -1,94 +1,98 @@
-.row#location
-  #content.middle-col.col-xs-12.col-md-10
-    / content starts
-    %div
-      %ul.breadcrumb
-        - if current_user.admin?
-          %li
-            %a{:href => "/user/managerecords"}= t('admin.manage_records')
-        - else
-          %li
-            %a{:href => "/user/manageads"}= t('admin.manage_your_ads')
-        - if is_adding_new
-          %li= t('admin.add_location')
-        - else
-          %li= t('admin.edit_location')
-    .row
-      .box.col-md-12
-        .box-inner
-          .box-header.well{"data-original-title" => ""}
-            %h2
-              - if is_adding_new
-                %i.glyphicon.glyphicon-plus
-                = t('admin.new_location')
-              - else
-                %i.glyphicon.glyphicon-edit
-                = t('admin.edit_location')
-          - if @location && @location.errors.any?
-            .alert.alert-danger
-              %button.close{"data-dismiss" => "alert", :type => "button"} ×
-              %strong
-                = t('admin.location.error_occurred', errors: pluralize(@location.errors.count, t('home.error.one'), t('home.error.more')))
-                \:
-              %ul
-                - @location.errors.full_messages.each do |msg|
-                  %li= msg
-          - if flash[:name]
-            .alert.alert-success
-              %button.close{"data-dismiss" => "alert", :type => "button"} ×
-              = t('admin.location.update_success', name: flash[:name])
-              - if current_user.admin?
-                %a{:href => "/user/managerecords#locations"}= t('admin.back_to_records')
-              - else
-                %a{:href => "/user/manageads#locations"}= t('admin.back_to_ads')
-          - if flash[:new_name]
-            .alert.alert-success
-              %button.close{"data-dismiss" => "alert", :type => "button"} ×
-              = t('admin.location.created_success', name: flash[:new_name])
-              - if current_user.admin?
-                %a{:href => "/user/managerecords#locations"}= t('admin.back_to_records')
-              - else
-                %a{:href => "/user/manageads#locations"}= t('admin.back_to_ads')
-          .box-content
-            = form_for [:user, @location.becomes(Location)], html: { id: 'locationForm', role: 'form' } do |f|
-              - if !is_adding_new
-                .form-group
-                  %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#"}= t('admin.location.delete')
-                .form-group
-                  = label_tag :nameId, t('admin.mandatory'), class:'control-label'
+.container
+  .row
+    #content.middle-col.col-xs-12.col-md-10
+      / content starts
+      %div
+        %ul.breadcrumb
+          - if current_user.admin?
+            %li
+              %a{:href => "/user/managerecords"}= t('admin.manage_records')
+          - else
+            %li
+              %a{:href => "/user/manageads"}= t('admin.manage_your_ads')
+          - if is_adding_new
+            %li= t('admin.add_location')
+          - else
+            %li= t('admin.edit_location')
+      .row
+        .box.col-md-12
+          .box-inner
+            .box-header.well{"data-original-title" => ""}
+              %h2
+                - if is_adding_new
+                  %i.glyphicon.glyphicon-plus
+                  = t('admin.new_location')
+                - else
+                  %i.glyphicon.glyphicon-edit
+                  = t('admin.edit_location')
+            - if @location && @location.errors.any?
+              .alert.alert-danger
+                %button.close{"data-dismiss" => "alert", :type => "button"} ×
+                %strong
+                  = t('admin.location.error_occurred', errors: pluralize(@location.errors.count, t('home.error.one'), t('home.error.more')))
+                  \:
+                %ul
+                  - @location.errors.full_messages.each do |msg|
+                    %li= msg
+            - if flash[:name]
+              .alert.alert-success
+                %button.close{"data-dismiss" => "alert", :type => "button"} ×
+                = t('admin.location.update_success', name: flash[:name])
                 - if current_user.admin?
-                  .form-inline
-                    = label_tag :idId, 'Id:', class:'control-label'
-                    = @location.id
+                  %a{:href => "/user/managerecords#locations"}= t('admin.back_to_records')
+                - else
+                  %a{:href => "/user/manageads#locations"}= t('admin.back_to_ads')
+            - if flash[:new_name]
+              .alert.alert-success
+                %button.close{"data-dismiss" => "alert", :type => "button"} ×
+                = t('admin.location.created_success', name: flash[:new_name])
+                - if current_user.admin?
+                  %a{:href => "/user/managerecords#locations"}= t('admin.back_to_records')
+                - else
+                  %a{:href => "/user/manageads#locations"}= t('admin.back_to_ads')
 
-              / Partial that contains the location form
-              .edit-location
-                = render 'shared/location_form', form: f, location: @location
+            .box-content
+              = form_for [:user, @location.becomes(Location)], html: { id: 'locationForm', class: 'form-horizontal', role: 'form' } do |f|
+                %fieldset
+                  - if !is_adding_new
+                    .form-group
+                      .col-lg-6
+                        %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#"}= t('admin.location.delete')
 
-              - if !is_adding_new
-                / List of items that can be found at this location
-                .form-group
-                  - if @location.ads.length > 0
-                    = label_tag :ad_linked, t('admin.location.linked_ads')+':', class:'control-label'
-                    %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
-                      %thead
-                        %tr
-                          %th ID
-                          %th= t('ad.title')
-                          %th= t('admin.items')
-                          %th= t('ad.description')
-                      %tbody
-                        - @location.ads.each do |ad|
-                          %tr
-                            %td= ad.id
-                            %td
-                              %a{:href => "/user/ads/#{ad.id}/edit"}= ad.title
-                            %td= ad.items.map{|i| i.name}.join(', ')
-                            %td= simple_format(ad.description)
-                  - else
-                    %strong= t('admin.location.no_ad')
-              / Submit button and cancel link
-              = render 'shared/submit_section'
+                    %hr
+
+                    .form-group
+                      .col-lg-6
+                        = label_tag :nameId, t('admin.mandatory'), class:'control-label'
+
+                  / Partial that contains the location form
+                  = render 'shared/location_form', form: f, location: @location
+
+                  - if !is_adding_new
+                    / List of items that can be found at this location
+                    .form-group
+                      .col-lg-6
+                        - if @location.ads.length > 0
+                          = label_tag :ad_linked, t('admin.location.linked_ads')+':', class:'control-label'
+                          %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
+                            %thead
+                              %tr
+                                %th ID
+                                %th= t('ad.title')
+                                %th= t('admin.items')
+                                %th= t('ad.description')
+                            %tbody
+                              - @location.ads.each do |ad|
+                                %tr
+                                  %td= ad.id
+                                  %td
+                                    %a{:href => "/user/ads/#{ad.id}/edit"}= ad.title
+                                  %td= ad.items.map{|i| i.name}.join(', ')
+                                  %td= simple_format(ad.description)
+                        - else
+                          %strong= t('admin.location.no_ad')
+                  / Submit button and cancel link
+                  = render 'shared/submit_section'
 
 
 - if !is_adding_new
@@ -110,3 +114,6 @@
 - content_for :scripts do
   / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that create the actual map
   = render 'shared/map_scripts_after_body', include_all_scripts: false
+
+  :javascript
+    adForm = new AdForm();

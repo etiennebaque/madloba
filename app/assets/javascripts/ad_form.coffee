@@ -51,7 +51,7 @@ AdForm::init = ->
     resetLocationForm districts_bounds, leaf.map
 
   # "Edit ad" form: create message when image needs to be uploaded.
-  $('#ad-edit-form').submit ->
+  $('#ad_edit_form').submit ->
     image_path = $('#ad_image').val()
     if image_path != null and image_path != ''
       $('#upload-in-progress').html '<i>' + gon.vars['new_image_uploading'] + '</i>'
