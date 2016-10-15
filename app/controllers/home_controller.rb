@@ -125,10 +125,7 @@ class HomeController < ApplicationController
         end
       end
 
-      and_other_items = ''
-      if number_of_items > 1
-        and_other_items = "and #{number_of_items - 1} other item(s)"
-      end
+      and_other_items = number_of_items > 1 ? "and #{number_of_items - 1} other item(s)" : ''
 
       popup_html += "<div class='col-xs-12' style='margin-top: 15px;'>#{ad_action} #{item_name} #{and_other_items}</div>"
 

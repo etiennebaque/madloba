@@ -297,12 +297,6 @@ fr:
     save: Enregistrer
     settings_menu: Paramètres
     nothing_to_do: Super, rien à faire ! :)
-    no_mapbox_account_html: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapbox_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
-    no_mapquest_account_html: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapquest_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
-    no_social: Vous n'avez pas encore entré d'adresses de réseaux sociaux (Facebook, Twitter, Pinterest), dans "Paramètres du site". Entrez vos différents profils pour augmenter votre visibilité.
-    one_category_html: <strong>Seulement une seule catégorie est disponible</strong>. Veuillez créer quelques catégories pour permettres aux utilisateurs de filtrer leur recherche.
-    no_website_description: Aucune description de site web n'a été écrite, dans "Paramètres du site". Expliquez aux utilisateurs le but de votre site Madloba, en écrivant un texte court. Cette description apparaitra en page de la page d'accueil, ainsi que dans la page "A propos".
-    no_area_type_html: <strong>Aucune zone n'a été spécifiée</strong>. S'il n'a pas la possibilité de choisir une zone lorsque une annonce est créé, l'utilisateur devra entrer une adresse exacte (ce qui ne sera pas forcément souhaité). Dans "Paramètres des zones", veuillez définir les zones de votre ville (par code postal, par quartiers), pour donner plus de flexibilité aux utilisateurs, lorsqu'ils définiront un emplacement.
     you_admin: Vous êtes un administrateur de ce site.
     use_left_hand: Utilisez le menu sur la gauche pour gérer
     admin_descr1: les différents éléments de ce site (annonces, emplacements, objets, catégories)
@@ -322,6 +316,14 @@ fr:
     warning_ads_before_delete_location: "ATTENTION: quelques annonces sont rattachés à cet emplacement. Supprimer cet emplacement aura pour effet de supprimer ces annonces définitivement."
     delete_confirm: Oui, supprimer cet %{entity}
     save_not_possible: "Démo - Mise à jour non possible pour cette page :"
+    todo:
+      no_category: "<strong>Aucune catégorie n'est disponible</strong>. Veuillez créer au moins une catégorie pour pouvoir créer des annonces."
+      one_category: '<strong>Seulement une seule catégorie est disponible</strong>. Veuillez créer quelques catégories pour permettre aux utilisateurs de filtrer leur recherche.'
+      no_area_type: <strong>Aucune zone n'a été spécifiée</strong>. S'il n'a pas la possibilité de choisir une zone lorsque une annonce est créé, l'utilisateur devra entrer une adresse exacte (ce qui ne sera pas forcément souhaité). Dans "Paramètres des zones", veuillez définir les zones de votre ville (par code postal, par quartiers), pour donner plus de flexibilité aux utilisateurs, lorsqu'ils définiront un emplacement.
+      mapbox_missing: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapbox_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+      mapquest_missing: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapquest_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+      description_missing: Aucune description de site web n'a été écrite, dans "Paramètres du site". Expliquez aux utilisateurs le but de votre site Madloba, en écrivant un texte court. Cette description apparaitra en page de la page d'accueil, ainsi que dans la page "A propos".
+      no_social_media: Vous n'avez pas encore entré d'adresses de réseaux sociaux (Facebook, Twitter, Pinterest), dans "Paramètres du site". Entrez vos différents profils pour augmenter votre visibilité.
     left_menu:
       admin_task: Tâches admin
       user_tasks: Tâches utilisateur

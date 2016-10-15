@@ -18,49 +18,9 @@ class User::AdminPanelController < ApplicationController
     @messages = []
     if (current_user.admin?)
       # To-do list creation
-      empty_social = 0
-
-      if Category.count == 1
-        # Show a warning message, if there's only 1 category (the default one, most likely).
-        @messages << {text: t('admin.one_category_html'), type: 'danger'}
+      Todo.all.each do |todo|
+        @messages << todo.message_and_alert if !todo.condition_met?
       end
-
-      settings = Setting.all
-      settings.each do |setting|
-        # Show a message if no area has been defined, in "Area settings"
-        if (setting.key == 'area_type' && (setting.value == '' || setting.value.nil?))
-          @messages << {text: t('admin.no_area_type_html'),
-                        type: 'danger'}
-        end
-
-        # Show a message if no Mapbox key has been entered, in "Map settings"
-        if (setting.key == 'map_box_api_key' && (setting.value == '' || setting.value.nil?))
-          @messages << {text: t('admin.no_mapbox_account_html', mapbox_website: view_context.link_to('Mapbox', 'http://www.mapbox.com', {target: '_blank'})),
-                        type: 'info'}
-        end
-
-        # Show a message if no MapQuest key has been entered, in "Map settings"
-        if (setting.key == 'mapquest_api_key' && (setting.value == '' || setting.value.nil?))
-          @messages << {text: t('admin.no_mapquest_account_html', mapquest_website: view_context.link_to('MapQuest Developers', 'http://developer.mapquest.com/web/info/account/app-keys', {target: '_blank'})),
-                        type: 'info'}
-        end
-
-        # Show a message if there is no website description, in "General settings"
-        if (setting.key == 'description' && (setting.value == '' || setting.value.nil?))
-          @messages << {text: t('admin.no_website_description'),
-                        type: 'info'}
-        end
-
-        if ((social_networks.include?setting.key) && (setting.value == '' || setting.value.nil?))
-          empty_social += 1
-        end
-      end
-
-      # Show a message if no social network contact has been entered, in "General settings"
-      if empty_social == social_networks.length
-        @messages << {text: t('admin.no_social'), type: 'info'}
-      end
-
     end
   end
 
