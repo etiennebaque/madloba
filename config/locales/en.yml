@@ -1,24 +1,3 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more, please read the Rails Internationalization guide
-# available at http://guides.rubyonrails.org/i18n.html.
-
 en:
   simple_captcha:
     placeholder: ""
@@ -170,7 +149,8 @@ en:
     description_help: Give some details about the item(s) you're giving away/searching.
     new_location: Enter a new location
     choose_existing: Choose existing location instead
-    create_this_ad: Create this ad!
+    submit_ad_new: Create this ad!
+    submit_ad_edit: Update this ad
     create_success: The ad '%{title}' has been created. You will shortly receive an e-mail, with the new ad details.
     where_to_find: "Where to find the item(s):"
     where_to_bring: "Where to bring the item(s):"
@@ -303,12 +283,6 @@ en:
     save: Save
     settings_menu: Settings
     nothing_to_do: Yay! Nothing to worry about :)
-    no_mapbox_account_html: You don't have entered a Mapbox key yet, in "Map (Settings)". You can get one by opening an account on <strong>%{mapbox_website}</strong>, to get a new map style for your website.
-    no_mapquest_account_html: You don't have entered a MapQuest key yet, in "Map (Settings)". You can get one by opening an account on <strong>%{mapquest_website}</strong>, to get a new map style for your website.
-    no_social: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General (Settings)". Specify some of them to increase your visibility.
-    one_category_html: <strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.
-    no_website_description: No website description has been written yet, in "General (Settings)". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
-    no_area_type_html: <strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area (Settings)", please indicate how an area is defined (by postal code or by district), to give the user more flexibility, when it comes to choose a location.
     you_admin: You're an administrator of this website.
     use_left_hand: Use the left-hand side menu to manage
     admin_descr1: the different components of this website (ads, locations, items, categories)
@@ -328,6 +302,14 @@ en:
     warning_ads_before_delete_location: "WARNING: some ads are still tied to this location. Deleting this location will permanently delete these ads."
     delete_confirm: Yes, delete this %{entity}
     save_not_possible: "Demo - Update not possible for this page"
+    todo:
+      no_category: '<strong>No category available</strong>. Please create at least one category to be able to create ads.'
+      one_category: '<strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.'
+      no_area_type: '<strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area (Settings)", please indicate how an area is defined (by postal code or by district), to give the user more flexibility, when it comes to choose a location.'
+      mapbox_missing: You don't have entered a Mapbox key yet, in "Map (Settings)". You can get one by opening an account on <strong>%{mapbox_website}</strong>, to get a new map style for your website.
+      mapquest_missing: You don't have entered a MapQuest key yet, in "Map (Settings)". You can get one by opening an account on <strong>%{mapquest_website}</strong>, to get a new map style for your website.
+      description_missing: No website description has been written yet, in "General (Settings)". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
+      no_social_media: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General (Settings)". Specify some of them to increase your visibility.
     left_menu:
       admin_task: Admin tasks
       user_tasks: Regular user tasks
