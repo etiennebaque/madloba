@@ -6,8 +6,6 @@ class HomeController < ApplicationController
   # --------------------------------------
   def index
     # Initializing the map, in relation to its center, defined in the settings table.
-    # Map on the home page does not focus on 1 specific marker, and is not clickable (ie no marker appears on clicl on the map)
-    #@map_settings = getMapSettings(nil, HAS_NOT_CENTER_MARKER, NOT_CLICKABLE_MAP)
     @map_settings = MapInfo.new(has_center_marker: false, clickable: NOT_CLICKABLE_MAP).to_hash
 
     # Initializing links, and social media information, for the footer of the home page.
@@ -24,20 +22,9 @@ class HomeController < ApplicationController
         @map_settings[:latitude] = params[:lat]
         @map_settings[:longitude] = params[:lon]
 
-        if params[:loc]
-          # A location search was just performed, with the name of the searched location (given back from Nominatim ws) in it.
-          current_location = params[:loc]
-        else
-          # there was no search beforehand, we need to find the address, based on the given latitude and longitude, as parameters.
-          current_location = getAddressFromGeocodes(params[:lat], params[:lon])
-          if !current_location
-            current_location = t('home.default_current_loc')
-          end
-        end
-
+        current_location = current_location_for(params)
         @map_settings[:searched_address] = current_location
         @location_search_refinement_to_display = current_location
-
     end
 
     # Defining all the categories attached to an item.
@@ -49,30 +36,11 @@ class HomeController < ApplicationController
       @categories = Category.joins(items: :ads).order('name asc').uniq
     end
 
-    # We need to see if we have a navigation state.
-    # If we do, that will impact what will be displayed on the map.
-    if params[:cat]
-      cat_nav_state = params[:cat].split(" ")
-    end
+    # We need to see if we have a navigation state. If we do, that will impact what will be displayed on the map.
+    cat_nav_state = params[:cat].split(" ") if params[:cat]
 
     # Queries to get ads to be displayed on the map, based on their locations
-    # First, we get the ads tied to an exact location.
-    @locations_exact = Ad.search(cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
-
-    area_types = settings['area_type'].split(',')
-    if area_types.include?('postal')
-      # If the users have the possiblity to post ad linked to a postal code, we get here these type of ads.
-      @locations_postal = Location.search('postal', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
-    end
-    if area_types.include?('district')
-      # If the users have the possiblity to post ad linked to a pre-defined district, we also get here these type of ads.
-      @locations_district = Location.search('district', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
-    end
-
-    # Getting a hash that matches areas to their respective latitude and longitudes.
-    if area_types.include?('postal') || area_types.include?('district')
-      @area_geocodes = Location.define_area_geocodes(@locations_postal, @locations_district)
-    end
+    location_search_result_objects(params, cat_nav_state, selected_item_ids, settings)
   end
 
 
@@ -178,6 +146,34 @@ class HomeController < ApplicationController
 
   private
 
+  def location_search_result_objects(params, cat_nav_state, selected_item_ids, settings)
+    # First, we get the ads tied to an exact location.
+    @locations_exact = Ad.search(cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
+
+    area_types = settings['area_type'].split(',')
+    if area_types.include?('postal')
+      # If the users have the possiblity to post ad linked to a postal code, we get here these type of ads.
+      @locations_postal = Location.search('postal', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
+    end
+    if area_types.include?('district')
+      # If the users have the possiblity to post ad linked to a pre-defined district, we also get here these type of ads.
+      @locations_district = Location.search('district', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
+    end
+
+    # Getting a hash that matches areas to their respective latitude and longitudes.
+    if area_types.include?('postal') || area_types.include?('district')
+      @area_geocodes = Location.define_area_geocodes(@locations_postal, @locations_district)
+    end
+  end
+
+  def current_location_for(params)
+    # A location search was just performed, with the name of the searched location (given back from Nominatim ws) in it.
+    return params[:loc] if params.has_key?(:loc)
+
+    # there was no search beforehand, we need to find the address, based on given latitude and longitude.
+    current_location = address_from_geocodes(params[:lat], params[:lon])
+    current_location = t('home.default_current_loc') if current_location.blank?
+  end
 
   # Creates a hash with the link and the label of one "Useful link",
   # that appears at the center of the home page footer.
@@ -202,9 +198,7 @@ class HomeController < ApplicationController
     link_numbers.each do |number|
       @links << get_link(settings["link_#{number}_label"], settings["link_#{number}_url"])
     end
-
     settings
-
   end
 
 end
