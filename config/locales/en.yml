@@ -130,6 +130,7 @@ en:
     expiration_date: This ad will expire on %{expire_date}.
     expires_today: This ad expires today!
     has_expired: This ad has expired on %{expire_date}, and is not visible on the website any longer.
+    back_home: Back to home page
     title: "Ad title*:"
     title_help: e.g. 'Gives away 5 shirts' or 'I want to get rid of my old laptop'...
     item: "Which item(s)?*:"

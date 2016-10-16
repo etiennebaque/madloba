@@ -1,107 +1,102 @@
-.row
-  #content.middle-col.col-xs-12.col-md-10
-    / content starts
-    / Success/Error flash messages
-    - if flash[:success]
-      .box-content.alerts
-        .alert.alert-success
-          %button.close{"data-dismiss" => "alert", :type => "button"} ×
-          = flash[:success]
-    
-    - if current_user.admin?
-      / Admin dashboard
-      .row
-        / Ad count
-        .col-md-3.col-sm-3.col-xs-3
-          %a.well.top-block{"data-toggle" => "tooltip", :href => "/user/managerecords#ads", :title => "#{t('admin.ads')}"}
-            %i.glyphicon.glyphicon-comment.blue
-            %div= t('admin.ads')
-            %div= Ad.count
-        / Location count
-        .col-md-3.col-sm-3.col-xs-3
-          %a.well.top-block{"data-toggle" => "tooltip", :href => "/user/managerecords#locations", :title => "#{t('admin.locations')}"}
-            %i.glyphicon.glyphicon-home.red
-            %div= t('admin.locations')
-            %div= Location.count
-        / Item count
-        .col-md-3.col-sm-3.col-xs-3
-          %a.well.top-block{"data-toggle" => "tooltip", :href => "/user/managerecords#items", :title => "#{t('admin.items')}"}
-            %i.glyphicon.glyphicon-paperclip.green
-            %div= t('admin.items')
-            %div= Item.count
-        / Category count
-        .col-md-3.col-sm-3.col-xs-3
-          %a.well.top-block{"data-toggle" => "tooltip", :href => "/user/managerecords#categories", :title => "#{t('admin.categories')}"}
-            %i.glyphicon.glyphicon-folder-open.yellow
-            %div= t('admin.categories')
-            %div= Category.count
-      %hr/
-      .row
-        / Dashboard - start
-        .box.col-sm-12.col-md-6
-          .box-inner
-            .box-header.well{"data-original-title" => ""}
-              %h2
-                %i.glyphicon.glyphicon-home
-                = t('admin.dashboard')
-            .box-content.row
-              .col-xs-12
-                %h3
-                  = t('session.hello')
-                  = current_user.first_name
-                  \!
-                %p= t('admin.you_admin')
-                %p
-                  = t('admin.use_left_hand')
-                  \:
-                %ul
-                  %li= t('admin.admin_descr1')
-                  %li= t('admin.admin_descr2')
-                  %li= t('admin.admin_descr3')
-                  %li= t('admin.admin_descr4')
-                  %li= t('admin.admin_descr5')
-                %p= t('admin.regular_actions')
-        / Dashboard - end
-        / To-do list - start
-        .box.col-sm-12.col-md-6
-          .box-inner
-            .box-header.well{"data-original-title" => ""}
-              %h2
-                %i.glyphicon.glyphicon-ok
-                = t('admin.todo_list')
-            .box-content.row
-              .col-xs-12
-                %h3= t('admin.todo_list')
-                - if @messages.length == 0
-                  %p= t('admin.nothing_to_do')
-                - else
-                  - @messages.each do |message|
-                    %div{:class => "alert alert-#{message[:type]}"}
-                      = message[:text].html_safe
-        / To-do list - end
-    - else
-      / Regular user dashboard
-      / Main section - start
-      .row
-        .box.col-md-12
-          .box-inner
-            .box-header.well{"data-original-title" => ""}
-              %h2
-                %i.glyphicon.glyphicon-home
-                = t('admin.dashboard')
-            .box-content.row
-              .col-lg-7.col-md-12
-                %h3
-                  = t('session.hello')
-                  = current_user.first_name
-                  \!
-                %p
-                  = t('admin.welcome_user', site_name: site_name)
-                  \:
-                %ul
-                  %li= t('admin.user_descr1')
-                  %li= t('admin.user_descr2')
-      / Main section - end
-    / content ends
-  / /#content.span10
-/ /row
+#content.middle-col.col-xs-12.col-md-10
+  / content starts
+  / Success/Error flash messages
+  - if flash[:success]
+    .box-content.alerts
+      .alert.alert-success
+        %button.close{"data-dismiss" => "alert", :type => "button"} ×
+        = flash[:success]
+
+  - if current_user.admin?
+    -# Admin dashboard
+    .row
+      -# Ad count
+      .col-md-3.col-sm-3.col-xs-3
+        %a.well.top-block{"data-toggle" => "tooltip", :href => "/user/managerecords#ads", :title => "#{t('admin.ads')}"}
+          %i.glyphicon.glyphicon-comment.blue
+          %div= t('admin.ads')
+          %div= Ad.count
+      -# Location count
+      .col-md-3.col-sm-3.col-xs-3
+        %a.well.top-block{"data-toggle" => "tooltip", :href => "/user/managerecords#locations", :title => "#{t('admin.locations')}"}
+          %i.glyphicon.glyphicon-home.red
+          %div= t('admin.locations')
+          %div= Location.count
+      -# Item count
+      .col-md-3.col-sm-3.col-xs-3
+        %a.well.top-block{"data-toggle" => "tooltip", :href => "/user/managerecords#items", :title => "#{t('admin.items')}"}
+          %i.glyphicon.glyphicon-paperclip.green
+          %div= t('admin.items')
+          %div= Item.count
+      -# Category count
+      .col-md-3.col-sm-3.col-xs-3
+        %a.well.top-block{"data-toggle" => "tooltip", :href => "/user/managerecords#categories", :title => "#{t('admin.categories')}"}
+          %i.glyphicon.glyphicon-folder-open.yellow
+          %div= t('admin.categories')
+          %div= Category.count
+    %hr
+    .row
+      -# Dashboard - start
+      .box.col-sm-12.col-md-6
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            %h2
+              %i.glyphicon.glyphicon-home
+              = t('admin.dashboard')
+          .box-content.row
+            .col-xs-12
+              %h3
+                = t('session.hello')
+                = current_user.first_name
+                \!
+              %p= t('admin.you_admin')
+              %p
+                = t('admin.use_left_hand')
+                \:
+              %ul
+                %li= t('admin.admin_descr1')
+                %li= t('admin.admin_descr2')
+                %li= t('admin.admin_descr3')
+                %li= t('admin.admin_descr4')
+                %li= t('admin.admin_descr5')
+              %p= t('admin.regular_actions')
+      -# Dashboard - end
+      -# To-do list - start
+      .box.col-sm-12.col-md-6
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            %h2
+              %i.glyphicon.glyphicon-ok
+              = t('admin.todo_list')
+          .box-content.row
+            .col-xs-12
+              %h3= t('admin.todo_list')
+              - if @messages.length == 0
+                %p= t('admin.nothing_to_do')
+              - else
+                - @messages.each do |message|
+                  %div{:class => "alert alert-#{message[:type]}"}
+                    = message[:text].html_safe
+      -# To-do list - end
+  - else
+    -# Regular user dashboard
+    -# Main section - start
+    .row
+      .box.col-md-12
+        .box-inner
+          .box-header.well{"data-original-title" => ""}
+            %h2
+              %i.glyphicon.glyphicon-home
+              = t('admin.dashboard')
+          .box-content.row
+            .col-lg-7.col-md-12
+              %h3
+                = t('session.hello')
+                = current_user.first_name
+                \!
+              %p
+                = t('admin.welcome_user', site_name: site_name)
+                \:
+              %ul
+                %li= t('admin.user_descr1')
+                %li= t('admin.user_descr2')

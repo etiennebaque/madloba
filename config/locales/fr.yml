@@ -141,6 +141,7 @@ fr:
     area: zone
     error_occurred: "%{errors} à corriger ci-dessous "
     published: "Publiée par :"
+    back_home: "Retour à la page d'accueil"
     expiration_date: Cette annonce expirera le %{expire_date}.
     expires_today: "Cette annonce expire aujourd'hui !"
     has_expired: Cette annonce a expiré le %{expire_date}, et n'est plus visible sur ce site.
