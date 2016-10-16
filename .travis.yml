@@ -10,4 +10,4 @@ before_script:
 
 script:
   - bundle exec rspec spec
-  - bundle exec cucumber ./features WEBKIT=true
+  - bundle exec cucumber features
