@@ -3,7 +3,7 @@
     var districts_bounds = #{raw districts_bounds.to_json};
 
 .nested-fields.location-fields{:style => "padding-bottom: 10px;"}
-  - if current_user.locations.any? && %w(new create edit update).include?(action_name) && !@is_location_edit
+  - if current_user.present? && current_user.locations.any? && %w(new create edit update).include?(action_name) && !@is_location_edit
     .form-group
       %hr/
     .form-group

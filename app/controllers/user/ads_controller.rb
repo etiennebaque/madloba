@@ -167,7 +167,7 @@ class User::AdsController < ApplicationController
 
   def sanitize_ad_params
     sanitized_params = ad_params.dup
-    if params[:location_id].present?
+    if ad_params.has_key?(:location_id)
       sanitized_params.delete(:location_attributes)
     end
     sanitized_params
