@@ -10,4 +10,4 @@ before_script:
 
 script:
   - bundle exec rspec spec
-  - bundle exec cucumber features
+  - export DISPLAY=:99.0 && bundle exec cucumber features
