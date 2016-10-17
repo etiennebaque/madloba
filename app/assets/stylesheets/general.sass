@@ -32,8 +32,9 @@ html, body
   &.large
     height: 400px
 
-#searchFormId
-  padding-left: 160px
+@media (min-width: 1060px)
+  #searchFormId
+    padding-left: 13%
 
 .devise-section
   padding: 20px 0px
@@ -143,6 +144,7 @@ span.disabled
   margin-bottom: 0px
 
 .nav-margin-bottom
+  z-index: 3000
   margin-bottom: 20px
   padding: 3px 0px
 
@@ -151,11 +153,6 @@ span.disabled
   margin-right: 9px
   height: 40px
   width: 32px
-
-.navbar-arrow-up
-  float: right
-  padding: 9px 18px
-  font-size: 22px
 
 #navbar-up-link
   color: white
@@ -235,21 +232,11 @@ html
 #district_notification_message
   margin-top: 15px
 
-// Admin panel - make sidebar nav vertical
-
-@media (min-width: 1060px)
-  .navbar-arrow-up
-    display: none
 
 // Hiding the secondary admin bar in mobile mode, as we show its links in the primary nav bar when collapsed.
 @media (max-width: 1059px)
   .admin-link-bar
     display: none
-
-@media (max-width: 767px)
-  .navbar-arrow-up
-    padding: 10px 12px 10px 0px
-    font-size: 20px
 
 .list-group h4
   margin-top: 10px !important
