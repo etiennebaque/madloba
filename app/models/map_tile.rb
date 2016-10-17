@@ -1,5 +1,7 @@
 class MapTile < ActiveRecord::Base
 
+  MAPBOX_MAPTILES = [['Street','mapbox.streets'], ['Satellite','mapbox.satellite']]
+
   def self.osm
     self.find_by_name('open_street_map')
   end

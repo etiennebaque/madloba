@@ -21,7 +21,7 @@ class MapAdInfo < MapInfo
 
     self.latitude = ad.location.latitude
     self.longitude = ad.location.longitude
-    self.zoom_level = MAX_ZOOM_LEVEL
+    self.zoom_level = CLOSER_ZOOM_LEVEL
   end
 
   def attributes_to_read

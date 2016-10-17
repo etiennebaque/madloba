@@ -96,17 +96,12 @@ module ApplicationHelper
   end
 
 
-  def getAddressFromGeocodes(latitude,longitude)
-    address = nil
+  def address_from_geocodes(latitude,longitude)
     url = "http://open.mapquestapi.com/nominatim/v1/reverse.php?format=json&lat=#{latitude}&lon=#{longitude}"
     safeurl = URI.parse(URI.encode(url))
     response = HTTParty.get(safeurl)
-    if !response.success?
-      raise response.response
-    else
-      address = response['display_name']
-    end
-    return address
+    raise response.response unless response.success?
+    response['display_name']
   end
 
   def valid_float?(str)

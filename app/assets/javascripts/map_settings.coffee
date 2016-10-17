@@ -18,8 +18,12 @@ MapSettings::init = ->
     $('[id$=form_zoom_level]').val(leaf.map.getZoom())
 
   # Refreshing map, when "Map type" field is modified.
-  $('#map_settings_form_chosen_map').change ->
+  $('.map-chosen-list, .mapbox-name-list').change ->
     selected_map = ''
     $('select option:selected').each ->
-      map_settings['chosen_map'] = $(this).val()
+      map_settings['chosen_map'] = $('.map-chosen-list').val()
+      if map_settings['mapbox_tile_url'] != ''
+        toReplace = map_settings['mapbox_tile_url'].match("v4/(.*)/{z}")[1]
+        newMapboxVal = $('.mapbox-name-list').val()
+        map_settings['mapbox_tile_url'] = map_settings['mapbox_tile_url'].replace(toReplace, newMapboxVal)
       initLeafletMap(map_settings)

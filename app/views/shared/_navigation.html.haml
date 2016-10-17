@@ -5,10 +5,6 @@
       %span.icon-bar
       %span.icon-bar
     = link_to "#{image_tag madloba_logo_file_name, class: 'madloba-img'} #{navigation_madloba_title}".html_safe, navigation_madloba_icon_path, class: 'navbar-brand'
-    / Up arrow: when clicked, screen scrolls automatically back up
-    %span.navbar-arrow-up
-      %a#navbar-up-link{:href => "#", :style => "display: none;"}
-        %i.fa.fa-chevron-up
           
   - if !setup_mode?
     #navbarCollapse.navbar-collapse.collapse.navbar-responsive-collapse

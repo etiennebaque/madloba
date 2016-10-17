@@ -25,14 +25,11 @@ class Category < ActiveRecord::Base
     if cat_nav_state
       # We have a category navigation state. Which means that a "remove refinement" url must be created for each selected category.
       # Also, category urls must take the previous refinements into consideration.
+      url = '/'
       if cat_nav_state.include? self.id.to_s
         # We're dealing with a refinement
         other_cat_ids = cat_nav_state - [self.id.to_s]
-        if (other_cat_ids.length > 0)
-          url = "/search?cat=#{other_cat_ids.join('+')}"
-        else
-          url = '/'
-        end
+        url = "/search?cat=#{other_cat_ids.join('+')}" if (other_cat_ids.length > 0)
       else
         # We're dealing with a category that was not chosen yet
         url = "/search?cat=#{cat_nav_state.join('+')}+#{self.id}"
@@ -44,28 +41,18 @@ class Category < ActiveRecord::Base
 
     # We also need to include the search parameters in the remove refinement url, if they exists
     if params[:item] && params[:item] != ''
-      if url == '/'
-        url = "/search?item=#{params[:item]}"
-      else
-        url += "&item=#{params[:item]}"
-      end
-    end
-    if params[:lat] && params[:lon] && params[:loc]
-      if url == '/'
-        url = "/search?lat=#{params[:lat]}&lon=#{params[:lon]}&loc=#{params[:loc]}"
-      else
-        url += "&lat=#{params[:lat]}&lon=#{params[:lon]}&loc=#{params[:loc]}"
-      end
-    end
-    if params[:q] # user_action represents the 'q' parameter.
-      if url == '/'
-        url = "/search?q=#{params[:q]}"
-      else
-        url += "&q=#{params[:q]}"
-      end
+      url == '/' ? url = "/search?item=#{params[:item]}" : url += "&item=#{params[:item]}"
     end
 
-    return url
+    if params[:lat] && params[:lon] && params[:loc]
+      url == '/' ? url = "/search?" : url += "&"
+      url += "/search?lat=#{params[:lat]}&lon=#{params[:lon]}&loc=#{params[:loc]}"
+    end
+
+    if params[:q] # user_action represents the 'q' parameter.
+      url == '/' ? url = "/search?q=#{params[:q]}" : url += "&q=#{params[:q]}"
+    end
+    url
   end
 
   # Sets whether a category link in the guided navigation (home page) is current refinement.
