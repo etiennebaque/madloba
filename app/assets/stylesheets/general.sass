@@ -32,9 +32,20 @@ html, body
   &.large
     height: 400px
 
+// responsive fixes for navigation bar
 @media (min-width: 1060px)
   #searchFormId
     padding-left: 13%
+
+@media (max-width: 1059px)
+  #searchFormId
+    .twitter-typeahead
+      width: 100%
+    .form-group
+      margin-top: 12px
+      text-align: center
+      #btn-form-search
+        padding: 7px 20px
 
 .devise-section
   padding: 20px 0px
