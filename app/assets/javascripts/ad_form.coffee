@@ -62,13 +62,15 @@ AdForm::init = ->
     $('.add-new-location').hide()
     $('.location-form-for-ad :input').attr("disabled", false)
     $('#locations_from_list :input').attr('disabled', true)
+    $('#locations_from_list').hide()
+    $(".remove-new-location").attr("tabindex",-1).focus() # Hack to center page on new location title.
 
   $('.remove-new-location').click ->
     $('.location-form-for-ad').hide()
     $('.add-new-location').show()
     $('.location-form-for-ad :input').attr("disabled", true)
     $('#locations_from_list :input').attr('disabled', false)
-
+    $('#locations_from_list').show()
 
 ###*
 # Function that binds events to the item drop down list (in ads#new and ads#edit pages)
