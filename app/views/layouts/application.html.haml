@@ -9,10 +9,10 @@
 
     %title= site_name
 
-    / Main CSS files to be included in all pages.
+    -# Main CSS files to be included in all pages.
     = stylesheet_link_tag 'application', media: 'all'
 
-    / Gon gem - managing text in JS files
+    -# Gon gem - managing text in JS files
     = include_gon
     = csrf_meta_tags
     = yield :head
@@ -27,13 +27,13 @@
         %button.close{"data-dismiss" => "alert", :type => "button"} ×
         = flash[:error]
 
-    / Main part of the body
+    -# Main part of the body
     #wrap
       = render 'shared/navigation'
       = yield
       = render 'shared/footer'
 
-    / Javascript files to be included in all pages.
+    -# Javascript files to be included in all pages.
     = javascript_include_tag 'application'
-    / Javascript files specific to some pages, to be included here.
+    -# Javascript files specific to some pages, to be included here.
     = yield :scripts
