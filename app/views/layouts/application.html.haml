@@ -17,14 +17,8 @@
     = csrf_meta_tags
     = yield :head
 
-  %body{class: (admin_panel? ? 'body-admin' : 'body-normal') }
-    
-    - if notice && !(request.original_url.include? 'setup')
-      / We're not displaying any Devise notification during the setup screens
-      .alert.alert-dismissable.alert-success.no-margin-bottom
-        %button.close{"data-dismiss" => "alert", :type => "button"} ×
-        = notice
-    - elsif alert
+  %body{class: (admin_panel? ? 'body-admin' : 'body-normal'), data: notifications_for(notice) }
+    - if alert
       .alert.alert-dismissable.alert-danger.no-margin-bottom
         %button.close{"data-dismiss" => "alert", :type => "button"} ×
         = alert

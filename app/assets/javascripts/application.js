@@ -41,6 +41,8 @@
 //= require leaflet.awesome-markers
 //= require bouncemarker
 
+//= require bootstrap-notify
+
 //= require ad_websocket
 
 //= require_tree .

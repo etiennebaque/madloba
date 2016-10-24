@@ -110,6 +110,12 @@ module ApplicationHelper
     !!Float(str) rescue false
   end
 
+  def notifications_for(notice)
+    # We're not displaying any Devise notification during the setup screens
+    return {message: notice, alert: 'success'} if notice.present? && !(request.original_url.include? 'setup')
+    {message: '', alert: ''}
+  end
+
 
   private
 

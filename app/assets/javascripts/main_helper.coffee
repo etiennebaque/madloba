@@ -1,6 +1,11 @@
 # Using this root context variable to define global variables later on.
 global = this
 
+$ ->
+  # Show Bootstrap notify on load, when needed
+  if $('body').data('message').length > 0
+    createNotification($('body').data('message'), $('body').data('alert'))
+
 ###*
 # Initialization of the leaf object (called 'leaf' as because of the main use of the Leaflet library :) )
 # This object attributes consists of the map object, map tiles and other map-related objects.
@@ -414,6 +419,17 @@ global.spiderifyMarkerGroups = ->
       bounds = a.layer.getBounds().pad(0.5)
       leaf.map.fitBounds bounds
 
+
+# Notification
+global.createNotification = (message, alert) ->
+  $.notify message,
+    offset:
+      x: 10
+      y: 60
+    type: alert
+    placement:
+      from: 'top'
+      align: 'right'
 
 ###*
 # Creates the text to be shown in a marker popup, giving details about the selected exact location.
