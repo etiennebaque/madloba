@@ -69,29 +69,23 @@ class HomeController < ApplicationController
 
     begin
       ad_id = params['ad_id']
-      item_id = params['item_id']
       ad = Ad.joins(:location, {items: :category}).where(id: ad_id).first
       number_of_items = ad.items.count
+      item = ad.items.select{|i| i.id == params['item_id'].to_i}.first
+      title = ad.title.length > 40 ? ad.title.chomp(a[-3..-1]) + '...' : ad.title
 
       popup_html = "<div style='overflow: auto;'>"
+      popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{item.category.color_code}'>" +
+                    "<span>#{title}</span></div>"
 
-      # Title (and image when available)
       if ad.image?
-          popup_html += "<div class='col-xs-12 col-md-6 title_popup'>#{view_context.link_to(ad.title, ad)}</div>
-                         <div class='col-xs-12 col-md-6'>#{ActionController::Base.helpers.image_tag(ad.image.thumb.url, class: 'pull-right')}</div>"
-      else
-          popup_html += "<div class='col-xs-12 title_popup'>#{view_context.link_to(ad.title, ad)}</div>"
+        image_tag = ActionController::Base.helpers.image_tag(ad.image.normal.url)
+        popup_html += "<div class='col-xs-12 image-popup no-padding'>#{image_tag}</div>"
       end
 
       # Action (giving away or searching for) + item name
       ad_action = ad.is_giving ? t('ad.giving_away') : t('ad.accepting')
-      item_name = ''
-      ad.items.each do |ad_item|
-        if ad_item.id == item_id.to_i
-          item_name = "<span style='color:" + MARKER_COLORS[ad_item.category.marker_color] + "';><strong>" + ad_item.name + "</strong></span>";
-          break
-        end
-      end
+      item_name = "<span style='color:" + item.category.color_code + "';><strong>" + item.name + "</strong></span>";
 
       and_other_items = number_of_items > 1 ? "and #{number_of_items - 1} other item(s)" : ''
 
@@ -101,11 +95,13 @@ class HomeController < ApplicationController
       popup_html += "<div class='col-xs-12' style='margin-bottom: 15px;'>#{ad.location.name_and_or_full_address}</div>"
 
       # "Show details" button
-      popup_html += "<div class='col-xs-12' style='text-align: center'>#{view_context.link_to(t('home.show_details'), ad, class: 'btn btn-info btn-sm no-color' )}</div>"
+      button = view_context.link_to(t('home.show_details'), ad, class: 'btn btn-info btn-sm no-color' )
+      popup_html += "<div class='col-xs-12 button-popup'>#{button}</div>"
 
       popup_html += "</div>"
 
-    rescue
+    rescue Exception => e
+      puts e
       # An error occurred, we show a error message.
       popup_html = "<i>#{t('home.error_get_popup_content')}</i>"
     end

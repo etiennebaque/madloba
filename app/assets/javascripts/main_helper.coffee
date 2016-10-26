@@ -218,7 +218,7 @@ global.markers =
         marker.item_id = item['item_id']
         popup = L.popup(
           minWidth: 250
-          maxWidth: 300).setContent('Loading...')
+          maxWidth: 280).setContent('Loading...')
         marker.bindPopup popup
         # When a marker is clicked, an Ajax call is made to get the content of the popup to display
         marker.on 'click', (e) ->
@@ -233,15 +233,12 @@ global.markers =
             dataType: 'html'
             beforeSend: (xhr) ->
               xhr.setRequestHeader 'Accept', 'text/html-partial'
-              return
             success: (data) ->
               marker_popup.setContent data
               marker_popup.update()
-              return
             error: (data) ->
               marker_popup.setContent data
               marker_popup.update()
-              return
           return
 
         markers.group.addLayer marker

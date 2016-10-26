@@ -149,9 +149,22 @@ span.disabled
       font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
       font-size: 14px
 
-.title_popup a
-  font-weight: bold !important
+.title-popup
+  height: 40px
+  line-height: 40px
+  font-weight: bold
+  color: white
+  font-size: 13px
+  border-radius: 12px 12px 0px 0px
 
+.image-popup img
+  width: 100%
+
+.button-popup
+  margin-bottom: 10px
+  text-align: center
+  a
+    width: 60%
 
 // Top navigation bar
 .no-margin-bottom
@@ -246,6 +259,9 @@ html
 #district_notification_message
   margin-top: 15px
 
+.no-padding
+  padding: 0 !important
+  margin: 0 !important
 
 // Hiding the secondary admin bar in mobile mode, as we show its links in the primary nav bar when collapsed.
 @media (max-width: 1059px)
@@ -275,7 +291,10 @@ html
   text-align: center
 
 .ad-title
-  padding-bottom: 30px
+  padding-bottom: 20px
+
+.back-link
+  padding-top: 10px
 
 .ad-label
   width: 120px
