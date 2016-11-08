@@ -72,21 +72,23 @@ class HomeController < ApplicationController
       ad = Ad.joins(:location, {items: :category}).where(id: ad_id).first
       number_of_items = ad.items.count
       item = ad.items.select{|i| i.id == params['item_id'].to_i}.first
-      title = ad.title.length > 40 ? ad.title.chomp(a[-3..-1]) + '...' : ad.title
+      title = item.name.length > 40 ? item.name.chomp(a[-3..-1]) + '...' : item.name
 
       popup_html = "<div style='overflow: auto;'>"
       popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{item.category.color_code}'>" +
-                    "<span>#{title}</span></div>"
+                    "<span>#{title.capitalize}</span></div>"
 
       if ad.image?
         image_tag = ActionController::Base.helpers.image_tag(ad.image.normal.url)
         popup_html += "<div class='col-xs-12 image-popup no-padding'>#{image_tag}</div>"
       end
 
+      # Title
+      popup_html += "<div class='col-xs-12' style='margin-top: 15px;'>#{view_context.link_to(ad.title, ad)}</div>"
+
       # Action (giving away or searching for) + item name
       ad_action = ad.is_giving ? t('ad.giving_away') : t('ad.accepting')
       item_name = "<span style='color:" + item.category.color_code + "';><strong>" + item.name + "</strong></span>";
-
       and_other_items = number_of_items > 1 ? "and #{number_of_items - 1} other item(s)" : ''
 
       popup_html += "<div class='col-xs-12' style='margin-top: 15px;'>#{ad_action} #{item_name} #{and_other_items}</div>"
