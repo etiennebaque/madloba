@@ -26,6 +26,7 @@ Home::init = ->
   if !$('.navbar-toggle').is(':visible')
     $('#sidebar_category_icon').trigger('click')
 
+
 ###*
 # Populates the map with different markers (eg exact address and area-type markers, to show ads)
 # @param locations_hash - hash containing the info to create all different markers.
@@ -41,10 +42,12 @@ Home::putLocationMarkers = ->
   markers.marker_colors = _this.marker_colors
   # Displaying markers on map
   markers.place_exact_locations_markers(_this.locations_exact, false)
+  markers.place_district_markers(_this.locations_exact, false)
   # Displaying postal code area circles on map
   markers.draw_postal_code_areas(_this.locations_postal)
   # Displaying district areas on map
   markers.draw_district_areas(_this.locations_district)
+
   # Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
   # Server side is in home_controller, method showSpecificAds.
   $('#map').on 'click', '.area_link', ->
@@ -87,3 +90,18 @@ Home::putLocationMarkers = ->
 
   if searched_location_marker != ''
     searched_location_marker.openPopup()
+
+  # Adding event to show/hide these districts from the checkbox in the guided navigation.
+  $('#show_area_id').change(->
+    markers.group.eachLayer (layer) ->
+      markers.group.removeLayer layer
+    markers.district_group.eachLayer (layer) ->
+      markers.district_group.removeLayer layer
+
+    if $('#show_area_id').prop('checked')
+      # Drawing districts in this function, when checkbox is checked.
+      markers.draw_district_areas(_this.locations_district)
+    else
+      markers.place_exact_locations_markers(_this.locations_exact, false)
+      markers.place_district_markers(_this.locations_exact, false)
+  ).change()

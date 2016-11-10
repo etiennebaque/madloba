@@ -246,6 +246,27 @@ global.markers =
       i++
     return
 
+  place_district_markers: (location_districts) ->
+    Object.keys(locations_district).forEach (district_id) ->
+      district_bounds = markers.area_geocodes[district_id]['bounds']
+      L.geoJson JSON.parse(district_bounds), onEachFeature: (feature, layer) ->
+      # Adding district marker
+        marker_icon = L.icon({
+          iconUrl: district_marker
+        })
+      
+        marker = L.marker(
+          layer.getBounds().getCenter(),
+          icon: marker_icon,
+          bounceOnAdd: false)
+      
+        markers.group.addLayer marker
+      
+        return
+      return
+    return  
+    
+
   draw_postal_code_areas: (locations_postal) ->
     if locations_postal != null and Object.keys(locations_postal).length > 0
       markers.postal_group = L.featureGroup().addTo(leaf.map)
@@ -266,21 +287,9 @@ global.markers =
     # Snippet that creates markers, to represent ads tied to district-type location.
     if locations_district != null and Object.keys(locations_district).length > 0
       markers.district_group = L.featureGroup().addTo(leaf.map)
-      # Adding event to show/hide these districts from the checkbox in the guided navigation.
-      $('#show_area_id').change(->
-        if $('#show_area_id').prop('checked')
-          # Drawing districts in this function, when checkbox is checked.
-          drawDistrictsOnMap locations_district
-        else
-          markers.district_group.eachLayer (layer) ->
-            markers.district_group.removeLayer layer
-            return
-        return
-      ).change()
-    return
+      drawDistrictsOnMap(locations_district)
 
-# Adding capitalization of first word of a string to String prototype.
-# Used to capitalize item names, in marker popup and area modal windows.
+    return
 
 ###*
 # Main function that initializes the map on different screens (eg home page, map setting page, ad page...).
@@ -323,6 +332,7 @@ global.drawDistrictsOnMap = (locations_district) ->
       layer.bindPopup popup_html_text
       layer.setStyle color: markers.district_color
       markers.district_group.addLayer layer
+
       return
     return
   return
