@@ -11,9 +11,6 @@ global.Home = (locations_exact, locations_postal, locations_district, area_geoco
   @putLocationMarkers()
 
 Home::init = ->
-  # Offcanvas related scripts
-  $('[data-toggle=offcanvas]').click ->
-    $('.row-offcanvas').toggleClass 'active'
 
   # This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel,
   # in the home page, the page would scroll down.
@@ -26,6 +23,8 @@ Home::init = ->
   if !$('.navbar-toggle').is(':visible')
     $('#sidebar_category_icon').trigger('click')
 
+  $("#ads_switch").bootstrapSwitch();
+
 
 ###*
 # Populates the map with different markers (eg exact address and area-type markers, to show ads)
@@ -37,6 +36,7 @@ Home::putLocationMarkers = ->
   # when they get too close to one another, as the user zooms out, on the home page.
   markers.group = new (L.markerClusterGroup)(
     spiderfyDistanceMultiplier: 2)
+  markers.district_group = L.featureGroup().addTo(leaf.map)
 
   markers.area_geocodes = _this.area_geocodes
   markers.marker_colors = _this.marker_colors
@@ -45,8 +45,6 @@ Home::putLocationMarkers = ->
   markers.place_district_markers(_this.locations_exact, false)
   # Displaying postal code area circles on map
   markers.draw_postal_code_areas(_this.locations_postal)
-  # Displaying district areas on map
-  markers.draw_district_areas(_this.locations_district)
 
   # Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
   # Server side is in home_controller, method showSpecificAds.
@@ -91,17 +89,17 @@ Home::putLocationMarkers = ->
   if searched_location_marker != ''
     searched_location_marker.openPopup()
 
-  # Adding event to show/hide these districts from the checkbox in the guided navigation.
-  $('#show_area_id').change(->
+  # Adding event to show/hide ads/districts from the switch in the guided navigation.
+  $('#ads_switch').on('switchChange.bootstrapSwitch', ->
     markers.group.eachLayer (layer) ->
       markers.group.removeLayer layer
     markers.district_group.eachLayer (layer) ->
       markers.district_group.removeLayer layer
 
-    if $('#show_area_id').prop('checked')
-      # Drawing districts in this function, when checkbox is checked.
-      markers.draw_district_areas(_this.locations_district)
-    else
+    if $('#ads_switch').prop('checked')
       markers.place_exact_locations_markers(_this.locations_exact, false)
       markers.place_district_markers(_this.locations_exact, false)
+    else
+      markers.draw_district_areas(_this.locations_district)
+
   ).change()

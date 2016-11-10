@@ -286,7 +286,6 @@ global.markers =
   draw_district_areas: (locations_district) ->
     # Snippet that creates markers, to represent ads tied to district-type location.
     if locations_district != null and Object.keys(locations_district).length > 0
-      markers.district_group = L.featureGroup().addTo(leaf.map)
       drawDistrictsOnMap(locations_district)
 
     return
