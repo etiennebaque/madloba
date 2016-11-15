@@ -121,35 +121,13 @@ resetLocationForm = (districts_bounds, map) ->
 
     if $('.location_type_exact').is(':checked')
       show_exact_address_section()
-    $('.location_type_postal_code').click ->
-      removes_location_layers()
-      show_postal_code_section()
 
-    if $('.location_type_postal_code').is(':checked')
-      show_postal_code_section()
     $('.location_type_district').click ->
       removes_location_layers()
       show_district_section()
 
     if $('.location_type_district').is(':checked')
       show_district_section()
-
-  # "Postal code" functionality: display a help message to inform about what the area will be named,
-  # after the postal code is entered.
-  $('.location_postal_code').focusout ->
-    if $('.location_type_postal_code').is(':checked')
-      area_code_length = undefined
-      postal_code_length = undefined
-      postal_code = $('.location_type_postal_code').val()
-      postal_code_value = $('.location_postal_code').val()
-      if typeof area_code_length == 'undefined' and typeof postal_code_length == 'undefined'
-        $.get '/user/getAreaSettings', {}, (data) ->
-          if data['code'] != null and data['area'] != null
-            # Based on the retrieved settings, we display which area code will be used for this ad.
-            area_code_length = data['area']
-            if postal_code.length >= area_code_length
-              postalCodeArea = postal_code_value.substring(0, area_code_length)
-              $('#postal_code_notification').html '<i>' + gon.vars['area_show_up'] + '\'' + postalCodeArea + '\'</i>'
 
   # Help messages for fields on "Create ad" form
   $('.help-message').popover()
@@ -159,9 +137,7 @@ resetLocationForm = (districts_bounds, map) ->
 # Function used in the location form - show appropriate section when choosing a district-based area
 show_district_section = ->
   $('.exact_location_section').addClass 'hide'
-  $('#postal_code_section').addClass 'hide'
   $('#district_section').removeClass 'hide'
-  $('#map_notification_postal_code_only').addClass 'hide'
   $('#map_notification_exact').addClass 'hide'
   markers.location_marker_type = 'area'
   leaf.map.off 'click', onMapClickLocation
@@ -187,8 +163,6 @@ removes_location_layers = ->
     leaf.map.removeLayer markers.new_marker
   if markers.selected_area != null
     leaf.map.removeLayer markers.selected_area
-  if markers.postal_code_circle != null
-    leaf.map.removeLayer markers.postal_code_circle
 
 # Function used in the location form - show appropriate section when entering an exact address
 show_exact_address_section = ->
@@ -197,15 +171,4 @@ show_exact_address_section = ->
   $('.exact_location_section').removeClass 'hide'
   markers.location_marker_type = 'exact'
   leaf.map.on 'click', onMapClickLocation
-  $('#map_notification_postal_code_only').addClass 'hide'
   $('#map_notification_exact').removeClass 'hide'
-
-# Function used in the location form - show appropriate section when choosing a postal code-based area
-show_postal_code_section = ->
-  $('.exact_location_section').addClass 'hide'
-  $('#district_section').addClass 'hide'
-  $('#postal_code_section').removeClass 'hide'
-  markers.location_marker_type = 'area'
-  leaf.map.on 'click', onMapClickLocation
-  $('#map_notification_postal_code_only').removeClass 'hide'
-  $('#map_notification_exact').addClass 'hide'

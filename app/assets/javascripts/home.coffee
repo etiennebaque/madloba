@@ -1,8 +1,7 @@
 global = this
 
-global.Home = (locations_exact, locations_postal, locations_district, area_geocodes, marker_colors) ->
+global.Home = (locations_exact, locations_district, area_geocodes, marker_colors) ->
   @locations_exact = locations_exact
-  @locations_postal = locations_postal
   @locations_district = locations_district
   @area_geocodes = area_geocodes
   @marker_colors = marker_colors
@@ -43,8 +42,7 @@ Home::putLocationMarkers = ->
   # Displaying markers on map
   markers.place_exact_locations_markers(_this.locations_exact, false)
   markers.place_district_markers(_this.locations_exact, false)
-  # Displaying postal code area circles on map
-  markers.draw_postal_code_areas(_this.locations_postal)
+  
 
   # Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
   # Server side is in home_controller, method showSpecificAds.

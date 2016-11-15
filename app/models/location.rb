@@ -54,21 +54,8 @@ class Location < ActiveRecord::Base
 
 
   # This method creates the final longitudes and latitudes for each area to be displayed on the map.
-  def self.define_area_geocodes (locations_postal, locations_district)
+  def self.define_area_geocodes (locations_district)
     area_geocodes = {}
-    if (locations_postal && locations_postal.length > 0)
-      locations_postal.each do |area, locations|
-        total_latitude = 0.0
-        total_longitude = 0.0
-        count = 0
-        locations.each do |location|
-          total_latitude += location.latitude.to_f
-          total_longitude += location.longitude.to_f
-          count += 1
-        end
-        area_geocodes[area] = {'latitude' => total_latitude / count, 'longitude' => total_longitude / count}
-      end
-    end
 
     if (locations_district && locations_district.length > 0)
       districts = District.where(id: locations_district.keys)

@@ -104,7 +104,6 @@ ActiveRecord::Schema.define(version: 20161015194712) do
     t.integer  "user_id"
     t.integer  "district_id"
     t.string   "loc_type",      limit: 255
-    t.string   "type"
   end
 
   add_index "locations", ["district_id"], name: "index_locations_on_district_id", using: :btree

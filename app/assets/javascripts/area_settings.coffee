@@ -10,22 +10,7 @@ global.AreaSettings = (districts) ->
 AreaSettings::init = (districts) ->
   leaf.districts = districts
 
-  # Show either the "postal code" or the "district" section.
-  $('.area_postal_code').click ->
-    $('#postal_code_section').toggle 0, ->
-
-  if $('.area_postal_code').is(':checked')
-    $('#postal_code_section').css 'display', 'block'
-
-  # Show appropriate section when choosing an area
-  $('.area_district').click ->
-    $('#district_section').toggle 0, ->
-    @drawMapAndDistricts()
-
-  if $('.area_district').is(':checked')
-    $('#district_section').css 'display', 'block'
-    @drawMapAndDistricts()
-
+  @drawMapAndDistricts()
   @initMapEvents()
   @initDrawingTools()
 

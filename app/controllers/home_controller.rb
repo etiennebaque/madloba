@@ -65,6 +65,7 @@ class HomeController < ApplicationController
   # Search result page
   # ------------------
   def results
+
     render 'home/results'
   end
 
@@ -156,10 +157,7 @@ class HomeController < ApplicationController
     @locations_exact = Ad.search(cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
 
     area_types = settings['area_type'].split(',')
-    if area_types.include?('postal')
-      # If the users have the possiblity to post ad linked to a postal code, we get here these type of ads.
-      @locations_postal = Location.search('postal', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
-    end
+
     if area_types.include?('district')
       # If the users have the possiblity to post ad linked to a pre-defined district, we also get here these type of ads.
       @locations_district = Location.search('district', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
@@ -167,7 +165,7 @@ class HomeController < ApplicationController
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
     if area_types.include?('postal') || area_types.include?('district')
-      @area_geocodes = Location.define_area_geocodes(@locations_postal, @locations_district)
+      @area_geocodes = Location.define_area_geocodes(@locations_district)
     end
   end
 
@@ -178,6 +176,7 @@ class HomeController < ApplicationController
     # there was no search beforehand, we need to find the address, based on given latitude and longitude.
     current_location = address_from_geocodes(params[:lat], params[:lon])
     current_location = t('home.default_current_loc') if current_location.blank?
+    current_location
   end
 
   # Creates a hash with the link and the label of one "Useful link",

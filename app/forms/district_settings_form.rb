@@ -1,7 +1,7 @@
 class DistrictSettingsForm < ApplicationForm
   include MapHelper
 
-  DISTRICT_ATTRIBUTES = [:area_type, :postal_code_length, :area_length]
+  DISTRICT_ATTRIBUTES = [:area_type, :area_length]
   attr_accessor(*(DISTRICT_ATTRIBUTES))
 
   def initialize

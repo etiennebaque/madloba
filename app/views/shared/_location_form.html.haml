@@ -32,11 +32,7 @@
         %label
           = form.radio_button :loc_type, 'exact', {checked: true, class: 'location_type_exact'}
           = t('location.definition_exact')
-      - if (area_type) && (area_type.include?'postal')
-        .radio
-          %label
-            = form.radio_button :loc_type, 'postal', {class: 'location_type_postal_code'}
-            = t('location.definition_postal_code')
+
       - if (area_type) && (area_type.include?'district')
         .radio
           %label
@@ -58,17 +54,9 @@
           :data => {:content => t('location.street_name_help'),                                             |
           :placement => 'top', :toggle => 'popover', :trigger => 'hover focus'}                             |
 
-  #postal_code_section
-    / Postal code ('area' type or 'exact' type address)
-    .form-group
-      = form.label :postal_code, t('location.postal_code'), class: 'col-lg-2 control-label'
-      .col-lg-4
-        = form.text_field :postal_code, class: 'form-control location_postal_code', maxlength:'8'
-        %span#postal_code_notification
-
-    / Geocode (latitude and longitude hidden fields)
-    = form.hidden_field :latitude, value: @map_settings[:latitude], class: 'latitude'
-    = form.hidden_field :longitude, value: @map_settings[:longitude], class: 'longitude'
+  / Geocode (latitude and longitude hidden fields)
+  = form.hidden_field :latitude, value: @map_settings[:latitude], class: 'latitude'
+  = form.hidden_field :longitude, value: @map_settings[:longitude], class: 'longitude'
 
   .exact_location_section
     / "Define geocodes & find address on the map" button
@@ -95,8 +83,6 @@
     .col-lg-10
       %span#map_notification_exact.map_notification
         %i= t('admin.location.map_notification_exact')
-      %span#map_notification_postal_code_only.map_notification
-        %i= t('admin.location.map_notification_postal_code')
 
       #map.large
 

@@ -1,7 +1,6 @@
 class User::AdminPanelController < ApplicationController
-  before_action :authenticate_user!, except: [:getAreaSettings]
-  before_filter :requires_user, except: [:getAreaSettings]
-  before_action :postal_code_greater_than_area_code, only: [:update_areasettings]
+  before_action :authenticate_user!
+  before_filter :requires_user
 
   include ApplicationHelper
 
@@ -132,9 +131,9 @@ class User::AdminPanelController < ApplicationController
     if params['area_type']
       area_type_param = params['area_type'].join(',')
     end
+
     settings_hash = {:area_type => area_type_param,
-                     :area_length => params['area_length'],
-                     :postal_code_length => params['postal_code_length']}
+                     :area_length => params['area_length']}
 
     settings_hash.each {|key, value|
       setting_record = Setting.find_by_key(key)
@@ -232,17 +231,6 @@ class User::AdminPanelController < ApplicationController
 
     render json: {'message' => message, 'style' => style}
 
-  end 
-
-  def getAreaSettings
-    code_and_area = Setting.where(key: %w(postal_code_length area_length)).pluck(:value)
-
-    if (code_and_area) && (code_and_area.length == 2)
-      render json: {'code' => code_and_area[0], 'area' => code_and_area[1]}
-    else
-      render json: {'error' => true}
-    end
-
   end
 
   # --------------------------------
@@ -262,20 +250,5 @@ class User::AdminPanelController < ApplicationController
   def social_networks
     %w(facebook twitter pinterest)
   end
-
-
-  def postal_code_greater_than_area_code
-    postal_code_length = params['postal_code_length']
-    area_length = params['area_length']
-
-    if (!(postal_code_length.empty?) && !(area_length.empty?))
-      if postal_code_length.to_i < area_length.to_i
-        flash[:page_error] = t('admin.map_settings.postal_area_error')
-        redirect_to user_mapsettings_path
-      end
-    end
-
-  end
-
 
 end

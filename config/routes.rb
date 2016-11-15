@@ -52,8 +52,6 @@ Madloba::Application.routes.draw do
     post 'areasettings/save_district', to: 'admin_panel#save_district'
     post 'areasettings/delete_districts', to: 'admin_panel#delete_districts'
 
-    get 'getAreaSettings', to: 'admin_panel#getAreaSettings'
-
     get 'ads/:id/edit', to: 'ads#edit'
 
     # This POST method is called when the deletion of a category is made through a form

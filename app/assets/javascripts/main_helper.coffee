@@ -52,26 +52,13 @@ global.leaf =
 
   show_features_on_ad_details_page: (map_settings) ->
     if map_settings['ad_show_is_area'] == true
-      # Postal or district address (area type).
+      # District address (area type).
       # Shows an area icon on the map of the ads show page.
       if map_settings['loc_type'] == 'district'
         # Drawing the district related to this ad.
         district_latlng = leaf.show_single_district(map_settings['popup_message'], map_settings['bounds'])
         leaf.map.setView district_latlng, map_settings['zoom_level']
-      else
-        # Drawing the postal code area circle related to this ad.
-        area = new (L.circle)([
-          leaf.my_lat
-          leaf.my_lng
-        ], 600,
-          color: markers.postal_code_area_color
-          fillColor: markers.postal_code_area_color
-          fillOpacity: 0.3)
-        area.addTo(leaf.map).bindPopup(map_settings['popup_message']).openPopup()
-        leaf.map.setView [
-          leaf.my_lat
-          leaf.my_lng
-        ], map_settings['zoom_level']
+
     else
       # Exact address. Potentially several center markers on the map.
       # Displays a marker for each item tied to the ad we're showing the details of.
@@ -108,17 +95,7 @@ global.leaf =
     return
 
   show_single_marker: (map_settings) ->
-    if map_settings['loc_type'] == 'postal'
-      # Drawing the postal code area circle related to this ad.
-      markers.postal_code_circle = new (L.circle)([
-        leaf.my_lat
-        leaf.my_lng
-      ], 600,
-        color: markers.postal_code_area_color
-        fillColor: markers.postal_code_area_color
-        fillOpacity: 0.3)
-      markers.postal_code_circle.addTo(leaf.map).bindPopup(map_settings['marker_message']).openPopup()
-    else if map_settings['loc_type'] == 'district'
+    if map_settings['loc_type'] == 'district'
       leaf.show_single_district map_settings['marker_message'], map_settings['bounds']
     else
       # we are displaying the center point.
@@ -156,14 +133,12 @@ global.leaf =
 global.markers =
   new_marker: ''
   selected_area: ''
-  postal_code_circle: ''
   group: ''
   postal_group: ''
   district_group: ''
   default_icon: null
   new_icon: null
   marker_colors: null
-  postal_code_area_color: null
   district_color: null
   area_geocodes: null
   location_marker_type: null
@@ -191,7 +166,6 @@ global.markers =
       ])
     markers.location_marker_type = map_settings['clickable_map_marker']
     markers.district_color = map_settings['district_color']
-    markers.postal_code_area_color = map_settings['postal_code_area_color']
     return
 
   place_exact_locations_markers: (locations_exact, is_bouncing_on_add) ->
@@ -265,23 +239,7 @@ global.markers =
         return
       return
     return  
-    
 
-  draw_postal_code_areas: (locations_postal) ->
-    if locations_postal != null and Object.keys(locations_postal).length > 0
-      markers.postal_group = L.featureGroup().addTo(leaf.map)
-      # Adding event to show/hide these districts from the checkbox in the guided navigation.
-      $('#show_area_id').change(->
-        if $('#show_area_id').prop('checked')
-          # Drawing districts in this function, when checkbox is checked.
-          drawPostalCodeAreaOnMap locations_postal
-        else
-          markers.postal_group.eachLayer (layer) ->
-            markers.postal_group.removeLayer layer
-            return
-        return
-      ).change()
-    return
 
   draw_district_areas: (locations_district) ->
     # Snippet that creates markers, to represent ads tied to district-type location.
@@ -336,25 +294,6 @@ global.drawDistrictsOnMap = (locations_district) ->
     return
   return
 
-###*
-# This function draws postal code areas (where at least a current ad is included)
-# on the map of the home page.
-###
-global.drawPostalCodeAreaOnMap = (locations_postal) ->
-  Object.keys(locations_postal).forEach (area_code) ->
-    locations = locations_postal[area_code]
-    popup_html_text = createPopupHtmlArea('In this area (<b>' + area_code + '</b>)' +
-        '<br /><br />', locations, 'postal', area_code)
-    area = L.circle([
-      markers.area_geocodes[area_code]['latitude']
-      markers.area_geocodes[area_code]['longitude']
-    ], 600,
-      color: markers.postal_code_area_color
-      fillColor: markers.postal_code_area_color
-      fillOpacity: 0.3).bindPopup(popup_html_text)
-    markers.postal_group.addLayer area
-    return
-  return
 
 ###*
 # Defines latitude and longitude, after a click on a map (eg on map settings page...).
@@ -375,9 +314,6 @@ global.onMapClickLocation = (e) ->
 global.find_geocodes = ->
   $('#find_geocodes_from_address').button().click ->
     location_type = 'exact'
-    if $('.location_type_postal_code').is(':checked')
-      # We're on the location edit page, and 'Postal code' or 'District' location type is checked.
-      location_type = 'area'
       
     # Ajax call to get geocodes (latitude, longitude) of an exact location defined by address, postal code, city...
     # This call is triggered by "Find this city", "Find this general location" buttons,
@@ -390,7 +326,6 @@ global.find_geocodes = ->
         street_number: $('.location_streetnumber').val()
         address: $('.location_streetname').val()
         city: $('.location_city').val()
-        postal_code: $('.location_postal_code').val()
         province: $('.location_state').val()
         country: $('.location_country').val()
         loc_type: location_type
@@ -549,22 +484,17 @@ createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area
 onMapClick = (e) ->
   if markers.new_marker != ''
     leaf.map.removeLayer markers.new_marker
-  if markers.postal_code_circle != ''
-    leaf.map.removeLayer markers.postal_code_circle
+
   myNewLat = e.latlng.lat
   myNewLng = e.latlng.lng
   # Rounding up latitude and longitude, with 5 decimals
   myNewLat = Math.round(myNewLat * 100000) / 100000
   myNewLng = Math.round(myNewLng * 100000) / 100000
+  
   if markers.location_marker_type == 'exact'
     markers.new_marker = new (L.Marker)(e.latlng, { icon: markers.new_icon }, draggable: false)
     leaf.map.addLayer markers.new_marker
-  else if markers.location_marker_type == 'area'
-    markers.postal_code_circle = new (L.circle)(e.latlng, 600,
-      color: markers.postal_code_area_color
-      fillColor: markers.postal_code_area_color
-      fillOpacity: 0.3)
-    markers.postal_code_circle.addTo leaf.map
+
   myNewLat + ',' + myNewLng
 
 String::capitalizeFirstLetter = ->

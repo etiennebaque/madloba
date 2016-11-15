@@ -33,8 +33,6 @@ setting_list = [
     ['facebook', ''],
     ['twitter', ''],
     ['pinterest', ''],
-    ['postal_code_length', ''],
-    ['area_length', ''],
     ['area_type', ''],
     %w(ad_max_expire 90),
     %w(setup_step 1),
