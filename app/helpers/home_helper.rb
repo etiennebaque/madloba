@@ -31,4 +31,16 @@ module HomeHelper
     return search_action
   end
 
+  def short_description_for(desc)
+    desc.length > 100 ? "#{desc[0..96]}..." : desc
+  end
+
+  def colored_items_for(ad)
+    it = []
+    ad.items.each do |item|
+      it << "<span style=\"color: #{item.category.color_code}\">#{item.name}</span>"
+    end
+    it.join(', ').html_safe
+  end
+
 end

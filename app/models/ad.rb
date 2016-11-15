@@ -80,7 +80,18 @@ class Ad < ActiveRecord::Base
     errors.add(:base, I18n.t('ad.provide_anon_email')) if (self.user_id.nil? && self.anon_email.blank?)
   end
 
+  def action
+    is_giving ? I18n.t('admin.ad.giving_away') : I18n.t('admin.ad.accepting')
+  end
 
+  def action_item
+    act = is_giving ? I18n.t('admin.ad.giving_away') : I18n.t('admin.ad.accepting')
+    self.items.each do |item|
+
+    end
+
+    "#{act} #{self.items.map(&:name).join(', ')}"
+  end
 
   # The publisher of an ad might not want to have their full name publicly displayed.
   # This method defines whether to show the username or the full name (whether it is anonymous or registered user)

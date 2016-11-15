@@ -85,6 +85,7 @@ gem 'faye-websocket'
 gem 'highline'
 
 gem 'font-awesome-sass'
+gem 'will_paginate', '~> 3.1.0'
 
 group :development, :test do
 

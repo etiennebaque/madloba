@@ -6,6 +6,7 @@ Madloba::Application.routes.draw do
   # Home page
   get 'home/index'
   get 'search', to: 'home#index'
+  get 'results', to: 'home#results'
 
   # About page
   get 'about', to: 'home#about'

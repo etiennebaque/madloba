@@ -61,6 +61,13 @@ class HomeController < ApplicationController
     render 'home/about'
   end
 
+  # ------------------
+  # Search result page
+  # ------------------
+  def results
+    render 'home/results'
+  end
+
   # Method called by Ajax call made when marker on the home page is clicked.
   # Returns the HTML code that will create the popup linked to that marker.
   def show_ad_popup
