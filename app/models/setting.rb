@@ -17,10 +17,6 @@ class Setting < ActiveRecord::Base
     Setting.find_by_key(:contact_email)
   end
 
-  def self.area_types
-    Setting.find_by_key(:area_type).value
-  end
-
   def url
     key == 'twitter' ? "http://twitter.com/#{value}" : "http://#{value}"
   end

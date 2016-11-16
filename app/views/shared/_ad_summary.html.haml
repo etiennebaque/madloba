@@ -18,23 +18,26 @@
 .show_ad_paragraph
   %label= t('location.location')+':'
   %span= @ad.location.name_and_or_full_address
-- if @ad.location.loc_type == 'exact'
-  / Left-hand side: Phone number
-  - if @ad.location.website && @ad.location.website != ''
-    .show_ad_paragraph
-      %label= t('location.phone_number')
-      %span= @ad.location.phone_number
-  / Left-hand side: Website
-  - if @ad.location.website && @ad.location.website != ''
-    .show_ad_paragraph
-      %label= t('ad.location_website')
-      %span
-        %a{:href => "#{@ad.location.full_website_url}", :target => "_blank"}= @ad.location.website
-  / Location description
-  - if @ad.location.description && @ad.location.description != ''
-    .show_ad_paragraph
-      %label= t('ad.location_description')
-      %span= simple_format(@ad.location.description)
+
+/ Left-hand side: Phone number
+- if @ad.location.phone_number.present?
+  .show_ad_paragraph
+    %label= t('location.phone_number')
+    %span= @ad.location.phone_number
+
+/ Left-hand side: Website
+- if @ad.location.website.present?
+  .show_ad_paragraph
+    %label= t('ad.location_website')
+    %span
+      %a{:href => "#{@ad.location.full_website_url}", :target => "_blank"}= @ad.location.website
+
+/ Location description
+- if @ad.location.description.present?
+  .show_ad_paragraph
+    %label= t('ad.location_description')
+    %span= simple_format(@ad.location.description)
+
 / Ad description
 .show_ad_paragraph
   %label

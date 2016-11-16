@@ -4,10 +4,6 @@ class Locations::DistrictLocation < Location
     LocationPolicy
   end
 
-  def area?
-    true
-  end
-
   def district?
     true
   end

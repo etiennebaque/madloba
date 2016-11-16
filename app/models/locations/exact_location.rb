@@ -4,10 +4,6 @@ class Locations::ExactLocation < Location
     LocationPolicy
   end
 
-  def exact?
-    true
-  end
-
   def marker_message
     full_name
   end

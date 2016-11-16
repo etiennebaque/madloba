@@ -22,8 +22,6 @@
           = form_tag '/user/areasettings/update', method: :post, id: 'areaSettingFormId', role: 'form' do
 
             #district_section
-              %hr
-              %h4= t('admin.area_settings.area_district')
               -# Map canvas
               .form-group
                 = label_tag 'map-canvas-wrapper', t('admin.area_settings.map_description'), class:'control-label'

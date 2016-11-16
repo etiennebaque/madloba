@@ -63,10 +63,8 @@ class User::LocationsController < ApplicationController
 
     if @location.update(location_params)
 
-      if location_params['loc_type'] != 'district'
-        @location.district = nil
-        @location.save
-      end
+      # @location.district = nil
+      # @location.save
 
       flash[:name] = @location.name
       redirect_to edit_user_location_path
@@ -139,7 +137,7 @@ class User::LocationsController < ApplicationController
   end
 
   def location_params
-    params.require(:location).permit(:name, :street_number, :address, :postal_code, :province, :city, :country, :latitude, :longitude, :phone_number, :website, :description, :loc_type, :district_id)
+    params.require(:location).permit(:name, :street_number, :address, :postal_code, :province, :city, :country, :latitude, :longitude, :phone_number, :website, :description, :district_id)
   end
 
   def simple_location_params

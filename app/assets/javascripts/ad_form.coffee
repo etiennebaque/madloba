@@ -47,8 +47,7 @@ AdForm::init = ->
     $('.selectpicker').selectpicker 'refresh'
 
   # Function call to initialize the location form (Location edit form, all Ad forms).
-  if typeof districts_bounds != 'undefined'
-    resetLocationForm districts_bounds, leaf.map
+  resetLocationForm()
 
   # "Edit ad" form: create message when image needs to be uploaded.
   $('#ad_edit_form').submit ->
@@ -111,9 +110,9 @@ bindTypeaheadToItemSelect = (object) ->
   return
 
 
-# This critical function initializes the location form (Location edit form, Ad forms)
+# This function initializes the location form (Location edit form, Ad forms)
 # as well as all the events tied to its relevant elements.
-resetLocationForm = (districts_bounds, map) ->
+resetLocationForm = ->
   if $('#map').length > 0
     $('.location_type_exact').click ->
       removes_location_layers()
@@ -124,10 +123,10 @@ resetLocationForm = (districts_bounds, map) ->
 
     $('.location_type_district').click ->
       removes_location_layers()
-      show_district_section()
+      show_district_section_only()
 
     if $('.location_type_district').is(':checked')
-      show_district_section()
+      show_district_section_only()
 
   # Help messages for fields on "Create ad" form
   $('.help-message').popover()
@@ -135,13 +134,14 @@ resetLocationForm = (districts_bounds, map) ->
   find_geocodes()
 
 # Function used in the location form - show appropriate section when choosing a district-based area
-show_district_section = ->
+show_district_section_only = ->
   $('.exact_location_section').addClass 'hide'
-  $('#district_section').removeClass 'hide'
   $('#map_notification_exact').addClass 'hide'
-  markers.location_marker_type = 'area'
+  $('.exact_location_section :input').attr('disabled', true)
+  
   leaf.map.off 'click', onMapClickLocation
   $('#map_notification').addClass 'hide'
+  
   # Loading the district matching the default option in the district drop-down box.
   id = $('.district_dropdown option:selected').val()
   name = $('.district_dropdown option:selected').text()
@@ -166,9 +166,9 @@ removes_location_layers = ->
 
 # Function used in the location form - show appropriate section when entering an exact address
 show_exact_address_section = ->
-  $('#postal_code_section').removeClass 'hide'
-  $('#district_section').addClass 'hide'
   $('.exact_location_section').removeClass 'hide'
+  $('.exact_location_section :input').attr('disabled', false)
+
   markers.location_marker_type = 'exact'
   leaf.map.on 'click', onMapClickLocation
   $('#map_notification_exact').removeClass 'hide'

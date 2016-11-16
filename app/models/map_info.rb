@@ -1,7 +1,7 @@
 class MapInfo
   include MapHelper
 
-  ATTRIBUTES = [:marker_message, :loc_type, :is_area, :marker_message, :bounds, :has_center_marker,
+  ATTRIBUTES = [:marker_message, :is_area, :marker_message, :bounds, :has_center_marker,
                          :clickable_map_marker, :areas, :default_marker_icon, :new_marker_icon, :district_color ]
 
   MAP_INFO_ATTRIBUTES = MAP_SERVICE_ATTRIBUTES+SETTINGS_ATTRIBUTES+ATTRIBUTES

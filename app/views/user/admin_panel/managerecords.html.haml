@@ -65,7 +65,6 @@
                   %tr
                     %th ID
                     %th= t('admin.name')
-                    %th= t('admin.exact_area')
                     %th= t('admin.address')
                     %th= t('admin.created_by_user')
                     %th= t('admin.actions')
@@ -74,7 +73,6 @@
                     %tr
                       %td.vert-align= location.id
                       %td.vert-align= location.name
-                      %td.vert-align= location.loc_type
                       - if location.loc_type == 'exact'
                         %td.vert-align
                           = location.street_number
@@ -83,6 +81,7 @@
                         %td.vert-align= location.district.name
                       - else
                         %td.vert-align= location.postal_code
+
                       %td.vert-align= location.user ? location.user.email : t('admin.location.anonymous_user')
                       %td.center
                         %a.btn.btn-info{:href => "/user/locations/#{location.id}/edit"}

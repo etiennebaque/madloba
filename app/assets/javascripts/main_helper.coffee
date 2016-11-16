@@ -328,7 +328,6 @@ global.find_geocodes = ->
         city: $('.location_city').val()
         province: $('.location_state').val()
         country: $('.location_country').val()
-        loc_type: location_type
       cache: false
       beforeSend: (xhr) ->
         xhr.setRequestHeader 'Accept', 'application/json'

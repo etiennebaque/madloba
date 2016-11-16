@@ -9,7 +9,7 @@ class Todo < ActiveRecord::Base
   end
 
   def self.area_types?
-    Setting.area_types.present?
+    District.all.any?
   end
 
   def self.description?

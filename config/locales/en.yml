@@ -103,14 +103,14 @@ en:
     name_username: the username
     name_fullname: the full name
     definition: "Enter your location*:"
-    definition_exact: by exact address
-    definition_postal_code: by postal code
-    definition_district: by district
+    definition_exact: "Give full address"
+    definition_district: "Choose district only"
     street_number: "Street number:"
-    street_name: "Street name*:"
+    street_name: "Street name:"
     street_name_help: For this location, the name of the street, avenue, drive...
-    postal_code: "Postal code*:"
-    district: "District*:"
+    postal_code: "Postal code:"
+    district: "District:"
+    district_blank: "-- Choose a district --"
     define_geocode_button: Locate me on the map
     map: "Map:"
     phone_number: "Phone number:"

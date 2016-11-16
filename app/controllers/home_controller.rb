@@ -125,7 +125,7 @@ class HomeController < ApplicationController
     item_name = params['item']
     location_type = params['type'] # 'postal', or 'district'
     area_value = params['area'] # code postal area code, or district id
-    ads = Ad.joins(:location, :items).where('expire_date >= ? AND locations.loc_type = ? AND items.name = ?', Date.today, location_type, item_name)
+    ads = Ad.joins(:location, :items).where('expire_date >= ? AND  items.name = ?', Date.today, location_type, item_name)
     item = Item.joins(:category).where('items.name = ?', item_name).first
 
     result = {}
@@ -156,17 +156,11 @@ class HomeController < ApplicationController
     # First, we get the ads tied to an exact location.
     @locations_exact = Ad.search(cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
 
-    area_types = settings['area_type'].split(',')
-
-    if area_types.include?('district')
-      # If the users have the possiblity to post ad linked to a pre-defined district, we also get here these type of ads.
-      @locations_district = Location.search('district', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
-    end
+    # If the users have the possiblity to post ad linked to a pre-defined district, we also get here these type of ads.
+    @locations_district = Location.search('district', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
-    if area_types.include?('postal') || area_types.include?('district')
-      @area_geocodes = Location.define_area_geocodes(@locations_district)
-    end
+    @area_geocodes = Location.define_area_geocodes(@locations_district)
   end
 
   def current_location_for(params)

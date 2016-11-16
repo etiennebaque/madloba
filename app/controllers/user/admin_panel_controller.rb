@@ -123,26 +123,9 @@ class User::AdminPanelController < ApplicationController
     authorize :admin, :areasettings?
 
     @map_settings = MapInfo.new(has_center_marker: false, clickable: NOT_CLICKABLE_MAP).to_hash
-    @area_types = Setting.area_types
   end
 
   def update_areasettings
-    area_type_param = ''
-    if params['area_type']
-      area_type_param = params['area_type'].join(',')
-    end
-
-    settings_hash = {:area_type => area_type_param,
-                     :area_length => params['area_length']}
-
-    settings_hash.each {|key, value|
-      setting_record = Setting.find_by_key(key)
-      setting_record.update_attribute(:value, value)
-    }
-
-    # Updating cache value, for area types.
-    Rails.cache.write(CACHE_AREA_TYPE, area_type_param)
-
     flash[:setting_success] = t('admin.map_settings.area_update_success')
     redirect_to user_areasettings_path
 

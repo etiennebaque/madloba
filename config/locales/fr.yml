@@ -117,14 +117,14 @@ fr:
     name_username: Nom d'utilisateur
     name_fullname: Nom complet réel
     definition: "Entrez votre emplacement* :"
-    definition_exact: par adresse exacte
-    definition_postal_code: par code postal
-    definition_district: par zone
+    definition_exact: "Donner adresse complète"
+    definition_district: "Indiquer quartier seulement"
     street_number: "Numéro de rue :"
-    street_name: "Nom de la rue* :"
+    street_name: "Nom de la rue :"
     street_name_help: "Exemple : nom de la rue, avenue, chemin..."
-    postal_code: "Code postal* :"
-    district: "Zone* :"
+    postal_code: "Code postal :"
+    district: "Quartier :"
+    district_blank: "-- Choisissez votre quartier --"
     define_geocode_button: Trouvez-moi sur la carte
     map: "Carte :"
     phone_number: "Numéro de téléphone :"

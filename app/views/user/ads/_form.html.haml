@@ -109,10 +109,10 @@
                 %label
                   - if index == 0
                     = f.radio_button :location_id, loc.id, checked: true
-                    = "#{loc.location_full_name} - #{loc.location_type_address}"
+                    = loc.location_full_name
                   - else
                     = f.radio_button :location_id, loc.id
-                    = "#{loc.location_full_name} - #{loc.location_type_address}"
+                    = loc.location_full_name
 
         .form-group
           .col-lg-6.col-lg-offset-2

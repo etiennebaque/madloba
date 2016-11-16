@@ -3,7 +3,6 @@ class Location < ActiveRecord::Base
   belongs_to :user
   belongs_to :district
 
-  validates_presence_of :address, :postal_code, if: lambda { self.exact? }
   validates_presence_of :latitude, :longitude
   # 'Postal code' field is not necessary only if user chooses a district name instead.
   validates_presence_of :postal_code, if: lambda { self.district == nil}
@@ -43,15 +42,16 @@ class Location < ActiveRecord::Base
       locations = locations.where("ads.is_giving = ?", user_action == 'searching')
     end
 
-    if location_type == 'postal'
-      locations = locations.group_by(&:area)
-    elsif location_type == 'district'
+    if location_type == 'district'
       locations = locations.group_by(&:district_id)
     end
 
     return locations
   end
 
+  def area?
+    address.blank? && postal_code.blank? && street_number.blank?
+  end
 
   # This method creates the final longitudes and latitudes for each area to be displayed on the map.
   def self.define_area_geocodes (locations_district)
@@ -67,27 +67,6 @@ class Location < ActiveRecord::Base
     return area_geocodes
   end
 
-  def area?
-    false
-  end
-
-  def district?
-    false
-  end
-
-  def postal?
-    false
-  end
-
-  def exact?
-    false
-  end
-
-  def area
-    area_length = Setting.find_by_key(:area_length).value.to_i
-    self.postal_code[0..area_length-1]
-  end
-
   def marker_message
   end
 
@@ -97,8 +76,12 @@ class Location < ActiveRecord::Base
 
   def full_address
     a = []
-    a << street_number if street_number.present?
-    a << address
+    if area?
+      a << street_number if street_number.present?
+      a << address
+    else
+      a << district.name
+    end
     a.join(' ')
   end
 
@@ -106,9 +89,11 @@ class Location < ActiveRecord::Base
     name.present? ? "#{name} - #{location_type_address_public}" : location_type_address_public
   end
 
-  # if the location has no name, return "unnamed location"
   def location_full_name
-    name.present? ? name : "(#{I18n.t('admin.location.unnamed')})"
+    full_name = []
+    full_name << name if name.present?
+    full_name << full_address
+    full_name.join(' - ')
   end
 
   def location_type_address
@@ -124,7 +109,7 @@ class Location < ActiveRecord::Base
   end
 
   def clickable_map_for_edit
-    area? ? CLICKABLE_MAP_AREA_MARKER : CLICKABLE_MAP_EXACT_MARKER
+    CLICKABLE_MAP_EXACT_MARKER
   end
 
   def address_geocode_lookup(short: false)
@@ -133,11 +118,6 @@ class Location < ActiveRecord::Base
     this_country = self.country.nil? ? Rails.cache.fetch(CACHE_COUNTRY_NAME) {Setting.find_by_key(:country).value} : self.country
     location_info += [this_city, self.province, this_country]
     location_info.reject{|e| e.to_s.empty?}.join(',')
-  end
-
-  def define_subclass
-    self.type = "Locations::#{self.loc_type.capitalize}Location"
-    self.save
   end
 
 end

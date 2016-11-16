@@ -16,15 +16,4 @@ module User::LocationFormHelper
     return results
   end
 
-  # Returns different available area types.
-  def area_type
-    types = Rails.cache.fetch(CACHE_AREA_TYPE) {Setting.find_by_key('area_type').value}
-    if types
-      types = types.split(',')
-    else
-      types = []
-    end
-    return types
-  end
-
 end
