@@ -65,6 +65,8 @@ class HomeController < ApplicationController
   # Search result page
   # ------------------
   def results
+    @ads = Ad.includes(:location).where(locations: {district_id: params[:dst].to_i})
+               .paginate(page: params[:page] || 1, per_page: 10 )
 
     render 'home/results'
   end
@@ -138,7 +140,7 @@ class HomeController < ApplicationController
       popup_html += "<div class='col-xs-12' style='margin: 15px 0px;'>#{message}</div>"
 
       # "Show details" button
-      button = view_context.link_to(I18n.t('home.show_results'), results_path, class: 'btn btn-info btn-sm no-color' )
+      button = view_context.link_to(I18n.t('home.show_results'), results_path(dst: district_id), class: 'btn btn-info btn-sm no-color' )
       popup_html += "<div class='col-xs-12 button-popup'>#{button}</div>"
 
       popup_html += "</div>"

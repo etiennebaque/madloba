@@ -7,9 +7,12 @@
     %hr
 
     .results
-      - Ad.first(10).each do |ad|
+      - @ads.each do |ad|
         .result
           .ad-title
             = link_to ad.title, ad
           .ad-items= "#{ad.action} #{colored_items_for(ad)}".html_safe
           .ad-description= short_description_for(ad.description)
+
+    .madloba-pagination
+      = will_paginate @ads, container: false
