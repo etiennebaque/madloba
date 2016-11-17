@@ -65,9 +65,11 @@ class HomeController < ApplicationController
   # Search result page
   # ------------------
   def results
-    @ads = Ad.includes(:location).where(locations: {district_id: params[:dst].to_i})
+    id = params[:dst].to_i
+    @ads = Ad.includes(:location).where(locations: {district_id: id})
                .paginate(page: params[:page] || 1, per_page: 10 )
 
+    @district = District.find(id)
     render 'home/results'
   end
 

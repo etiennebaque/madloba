@@ -96,6 +96,8 @@ fr:
     error:
       one: erreur
       more: erreurs
+  results:
+    title: "Annonces pour \"%{district}\" (%{num} résultats)"
   errors:
     oops: "Oups !"
     not_found: 404 Page non trouvée

@@ -82,6 +82,8 @@ en:
     error:
       one: error
       more: errors
+  results:
+    title: "Ads for \"%{district}\" (%{num} results)"
   errors:
     oops: "Oops!"
     not_found: 404 Page Not Found
