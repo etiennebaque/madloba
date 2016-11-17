@@ -73,6 +73,7 @@ Madloba::Application.routes.draw do
 
   # Ajax call to show popup content, when marker clicked on home page.
   get '/showAdPopup', to: 'home#show_ad_popup'
+  get '/showDistrictPopup', to: 'home#show_district_popup'
 
   # Root
   root 'home#index'

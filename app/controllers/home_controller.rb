@@ -72,9 +72,7 @@ class HomeController < ApplicationController
   # Method called by Ajax call made when marker on the home page is clicked.
   # Returns the HTML code that will create the popup linked to that marker.
   def show_ad_popup
-
     popup_html = ''
-
     begin
       ad_id = params['ad_id']
       ad = Ad.joins(:location, {items: :category}).where(id: ad_id).first
@@ -112,6 +110,41 @@ class HomeController < ApplicationController
 
     rescue Exception => e
       puts e
+      # An error occurred, we show a error message.
+      popup_html = "<i>#{t('home.error_get_popup_content')}</i>"
+    end
+
+    render json: popup_html
+  end
+
+  def show_district_popup
+    popup_html = ''
+    begin
+      district_id = params['district_id']
+
+      district = District.includes(locations: {ads: :items}).find(district_id.to_i)
+      ad_count, item_count = 0, 0
+      district.locations.each do |location|
+        ad_count += location.ads.count
+        location.ads.each{|ad| item_count += ad.items.count}
+      end
+
+      popup_html = "<div style='overflow: auto;'>"
+      popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{DISTRICT_COLOR}'>" +
+          "<span>#{district.name}</span></div>"
+
+      # Title
+      message = I18n.t('home.district_popup_message', ad_count: ad_count, item_count: item_count)
+      popup_html += "<div class='col-xs-12' style='margin: 15px 0px;'>#{message}</div>"
+
+      # "Show details" button
+      button = view_context.link_to(I18n.t('home.show_results'), results_path, class: 'btn btn-info btn-sm no-color' )
+      popup_html += "<div class='col-xs-12 button-popup'>#{button}</div>"
+
+      popup_html += "</div>"
+    rescue Exception => e
+      logger.error e.message
+      logger.error e.backtrace.join("\n")
       # An error occurred, we show a error message.
       popup_html = "<i>#{t('home.error_get_popup_content')}</i>"
     end
@@ -157,7 +190,7 @@ class HomeController < ApplicationController
     @locations_exact = Ad.search(cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
 
     # If the users have the possiblity to post ad linked to a pre-defined district, we also get here these type of ads.
-    @locations_district = Location.search('district', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
+    @locations_district = Location.search('district', cat_nav_state, params[:item], selected_item_ids, params[:q])
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
     @area_geocodes = Location.define_area_geocodes(@locations_district)

@@ -39,7 +39,7 @@
   :javascript
     // specific script to render map markers and initialize the sidebar.
     var locations_exact = #{raw @locations_exact.to_json}
-    var locations_district = #{raw @locations_district.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})};
+    var locations_district = #{raw @locations_district.to_json(:include => :ads )};
     var area_geocodes = #{raw @area_geocodes.to_json};
     var marker_colors = #{raw MARKER_COLORS.to_json};
 

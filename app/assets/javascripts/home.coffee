@@ -101,3 +101,9 @@ Home::putLocationMarkers = ->
       markers.draw_district_areas(_this.locations_district)
 
   ).change()
+
+  # Tweak to center clicked marker
+  $('#map').on 'popupopen', ->
+    px = $('#map').project(e.popup._latlng)
+    px.y -= e.popup._container.clientHeight/2
+    map.panTo($('#map').unproject(px),{animate: true})

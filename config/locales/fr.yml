@@ -63,6 +63,8 @@ fr:
     links: Liens
     your_searched_location: Votre recherche
     no_ad: Pas d'annonce en ce moment.
+    district_popup_message: "%{ad_count} annonces postées, présentant %{item_count} objets."
+    show_results: "Voir résultats"
     create_an_ad_now_html: "%{create_new_ad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
     about_page: A propos de %{website_name}
     about_description_1_html: "%{website_name} est un site utilisant %{madloba_link}."

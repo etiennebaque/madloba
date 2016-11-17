@@ -49,6 +49,8 @@ en:
     links: Links
     your_searched_location: Your searched location
     no_ad: There's no ad at the moment.
+    district_popup_message: "%{ad_count} ads posted, featuring %{item_count} items."
+    show_results: "Show results"
     create_an_ad_now_html: "%{create_new_ad} to tell your community what you have to give, or what you're looking for!"
     about_page: About %{website_name}
     about_description_1_html: "%{website_name} is a website powered by %{madloba_link}."

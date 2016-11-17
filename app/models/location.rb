@@ -9,21 +9,18 @@ class Location < ActiveRecord::Base
   validates :latitude , numericality: { greater_than:  -90, less_than:  90 }
   validates :longitude, numericality: { greater_than: -180, less_than: 180 }
 
-  scope :type, -> (location_type) { where('ads.expire_date >= ? AND loc_type = ?', Date.today, location_type)}
+  #scope :type, -> (location_type) { where('ads.expire_date >= ? AND loc_type = ?', Date.today, location_type)}
 
   attr_accessor :country
 
   # This method returns the right query to display relevant markers, on the home page.
-  def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action, ad_id)
+  def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action)
 
-    locations = Location.includes(ads: {items: :category}).type(location_type).references(:ads)
-
-    if ad_id.present?
-      # Search by ad ids when adding ads on home page dynamically, when other user just created an ad (websocket)
-      locations = locations.where('ads.id = ?', ad_id)
-    end
-
+    #locations = Location.includes(ads: {items: :category}).type(location_type).references(:ads)
     if cat_nav_state || searched_item
+
+      locations = Location.includes(ads: {items: :category}).where('ads.expire_date >= ?', Date.today).references(:ads)
+
       if cat_nav_state
         if searched_item
           # We search for ads in relation to the searched item and the current category navigation state.
@@ -35,6 +32,9 @@ class Location < ActiveRecord::Base
       elsif searched_item
         locations = locations.where(items: {id: selected_item_ids})
       end
+
+    else
+      locations = Location.includes(:ads).where('ads.expire_date >= ?', Date.today).references(:ads)
     end
 
     if user_action

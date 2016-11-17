@@ -281,16 +281,40 @@ global.drawDistrictsOnMap = (locations_district) ->
     locations = locations_district[district_id]
     district_name = markers.area_geocodes[district_id]['name']
     district_bounds = markers.area_geocodes[district_id]['bounds']
-    popup_html_text = createPopupHtmlArea(gon.vars['in_this_district'] + ' (<b>' + district_name + '</b>)' +
-        '<br /><br />', locations, 'district', district_id)
+#    popup_html_text = createPopupHtmlArea(gon.vars['in_this_district'] + ' (<b>' + district_name + '</b>)' +
+#        '<br /><br />', locations, 'district', district_id)
 
     # Adding the districts (which have ads) to the home page map.
-    L.geoJson JSON.parse(district_bounds), onEachFeature: (feature, layer) ->
-      layer.bindPopup popup_html_text
+    districtLayer = L.geoJson JSON.parse(district_bounds), onEachFeature: (feature, layer) ->
       layer.setStyle color: markers.district_color
       markers.district_group.addLayer layer
-
       return
+
+    popup_options = {className: 'district-popup'}
+
+    districtLayer.on 'click', (e) ->
+      _layer = e.layer
+      $.ajax
+        url: '/showDistrictPopup'
+        global: false
+        type: 'GET'
+        data:
+          district_id: district_id
+        dataType: 'html'
+        beforeSend: (xhr) ->
+          _layer.bindPopup 'Loading...', popup_options
+          _layer.openPopup()
+          xhr.setRequestHeader 'Accept', 'text/html-partial'
+        success: (data) ->
+          _layer.unbindPopup()
+          _layer.bindPopup data
+          markers.district_group.addLayer _layer
+          _layer.off('click')
+          _layer.openPopup()
+        error: (data) ->
+          _layer.unbindPopup()
+          _layer.bindPopup data
+          _layer.openPopup()
     return
   return
 
@@ -415,11 +439,13 @@ createPopupHtml = (first_sentence, ad, index) ->
 createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area_id) ->
   is_giving_item = false
   is_accepting_item = false
+
   # Adding a explanatory note, before listing items
   explanation = '<i>' + gon.vars['select_item'] + '</i><br /><br />'
   first_sentence = first_sentence + explanation
   people_give = gon.vars['items_given'] + '<br />'
   people_accept = gon.vars['items_searched'] + '<br />'
+
   # This hash will count how many ads we have, per promoted item.
   ad_number_per_item = {}
   # This array will be used to sort items alphabetically.
@@ -444,9 +470,11 @@ createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area
         k++
       j++
     i++
+
   # We now sort all the items we worked with right above
   # (they are appended with marker colors, but still, items get sorted).
   sorted_items = sorted_items.sort()
+
   # Popup for this area is created here.
   idx = 0
   while idx < sorted_items.length
