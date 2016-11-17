@@ -98,7 +98,7 @@
                 = t('ad.image_selected')
 
     -# Ad location section
-    - if current_user.locations.any?
+    - if current_user.present? && current_user.locations.any?
       -# List of all the different locations previously entered by the current user
       #locations_from_list
         .form-group

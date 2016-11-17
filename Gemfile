@@ -10,6 +10,7 @@ gem 'pg'
 # Use Bootstrap and SCSS for stylesheets
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'sass-rails', '>= 3.2'
+gem 'bootstrap-growl-rails'
 
 gem 'sprockets-rails', '2.3.3'
 

@@ -21,10 +21,10 @@ Home::init = ->
   $('.leaflet-control-zoom-out, .leaflet-control-zoom-in').click ->
     $('html, body').animate { scrollTop: 0 }, 0
 
-  # Initialize the right-hand side navigation bar, on the home page, on open it on load.
+  # Initialize the right-hand side navigation bar, on the home page. Open it on load (not on mobile)
   L.control.sidebar('sidebar').addTo(leaf.map)
-  $('#sidebar_category_icon').trigger('click')
-
+  if !$('.navbar-toggle').is(':visible')
+    $('#sidebar_category_icon').trigger('click')
 
 ###*
 # Populates the map with different markers (eg exact address and area-type markers, to show ads)

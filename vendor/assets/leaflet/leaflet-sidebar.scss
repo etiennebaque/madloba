@@ -108,6 +108,10 @@ $move-map-in-xs: true !default;
         @media(min-width:$threshold-sm) {
             left: $tab-size + $sidebar-margins;
         }
+
+        @media(max-width:$threshold-sm - 1px) {
+            left: $tab-size;
+        }
     }
 }
 

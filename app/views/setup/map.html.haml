@@ -45,7 +45,7 @@
               .col-lg-12
                 = submit_tag(t('setup.next'), class: 'btn btn-success pull-right')
                 %a.btn.btn-link.pull-right{:href => "/setup/general"}= t('setup.back')
-#push
+
 / Loading JS scripts
 - content_for :scripts do
   / Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and script that creates the actual map)
