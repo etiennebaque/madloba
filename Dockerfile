@@ -11,5 +11,20 @@ ADD Gemfile.lock $RAILS_ROOT/Gemfile.lock
 RUN bundle install
 
 ADD . $RAILS_ROOT
+EXPOSE 3000
 
-RUN RAILS_ENV=production bundle exec rake assets:precompile --trace
+RUN bundle exec rails server -b 0.0.0.0
+# CMD [startup.sh]
+
+#In startup.sh
+#
+#if $APP_ENV = 'production'
+#  - use nginx
+#else
+#  - use thin
+#
+#Set up the environment variable in docker-compose (in environment node)
+#Run the export command (to set the values for env vars )before running docker-compose.
+#
+#db:seed_fu in startup.sh
+#
