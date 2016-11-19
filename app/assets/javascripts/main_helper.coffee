@@ -233,7 +233,30 @@ global.markers =
           layer.getBounds().getCenter(),
           icon: marker_icon,
           bounceOnAdd: false)
-      
+
+        popup = L.popup().setContent('Loading...')
+        marker.bindPopup popup
+
+        marker.on 'click', (e) ->
+          marker_popup = e.target.getPopup()
+          $.ajax
+            url: '/showAreaPopup'
+            global: false
+            type: 'GET'
+            data:
+              area_id: area_id
+              area_marker: true
+            dataType: 'html'
+            beforeSend: (xhr) ->
+              xhr.setRequestHeader 'Accept', 'text/html-partial'
+            success: (data) ->
+              marker_popup.setContent data
+              marker_popup.update()
+            error: (data) ->
+              marker_popup.setContent data
+              marker_popup.update()
+          return
+
         markers.group.addLayer marker
       
         return
@@ -300,6 +323,7 @@ global.drawAreasOnMap = (locations_area) ->
         type: 'GET'
         data:
           area_id: area_id
+          area_marker: false
         dataType: 'html'
         beforeSend: (xhr) ->
           _layer.bindPopup 'Loading...', popup_options

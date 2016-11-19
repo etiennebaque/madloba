@@ -50,7 +50,7 @@ class Location < ActiveRecord::Base
   end
 
   def area?
-    address.blank? && postal_code.blank? && street_number.blank?
+    area.present? && (address.blank? || postal_code.blank?)
   end
 
   # This method creates the final longitudes and latitudes for each area to be displayed on the map.
@@ -76,13 +76,11 @@ class Location < ActiveRecord::Base
   end
 
   def full_address
+    return area.name if area?
+
     a = name.present? ? [name, '-'] : []
-    if area?
-      a << area.name
-    else
-      a << street_number if street_number.present?
-      a << "#{address}, #{postal_code}"
-    end
+    a << street_number if street_number.present?
+    a << "#{address}, #{postal_code}"
     a.join(' ')
   end
 
