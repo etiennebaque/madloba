@@ -43,9 +43,4 @@ module HomeHelper
     it.join(', ').html_safe
   end
 
-  def result_icon_for(location)
-    dot_circle_icon = "<i class='fa fa-dot-circle-o' aria-hidden='true'></i>"
-    map_marker_icon = "<i class='fa fa-map-marker' aria-hidden='true'></i>"
-  end
-
 end

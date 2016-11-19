@@ -11,7 +11,7 @@
         .result
           .ad-title= link_to ad.title, ad
           .ad-address
-            %i.fa{class: ad.location.area? ? 'fa-dot-circle-o' : 'fa-map-marker'}
+            %i.fa{class: ad.location.area? ? Location::AREA_ADDRESS_ICON : Location::EXACT_ADDRESS_ICON}
             = ad.location.full_address
 
           .ad-items= "#{ad.action} #{colored_items_for(ad)}".html_safe

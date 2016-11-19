@@ -13,6 +13,9 @@ class Location < ActiveRecord::Base
 
   attr_accessor :country
 
+  EXACT_ADDRESS_ICON = 'fa-home'
+  AREA_ADDRESS_ICON = 'fa-dot-circle-o'
+
   # This method returns the right query to display relevant markers, on the home page.
   def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action)
 

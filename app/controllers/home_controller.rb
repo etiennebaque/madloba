@@ -65,7 +65,7 @@ class HomeController < ApplicationController
   # Search result page
   # ------------------
   def results
-    id = params[:dst].to_i
+    id = params[:area].to_i
     @ads = Ad.includes(:location).where(locations: {area_id: id})
                .paginate(page: params[:page] || 1, per_page: 10 )
 
@@ -139,15 +139,15 @@ class HomeController < ApplicationController
         end
       end
 
-      dot_circle_icon = "<i class='fa fa-dot-circle-o' aria-hidden='true'></i>"
-      map_marker_icon = "<i class='fa fa-map-marker' aria-hidden='true'></i>"
+      dot_circle_icon = "<i class='fa #{Location::AREA_ADDRESS_ICON}' aria-hidden='true'></i>"
+      exact_marker_icon = "<i class='fa #{Location::EXACT_ADDRESS_ICON} aria-hidden='true'></i>"
 
       if area_marker
         message_key = 'area_marker_message'
         icon_html = "#{dot_circle_icon}&nbsp;"
       else
         message_key = 'area_popup_message'
-        icon_html = "#{map_marker_icon}&nbsp;#{dot_circle_icon}&nbsp;"
+        icon_html = "#{exact_marker_icon}&nbsp;#{dot_circle_icon}&nbsp;"
       end
 
       message = I18n.t("home.#{message_key}", ad_count: ad_count, item_count: item_count)
@@ -162,7 +162,7 @@ class HomeController < ApplicationController
       popup_html += "<div class='col-xs-12' style='margin: 15px 0px;'>#{message}</div>"
 
       # "Show details" button
-      button = view_context.link_to(I18n.t('home.show_results'), results_path(dst: area_id), class: 'btn btn-info btn-sm no-color' )
+      button = view_context.link_to(I18n.t('home.show_results'), results_path(area: area_id), class: 'btn btn-info btn-sm no-color' )
       popup_html += "<div class='col-xs-12 button-popup'>#{button}</div>"
 
       popup_html += "</div>"

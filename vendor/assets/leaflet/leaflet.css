@@ -134,9 +134,13 @@
 .leaflet-right .leaflet-control {
 	float: right;
 	}
-.leaflet-top .leaflet-control {
-	margin-top: 10px;
+#map.home .leaflet-top .leaflet-control {
+	margin-top: 60px;
 	}
+#map:not(.home) .leaflet-top .leaflet-control {
+	margin-top: 10px;
+}
+
 .leaflet-bottom .leaflet-control {
 	margin-bottom: 10px;
 	}
