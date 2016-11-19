@@ -65,7 +65,7 @@ fr:
     links: Liens
     your_searched_location: Votre recherche
     no_ad: Pas d'annonce en ce moment.
-    district_popup_message: "%{ad_count} annonces postées, présentant %{item_count} objets."
+    area_popup_message: "%{ad_count} annonces postées, présentant %{item_count} objets."
     show_results: "Voir résultats"
     create_an_ad_now_html: "%{create_new_ad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
     about_page: A propos de %{website_name}
@@ -92,14 +92,14 @@ fr:
     footer_new_powered_by_html: Nouveau site délivré par %{madloba_link}
     footer_theme_html: "Thème : %{charisma}"
     log_out: Déconnexion
-    show_ads_districts: Afficher quartiers
+    show_ads_areas: Afficher quartiers
     show_details: Afficher détails
     error_get_popup_content: "Désolé, une erreur s'est produite. Veuillez réessayer plus tard."
     error:
       one: erreur
       more: erreurs
   results:
-    title: "Annonces pour \"%{district}\" (%{num} résultats)"
+    title: "Annonces pour \"%{area}\" (%{num} résultats)"
   errors:
     oops: "Oups !"
     not_found: 404 Page non trouvée
@@ -124,13 +124,13 @@ fr:
     name_fullname: Nom complet réel
     definition: "Entrez votre emplacement* :"
     definition_exact: "Donner adresse complète"
-    definition_district: "Indiquer quartier seulement"
+    definition_area: "Indiquer quartier seulement"
     street_number: "Numéro de rue :"
     street_name: "Nom de la rue :"
     street_name_help: "Exemple : nom de la rue, avenue, chemin..."
     postal_code: "Code postal :"
-    district: "Quartier :"
-    district_blank: "-- Choisissez votre quartier --"
+    area: "Quartier :"
+    area_blank: "-- Choisissez votre quartier --"
     define_geocode_button: Trouvez-moi sur la carte
     map: "Carte :"
     phone_number: "Numéro de téléphone :"
@@ -140,7 +140,7 @@ fr:
     not_found: Emplacement non trouvé
     not_found_descr1: "Cet emplacement n'a pas pu être trouvé, basé sur les informations entrées."
     not_found_descr2: "Mais ce n'est pas grave ! Cliquez sur la carte pour sélectionner cet emplacement."
-    district_help: Choisissez la zone où cet emplacement se trouve.
+    area_help: Choisissez la zone où cet emplacement se trouve.
   ad:
     new_ad: Nouvelle annonce
     once_created_expire_html: une fois créée, votre annonce sera publiée pour <strong>%{max_expire_days} jours</strong>.
@@ -424,16 +424,16 @@ fr:
       title: Paramètres des zones
       define_area: Une zone peut être définie
       by_postal_code: par un code postal
-      by_district: par un quartier
+      by_area: par un quartier
       area_postal_code: Zone définie par un code postal
-      area_district: Zone définie par un quartier
+      area_area: Zone définie par un quartier
       map_description: Utilisez cette carte pour dessiner, éditer ou supprimer les limites des différents quartiers de votre ville.
-      error_update_district: Erreur lors de la mise à jour des quartiers. Veuillez réessayer plus tard.
-      error_save_district: Erreur lors de la sauvegarde de ce quartier. Veuillez réessayer plus tard.
-      district_name: Nom du quartier
+      error_update_area: Erreur lors de la mise à jour des quartiers. Veuillez réessayer plus tard.
+      error_save_area: Erreur lors de la sauvegarde de ce quartier. Veuillez réessayer plus tard.
+      area_name: Nom du quartier
       latitude: Latitude
       longitude: Longitude
-      add_district: Ajouter quartier
+      add_area: Ajouter quartier
       save_success: Le nouveau quartier a été sauvegardé.
       save_name_success: Le nom de ce quartier a été mis à jour.
       error_name_save: Erreur lors de la mise à jour du nom de ce quartier. Veuillez réessayer plus tard.
@@ -561,11 +561,11 @@ fr:
     start_typing_item: Tapez le nom d'un objet
     no_result_create_item: Pas de résultat. Choisissez 'Créer un nouvel objet'.
     new_image_uploading: Téléchargement de la nouvelle image en cours. Veulliez attendre svp.
-    type_district_name: "Tapez le nom d'un quartier ici..."
+    type_area_name: "Tapez le nom d'un quartier ici..."
     latitude: (latitude)
     longitude: (longitude)
     add: Ajouter
-    updating_district: Mise à jour de la liste de quartiers...
+    updating_area: Mise à jour de la liste de quartiers...
     area_show_up: "Cette zone apparaitra en tant que :"
     searching_location: Recherche d'un emplacement...
     update: Mettre à jour
@@ -585,7 +585,7 @@ fr:
     last: Dernier
     filtered_from: filtrés sur
     total_entries: enregistrements au total
-    in_this_district: Dans ce quartier
+    in_this_area: Dans ce quartier
     ads_for: Annonces pour
     items_given: "Objets donnés :"
     items_searched: "Objets recherchés :"
@@ -595,14 +595,14 @@ fr:
     cancel: Cancel
     delete_last_point_drawn: Delete last point drawn
     delete_last_point: Delete last point
-    draw_district: Draw a district
-    start_draw_district: Click to start drawing district.
-    continue_draw_district: Click to continue drawing district.
-    click_first_point: Click first point to close this district.
+    draw_area: Draw an area
+    start_draw_area: Click to start drawing area.
+    continue_draw_area: Click to continue drawing area.
+    click_first_point: Click first point to close this area.
     error: "Error:"
-    edges_cannot: "district edges cannot cross!"
-    edit_district: Edit district
-    no_edit_district: No district to edit
-    delete_district: Delete district
-    no_district_delete: No district to delete
-    drag_handles: Drag handles to edit district boundaries. Click on the area to edit its name.
+    edges_cannot: "area edges cannot cross!"
+    edit_area: Edit area
+    no_edit_area: No area to edit
+    delete_area: Delete area
+    no_area_delete: No area to delete
+    drag_handles: Drag handles to edit area boundaries. Click on the area to edit its name.

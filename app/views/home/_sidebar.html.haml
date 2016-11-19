@@ -69,7 +69,7 @@
                         %i{:class => "fa #{category.icon}", :style => "color: #{category.marker_color_hexacode};"}
                       %span.guided-nav-label= category.name
 
-            - switch_data = {size: 'small', handle_width: '65', on_text: 'Ads', off_text: 'Districts'}
+            - switch_data = {size: 'small', handle_width: '65', on_text: 'Ads', off_text: 'Areas'}
             %input#ads_switch{type: 'checkbox', checked: true, data: switch_data}
 
           - else

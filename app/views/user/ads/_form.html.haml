@@ -31,30 +31,30 @@
     -# Name to use (it user is not anonymous)
     - if user_signed_in?
       .form-group
-        = f.label :is_username_used, t('location.name_to_use'), class: 'col-lg-2 control-label'
+        = f.label :username_used, t('location.name_to_use'), class: 'col-lg-2 control-label'
         .col-lg-6
           .radio
             %label
-              = f.radio_button :is_username_used, true, checked: true
+              = f.radio_button :username_used, true, checked: true
               = t('location.name_username')
               (#{current_user.username})
           .radio
             %label
-              = f.radio_button :is_username_used, false
+              = f.radio_button :username_used, false
               = t('location.name_fullname')
               (#{current_user.first_name} #{current_user.last_name})
 
     -# Giving / Accepting items
     .form-group
-      = f.label :is_giving, t('location.ad_action'), class: 'col-lg-2 control-label'
+      = f.label :giving, t('location.ad_action'), class: 'col-lg-2 control-label'
       .col-lg-6
         .radio
           %label
-            = f.radio_button :is_giving, true, checked: true
+            = f.radio_button :giving, true, checked: true
             = t('location.ad_action_giving')
         .radio
           %label
-            = f.radio_button :is_giving, false
+            = f.radio_button :giving, false
             = t('location.ad_action_accepting')
 
     -# Items

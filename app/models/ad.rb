@@ -16,8 +16,8 @@ class Ad < ActiveRecord::Base
   accepts_nested_attributes_for :items
 
   validates_presence_of :title, :description
-  validates :is_giving, inclusion: [true, false]
-  validates :is_username_used, inclusion: [true, false]
+  validates :giving, inclusion: [true, false]
+  validates :username_used, inclusion: [true, false]
   validate :has_items
   validate :has_anon_name_and_email
   validates_size_of :image, maximum: 5.megabytes
@@ -49,7 +49,7 @@ class Ad < ActiveRecord::Base
 
       if user_action
         # If the user is searching for items, we need to show the posted ads, which people give stuff away.
-        ads = ads.where("ads.is_giving = ?", user_action == 'searching')
+        ads = ads.where("ads.giving = ?", user_action == 'searching')
       end
 
     end
@@ -66,7 +66,7 @@ class Ad < ActiveRecord::Base
     if current_user
       self.save
     else
-      self.is_username_used = false
+      self.username_used = false
       self.save_with_captcha
     end
   end
@@ -81,11 +81,11 @@ class Ad < ActiveRecord::Base
   end
 
   def action
-    is_giving ? I18n.t('admin.ad.giving_away') : I18n.t('admin.ad.accepting')
+    giving? ? I18n.t('admin.ad.giving_away') : I18n.t('admin.ad.accepting')
   end
 
   def action_item
-    act = is_giving ? I18n.t('admin.ad.giving_away') : I18n.t('admin.ad.accepting')
+    act = giving? ? I18n.t('admin.ad.giving_away') : I18n.t('admin.ad.accepting')
     self.items.each do |item|
 
     end
@@ -98,7 +98,7 @@ class Ad < ActiveRecord::Base
   def username_to_display
     if self.is_anonymous
       self.anon_name
-    elsif self.is_username_used
+    elsif self.username_used?
       self.user.username
     else
       "#{self.user.first_name} #{self.user.last_name}"

@@ -5,7 +5,7 @@
 :javascript
   // Initializing a bunch of variables used over the map-related scripts.
   var map_settings = #{raw @map_settings.to_json};
-  var district_marker = "#{asset_url 'madloba_logo_green_40.png'}";
+  var area_marker = "#{asset_url 'madloba_logo_green_40.png'}";
 
   if ($("#map").length > 0){
     initLeafletMap(map_settings);

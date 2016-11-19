@@ -45,7 +45,7 @@
                     - @ads.each do |ad|
                       %tr
                         %td.vert-align= ad.title
-                        %td.vert-align= ad.is_giving ? t('admin.ad.giving_away') : t('admin.ad.accepting')
+                        %td.vert-align= ad.giving ? t('admin.ad.giving_away') : t('admin.ad.accepting')
                         %td.vert-align= ad.item_list
                         %td.vert-align
                           %a{:href => "/user/locations/#{ad.location.id}/edit"}= ad.location.full_address

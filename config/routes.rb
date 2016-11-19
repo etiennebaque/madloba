@@ -40,17 +40,17 @@ Madloba::Application.routes.draw do
     get 'manageusers', to: 'admin_panel#manageusers'
     get 'manageads', to: 'admin_panel#manageads'
     get 'manageprofile', to: 'users#edit'
-    get 'generalsettings', to: 'admin_panel#generalsettings'
-    get 'mapsettings', to: 'admin_panel#mapsettings'
-    get 'areasettings', to: 'admin_panel#areasettings'
+    get 'generalsettings', to: 'admin_panel#general_settings'
+    get 'mapsettings', to: 'admin_panel#map_settings'
+    get 'areasettings', to: 'admin_panel#area_settings'
 
-    post 'mapsettings/update', to: 'admin_panel#update_mapsettings'
-    post 'generalsettings/update', to: 'admin_panel#update_generalsettings'
-    post 'areasettings/update', to: 'admin_panel#update_areasettings'
-    post 'areasettings/update_districts', to: 'admin_panel#update_districts'
-    post 'areasettings/update_district_name', to: 'admin_panel#update_district_name'
-    post 'areasettings/save_district', to: 'admin_panel#save_district'
-    post 'areasettings/delete_districts', to: 'admin_panel#delete_districts'
+    post 'mapsettings/update', to: 'admin_panel#update_map_settings'
+    post 'generalsettings/update', to: 'admin_panel#update_general_settings'
+    post 'areasettings/update', to: 'admin_panel#update_area_settings'
+    post 'areasettings/update_areas', to: 'admin_panel#update_areas'
+    post 'areasettings/update_area_name', to: 'admin_panel#update_area_name'
+    post 'areasettings/save_area', to: 'admin_panel#save_area'
+    post 'areasettings/delete_areas', to: 'admin_panel#delete_areas'
 
     get 'ads/:id/edit', to: 'ads#edit'
 
@@ -68,12 +68,12 @@ Madloba::Application.routes.draw do
   # Ajax call to get the list of items, for autocomplete, when searching for an item, or creating/editing an ad.
   get '/getItems', to: 'application#get_items'
 
-  # Ajax call to show the ads related to 1 type of item and to 1 district/area.
+  # Ajax call to show the ads related to 1 type of item and to 1 area/area.
   get '/showSpecificAds', to: 'home#showSpecificAds'
 
   # Ajax call to show popup content, when marker clicked on home page.
   get '/showAdPopup', to: 'home#show_ad_popup'
-  get '/showDistrictPopup', to: 'home#show_district_popup'
+  get '/showAreaPopup', to: 'home#show_area_popup'
 
   # Root
   root 'home#index'

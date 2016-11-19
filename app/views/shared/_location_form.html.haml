@@ -1,6 +1,6 @@
 - content_for :head do
   :javascript
-    var districts_bounds = #{raw districts_bounds.to_json};
+    var areas_bounds = #{raw areas_bounds.to_json};
 
 .nested-fields.location-fields{:style => "padding-bottom: 10px;"}
   - if current_user.present? && current_user.locations.any? && %w(new create edit update).include?(action_name) && !@is_location_edit
@@ -34,8 +34,8 @@
           = t('location.definition_exact')
       .radio
         %label
-          = radio_button_tag 'loc_type', 'district', false, class: 'location_type_district'
-          = t('location.definition_district')
+          = radio_button_tag 'loc_type', 'area', false, class: 'location_type_area'
+          = t('location.definition_area')
 
   .exact_location_section
     / Street number
@@ -72,13 +72,13 @@
         %span#findGeocodeLoaderId
         %span#geocodeErrorMessageId
 
-  #district_section
-    / List of district ('area' type address only)
+  #area_section
+    / List of area ('area' type address only)
     .form-group
-      = form.label :district_id, t('location.district'), class: 'col-lg-2 control-label'
+      = form.label :area_id, t('location.area'), class: 'col-lg-2 control-label'
       .col-lg-3
-        = form.select :district_id, options_for_select(districts, form.object.district_id), {include_blank: t('location.district_blank')}, {class: 'form-control help-message district_dropdown',
-          :data => {:content => t('location.district_help'), :placement => 'top',
+        = form.select :area_id, options_for_select(areas, form.object.area_id), {include_blank: t('location.area_blank')}, {class: 'form-control help-message area_dropdown',
+          :data => {:content => t('location.area_help'), :placement => 'top',
           :toggle => 'popover', :trigger => 'hover focus'}}
 
   / Canvas for the map

@@ -10,7 +10,7 @@
       %li
         = t('mailer.ad_title')
         \: #{@ad.title}
-      - if @ad['is_giving']
+      - if @ad['giving']
         %li
           = t('ad.giving_away')
           \:

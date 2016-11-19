@@ -121,20 +121,20 @@ resetLocationForm = ->
     if $('.location_type_exact').is(':checked')
       show_exact_address_section()
 
-    $('.location_type_district').click ->
+    $('.location_type_area').click ->
       removes_location_layers()
-      show_district_section_only()
+      show_area_section_only()
 
-    if $('.location_type_district').is(':checked')
-      show_district_section_only()
+    if $('.location_type_area').is(':checked')
+      show_area_section_only()
 
   # Help messages for fields on "Create ad" form
   $('.help-message').popover()
   # Initializing onclick event on "Locate me on the map" button, when looking for location on map, based on user input.
   find_geocodes()
 
-# Function used in the location form - show appropriate section when choosing a district-based area
-show_district_section_only = ->
+# Function used in the location form - show appropriate section when choosing an area-based area
+show_area_section_only = ->
   $('.exact_location_section').addClass 'hide'
   $('#map_notification_exact').addClass 'hide'
   $('.exact_location_section :input').attr('disabled', true)
@@ -142,22 +142,22 @@ show_district_section_only = ->
   leaf.map.off 'click', onMapClickLocation
   $('#map_notification').addClass 'hide'
   
-  # Loading the district matching the default option in the district drop-down box.
-  id = $('.district_dropdown option:selected').val()
-  name = $('.district_dropdown option:selected').text()
-  bounds = districts_bounds[id]
-  leaf.show_single_district name, bounds
-  # Location form: when choosing a district from the drop-down box, we need to display the area on the map underneath.
-  $('#district_section').on('change', '.district_dropdown', ->
-    id = $('.district_dropdown option:selected').val()
-    name = $('.district_dropdown option:selected').text()
-    bounds = districts_bounds[id]
-    leaf.show_single_district name, bounds
+  # Loading the area matching the default option in the area drop-down box.
+  id = $('.area_dropdown option:selected').val()
+  name = $('.area_dropdown option:selected').text()
+  bounds = areas_bounds[id]
+  leaf.show_single_area name, bounds
+  # Location form: when choosing an area from the drop-down box, we need to display the area on the map underneath.
+  $('#area_section').on('change', '.area_dropdown', ->
+    id = $('.area_dropdown option:selected').val()
+    name = $('.area_dropdown option:selected').text()
+    bounds = areas_bounds[id]
+    leaf.show_single_area name, bounds
   ).change()
 
 
 # On the location form, removes layers representing a previously clicked exact location, postal code area,
-# or selected district.
+# or selected area.
 removes_location_layers = ->
   if markers.new_marker != null
     leaf.map.removeLayer markers.new_marker

@@ -8,7 +8,7 @@ class User::AdsController < ApplicationController
   include ApplicationHelper
 
   def show
-    @ad = Ad.includes(:location => :district).where(id: params['id']).first!
+    @ad = Ad.includes(:location => :area).where(id: params['id']).first!
     authorize @ad
 
     # Redirection to the home page, if this ad has expired, expect if current user owns this ad.
@@ -74,7 +74,7 @@ class User::AdsController < ApplicationController
   end
 
   def edit
-    @ad = Ad.includes(:location => :district).where(id: params[:id]).first!
+    @ad = Ad.includes(:location => :area).where(id: params[:id]).first!
     authorize @ad
     get_map_settings_for_ad
   end
@@ -112,10 +112,10 @@ class User::AdsController < ApplicationController
   end
 
   def ad_params
-    params.require(:ad).permit(:title, :description, :is_username_used, :location_id, :is_giving,
+    params.require(:ad).permit(:title, :description, :username_used, :location_id, :giving,
                                :image, :image_cache, :remove_image, :anon_name, :anon_email, :captcha, :captcha_key,
                                :ad_items_attributes => [:id, :item_id, :_destroy, :item_attributes => [:id, :name, :category_id, :_destroy] ],
-                               :location_attributes => [:id, :user_id, :name, :street_number, :address, :province, :city, :district_id, :type, :latitude, :longitude, :phone_number, :website, :description])
+                               :location_attributes => [:id, :user_id, :name, :street_number, :address, :province, :city, :area_id, :type, :latitude, :longitude, :phone_number, :website, :description])
   end
 
   # This method is called when a user replies and sends a message to another user, who posted an ad.

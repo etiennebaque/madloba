@@ -133,12 +133,12 @@ class ApplicationController < ActionController::Base
 
     if typeahead_type == PREFETCH_AD_ITEMS
       # 'prefetch_ad_items' type - prefetching data when item typed in main navigation search bar.
-      matched_items = Ad.joins(:items).where(is_giving: search_type=='searching').pluck(:name).uniq
+      matched_items = Ad.joins(:items).where(giving: search_type=='searching').pluck(:name).uniq
     elsif typeahead_type == PREFETCH_ALL_ITEMS
       matched_items = Item.all.pluck(:id, :name)
     elsif typeahead_type == SEARCH_IN_AD_ITEMS
       # 'search_ad_items' type - used on Ajax call, when item typed in main navigation search bar.
-      matched_items = Ad.joins(:items).where('items.name LIKE ? and ads.is_giving = ?', "%#{params[:item].downcase}%", search_type=='searching').pluck(:name).uniq
+      matched_items = Ad.joins(:items).where('items.name LIKE ? and ads.giving = ?', "%#{params[:item].downcase}%", search_type=='searching').pluck(:name).uniq
     elsif typeahead_type == SEARCH_IN_ALL_ITEMS
       # 'search_items' type - used on Ajax call, when item typed in drop-down box, when adding items,
       # in ads#edit and ads#new pages.

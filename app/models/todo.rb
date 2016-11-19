@@ -9,7 +9,7 @@ class Todo < ActiveRecord::Base
   end
 
   def self.area_types?
-    District.all.any?
+    Area.all.any?
   end
 
   def self.description?

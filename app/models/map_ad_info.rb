@@ -11,7 +11,7 @@ class MapAdInfo < MapInfo
     items = ad.items
 
     if self.ad_show_is_area
-      # Getting information whether it's a postal code area, or a district
+      # Getting information whether it's a postal code area, or an area
       self.popup_message = items.map(&:capitalized_name).join(', ')
     else
       # Getting information as an exact address location

@@ -127,15 +127,15 @@ AdSocket::refresh_map = (new_map_info, new_nav_state) ->
     markers.group.clearLayers()
   if markers.postal_group != ''
     markers.postal_group.clearLayers()
-  if markers.district_group != ''
-    markers.district_group.clearLayers()
+  if markers.area_group != ''
+    markers.area_group.clearLayers()
   # Then we place the different markers and areas.
   if new_map_info['markers'] != ''
     markers.place_exact_locations_markers new_map_info['markers'], false
   if new_map_info['postal'] != ''
     drawPostalCodeAreaOnMap new_map_info['postal']
-  if new_map_info['district'] != ''
-    drawDistrictsOnMap new_map_info['district']
+  if new_map_info['area'] != ''
+    drawAreaOnMap new_map_info['area']
   return
 
 # This method allows to update the URL without redirecting, when a category is selected.

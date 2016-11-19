@@ -1,21 +1,21 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :district do |f|
+  factory :area do |f|
     f.name { Faker::Name.title }
 
-    factory :district_with_locations do
-      after_create do |district|
-        create(:location, district: district)
+    factory :area_with_locations do
+      after_create do |area|
+        create(:location, area: area)
       end
     end
   end
 
-  factory :invalid_district, parent: :district do |f|
+  factory :invalid_area, parent: :area do |f|
     f.name nil
   end
 
-  factory :new_district do |f|
+  factory :new_area do |f|
     f.name nil
   end
 end

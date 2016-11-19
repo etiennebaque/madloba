@@ -1,8 +1,8 @@
 global = this
 
-global.Home = (locations_exact, locations_district, area_geocodes, marker_colors) ->
+global.Home = (locations_exact, locations_area, area_geocodes, marker_colors) ->
   @locations_exact = locations_exact
-  @locations_district = locations_district
+  @locations_area = locations_area
   @area_geocodes = area_geocodes
   @marker_colors = marker_colors
 
@@ -35,16 +35,16 @@ Home::putLocationMarkers = ->
   # when they get too close to one another, as the user zooms out, on the home page.
   markers.group = new (L.markerClusterGroup)(
     spiderfyDistanceMultiplier: 2)
-  markers.district_group = L.featureGroup().addTo(leaf.map)
+  markers.area_group = L.featureGroup().addTo(leaf.map)
 
   markers.area_geocodes = _this.area_geocodes
   markers.marker_colors = _this.marker_colors
   # Displaying markers on map
   markers.place_exact_locations_markers(_this.locations_exact, false)
-  markers.place_district_markers(_this.locations_exact, false)
+  markers.place_area_markers(_this.locations_exact, false)
   
 
-  # Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
+  # Event to trigger when click on a link in an area popup, on the home page map. Makes a modal window appear.
   # Server side is in home_controller, method showSpecificAds.
   $('#map').on 'click', '.area_link', ->
     input = $(this).attr('id').split('|')
@@ -87,18 +87,18 @@ Home::putLocationMarkers = ->
   if searched_location_marker != ''
     searched_location_marker.openPopup()
 
-  # Adding event to show/hide ads/districts from the switch in the guided navigation.
+  # Adding event to show/hide ads/areas from the switch in the guided navigation.
   $('#ads_switch').on('switchChange.bootstrapSwitch', ->
     markers.group.eachLayer (layer) ->
       markers.group.removeLayer layer
-    markers.district_group.eachLayer (layer) ->
-      markers.district_group.removeLayer layer
+    markers.area_group.eachLayer (layer) ->
+      markers.area_group.removeLayer layer
 
     if $('#ads_switch').prop('checked')
       markers.place_exact_locations_markers(_this.locations_exact, false)
-      markers.place_district_markers(_this.locations_exact, false)
+      markers.place_area_markers(_this.locations_exact, false)
     else
-      markers.draw_district_areas(_this.locations_district)
+      markers.draw_area_areas(_this.locations_area)
 
   ).change()
 

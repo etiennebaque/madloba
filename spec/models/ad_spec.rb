@@ -45,8 +45,8 @@ RSpec.describe Ad, :type => :model do
     expect(FactoryGirl.build(:ad, description: nil)).not_to be_valid
   end
 
-  it 'is invalid without a is_giving boolean' do
-    expect(FactoryGirl.build(:ad, is_giving: nil)).not_to be_valid
+  it 'is invalid without a giving boolean' do
+    expect(FactoryGirl.build(:ad, giving: nil)).not_to be_valid
   end
 
   it 'is invalid with an image too big (more than 5MB)' do

@@ -3,7 +3,7 @@
 \:
 
 \- #{t('mailer.ad_title')}: #{@ad.title}
-- if @ad.is_giving
+- if @ad.giving
   \- #{t('ad.giving_away')}:
   - @ad.items.each do |item|
     \- #{item.name}

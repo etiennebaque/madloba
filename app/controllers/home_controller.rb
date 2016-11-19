@@ -66,10 +66,10 @@ class HomeController < ApplicationController
   # ------------------
   def results
     id = params[:dst].to_i
-    @ads = Ad.includes(:location).where(locations: {district_id: id})
+    @ads = Ad.includes(:location).where(locations: {area_id: id})
                .paginate(page: params[:page] || 1, per_page: 10 )
 
-    @district = District.find(id)
+    @area = Area.find(id)
     render 'home/results'
   end
 
@@ -97,7 +97,7 @@ class HomeController < ApplicationController
       popup_html += "<div class='col-xs-12' style='margin-top: 15px;'>#{view_context.link_to(ad.title, ad)}</div>"
 
       # Action (giving away or searching for) + item name
-      ad_action = ad.is_giving ? t('ad.giving_away') : t('ad.accepting')
+      ad_action = ad.giving ? t('ad.giving_away') : t('ad.accepting')
       item_name = "<span style='color:" + item.category.color_code + "';><strong>" + item.name + "</strong></span>";
       and_other_items = number_of_items > 1 ? "and #{number_of_items - 1} other item(s)" : ''
 
@@ -121,28 +121,28 @@ class HomeController < ApplicationController
     render json: popup_html
   end
 
-  def show_district_popup
+  def show_area_popup
     popup_html = ''
     begin
-      district_id = params['district_id']
+      area_id = params['area_id']
 
-      district = District.includes(locations: {ads: :items}).find(district_id.to_i)
+      area = Area.includes(locations: {ads: :items}).find(area_id.to_i)
       ad_count, item_count = 0, 0
-      district.locations.each do |location|
+      area.locations.each do |location|
         ad_count += location.ads.count
         location.ads.each{|ad| item_count += ad.items.count}
       end
 
       popup_html = "<div style='overflow: auto;'>"
-      popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{DISTRICT_COLOR}'>" +
-          "<span>#{district.name}</span></div>"
+      popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{Area::AREA_COLOR}'>" +
+          "<span>#{area.name}</span></div>"
 
       # Title
-      message = I18n.t('home.district_popup_message', ad_count: ad_count, item_count: item_count)
+      message = I18n.t('home.area_popup_message', ad_count: ad_count, item_count: item_count)
       popup_html += "<div class='col-xs-12' style='margin: 15px 0px;'>#{message}</div>"
 
       # "Show details" button
-      button = view_context.link_to(I18n.t('home.show_results'), results_path(dst: district_id), class: 'btn btn-info btn-sm no-color' )
+      button = view_context.link_to(I18n.t('home.show_results'), results_path(dst: area_id), class: 'btn btn-info btn-sm no-color' )
       popup_html += "<div class='col-xs-12 button-popup'>#{button}</div>"
 
       popup_html += "</div>"
@@ -156,12 +156,12 @@ class HomeController < ApplicationController
     render json: popup_html
   end
 
-  # Ajax call to show the ads related to 1 type of item and to 1 district/area.
+  # Ajax call to show the ads related to 1 type of item and to 1 area/area.
   # Call made when click on link, in area marker popup.
   def showSpecificAds
     item_name = params['item']
-    location_type = params['type'] # 'postal', or 'district'
-    area_value = params['area'] # code postal area code, or district id
+    location_type = params['type'] # 'postal', or 'area'
+    area_value = params['area'] # code postal area code, or area id
     ads = Ad.joins(:location, :items).where('expire_date >= ? AND  items.name = ?', Date.today, location_type, item_name)
     item = Item.joins(:category).where('items.name = ?', item_name).first
 
@@ -169,9 +169,9 @@ class HomeController < ApplicationController
     if location_type == 'postal'
       ads = ads.where('locations.postal_code LIKE ?', "#{area_value}%")
       result['area_name'] = area_value
-    elsif location_type == 'district'
-      ads = ads.where('locations.district_id = ?', area_value)
-      result['area_name'] = District.find(area_value).name
+    elsif location_type == 'area'
+      ads = ads.where('locations.area_id = ?', area_value)
+      result['area_name'] = Area.find(area_value).name
     end
 
     if item
@@ -181,7 +181,7 @@ class HomeController < ApplicationController
 
     result['ads'] = []
     ads.each do |ad|
-      result['ads'] << {id: ad.id, title: ad.title, is_giving: ad.is_giving}
+      result['ads'] << {id: ad.id, title: ad.title, giving: ad.giving}
     end
 
     render json: result
@@ -193,11 +193,11 @@ class HomeController < ApplicationController
     # First, we get the ads tied to an exact location.
     @locations_exact = Ad.search(cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
 
-    # If the users have the possiblity to post ad linked to a pre-defined district, we also get here these type of ads.
-    @locations_district = Location.search('district', cat_nav_state, params[:item], selected_item_ids, params[:q])
+    # If the users have the possiblity to post ad linked to a pre-defined area, we also get here these type of ads.
+    @locations_area = Location.search('area', cat_nav_state, params[:item], selected_item_ids, params[:q])
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
-    @area_geocodes = Location.define_area_geocodes(@locations_district)
+    @area_geocodes = Location.define_area_geocodes(@locations_area)
   end
 
   def current_location_for(params)

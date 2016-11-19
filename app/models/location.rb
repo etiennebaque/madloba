@@ -1,11 +1,11 @@
 class Location < ActiveRecord::Base
   has_many :ads, dependent: :destroy
   belongs_to :user
-  belongs_to :district
+  belongs_to :area
 
   validates_presence_of :latitude, :longitude
-  # 'Postal code' field is not necessary only if user chooses a district name instead.
-  validates_presence_of :postal_code, if: lambda { self.district == nil}
+  # 'Postal code' field is not necessary only if user chooses an area name instead.
+  validates_presence_of :postal_code, if: lambda { self.area == nil}
   validates :latitude , numericality: { greater_than:  -90, less_than:  90 }
   validates :longitude, numericality: { greater_than: -180, less_than: 180 }
 
@@ -39,11 +39,11 @@ class Location < ActiveRecord::Base
 
     if user_action
       # If the user is searching for items, we need to show the posted ads, which people give stuff away.
-      locations = locations.where("ads.is_giving = ?", user_action == 'searching')
+      locations = locations.where("ads.giving = ?", user_action == 'searching')
     end
 
-    if location_type == 'district'
-      locations = locations.group_by(&:district_id)
+    if location_type == 'area'
+      locations = locations.group_by(&:area_id)
     end
 
     return locations
@@ -54,13 +54,13 @@ class Location < ActiveRecord::Base
   end
 
   # This method creates the final longitudes and latitudes for each area to be displayed on the map.
-  def self.define_area_geocodes (locations_district)
+  def self.define_area_geocodes (locations_area)
     area_geocodes = {}
 
-    if (locations_district && locations_district.length > 0)
-      districts = District.where(id: locations_district.keys)
-      districts.each do |district|
-        area_geocodes[district.id] = {'name' => district.name, 'bounds' => district.bounds}
+    if (locations_area && locations_area.length > 0)
+      areas = Area.where(id: locations_area.keys)
+      areas.each do |area|
+        area_geocodes[area.id] = {'name' => area.name, 'bounds' => area.bounds}
       end
     end
 
@@ -78,10 +78,10 @@ class Location < ActiveRecord::Base
   def full_address
     a = name.present? ? [name, '-'] : []
     if area?
-      a << district.name
+      a << area.name
     else
       a << street_number if street_number.present?
-      a << address
+      a << "#{address}, #{postal_code}"
     end
     a.join(' ')
   end

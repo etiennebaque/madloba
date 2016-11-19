@@ -1,13 +1,16 @@
-class District < ActiveRecord::Base
+class Area < ActiveRecord::Base
 
   has_many :locations
 
   validates :name, presence: true
 
+  # Color used to draw areas and postal code areas on map
+  AREA_COLOR = '#6ca585'
+
   def self.bounds
-    districts = District.all.select(:id, :name, :bounds)
+    areas = Area.all.select(:id, :name, :bounds)
     result = []
-    districts.each do |d|
+    areas.each do |d|
       if d.bounds.present?
         bounds = JSON.parse(d.bounds)
         bounds['properties']['id'] = d.id

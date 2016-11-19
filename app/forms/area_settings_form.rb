@@ -1,22 +1,22 @@
-class DistrictSettingsForm < ApplicationForm
+class AreaSettingsForm < ApplicationForm
   include MapHelper
 
   def initialize
     #init_map_settings
-    #init_districts
+    #init_areas
 
     #self.page = 'areasettings'
   end
 
-  def init_districts
-    districts = District.all.select(:id, :name, :bounds)
-    self.districts = []
-    districts.each do |d|
+  def init_areas
+    areas = Area.all.select(:id, :name, :bounds)
+    self.areas = []
+    areas.each do |d|
       if d.bounds.present?
         bounds = JSON.parse(d.bounds)
         bounds['properties']['id'] = d.id
         bounds['properties']['name'] = d.name
-        self.districts.push(bounds)
+        self.areas.push(bounds)
       end
     end
   end

@@ -9,7 +9,7 @@ class User::LocationsController < ApplicationController
   include ApplicationHelper
 
   def show
-    @location = Location.includes(:ads => :item).includes(:district).where(id: params[:id]).first!
+    @location = Location.includes(:ads => :item).includes(:area).where(id: params[:id]).first!
     authorize @location
     @map_settings = MapLocationInfo.new(location: @location)
     render 'location'
@@ -39,7 +39,7 @@ class User::LocationsController < ApplicationController
   end
 
   def edit
-    @location = Location.includes(ads: :items).includes(:district).where(id: params[:id]).first!
+    @location = Location.includes(ads: :items).includes(:area).where(id: params[:id]).first!
 
     authorize @location
     @map_settings = MapLocationInfo.new(location: @location, clickable: @location.clickable_map_for_edit).to_hash
@@ -63,7 +63,7 @@ class User::LocationsController < ApplicationController
 
     if @location.update(location_params)
 
-      # @location.district = nil
+      # @location.area = nil
       # @location.save
 
       flash[:name] = @location.name
@@ -137,11 +137,11 @@ class User::LocationsController < ApplicationController
   end
 
   def location_params
-    params.require(:location).permit(:name, :street_number, :address, :postal_code, :province, :city, :country, :latitude, :longitude, :phone_number, :website, :description, :district_id)
+    params.require(:location).permit(:name, :street_number, :address, :postal_code, :province, :city, :country, :latitude, :longitude, :phone_number, :website, :description, :area_id)
   end
 
   def simple_location_params
-    params.permit(:name, :street_number, :address, :postal_code, :province, :city, :country, :loc_type)
+    params.permit(:name, :street_number, :address, :postal_code, :province, :city, :country)
   end
 
   # Updates the relevant ads marker_info (jsonb)

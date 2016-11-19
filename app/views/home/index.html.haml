@@ -5,7 +5,7 @@
 #map.home.sidebar-map
 
 
--# Modal popup that shows several ads promoting the same item, in a specific district/area
+-# Modal popup that shows several ads promoting the same item, in a specific area/area
 #adsModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "basicModal", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content
@@ -39,11 +39,11 @@
   :javascript
     // specific script to render map markers and initialize the sidebar.
     var locations_exact = #{raw @locations_exact.to_json}
-    var locations_district = #{raw @locations_district.to_json(:include => :ads )};
+    var locations_area = #{raw @locations_area.to_json(:include => :ads )};
     var area_geocodes = #{raw @area_geocodes.to_json};
     var marker_colors = #{raw MARKER_COLORS.to_json};
 
-    var homePage = new Home(locations_exact, locations_district, area_geocodes, marker_colors);
+    var homePage = new Home(locations_exact, locations_area, area_geocodes, marker_colors);
 
     // Initialize the Web socket object
     #{render 'shared/initialize_websocket.js'}

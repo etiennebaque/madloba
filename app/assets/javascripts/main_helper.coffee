@@ -16,7 +16,7 @@ global.leaf =
   my_lat: ''
   my_lng: ''
   drawn_items: null
-  districts: null
+  areas: null
   searched_address: ''
 
   init: (map_settings) ->
@@ -52,12 +52,12 @@ global.leaf =
 
   show_features_on_ad_details_page: (map_settings) ->
     if map_settings['ad_show_is_area'] == true
-      # District address (area type).
+      # area address (area type).
       # Shows an area icon on the map of the ads show page.
-      if map_settings['loc_type'] == 'district'
-        # Drawing the district related to this ad.
-        district_latlng = leaf.show_single_district(map_settings['popup_message'], map_settings['bounds'])
-        leaf.map.setView district_latlng, map_settings['zoom_level']
+      if map_settings['loc_type'] == 'area'
+        # Drawing the area related to this ad.
+        area_latlng = leaf.show_single_area(map_settings['popup_message'], map_settings['bounds'])
+        leaf.map.setView area_latlng, map_settings['zoom_level']
 
     else
       # Exact address. Potentially several center markers on the map.
@@ -95,8 +95,8 @@ global.leaf =
     return
 
   show_single_marker: (map_settings) ->
-    if map_settings['loc_type'] == 'district'
-      leaf.show_single_district map_settings['marker_message'], map_settings['bounds']
+    if map_settings['loc_type'] == 'area'
+      leaf.show_single_area map_settings['marker_message'], map_settings['bounds']
     else
       # we are displaying the center point.
       center_marker = L.marker([
@@ -110,15 +110,15 @@ global.leaf =
     return
 
 
-  show_single_district: (district_name, bounds) ->
-    # Before adding the selected district, we need to remove all the currently displayed districts.
+  show_single_area: (area_name, bounds) ->
+    # Before adding the selected area, we need to remove all the currently displayed areas.
     if markers.selected_area != ''
       leaf.map.removeLayer markers.selected_area
     latlng = ''
-    # Drawing the selecting district on the map.
+    # Drawing the selecting area on the map.
     L.geoJson JSON.parse(bounds), onEachFeature: (feature, layer) ->
-      layer.bindPopup district_name
-      layer.setStyle color: markers.district_color
+      layer.bindPopup area_name
+      layer.setStyle color: markers.area_color
       leaf.map.addLayer layer
       latlng = layer.getBounds().getCenter()
       layer.openPopup latlng
@@ -135,11 +135,11 @@ global.markers =
   selected_area: ''
   group: ''
   postal_group: ''
-  district_group: ''
+  area_group: ''
   default_icon: null
   new_icon: null
   marker_colors: null
-  district_color: null
+  area_color: null
   area_geocodes: null
   location_marker_type: null
   center_marker: null
@@ -165,7 +165,7 @@ global.markers =
         -34
       ])
     markers.location_marker_type = map_settings['clickable_map_marker']
-    markers.district_color = map_settings['district_color']
+    markers.area_color = map_settings['area_color']
     return
 
   place_exact_locations_markers: (locations_exact, is_bouncing_on_add) ->
@@ -220,13 +220,13 @@ global.markers =
       i++
     return
 
-  place_district_markers: (location_districts) ->
-    Object.keys(locations_district).forEach (district_id) ->
-      district_bounds = markers.area_geocodes[district_id]['bounds']
-      L.geoJson JSON.parse(district_bounds), onEachFeature: (feature, layer) ->
-      # Adding district marker
+  place_area_markers: (location_areas) ->
+    Object.keys(locations_area).forEach (area_id) ->
+      area_bounds = markers.area_geocodes[area_id]['bounds']
+      L.geoJson JSON.parse(area_bounds), onEachFeature: (feature, layer) ->
+      # Adding area marker
         marker_icon = L.icon({
-          iconUrl: district_marker
+          iconUrl: area_marker
         })
       
         marker = L.marker(
@@ -241,10 +241,10 @@ global.markers =
     return  
 
 
-  draw_district_areas: (locations_district) ->
-    # Snippet that creates markers, to represent ads tied to district-type location.
-    if locations_district != null and Object.keys(locations_district).length > 0
-      drawDistrictsOnMap(locations_district)
+  draw_area_areas: (locations_area) ->
+    # Snippet that creates markers, to represent ads tied to area-type location.
+    if locations_area != null and Object.keys(locations_area).length > 0
+      drawAreasOnMap(locations_area)
 
     return
 
@@ -263,7 +263,7 @@ global.initLeafletMap = (map_settings) ->
 
   if map_settings['has_center_marker'] == true
     if $('#show_ad_page').length > 0
-      # Showing markers, district area or postal code area on the ad details page (ads#show)
+      # Showing markers or an area on the ad details page (ads#show)
       leaf.show_features_on_ad_details_page map_settings
     else
       # Center single marker on the map
@@ -273,33 +273,33 @@ global.initLeafletMap = (map_settings) ->
 
 
 ###*
-# This function draws districts (where at least one current ad is included)
+# This function draws areas (where at least one current ad is included)
 # on the map of the home page.
 ###
-global.drawDistrictsOnMap = (locations_district) ->
-  Object.keys(locations_district).forEach (district_id) ->
-    locations = locations_district[district_id]
-    district_name = markers.area_geocodes[district_id]['name']
-    district_bounds = markers.area_geocodes[district_id]['bounds']
-#    popup_html_text = createPopupHtmlArea(gon.vars['in_this_district'] + ' (<b>' + district_name + '</b>)' +
-#        '<br /><br />', locations, 'district', district_id)
+global.drawAreasOnMap = (locations_area) ->
+  Object.keys(locations_area).forEach (area_id) ->
+    locations = locations_area[area_id]
+    area_name = markers.area_geocodes[area_id]['name']
+    area_bounds = markers.area_geocodes[area_id]['bounds']
+#    popup_html_text = createPopupHtmlArea(gon.vars['in_this_area'] + ' (<b>' + area_name + '</b>)' +
+#        '<br /><br />', locations, 'area', area_id)
 
-    # Adding the districts (which have ads) to the home page map.
-    districtLayer = L.geoJson JSON.parse(district_bounds), onEachFeature: (feature, layer) ->
-      layer.setStyle color: markers.district_color
-      markers.district_group.addLayer layer
+    # Adding the areas (which have ads) to the home page map.
+    areaLayer = L.geoJson JSON.parse(area_bounds), onEachFeature: (feature, layer) ->
+      layer.setStyle color: markers.area_color
+      markers.area_group.addLayer layer
       return
 
-    popup_options = {className: 'district-popup'}
+    popup_options = {className: 'area-popup'}
 
-    districtLayer.on 'click', (e) ->
+    areaLayer.on 'click', (e) ->
       _layer = e.layer
       $.ajax
-        url: '/showDistrictPopup'
+        url: '/showAreaPopup'
         global: false
         type: 'GET'
         data:
-          district_id: district_id
+          area_id: area_id
         dataType: 'html'
         beforeSend: (xhr) ->
           _layer.bindPopup 'Loading...', popup_options
@@ -308,7 +308,7 @@ global.drawDistrictsOnMap = (locations_district) ->
         success: (data) ->
           _layer.unbindPopup()
           _layer.bindPopup data
-          markers.district_group.addLayer _layer
+          markers.area_group.addLayer _layer
           _layer.off('click')
           _layer.openPopup()
         error: (data) ->
@@ -409,7 +409,7 @@ createPopupHtml = (first_sentence, ad, index) ->
   markerColor = marker_colors[item['category']['marker_color']]
   itemName = item['name'].capitalizeFirstLetter()
   popup_item_name = '<span style=\'color:' + markerColor + '\';><strong>' + itemName + '</strong></span>'
-  if ad['is_giving'] == true
+  if ad['giving'] == true
     second_sentence = gon.vars['items_given'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
   else
     second_sentence = gon.vars['items_searched'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
@@ -431,13 +431,13 @@ createPopupHtml = (first_sentence, ad, index) ->
 
 ###*
 # Creates the text to be shown in a marker popup,
-# giving details about the selected area-type location (postal or district).
+# giving details about the selected area-type location (postal or area).
 # @param first_sentence
 # @param location
 # @returns Popup text content.
 ###
 createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area_id) ->
-  is_giving_item = false
+  giving_item = false
   is_accepting_item = false
 
   # Adding a explanatory note, before listing items
@@ -465,7 +465,7 @@ createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area
         else
           ad_number_per_item[item_marker_color] = {}
           ad_number_per_item[item_marker_color]['number'] = 1
-          ad_number_per_item[item_marker_color]['is_giving'] = ad['is_giving']
+          ad_number_per_item[item_marker_color]['giving'] = ad['giving']
           sorted_items.push item_marker_color
         k++
       j++
@@ -487,17 +487,17 @@ createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area
     link_id = item_name + '|' + area_type + '|' + area_id
     itemNumberAds = popup_item_name + ' (' + number_of_ads + ')'
     popup_ad_link = '- <a href=\'#\' class=\'area_link\' id=\'' + link_id + '\'>' + itemNumberAds + '</a>'
-    if ad_number_per_item[this_marker_color]['is_giving'] == true
-      is_giving_item = true
+    if ad_number_per_item[this_marker_color]['giving'] == true
+      giving_item = true
       people_give = people_give + popup_ad_link + '<br />'
     else
       is_accepting_item = true
       people_accept = people_accept + popup_ad_link + '<br />'
     idx++
   # Putting all the sections of the popup together.
-  if !is_giving_item and is_accepting_item
+  if !giving_item and is_accepting_item
     first_sentence = first_sentence + people_accept
-  else if !is_accepting_item and is_giving_item
+  else if !is_accepting_item and giving_item
     first_sentence = first_sentence + people_give
   else
     first_sentence = first_sentence + people_give + '<br />' + people_accept

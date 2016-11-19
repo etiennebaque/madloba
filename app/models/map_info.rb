@@ -2,7 +2,7 @@ class MapInfo
   include MapHelper
 
   ATTRIBUTES = [:marker_message, :is_area, :marker_message, :bounds, :has_center_marker,
-                         :clickable_map_marker, :areas, :default_marker_icon, :new_marker_icon, :district_color ]
+                         :clickable_map_marker, :areas, :default_marker_icon, :new_marker_icon, :area_color ]
 
   MAP_INFO_ATTRIBUTES = MAP_SERVICE_ATTRIBUTES+SETTINGS_ATTRIBUTES+ATTRIBUTES
 
@@ -15,7 +15,7 @@ class MapInfo
 
     self.default_marker_icon = ActionController::Base.helpers.asset_path('images/marker-icon.png')
     self.new_marker_icon = ActionController::Base.helpers.asset_path('images/marker-icon-red.png')
-    self.district_color = DISTRICT_COLOR
+    self.area_color = Area::AREA_COLOR
     self.has_center_marker = has_center_marker
     self.clickable_map_marker = clickable
   end
