@@ -110,6 +110,7 @@ group :development, :test do
   gem 'spring-commands-cucumber'
 
   gem 'haml-rails'
+  gem 'pry-byebug'
 end
 
 group :test do
