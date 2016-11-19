@@ -33,6 +33,8 @@ fr:
             image:
               too_long: "ne doit pas dépasser 5 Mo"
   home:
+    yes: Oui
+    no: Non
     home: Accueil
     page: Page d'accueil
     user_panel: Votre profil
@@ -264,7 +266,7 @@ fr:
     todo_list: A faire
     name: Nom
     address: Adresse/Code postal/Zone
-    exact_area: Type d'emplacement
+    exact_area: "Quartier seulement ?"
     ads: Annonces
     ad_settings: Paramètres pour annonces
     location_name: emplacement

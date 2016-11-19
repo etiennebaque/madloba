@@ -19,6 +19,8 @@ en:
             image:
               too_long: must be less than 5MB
   home:
+    yes: Yes
+    no: No
     home: Home
     page: Home page
     user_panel: User panel
@@ -250,7 +252,7 @@ en:
     todo_list: To-do list
     name: Name
     address: Address/Postal code/District
-    exact_area: Location type
+    exact_area: Area only?
     ads: Ads
     ad_settings: Ad settings
     location_name: location

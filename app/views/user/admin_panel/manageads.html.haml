@@ -48,7 +48,7 @@
                         %td.vert-align= ad.is_giving ? t('admin.ad.giving_away') : t('admin.ad.accepting')
                         %td.vert-align= ad.item_list
                         %td.vert-align
-                          %a{:href => "/user/locations/#{ad.location.id}/edit"}= ad.location.location_full_name
+                          %a{:href => "/user/locations/#{ad.location.id}/edit"}= ad.location.full_address
                         - if ad.expire_date.to_s != '2100-01-01'
                           %td.vert-align= ad.expire_date
                         - else
@@ -80,9 +80,9 @@
                   %tbody
                     - @locations.each do |location|
                       %tr
-                        %td.vert-align= location.location_full_name
-                        %td.vert-align= location.area? ? t('admin.location.area') : t('admin.location.exact_address')
-                        %td.vert-align= location.location_type_address
+                        %td.vert-align= location.full_address
+                        %td.vert-align= location.area? ? t('home.yes') : t('home.no')
+                        %td.vert-align= location.full_address
                         %td
                           - if location.ads.length == 0
                             %i= t('admin.location.no_ad_tied')

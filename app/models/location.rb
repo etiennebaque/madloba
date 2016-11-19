@@ -68,6 +68,7 @@ class Location < ActiveRecord::Base
   end
 
   def marker_message
+    full_name
   end
 
   def full_name
@@ -75,33 +76,14 @@ class Location < ActiveRecord::Base
   end
 
   def full_address
-    a = []
+    a = name.present? ? [name, '-'] : []
     if area?
+      a << district.name
+    else
       a << street_number if street_number.present?
       a << address
-    else
-      a << district.name
     end
     a.join(' ')
-  end
-
-  def name_and_or_full_address
-    name.present? ? "#{name} - #{location_type_address_public}" : location_type_address_public
-  end
-
-  def location_full_name
-    full_name = []
-    full_name << name if name.present?
-    full_name << full_address
-    full_name.join(' - ')
-  end
-
-  def location_type_address
-  end
-
-  # On the ads/show page, we're not necessarily showing the full address,
-  # depending of how the location type.
-  def location_type_address_public
   end
 
   def full_website_url

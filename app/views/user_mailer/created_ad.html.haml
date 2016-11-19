@@ -19,7 +19,7 @@
               %li= item.name
         %li
           = t('mailer.where_pick_up')
-          \: #{@ad.location.name_and_or_full_address}
+          \: #{@ad.location.full_address}
       - else
         %li
           = t('ad.accepting')
@@ -29,7 +29,7 @@
               %li= item.name
         %li
           = t('mailer.where_to_drop')
-          \: #{@ad.location.name_and_or_full_address}
+          \: #{@ad.location.full_address}
     %p
       = t('mailer.description')
       \: #{simple_format(@ad.description)}

@@ -17,7 +17,7 @@
 / Left-hand side: Location
 .show_ad_paragraph
   %label= t('location.location')+':'
-  %span= @ad.location.name_and_or_full_address
+  %span= @ad.location.full_address
 
 / Left-hand side: Phone number
 - if @ad.location.phone_number.present?

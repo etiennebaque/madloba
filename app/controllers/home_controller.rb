@@ -104,7 +104,7 @@ class HomeController < ApplicationController
       popup_html += "<div class='col-xs-12' style='margin-top: 15px;'>#{ad_action} #{item_name} #{and_other_items}</div>"
 
       # Location full address
-      popup_html += "<div class='col-xs-12' style='margin-bottom: 15px;'>#{ad.location.name_and_or_full_address}</div>"
+      popup_html += "<div class='col-xs-12' style='margin-bottom: 15px;'>#{ad.location.full_address}</div>"
 
       # "Show details" button
       button = view_context.link_to(t('home.show_details'), ad, class: 'btn btn-info btn-sm no-color' )
