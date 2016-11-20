@@ -176,7 +176,7 @@ class HomeController < ApplicationController
     render json: popup_html
   end
 
-  # Ajax call to show the ads related to 1 type of item and to 1 area/area.
+  # Ajax call to show the ads related to 1 type of item and to 1 area
   # Call made when click on link, in area marker popup.
   def showSpecificAds
     item_name = params['item']

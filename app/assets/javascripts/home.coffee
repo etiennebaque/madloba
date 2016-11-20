@@ -101,11 +101,3 @@ Home::putLocationMarkers = ->
       markers.draw_area_areas(_this.locations_area)
 
   ).change()
-
-  # Tweak to center clicked marker
-  leaf.map.on 'popupopen', (e) ->
-    px = leaf.map.project(e.popup._latlng)
-    px.y -= e.popup._container.clientHeight/2 + 160
-    if !$('.sidebar').hasClass('collapsed')
-      px.x -= 140
-    leaf.map.panTo(leaf.map.unproject(px),{animate: true})

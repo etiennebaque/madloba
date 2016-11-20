@@ -203,6 +203,7 @@ global.markers =
             success: (data) ->
               marker_popup.setContent data
               marker_popup.update()
+              adjustPopupPosition(marker_popup, 'exact')
             error: (data) ->
               marker_popup.setContent data
               marker_popup.update()
@@ -246,6 +247,7 @@ global.markers =
             success: (data) ->
               marker_popup.setContent data
               marker_popup.update()
+              adjustPopupPosition(marker_popup, 'area')
             error: (data) ->
               marker_popup.setContent data
               marker_popup.update()
@@ -327,6 +329,7 @@ global.drawAreasOnMap = (locations_area) ->
           markers.area_group.addLayer _layer
           _layer.off('click')
           _layer.openPopup()
+          adjustPopupPosition(_layer.getPopup(), 'area')
         error: (data) ->
           _layer.unbindPopup()
           _layer.bindPopup data
@@ -410,6 +413,19 @@ global.createNotification = (message, alert) ->
     placement:
       from: 'top'
       align: 'right'
+
+# Center popup based on its content, by positioning the clicked maker correctly.
+global.adjustPopupPosition = (popup, popup_type) ->
+  console.log(popup)
+  px = leaf.map.project(popup.getLatLng())
+  offset = 0
+  if popup_type == 'exact'
+    offset = 100
+  px.y -= popup._container.clientHeight/2 + offset
+  if !$('.sidebar').hasClass('collapsed')
+    px.x -= 140
+  leaf.map.panTo(leaf.map.unproject(px),{animate: true})
+
 
 ###*
 # Creates the text to be shown in a marker popup, giving details about the selected exact location.
