@@ -30,7 +30,7 @@ AreaSettings::drawMapAndAreas = ->
     while i < leaf.areas.length
       # Adding the area id and name to the geoJson properties.
       L.geoJson leaf.areas[i], onEachFeature: (feature, layer) ->
-        layer.bindPopup leaf.areas[i]['properties']['name']
+        layer.bindPopup leaf.areas[i]['properties']['name'], popupOptions()
         layer.setStyle color: markers.area_color
         leaf.drawn_items.addLayer layer
       i++
@@ -62,7 +62,7 @@ AreaSettings::initMapEvents = ->
         _this.area_bounds['properties']['id'] = data.id
         _this.area_bounds['properties']['name'] = area_name
         L.geoJson _this.area_bounds, onEachFeature: (feature, layer) ->
-          layer.bindPopup area_name
+          layer.bindPopup area_name, popupOptions()
           layer.setStyle color: data.area_color
           leaf.drawn_items.addLayer layer
 
@@ -87,7 +87,7 @@ AreaSettings::initMapEvents = ->
             'value=\'' + new_area_name + '\'>' +
             '<button type=\'button\' id=\'save_' + _this.area_bounds['properties']['id'] + '\' ' +
             'class=\'btn btn-xs btn-success update_area\'>OK</button>' +
-            '<br /><div class=\'area_notif\'></div>'
+            '<br /><div class=\'area_notif\'></div>', popupOptions()
 
         layer.closePopup()
 
@@ -102,7 +102,7 @@ AreaSettings::initDrawingTools = ->
     popup = L.popup(closeButton: false).setContent('<input type=\'text\' class=\'save_area_text\' ' +
         'style=\'margin-right:5px;\' placeholder=\'Area name\'><button type=\'button\' ' +
         'class=\'btn btn-xs btn-success save_area disabled\'>Save area</button>')
-    _this.layer.bindPopup popup
+    _this.layer.bindPopup popup, popupOptions()
     _this.area_bounds = _this.layer.toGeoJSON()
     _this.layer.openPopup(_this.layer.getBounds().getCenter())
 
@@ -115,14 +115,14 @@ AreaSettings::initDrawingTools = ->
           'class=\'update_area_text\' style=\'margin-right:5px;\' placeholder=\'Area name\' ' +
           'value=\'' + _this.area_bounds['properties']['name'] + '\'>' +
           '<button type=\'button\' id=\'save_' + _this.area_bounds['properties']['id'] + '\' ' +
-          'class=\'btn btn-xs btn-success update_area\'>OK</button><br /><div class=\'area_notif\'></div>'
+          'class=\'btn btn-xs btn-success update_area\'>OK</button><br /><div class=\'area_notif\'></div>', popupOptions()
 
   # After saving new name of area,
   # remove the text input and display new name as text only.
   leaf.map.on 'draw:editstop', (e) ->
     leaf.drawn_items.eachLayer (layer) ->
       _this.area_bounds = layer.toGeoJSON()
-      layer.bindPopup _this.area_bounds['properties']['name']
+      layer.bindPopup _this.area_bounds['properties']['name'], popupOptions()
 
   # Event triggered when polygon (area) has been edited,
   # and "Save" has been clicked.

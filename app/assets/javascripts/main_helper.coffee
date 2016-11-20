@@ -115,8 +115,7 @@ global.leaf =
     # Drawing the selecting area on the map.
     L.geoJson JSON.parse(bounds), onEachFeature: (feature, layer) ->
       latlng = layer.getBounds().getCenter()
-      popup_options = {className: 'area-popup'}
-      layer.bindPopup area_name, popup_options
+      layer.bindPopup area_name, popupOptions()
 
       layer.setStyle color: markers.area_color
       leaf.map.addLayer layer
@@ -307,8 +306,6 @@ global.drawAreasOnMap = (locations_area) ->
       markers.area_group.addLayer layer
       return
 
-    popup_options = {className: 'area-popup'}
-
     areaLayer.on 'click', (e) ->
       _layer = e.layer
       $.ajax
@@ -320,7 +317,7 @@ global.drawAreasOnMap = (locations_area) ->
           area_marker: false
         dataType: 'html'
         beforeSend: (xhr) ->
-          _layer.bindPopup 'Loading...', popup_options
+          _layer.bindPopup 'Loading...', popupOptions()
           _layer.openPopup()
           xhr.setRequestHeader 'Accept', 'text/html-partial'
         success: (data) ->
@@ -426,7 +423,10 @@ global.adjustPopupPosition = (popup, popup_type) ->
     px.x -= 140
   leaf.map.panTo(leaf.map.unproject(px),{animate: true})
 
-
+# Option to attach to popup, on bindPopup event  
+global.popupOptions = ->
+  {className: 'area-popup'}
+  
 ###*
 # Creates the text to be shown in a marker popup, giving details about the selected exact location.
 # @param first_sentence
