@@ -5,7 +5,7 @@ class Todo < ActiveRecord::Base
   end
 
   def message_and_alert
-    {text: I18n.t("admin.todo.#{self.description}").html_safe, type: self.alert}
+    {text: I18n.t("admin.todo.#{self.description}_html").html_safe, type: self.alert}
   end
 
   def self.area_types?

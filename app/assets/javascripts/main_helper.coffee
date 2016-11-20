@@ -52,12 +52,9 @@ global.leaf =
 
   show_features_on_ad_details_page: (map_settings) ->
     if map_settings['ad_show_is_area'] == true
-      # area address (area type).
-      # Shows an area icon on the map of the ads show page.
-      if map_settings['loc_type'] == 'area'
-        # Drawing the area related to this ad.
-        area_latlng = leaf.show_single_area(map_settings['popup_message'], map_settings['bounds'])
-        leaf.map.setView area_latlng, map_settings['zoom_level']
+      # Location where full address is not given (area only). Drawing the area related to this ad.
+      area_latlng = leaf.show_single_area(map_settings['popup_message'], map_settings['bounds'])
+      leaf.map.setView area_latlng, map_settings['zoom_level']
 
     else
       # Exact address. Potentially several center markers on the map.
@@ -117,11 +114,13 @@ global.leaf =
     latlng = ''
     # Drawing the selecting area on the map.
     L.geoJson JSON.parse(bounds), onEachFeature: (feature, layer) ->
-      layer.bindPopup area_name
+      latlng = layer.getBounds().getCenter()
+      popup_options = {className: 'area-popup'}
+      layer.bindPopup area_name, popup_options
+
       layer.setStyle color: markers.area_color
       leaf.map.addLayer layer
-      latlng = layer.getBounds().getCenter()
-      layer.openPopup latlng
+      leaf.map.fitBounds(layer.getBounds())
       markers.selected_area = layer
 
     latlng
@@ -156,14 +155,8 @@ global.markers =
       ])
     markers.new_icon = L.icon(
       iconUrl: map_settings['new_marker_icon']
-      iconAnchor: [
-        12
-        41
-      ]
-      popupAnchor: [
-        0
-        -34
-      ])
+      iconAnchor: [12, 41]
+      popupAnchor: [0, -34])
     markers.location_marker_type = map_settings['clickable_map_marker']
     markers.area_color = map_settings['area_color']
     return
@@ -227,6 +220,7 @@ global.markers =
       # Adding area marker
         marker_icon = L.icon({
           iconUrl: area_marker
+          popupAnchor: [17,2]
         })
       
         marker = L.marker(
@@ -304,8 +298,6 @@ global.drawAreasOnMap = (locations_area) ->
     locations = locations_area[area_id]
     area_name = markers.area_geocodes[area_id]['name']
     area_bounds = markers.area_geocodes[area_id]['bounds']
-#    popup_html_text = createPopupHtmlArea(gon.vars['in_this_area'] + ' (<b>' + area_name + '</b>)' +
-#        '<br /><br />', locations, 'area', area_id)
 
     # Adding the areas (which have ads) to the home page map.
     areaLayer = L.geoJson JSON.parse(area_bounds), onEachFeature: (feature, layer) ->
@@ -452,80 +444,6 @@ createPopupHtml = (first_sentence, ad, index) ->
     result = '<div style=\'overflow: auto;\'>' + first_sentence + '<br><br>' + second_sentence + '</div>'
   result
 
-
-###*
-# Creates the text to be shown in a marker popup,
-# giving details about the selected area-type location (postal or area).
-# @param first_sentence
-# @param location
-# @returns Popup text content.
-###
-createPopupHtmlArea = (first_sentence, locations_from_same_area, area_type, area_id) ->
-  giving_item = false
-  is_accepting_item = false
-
-  # Adding a explanatory note, before listing items
-  explanation = '<i>' + gon.vars['select_item'] + '</i><br /><br />'
-  first_sentence = first_sentence + explanation
-  people_give = gon.vars['items_given'] + '<br />'
-  people_accept = gon.vars['items_searched'] + '<br />'
-
-  # This hash will count how many ads we have, per promoted item.
-  ad_number_per_item = {}
-  # This array will be used to sort items alphabetically.
-  sorted_items = []
-  i = 0
-  while i < locations_from_same_area.length
-    location = locations_from_same_area[i]
-    j = 0
-    while j < location['ads'].length
-      ad = location['ads'][j]
-      k = 0
-      while k < ad['items'].length
-        item = ad['items'][k]
-        item_marker_color = item['name'] + '|' + markers.marker_colors[item['category']['marker_color']]
-        if item_marker_color of ad_number_per_item
-          ad_number_per_item[item_marker_color]['number'] = ad_number_per_item[item_marker_color]['number'] + 1
-        else
-          ad_number_per_item[item_marker_color] = {}
-          ad_number_per_item[item_marker_color]['number'] = 1
-          ad_number_per_item[item_marker_color]['giving'] = ad['giving']
-          sorted_items.push item_marker_color
-        k++
-      j++
-    i++
-
-  # We now sort all the items we worked with right above
-  # (they are appended with marker colors, but still, items get sorted).
-  sorted_items = sorted_items.sort()
-
-  # Popup for this area is created here.
-  idx = 0
-  while idx < sorted_items.length
-    this_marker_color = sorted_items[idx]
-    item_info = this_marker_color.split('|')
-    item_name = item_info[0]
-    marker_color = item_info[1]
-    number_of_ads = ad_number_per_item[this_marker_color]['number']
-    popup_item_name = '<span style=\'color:' + marker_color + ';\' >' + item_name.capitalizeFirstLetter() + '</span>'
-    link_id = item_name + '|' + area_type + '|' + area_id
-    itemNumberAds = popup_item_name + ' (' + number_of_ads + ')'
-    popup_ad_link = '- <a href=\'#\' class=\'area_link\' id=\'' + link_id + '\'>' + itemNumberAds + '</a>'
-    if ad_number_per_item[this_marker_color]['giving'] == true
-      giving_item = true
-      people_give = people_give + popup_ad_link + '<br />'
-    else
-      is_accepting_item = true
-      people_accept = people_accept + popup_ad_link + '<br />'
-    idx++
-  # Putting all the sections of the popup together.
-  if !giving_item and is_accepting_item
-    first_sentence = first_sentence + people_accept
-  else if !is_accepting_item and giving_item
-    first_sentence = first_sentence + people_give
-  else
-    first_sentence = first_sentence + people_give + '<br />' + people_accept
-  first_sentence
 
 ###*
 # Callback function that returns geocodes of clicked location.

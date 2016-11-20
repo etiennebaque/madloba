@@ -292,15 +292,15 @@ en:
     settings_menu: Settings
     nothing_to_do: Yay! Nothing to worry about :)
     you_admin: You're an administrator of this website.
-    use_left_hand: Use the left-hand side menu to manage
+    use_menu_above: "Use the menu above to manage:"
     admin_descr1: the different components of this website (ads, locations, items, categories)
     admin_descr2: the registered users (admins and regulars users)
     admin_descr3: the website main settings
     admin_descr4: the settings for the map on the front page
-    admin_descr5: the settings that define an area in your town (eg postal codes and/or areas)
+    admin_descr5: the settings that define areas in your town
     regular_actions: You can also perform regular users' actions.
     todo_list: To-do list
-    welcome_user: Welcome to your %{site_name} dashboard. Use the left-hand side menu to manage
+    welcome_user: "Welcome to your %{site_name} dashboard. Use the menu above to manage:"
     user_descr1: the ads you published, as well as the locations tied to them.
     user_descr2: your user information.
     social_media: Social media
@@ -311,13 +311,13 @@ en:
     delete_confirm: Yes, delete this %{entity}
     save_not_possible: "Demo - Update not possible for this page"
     todo:
-      no_category: '<strong>No category available</strong>. Please create at least one category to be able to create ads.'
-      one_category: '<strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.'
-      no_area_type: '<strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area (Settings)", please indicate how an area is defined (by postal code or by area), to give the user more flexibility, when it comes to choose a location.'
-      mapbox_missing: You don't have entered a Mapbox key yet, in "Map (Settings)". You can get one by opening an account on <strong>%{mapbox_website}</strong>, to get a new map style for your website.
-      mapquest_missing: You don't have entered a MapQuest key yet, in "Map (Settings)". You can get one by opening an account on <strong>%{mapquest_website}</strong>, to get a new map style for your website.
-      description_missing: No website description has been written yet, in "General (Settings)". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
-      no_social_media: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General (Settings)". Specify some of them to increase your visibility.
+      no_category_html: '<strong>No category available</strong>. Please create at least one category to be able to create ads.'
+      one_category_html: '<strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.'
+      no_area_type_html: '<strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area (Settings)", please indicate how an area is defined (by postal code or by area), to give the user more flexibility, when it comes to choose a location.'
+      mapbox_missing_html: You don't have entered a Mapbox key yet, in "Map (Settings)". You can get one by opening an account on <a href="https://www.mapbox.com" target="_blank">Mapbox</a>, to get a new map style for your website.
+      mapquest_missing_html: You don't have entered a MapQuest key yet, in "Map (Settings)". You can get one by opening an account on <a href="https://developer.mapquest.com" target="_blank">Mapquest</a>, to get a new map style for your website.
+      description_missing_html: No website description has been written yet, in "General (Settings)". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
+      no_social_media_html: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General (Settings)". Specify some of them to increase your visibility.
     left_menu:
       admin_task: Admin tasks
       user_tasks: Regular user tasks
@@ -577,7 +577,6 @@ en:
     items_given: "Item(s) being given away:"
     items_searched: "Item(s) being searched for:"
     image_not_available: Image not available yet.
-    select_item: Select an item below for more details.
     cancel_drawing: Cancel drawing
     cancel: Cancel
     delete_last_point_drawn: Delete last point drawn

@@ -1,11 +1,12 @@
 - footer_class = admin_panel? ? 'admin' : 'regular'
-%footer#footer{class: footer_class}
-  .container-fluid
-    - if setup_mode?
-      / Footer for setup pages
-      %p.muted.footer-message= t('home.footer_new_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank'))
-    - else
-      / Footer for regular and admin pages
-      %p.muted.footer-message
-        = site_name
-        \- #{t('home.footer_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank'))}
+- if !root_path
+  %footer#footer{class: footer_class}
+    .container-fluid
+      - if setup_mode?
+        / Footer for setup pages
+        %p.muted.footer-message= t('home.footer_new_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank'))
+      - else
+        / Footer for regular and admin pages
+        %p.muted.footer-message
+          = site_name
+          \- #{t('home.footer_powered_by_html', madloba_link: (link_to 'Madloba', 'http://madloba.org', target: '_blank'))}

@@ -306,15 +306,15 @@ fr:
     settings_menu: Paramètres
     nothing_to_do: Super, rien à faire ! :)
     you_admin: Vous êtes un administrateur de ce site.
-    use_left_hand: Utilisez le menu sur la gauche pour gérer
+    use_menu_above: "Utilisez le menu ci-dessus pour gérer :"
     admin_descr1: les différents éléments de ce site (annonces, emplacements, objets, catégories)
     admin_descr2: les utilisateurs (administrateurs et autres)
     admin_descr3: les paramètres généraux du site
     admin_descr4: les paramètres de la carte en page d'accueil
-    admin_descr5: "les paramètres qui définissent une zone dans votre ville (ex : codes postaux, quartiers...)"
+    admin_descr5: "les paramètres qui définissent les quartiers de votre ville"
     regular_actions: Vous avez aussi accès aux fonctions non-admins.
     todo_list: A faire
-    welcome_user: Bienvenue sur le panneau admin de %{site_name}. Utiliser le menu à gauche pour gérer
+    welcome_user: "Bienvenue sur le panneau admin de %{site_name}. Utilisez le menu ci-dessus pour gérer: "
     user_descr1: les annonces que vous publiez, ainsi que les emplacements qui leur sont rattachés.
     user_descr2: votre profil utilisateur.
     social_media: Médias sociaux
@@ -325,13 +325,13 @@ fr:
     delete_confirm: Oui, supprimer cet %{entity}
     save_not_possible: "Démo - Mise à jour non possible pour cette page :"
     todo:
-      no_category: "<strong>Aucune catégorie n'est disponible</strong>. Veuillez créer au moins une catégorie pour pouvoir créer des annonces."
-      one_category: '<strong>Seulement une seule catégorie est disponible</strong>. Veuillez créer quelques catégories pour permettre aux utilisateurs de filtrer leur recherche.'
-      no_area_type: <strong>Aucune zone n'a été spécifiée</strong>. S'il n'a pas la possibilité de choisir une zone lorsque une annonce est créé, l'utilisateur devra entrer une adresse exacte (ce qui ne sera pas forcément souhaité). Dans "Paramètres des zones", veuillez définir les zones de votre ville (par code postal, par quartiers), pour donner plus de flexibilité aux utilisateurs, lorsqu'ils définiront un emplacement.
-      mapbox_missing: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapbox_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
-      mapquest_missing: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapquest_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
-      description_missing: Aucune description de site web n'a été écrite, dans "Paramètres du site". Expliquez aux utilisateurs le but de votre site Madloba, en écrivant un texte court. Cette description apparaitra en page de la page d'accueil, ainsi que dans la page "A propos".
-      no_social_media: Vous n'avez pas encore entré d'adresses de réseaux sociaux (Facebook, Twitter, Pinterest), dans "Paramètres du site". Entrez vos différents profils pour augmenter votre visibilité.
+      no_category_html: "<strong>Aucune catégorie n'est disponible</strong>. Veuillez créer au moins une catégorie pour pouvoir créer des annonces."
+      one_category_html: '<strong>Seulement une seule catégorie est disponible</strong>. Veuillez créer quelques catégories pour permettre aux utilisateurs de filtrer leur recherche.'
+      no_area_type_html: <strong>Aucune zone n'a été spécifiée</strong>. S'il n'a pas la possibilité de choisir une zone lorsque une annonce est créé, l'utilisateur devra entrer une adresse exacte (ce qui ne sera pas forcément souhaité). Dans "Paramètres des zones", veuillez définir les zones de votre ville (par code postal, par quartiers), pour donner plus de flexibilité aux utilisateurs, lorsqu'ils définiront un emplacement.
+      mapbox_missing_html: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <a href="https://www.mapbox.com" target="_blank">Mapbox</a>, pour avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+      mapquest_missing_html: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <a href="https://developer.mapquest.com" target="_blank">Mapquest</a>, pour avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+      description_missing_html: Aucune description de site web n'a été écrite, dans "Paramètres du site". Expliquez aux utilisateurs le but de votre site Madloba, en écrivant un texte court. Cette description apparaitra en page de la page d'accueil, ainsi que dans la page "A propos".
+      no_social_media_html: Vous n'avez pas encore entré d'adresses de réseaux sociaux (Facebook, Twitter, Pinterest), dans "Paramètres du site". Entrez vos différents profils pour augmenter votre visibilité.
     left_menu:
       admin_task: Tâches admin
       user_tasks: Tâches utilisateur
@@ -591,7 +591,6 @@ fr:
     items_given: "Objets donnés :"
     items_searched: "Objets recherchés :"
     image_not_available: Image pas encore disponible.
-    select_item: Choisissez un objet ci-dessous pour plus de détails.
     cancel_drawing: Cancel drawing
     cancel: Cancel
     delete_last_point_drawn: Delete last point drawn
