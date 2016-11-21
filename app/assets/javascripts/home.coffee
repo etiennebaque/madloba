@@ -1,8 +1,8 @@
 global = this
 
 global.Home = (locations_exact, locations_area, area_geocodes, marker_colors) ->
-  @locations_exact = locations_exact
-  @locations_area = locations_area
+  markers.locations_exact = locations_exact
+  markers.locations_area = locations_area
   @area_geocodes = area_geocodes
   @marker_colors = marker_colors
 
@@ -40,8 +40,8 @@ Home::putLocationMarkers = ->
   markers.area_geocodes = _this.area_geocodes
   markers.marker_colors = _this.marker_colors
   # Displaying markers on map
-  markers.place_exact_locations_markers(_this.locations_exact, false)
-  markers.place_area_markers(_this.locations_exact, false)
+  markers.place_exact_locations_markers(markers.locations_exact, false)
+  markers.place_area_markers(markers.locations_exact, false)
   
 
   # Event to trigger when click on a link in an area popup, on the home page map. Makes a modal window appear.
@@ -95,9 +95,9 @@ Home::putLocationMarkers = ->
       markers.area_group.removeLayer layer
 
     if $('#ads_switch').prop('checked')
-      markers.place_exact_locations_markers(_this.locations_exact, false)
-      markers.place_area_markers(_this.locations_exact, false)
+      markers.place_exact_locations_markers(markers.locations_exact, false)
+      markers.place_area_markers(markers.locations_exact, false)
     else
-      markers.draw_area_areas(_this.locations_area)
+      markers.draw_area_areas(markers.locations_area)
 
   ).change()

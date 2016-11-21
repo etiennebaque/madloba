@@ -132,8 +132,9 @@ global.markers =
   new_marker: ''
   selected_area: ''
   group: ''
-  postal_group: ''
   area_group: ''
+  locations_exact: null
+  areas_exact: null
   default_icon: null
   new_icon: null
   marker_colors: null
