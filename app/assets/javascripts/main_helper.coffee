@@ -173,10 +173,7 @@ global.markers =
           markerColor: item['color']
           icon: item['icon'])
 
-        marker = L.marker([
-          ad['lat']
-          ad['lng']
-        ],
+        marker = L.marker([ad['lat'], ad['lng']],
           icon: marker_icon
           bounceOnAdd: is_bouncing_on_add)
 
@@ -185,6 +182,7 @@ global.markers =
         popup = L.popup(
           minWidth: 250
           maxWidth: 280).setContent('Loading...')
+
         marker.bindPopup popup
         # When a marker is clicked, an Ajax call is made to get the content of the popup to display
         marker.on 'click', (e) ->
@@ -413,7 +411,6 @@ global.createNotification = (message, alert) ->
 
 # Center popup based on its content, by positioning the clicked maker correctly.
 global.adjustPopupPosition = (popup, popup_type) ->
-  console.log(popup)
   px = leaf.map.project(popup.getLatLng())
   offset = 0
   if popup_type == 'exact'
