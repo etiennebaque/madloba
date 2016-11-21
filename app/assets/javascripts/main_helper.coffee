@@ -184,7 +184,7 @@ global.markers =
           minWidth: 250
           maxWidth: 280).setContent('Loading...')
 
-        marker.bindPopup popup
+        marker.bindPopup popup, popupOptions()
         # When a marker is clicked, an Ajax call is made to get the content of the popup to display
         marker.on 'click', (e) ->
           marker_popup = e.target.getPopup()
@@ -199,6 +199,7 @@ global.markers =
             beforeSend: (xhr) ->
               xhr.setRequestHeader 'Accept', 'text/html-partial'
             success: (data) ->
+              $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
               marker_popup.setContent data
               marker_popup.update()
               adjustPopupPosition(marker_popup, 'exact')
@@ -228,7 +229,7 @@ global.markers =
           bounceOnAdd: false)
 
         popup = L.popup().setContent('Loading...')
-        marker.bindPopup popup
+        marker.bindPopup popup, popupOptions()
 
         marker.on 'click', (e) ->
           marker_popup = e.target.getPopup()
@@ -243,6 +244,7 @@ global.markers =
             beforeSend: (xhr) ->
               xhr.setRequestHeader 'Accept', 'text/html-partial'
             success: (data) ->
+              $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
               marker_popup.setContent data
               marker_popup.update()
               adjustPopupPosition(marker_popup, 'area')
