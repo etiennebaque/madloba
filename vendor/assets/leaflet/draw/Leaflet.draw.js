@@ -17,7 +17,7 @@ L.drawLocal = {
 			},
 			buttons: {
 				polyline: 'Draw a polyline',
-				polygon: 'Draw a new district',
+				polygon: 'Draw a new area',
 				rectangle: 'Draw a rectangle',
 				circle: 'Draw a circle',
 				marker: 'Draw a marker'
@@ -37,13 +37,13 @@ L.drawLocal = {
 			},
 			polygon: {
 				tooltip: {
-					start: 'Click to start drawing district.',
-					cont: 'Click to continue drawing district.',
-					end: 'Click first point to close this district.'
+					start: 'Click to start drawing area.',
+					cont: 'Click to continue drawing area.',
+					end: 'Click first point to close this area.'
 				}
 			},
 			polyline: {
-				error: '<strong>Error:</strong> district edges cannot cross!',
+				error: '<strong>Error:</strong> area edges cannot cross!',
 				tooltip: {
 					start: 'Click to start drawing line.',
 					cont: 'Click to continue drawing line.',
@@ -75,16 +75,16 @@ L.drawLocal = {
 				}
 			},
 			buttons: {
-				edit: 'Edit district',
-				editDisabled: 'No district to edit',
-				remove: 'Delete district',
-				removeDisabled: 'No district to delete'
+				edit: 'Edit area',
+				editDisabled: 'No area to edit',
+				remove: 'Delete area',
+				removeDisabled: 'No area to delete'
 			}
 		},
 		handlers: {
 			edit: {
 				tooltip: {
-					text: 'Drag handles to edit district boundaries. Click on the area to edit its name.',
+					text: 'Drag handles to edit area boundaries. Click on the area to edit its name.',
 					subtext: 'Click cancel to undo changes.'
 				}
 			},

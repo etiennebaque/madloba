@@ -61,51 +61,59 @@ class HomeController < ApplicationController
     render 'home/about'
   end
 
+  # ------------------
+  # Search result page
+  # ------------------
+  def results
+    id = params[:area].to_i
+    @ads = Ad.includes(:location).where(locations: {area_id: id})
+               .paginate(page: params[:page] || 1, per_page: 10 )
+
+    @area = Area.find(id)
+    render 'home/results'
+  end
+
   # Method called by Ajax call made when marker on the home page is clicked.
   # Returns the HTML code that will create the popup linked to that marker.
   def show_ad_popup
-
     popup_html = ''
-
     begin
       ad_id = params['ad_id']
-      item_id = params['item_id']
       ad = Ad.joins(:location, {items: :category}).where(id: ad_id).first
       number_of_items = ad.items.count
+      item = ad.items.select{|i| i.id == params['item_id'].to_i}.first
+      title = item.name.length > 40 ? item.name.chomp(a[-3..-1]) + '...' : item.name
 
       popup_html = "<div style='overflow: auto;'>"
+      popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{item.category.color_code}'>" +
+                    "<span>#{title.capitalize}</span></div>"
 
-      # Title (and image when available)
       if ad.image?
-          popup_html += "<div class='col-xs-12 col-md-6 title_popup'>#{view_context.link_to(ad.title, ad)}</div>
-                         <div class='col-xs-12 col-md-6'>#{ActionController::Base.helpers.image_tag(ad.image.thumb.url, class: 'pull-right')}</div>"
-      else
-          popup_html += "<div class='col-xs-12 title_popup'>#{view_context.link_to(ad.title, ad)}</div>"
+        image_tag = ActionController::Base.helpers.image_tag(ad.image.normal.url)
+        popup_html += "<div class='col-xs-12 image-popup no-padding'>#{image_tag}</div>"
       end
+
+      # Title
+      popup_html += "<div class='col-xs-12' style='margin-top: 15px;'>#{view_context.link_to(ad.title, ad)}</div>"
 
       # Action (giving away or searching for) + item name
-      ad_action = ad.is_giving ? t('ad.giving_away') : t('ad.accepting')
-      item_name = ''
-      ad.items.each do |ad_item|
-        if ad_item.id == item_id.to_i
-          item_name = "<span style='color:" + MARKER_COLORS[ad_item.category.marker_color] + "';><strong>" + ad_item.name + "</strong></span>";
-          break
-        end
-      end
-
+      ad_action = ad.giving ? t('ad.giving_away') : t('ad.accepting')
+      item_name = "<span style='color:" + item.category.color_code + "';><strong>" + item.name + "</strong></span>";
       and_other_items = number_of_items > 1 ? "and #{number_of_items - 1} other item(s)" : ''
 
       popup_html += "<div class='col-xs-12' style='margin-top: 15px;'>#{ad_action} #{item_name} #{and_other_items}</div>"
 
       # Location full address
-      popup_html += "<div class='col-xs-12' style='margin-bottom: 15px;'>#{ad.location.name_and_or_full_address}</div>"
+      popup_html += "<div class='col-xs-12' style='margin-bottom: 15px;'>#{ad.location.full_address}</div>"
 
       # "Show details" button
-      popup_html += "<div class='col-xs-12' style='text-align: center'>#{view_context.link_to(t('home.show_details'), ad, class: 'btn btn-info btn-sm no-color' )}</div>"
+      button = view_context.link_to(t('home.show_details'), ad, class: 'btn btn-info btn-sm no-color' )
+      popup_html += "<div class='col-xs-12 button-popup'>#{button}</div>"
 
       popup_html += "</div>"
 
-    rescue
+    rescue Exception => e
+      puts e
       # An error occurred, we show a error message.
       popup_html = "<i>#{t('home.error_get_popup_content')}</i>"
     end
@@ -113,22 +121,77 @@ class HomeController < ApplicationController
     render json: popup_html
   end
 
-  # Ajax call to show the ads related to 1 type of item and to 1 district/area.
+  def show_area_popup
+    popup_html = ''
+    begin
+      area_id = params['area_id']
+      area_marker = params['area_marker'] == 'true'
+
+      area = Area.includes(locations: {ads: :items}).find(area_id.to_i)
+      ad_count, item_count = 0, 0
+
+      # When show popup for area marker, message should mention the 'other ads'.
+      # Otherwise, when showing popup for area, mention all ads in this area.
+      area.locations.each do |location|
+        if !area_marker || (area_marker && location.area?)
+          ad_count += location.ads.count
+          location.ads.each{|ad| item_count += ad.items.count}
+        end
+      end
+
+      dot_circle_icon = "<i class='fa #{Location::AREA_ADDRESS_ICON}' aria-hidden='true'></i>"
+      exact_marker_icon = "<i class='fa #{Location::EXACT_ADDRESS_ICON} aria-hidden='true'></i>"
+
+      if area_marker
+        message_key = 'area_marker_message'
+        icon_html = "#{dot_circle_icon}&nbsp;"
+      else
+        message_key = 'area_popup_message'
+        icon_html = "#{exact_marker_icon}&nbsp;#{dot_circle_icon}&nbsp;"
+      end
+
+      message = I18n.t("home.#{message_key}", ad_count: ad_count, item_count: item_count)
+
+      popup_html = "<div style='overflow: auto;'>"
+
+      # Title
+      popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{Area::AREA_COLOR}'>" +
+          "<span>#{icon_html} #{area.name}</span></div>"
+
+      # Message
+      popup_html += "<div class='col-xs-12' style='margin: 15px 0px;'>#{message}</div>"
+
+      # "Show details" button
+      button = view_context.link_to(I18n.t('home.show_results'), results_path(area: area_id), class: 'btn btn-info btn-sm no-color' )
+      popup_html += "<div class='col-xs-12 button-popup'>#{button}</div>"
+
+      popup_html += "</div>"
+    rescue Exception => e
+      logger.error e.message
+      logger.error e.backtrace.join("\n")
+      # An error occurred, we show a error message.
+      popup_html = "<i>#{t('home.error_get_popup_content')}</i>"
+    end
+
+    render json: popup_html
+  end
+
+  # Ajax call to show the ads related to 1 type of item and to 1 area
   # Call made when click on link, in area marker popup.
   def showSpecificAds
     item_name = params['item']
-    location_type = params['type'] # 'postal', or 'district'
-    area_value = params['area'] # code postal area code, or district id
-    ads = Ad.joins(:location, :items).where('expire_date >= ? AND locations.loc_type = ? AND items.name = ?', Date.today, location_type, item_name)
+    location_type = params['type'] # 'postal', or 'area'
+    area_value = params['area'] # code postal area code, or area id
+    ads = Ad.joins(:location, :items).where('expire_date >= ? AND  items.name = ?', Date.today, location_type, item_name)
     item = Item.joins(:category).where('items.name = ?', item_name).first
 
     result = {}
     if location_type == 'postal'
       ads = ads.where('locations.postal_code LIKE ?', "#{area_value}%")
       result['area_name'] = area_value
-    elsif location_type == 'district'
-      ads = ads.where('locations.district_id = ?', area_value)
-      result['area_name'] = District.find(area_value).name
+    elsif location_type == 'area'
+      ads = ads.where('locations.area_id = ?', area_value)
+      result['area_name'] = Area.find(area_value).name
     end
 
     if item
@@ -138,7 +201,7 @@ class HomeController < ApplicationController
 
     result['ads'] = []
     ads.each do |ad|
-      result['ads'] << {id: ad.id, title: ad.title, is_giving: ad.is_giving}
+      result['ads'] << {id: ad.id, title: ad.title, giving: ad.giving}
     end
 
     render json: result
@@ -150,20 +213,11 @@ class HomeController < ApplicationController
     # First, we get the ads tied to an exact location.
     @locations_exact = Ad.search(cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
 
-    area_types = settings['area_type'].split(',')
-    if area_types.include?('postal')
-      # If the users have the possiblity to post ad linked to a postal code, we get here these type of ads.
-      @locations_postal = Location.search('postal', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
-    end
-    if area_types.include?('district')
-      # If the users have the possiblity to post ad linked to a pre-defined district, we also get here these type of ads.
-      @locations_district = Location.search('district', cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
-    end
+    # If the users have the possiblity to post ad linked to a pre-defined area, we also get here these type of ads.
+    @locations_area = Location.search('area', cat_nav_state, params[:item], selected_item_ids, params[:q])
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
-    if area_types.include?('postal') || area_types.include?('district')
-      @area_geocodes = Location.define_area_geocodes(@locations_postal, @locations_district)
-    end
+    @area_geocodes = Location.define_area_geocodes(@locations_area)
   end
 
   def current_location_for(params)
@@ -173,6 +227,7 @@ class HomeController < ApplicationController
     # there was no search beforehand, we need to find the address, based on given latitude and longitude.
     current_location = address_from_geocodes(params[:lat], params[:lon])
     current_location = t('home.default_current_loc') if current_location.blank?
+    current_location
   end
 
   # Creates a hash with the link and the label of one "Useful link",

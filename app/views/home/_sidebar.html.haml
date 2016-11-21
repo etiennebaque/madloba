@@ -68,12 +68,10 @@
                       %label{:style => "width: 15px;"}
                         %i{:class => "fa #{category.icon}", :style => "color: #{category.marker_color_hexacode};"}
                       %span.guided-nav-label= category.name
-            - if (@locations_postal && @locations_postal.length > 0) || (@locations_district && @locations_district.length > 0)
-              %hr/
-              .checkbox
-                %label
-                  = check_box_tag 'show_area_id', 'ok', true
-                  = t('home.show_ads_districts')
+
+            - switch_data = {size: 'small', handle_width: '65', on_text: 'Ads', off_text: 'Areas'}
+            %input#ads_switch{type: 'checkbox', checked: true, data: switch_data}
+
           - else
             .list-group
               .list-group-item.smaller-no-border-no-background

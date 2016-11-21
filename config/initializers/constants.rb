@@ -41,10 +41,6 @@ MARKER_COLORS = {
     'red' => '#d63e2a',
 }
 
-# Color used to draw districts and postal code areas on map
-DISTRICT_COLOR = '#6ca585';
-POSTAL_CODE_AREA_COLOR = '#728edb';
-
 # Selection of Font-Awesome icons, to be displayed in popup, when editing categories.
 ICON_SELECTION =
     %w(fa-anchor fa-archive fa-automobile fa-beer fa-bell-o fa-bicycle fa-binoculars fa-birthday-cake fa-book
@@ -63,8 +59,7 @@ CACHE_CITY_NAME = 'cache_city_name'
 CACHE_COUNTRY_NAME = 'cache_country_name'
 CACHE_IMAGE_STORAGE = 'cache_image_storage'
 CACHE_MAX_DAYS_EXPIRE = 'cache_max_days_expire'
-CACHE_AREA_TYPE = 'cache_area_type'
-CACHE_DISTRICTS = 'cache_districts'
+CACHE_AREAS = 'cache_areas'
 CACHE_CHOSEN_LANGUAGE = 'cache_chosen_language'
 
 # Image storage constants

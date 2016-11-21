@@ -39,9 +39,11 @@
 //= require leaflet-function-button
 //= require leaflet.markercluster
 //= require leaflet.awesome-markers
+//= require draw/Leaflet.draw
 //= require bouncemarker
 
 //= require bootstrap-notify
+//= require bootstrap-switch.min
 
 //= require ad_websocket
 

@@ -1,9 +1,8 @@
 global = this
 
-global.Home = (locations_exact, locations_postal, locations_district, area_geocodes, marker_colors) ->
-  @locations_exact = locations_exact
-  @locations_postal = locations_postal
-  @locations_district = locations_district
+global.Home = (locations_exact, locations_area, area_geocodes, marker_colors) ->
+  markers.locations_exact = locations_exact
+  markers.locations_area = locations_area
   @area_geocodes = area_geocodes
   @marker_colors = marker_colors
 
@@ -11,9 +10,6 @@ global.Home = (locations_exact, locations_postal, locations_district, area_geoco
   @putLocationMarkers()
 
 Home::init = ->
-  # Offcanvas related scripts
-  $('[data-toggle=offcanvas]').click ->
-    $('.row-offcanvas').toggleClass 'active'
 
   # This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel,
   # in the home page, the page would scroll down.
@@ -26,6 +22,9 @@ Home::init = ->
   if !$('.navbar-toggle').is(':visible')
     $('#sidebar_category_icon').trigger('click')
 
+  $("#ads_switch").bootstrapSwitch();
+
+
 ###*
 # Populates the map with different markers (eg exact address and area-type markers, to show ads)
 # @param locations_hash - hash containing the info to create all different markers.
@@ -36,16 +35,16 @@ Home::putLocationMarkers = ->
   # when they get too close to one another, as the user zooms out, on the home page.
   markers.group = new (L.markerClusterGroup)(
     spiderfyDistanceMultiplier: 2)
+  markers.area_group = L.featureGroup().addTo(leaf.map)
 
   markers.area_geocodes = _this.area_geocodes
   markers.marker_colors = _this.marker_colors
   # Displaying markers on map
-  markers.place_exact_locations_markers(_this.locations_exact, false)
-  # Displaying postal code area circles on map
-  markers.draw_postal_code_areas(_this.locations_postal)
-  # Displaying district areas on map
-  markers.draw_district_areas(_this.locations_district)
-  # Event to trigger when click on a link in a area popup, on the home page map. Makes a modal window appear.
+  markers.place_exact_locations_markers(markers.locations_exact, false)
+  markers.place_area_markers(markers.locations_exact, false)
+  
+
+  # Event to trigger when click on a link in an area popup, on the home page map. Makes a modal window appear.
   # Server side is in home_controller, method showSpecificAds.
   $('#map').on 'click', '.area_link', ->
     input = $(this).attr('id').split('|')
@@ -87,3 +86,18 @@ Home::putLocationMarkers = ->
 
   if searched_location_marker != ''
     searched_location_marker.openPopup()
+
+  # Adding event to show/hide ads/areas from the switch in the guided navigation.
+  $('#ads_switch').on('switchChange.bootstrapSwitch', ->
+    markers.group.eachLayer (layer) ->
+      markers.group.removeLayer layer
+    markers.area_group.eachLayer (layer) ->
+      markers.area_group.removeLayer layer
+
+    if $('#ads_switch').prop('checked')
+      markers.place_exact_locations_markers(markers.locations_exact, false)
+      markers.place_area_markers(markers.locations_exact, false)
+    else
+      markers.draw_area_areas(markers.locations_area)
+
+  ).change()

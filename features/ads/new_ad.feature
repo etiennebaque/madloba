@@ -15,7 +15,7 @@ Scenario: Create successfully a new ad with a signed in user
   When I fill in field with class 'ad-create-item-field' with 'Thing'
   And I fill in 'ad[description]' with 'This is a ad description'
   And I fill in 'ad[location_attributes][name]' with 'My shop'
-  And I choose 'by exact address'
+  And I choose 'Give full address'
   And I fill in 'ad[location_attributes][street_number]' with '250'
   And I fill in 'ad[location_attributes][address]' with 'Gladstone avenue'
   And I fill in 'ad[location_attributes][postal_code]' with 'K2P0Y6'

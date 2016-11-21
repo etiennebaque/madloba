@@ -6,21 +6,23 @@ class MapAdInfo < MapInfo
 
   def initialize(ad)
     super(has_center_marker: true, clickable: NOT_CLICKABLE_MAP)
+    ad_location = ad.location
 
-    self.ad_show_is_area = ad.location.area?
+    self.ad_show_is_area = ad_location.area?
     items = ad.items
 
     if self.ad_show_is_area
-      # Getting information whether it's a postal code area, or a district
+      # Getting information for this ads based that's based on district-only location
       self.popup_message = items.map(&:capitalized_name).join(', ')
+      self.bounds = ad_location.area.bounds
     else
       # Getting information as an exact address location
       self.ad_show = []
       items.each {|item| self.ad_show << {icon: item.category.icon, color: item.category.marker_color, item_name: item.name}}
     end
 
-    self.latitude = ad.location.latitude
-    self.longitude = ad.location.longitude
+    self.latitude = ad_location.latitude
+    self.longitude = ad_location.longitude
     self.zoom_level = CLOSER_ZOOM_LEVEL
   end
 

@@ -5,8 +5,8 @@ FactoryGirl.define do
   factory :ad do |f|
     f.title { Faker::Name.title }
     f.description { Faker::Lorem.sentence }
-    f.is_giving { [true, false].sample}
-    f.is_username_used { [true, false].sample}
+    f.giving { [true, false].sample}
+    f.username_used { [true, false].sample}
     f.expire_date { Date.new(2100,1,1) }
 
     location

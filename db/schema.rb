@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161015194712) do
+ActiveRecord::Schema.define(version: 20161119165844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,23 +27,30 @@ ActiveRecord::Schema.define(version: 20161015194712) do
   add_index "ad_items", ["item_id"], name: "index_ad_items_on_item_id", using: :btree
 
   create_table "ads", force: :cascade do |t|
-    t.string   "title",            limit: 255
+    t.string   "title",         limit: 255
     t.text     "description"
     t.integer  "location_id"
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "is_username_used"
-    t.boolean  "is_giving"
+    t.boolean  "username_used"
+    t.boolean  "giving"
     t.date     "expire_date"
-    t.string   "image",            limit: 255
-    t.string   "anon_name",        limit: 255
-    t.string   "anon_email",       limit: 255
-    t.jsonb    "marker_info",                  default: {}
+    t.string   "image",         limit: 255
+    t.string   "anon_name",     limit: 255
+    t.string   "anon_email",    limit: 255
+    t.jsonb    "marker_info",               default: {}
   end
 
   add_index "ads", ["location_id"], name: "index_ads_on_location_id", using: :btree
   add_index "ads", ["user_id"], name: "index_ads_on_user_id", using: :btree
+
+  create_table "areas", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "bounds"
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -70,13 +77,6 @@ ActiveRecord::Schema.define(version: 20161015194712) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
-  create_table "districts", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.text     "bounds"
-  end
-
   create_table "items", force: :cascade do |t|
     t.string   "name",        limit: 255
     t.string   "description", limit: 255
@@ -102,12 +102,10 @@ ActiveRecord::Schema.define(version: 20161015194712) do
     t.decimal  "latitude",                  precision: 7, scale: 5
     t.decimal  "longitude",                 precision: 8, scale: 5
     t.integer  "user_id"
-    t.integer  "district_id"
-    t.string   "loc_type",      limit: 255
-    t.string   "type"
+    t.integer  "area_id"
   end
 
-  add_index "locations", ["district_id"], name: "index_locations_on_district_id", using: :btree
+  add_index "locations", ["area_id"], name: "index_locations_on_area_id", using: :btree
   add_index "locations", ["user_id"], name: "index_locations_on_user_id", using: :btree
 
   create_table "map_tiles", force: :cascade do |t|

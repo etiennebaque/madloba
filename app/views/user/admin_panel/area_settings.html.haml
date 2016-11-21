@@ -1,0 +1,49 @@
+#content.middle-col.col-xs-12.col-md-10
+  .row
+    .box.col-md-12
+      .box-inner
+        .box-header.well{"data-original-title" => ""}
+          %h2
+            %i.glyphicon.glyphicon-globe
+            = t('admin.area_settings.title')
+        -# Success/Error flash messages
+        - if flash[:page_error]
+          .box-content.alerts
+            .alert.alert-danger
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              = flash[:page_error]
+        - if flash[:setting_success]
+          .box-content.alerts
+            .alert.alert-success
+              %button.close{"data-dismiss" => "alert", :type => "button"} ×
+              = flash[:setting_success]
+
+        .box-content
+          = form_tag '/user/areasettings/update', method: :post, id: 'areaSettingFormId', role: 'form' do
+
+            #area_section
+              -# Map canvas
+              .form-group
+                = label_tag 'map-canvas-wrapper', t('admin.area_settings.map_description'), class:'control-label'
+                .form-inline
+                  #map-canvas-wrapper
+                    #map.large
+                #area_notification_message
+
+            %hr
+            -# Submit button
+            .form-actions
+              = submit_tag(t('admin.save'), class: 'btn btn-success')
+              %a.btn{:href => "/user/index"}= t('home.cancel')
+
+
+%hr
+- content_for :scripts do
+  -# Inserting the Leaflet Draw plugin, in order to draw polygon to define areas
+  = render 'shared/included_leafletdraw_scripts'
+  -# Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
+  = render 'shared/map_scripts_after_body'
+
+  :javascript
+    var areas = #{raw Area.bounds.to_json}
+    var areaSettings = new AreaSettings(areas);

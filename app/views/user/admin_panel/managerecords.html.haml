@@ -45,7 +45,7 @@
                     %tr
                       %td.vert-align= ad.id
                       %td.vert-align= ad.title
-                      %td.vert-align= ad.is_giving ? t('admin.ad.giving_away') : t('admin.ad.accepting')
+                      %td.vert-align= ad.giving ? t('admin.ad.giving_away') : t('admin.ad.accepting')
                       %td.vert-align= ad.item_list
                       %td.vert-align= ad.email_to_display
                       %td.center
@@ -64,25 +64,16 @@
                 %thead
                   %tr
                     %th ID
-                    %th= t('admin.name')
-                    %th= t('admin.exact_area')
                     %th= t('admin.address')
+                    %th= t('admin.exact_area')
                     %th= t('admin.created_by_user')
                     %th= t('admin.actions')
                 %tbody
                   - Location.all.each do |location|
                     %tr
                       %td.vert-align= location.id
-                      %td.vert-align= location.name
-                      %td.vert-align= location.loc_type
-                      - if location.loc_type == 'exact'
-                        %td.vert-align
-                          = location.street_number
-                           #{location.address}
-                      - elsif location.loc_type == 'district'
-                        %td.vert-align= location.district.name
-                      - else
-                        %td.vert-align= location.postal_code
+                      %td.vert-align= location.full_address
+                      %td.vert-align= location.area? ? t('home.yes') : t('home.no')
                       %td.vert-align= location.user ? location.user.email : t('admin.location.anonymous_user')
                       %td.center
                         %a.btn.btn-info{:href => "/user/locations/#{location.id}/edit"}

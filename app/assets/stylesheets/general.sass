@@ -4,8 +4,12 @@
 // Home page - General layout
 // **************************
 
-html, body
-  height: 100%
+html
+  position: relative
+  min-height: 100%
+
+body
+  margin-bottom: 50px
 
 #wrap
   height: 100%
@@ -13,16 +17,30 @@ html, body
 
 #footer
   height: 50px
-  position: relative
-  bottom: 0px
+  position: absolute
+  bottom: 0
   width: 100%
-  background-color: #f5f5f5
+  text-align: center
+  &.regular
+    background-color: #0C5A2E
+    color: white
+  &.admin
+    background-color: #f4f4f4
+    color: #666666
+
+// responsive CSS fixes as necessary, for the footer
+@media (max-width: 767px)
+  #footer
+    margin-left: -20px
+    margin-right: -20px
+    padding-left: 20px
+    padding-right: 20px
 
 #map
   width: 100%
   margin: 0
   &.home
-    position: relative
+    position: absolute
     top: 0px
     left: 0px
     height: 100% !important
@@ -52,26 +70,12 @@ html, body
   padding: 20px 0px
   height: calc(100% - 50px)
 
-// responsive CSS fixes as necessary, for the footer
-@media (max-width: 767px)
-  #footer
-    margin-left: -20px
-    margin-right: -20px
-    padding-left: 20px
-    padding-right: 20px
-
 .footer-message
-  margin: 20px 0 19px 0
+  margin-top: 18px
 
 .popover
   max-width: 340px
   width: auto
-
-.lower-footer
-  min-height: 50px
-  background-color: #0C5A2E
-  color: white
-  text-align: center
 
 .blocking-notification
   position: fixed
@@ -148,10 +152,61 @@ span.disabled
     span
       font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
       font-size: 14px
+  .bootstrap-switch
+    margin-left: 14px
+    margin-top: 20px
 
-.title_popup a
-  font-weight: bold !important
+// Pagination
+.madloba-pagination
+  //background: #f1f1f1
+  //border: 1px solid #e5e5e5
+  text-align: center
+  padding: 1.8em
+  cursor: default
+  a, span
+    padding: 0.2em 0.4em
+  .disabled
+    color: #aaaaaa
+  .current
+    font-style: normal
+    font-weight: bold
+    background-color: darken(#f1f1f1, 20)
+    display: inline-block
+    width: 1.4em
+    height: 1.4em
+    line-height: 1.5
+    -moz-border-radius: 1em
+    -webkit-border-radius: 1em
+    border-radius: 1em
+    text-shadow: rgba(white, .8) 1px 1px 1px
+  a
+    text-decoration: none
+    color: black
+    &:hover, &:focus
+      text-decoration: underline
 
+.title-popup
+  height: 40px
+  line-height: 40px
+  font-weight: bold
+  color: white
+  font-size: 13px
+  border-radius: 12px 12px 0px 0px
+
+.area-popup .leaflet-popup-content-wrapper
+  padding: 14px
+
+.area-popup-no-margin .leaflet-popup-content-wrapper
+  padding: 0px
+
+.image-popup img
+  width: 100%
+
+.button-popup
+  margin-bottom: 15px
+  text-align: center
+  a
+    width: 60%
 
 // Top navigation bar
 .no-margin-bottom
@@ -243,9 +298,12 @@ html
   font-style: italic
   padding: 10px 20px
 
-#district_notification_message
+#area_notification_message
   margin-top: 15px
 
+.no-padding
+  padding: 0 !important
+  margin: 0 !important
 
 // Hiding the secondary admin bar in mobile mode, as we show its links in the primary nav bar when collapsed.
 @media (max-width: 1059px)
@@ -255,14 +313,26 @@ html
 .list-group h4
   margin-top: 10px !important
 
-
 // Styling for Madloba setup screens
 .setup-padding
   padding-bottom: 20px
 
+// Styling for results page
+#results_page
+  .summary
+    margin: 20px 0px
+    font-size: 16px
+  .results
+    margin-bottom: 20px
+    .result
+      margin-bottom: 20px
+      .ad-title
+        font-size: 16px
+      .ad-items
+        font-style: italic
+
 
 // Styles on Ad pages
-
 .ad-show-description
   padding-bottom: 20px
   min-height: 120px
@@ -274,8 +344,11 @@ html
   padding-bottom: 20px
   text-align: center
 
-.ad-title
-  padding-bottom: 30px
+#show_ad_page .ad-title
+  padding-bottom: 20px
+
+.back-link
+  padding-top: 10px
 
 .ad-label
   width: 120px

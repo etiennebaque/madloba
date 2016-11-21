@@ -64,6 +64,10 @@ class Category < ActiveRecord::Base
     return cat_nav_state && (cat_nav_state.include? self.id.to_s)
   end
 
+  def color_code
+    MARKER_COLORS[self.marker_color]
+  end
+
   private
 
   # Custom validation to check if the chosen marker color / icon duo is unique
