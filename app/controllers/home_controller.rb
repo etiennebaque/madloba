@@ -217,7 +217,7 @@ class HomeController < ApplicationController
     @locations_area = Location.search('area', cat_nav_state, params[:item], selected_item_ids, params[:q])
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
-    @area_geocodes = Location.define_area_geocodes(@locations_area)
+    @areas, @area_geocodes = Location.define_area_geocodes(@locations_area)
   end
 
   def current_location_for(params)

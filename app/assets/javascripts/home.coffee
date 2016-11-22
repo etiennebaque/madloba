@@ -10,7 +10,6 @@ global.Home = (locations_exact, locations_area, area_geocodes, marker_colors) ->
   @putLocationMarkers()
 
 Home::init = ->
-
   # This is to correct a behavior that was happening in Chrome: when clicking on the zoom control panel,
   # in the home page, the page would scroll down.
   # When clicking on zoom in/zoom out, this will force to be at the top of the page
@@ -22,7 +21,8 @@ Home::init = ->
   if !$('.navbar-toggle').is(':visible')
     $('#sidebar_category_icon').trigger('click')
 
-  $("#ads_switch").bootstrapSwitch();
+  # After choosing an area, moves the map to where it is.
+  @moveMapBasedOnArea()
 
 
 ###*
@@ -39,10 +39,10 @@ Home::putLocationMarkers = ->
 
   markers.area_geocodes = _this.area_geocodes
   markers.marker_colors = _this.marker_colors
+
   # Displaying markers on map
   markers.place_exact_locations_markers(markers.locations_exact, false)
   markers.place_area_markers(markers.locations_exact, false)
-  
 
   # Event to trigger when click on a link in an area popup, on the home page map. Makes a modal window appear.
   # Server side is in home_controller, method showSpecificAds.
@@ -88,16 +88,25 @@ Home::putLocationMarkers = ->
     searched_location_marker.openPopup()
 
   # Adding event to show/hide ads/areas from the switch in the guided navigation.
-  $('#ads_switch').on('switchChange.bootstrapSwitch', ->
-    markers.group.eachLayer (layer) ->
-      markers.group.removeLayer layer
-    markers.area_group.eachLayer (layer) ->
-      markers.area_group.removeLayer layer
+#  $('#ads_switch').on('switchChange.bootstrapSwitch', ->
+#    markers.group.eachLayer (layer) ->
+#      markers.group.removeLayer layer
+#    markers.area_group.eachLayer (layer) ->
+#      markers.area_group.removeLayer layer
+#
+#    if $('#ads_switch').prop('checked')
+#      markers.place_exact_locations_markers(markers.locations_exact, false)
+#      markers.place_area_markers(markers.locations_exact, false)
+#    else
+#      markers.draw_area_areas(markers.locations_area)
+#
+#  ).change()
 
-    if $('#ads_switch').prop('checked')
-      markers.place_exact_locations_markers(markers.locations_exact, false)
-      markers.place_area_markers(markers.locations_exact, false)
-    else
-      markers.draw_area_areas(markers.locations_area)
+Home::moveMapBasedOnArea = ->
+  $('.sidebar-area-select').on('change', ->
+    areaBounds = $('.sidebar-area-select option:selected').data('bounds')
+    console.log areaBounds
 
-  ).change()
+    L.geoJson areaBounds, onEachFeature: (feature, layer) ->
+      leaf.map.fitBounds(layer.getBounds())
+  )

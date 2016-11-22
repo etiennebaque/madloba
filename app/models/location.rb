@@ -67,7 +67,7 @@ class Location < ActiveRecord::Base
       end
     end
 
-    return area_geocodes
+    return areas, area_geocodes
   end
 
   def marker_message
