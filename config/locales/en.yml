@@ -31,7 +31,7 @@ en:
     create_account: create an account
     refinements: Your selection
     delete_all: Delete all
-    refine_location: Refine location
+    refine_location: Move to a specific location
     cancel: Cancel
     close: Close
     sign_register: Sign in / Create account
