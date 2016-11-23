@@ -51,8 +51,7 @@ en:
     links: Links
     your_searched_location: Your searched location
     no_ad: There's no ad at the moment.
-    area_popup_message: "%{ad_count} ads posted in total in this area, featuring %{item_count} items."
-    area_marker_message: "%{ad_count} other ads posted in this area, featuring %{item_count} items."
+    area_marker_message: "%{ad_count} ads posted in total in this area, featuring %{item_count} items."
     show_results: "Show results for this area"
     create_an_ad_now_html: "%{create_new_ad} to tell your community what you have to give, or what you're looking for!"
     about_page: About %{website_name}
@@ -128,6 +127,7 @@ en:
     not_found_descr1: "Based on the information you've entered, the location could not be found."
     not_found_descr2: "But that's ok! Please select it manually on the map."
     area_help: Choose the area where this location can be found.
+    error_location_fields: "Either an area or an address must be given"
   ad:
     new_ad: New ad
     once_created_expire_html: Once created, your ad will be published for <strong>%{max_expire_days} days</strong>.
@@ -548,16 +548,13 @@ en:
     start_typing_item: Start typing an item
     no_result_create_item: No results. Select 'Create a new item'.
     new_image_uploading: New image is being uploaded. Please wait.
-    type_area_name: Type an area name here...
     latitude: (latitude)
     longitude: (longitude)
     add: Add
     updating_area: Updating area list...
-    area_show_up: "This location area will show up as:"
     searching_location: Searching location...
     update: Update
     loading: Loading...
-    choose_location: Choose one of the following available locations, provided by OpenStreetMap
     remove: Remove
     records_per_page: records per page
     search: "Search:"
@@ -572,7 +569,6 @@ en:
     last: Last
     filtered_from: filtered from
     total_entries: total entries
-    in_this_area: In this area
     ads_for: Ads for
     items_given: "Item(s) being given away:"
     items_searched: "Item(s) being searched for:"

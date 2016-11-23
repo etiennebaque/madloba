@@ -125,38 +125,23 @@ class HomeController < ApplicationController
     popup_html = ''
     begin
       area_id = params['area_id']
-      area_marker = params['area_marker'] == 'true'
 
       area = Area.includes(locations: {ads: :items}).find(area_id.to_i)
       ad_count, item_count = 0, 0
 
-      # When show popup for area marker, message should mention the 'other ads'.
-      # Otherwise, when showing popup for area, mention all ads in this area.
+      # Counting items for all ads in this area.
       area.locations.each do |location|
-        if !area_marker || (area_marker && location.area?)
-          ad_count += location.ads.count
-          location.ads.each{|ad| item_count += ad.items.count}
-        end
+        ad_count += location.ads.count
+        location.ads.each{|ad| item_count += ad.items.count}
       end
 
-      dot_circle_icon = "<i class='fa #{Location::AREA_ADDRESS_ICON}' aria-hidden='true'></i>"
-      exact_marker_icon = "<i class='fa #{Location::EXACT_ADDRESS_ICON} aria-hidden='true'></i>"
-
-      if area_marker
-        message_key = 'area_marker_message'
-        icon_html = "#{dot_circle_icon}&nbsp;"
-      else
-        message_key = 'area_popup_message'
-        icon_html = "#{exact_marker_icon}&nbsp;#{dot_circle_icon}&nbsp;"
-      end
-
-      message = I18n.t("home.#{message_key}", ad_count: ad_count, item_count: item_count)
+      message = I18n.t("home.area_marker_message", ad_count: ad_count, item_count: item_count)
 
       popup_html = "<div style='overflow: auto;'>"
 
       # Title
       popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{Area::AREA_COLOR}'>" +
-          "<span>#{icon_html} #{area.name}</span></div>"
+          "<span>#{area.name}</span></div>"
 
       # Message
       popup_html += "<div class='col-xs-12' style='margin: 15px 0px;'>#{message}</div>"

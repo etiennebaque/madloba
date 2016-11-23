@@ -52,12 +52,15 @@ body
     height: 400px
 
 // responsive fixes for navigation bar
+.nav-form-center
+  text-align: center
 @media (min-width: 1060px)
-  #searchFormId
-    padding-left: 13%
+  #nav_search_form
+    float: none
+    display: inline-block
 
 @media (max-width: 1059px)
-  #searchFormId
+  #nav_search_form
     .twitter-typeahead
       width: 100%
     .form-group

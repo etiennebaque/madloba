@@ -65,8 +65,7 @@ fr:
     links: Liens
     your_searched_location: Votre recherche
     no_ad: Pas d'annonce en ce moment.
-    area_popup_message: "%{ad_count} annonces au total postées dans ce quartier, présentant %{item_count} objets."
-    area_marker_message: "%{ad_count} autres annonces postées dans ce quartier, présentant %{item_count} objets."
+    area_marker_message: "%{ad_count} annonces au total postées dans ce quartier, présentant %{item_count} objets."
     show_results: "Voir résultats"
     create_an_ad_now_html: "%{create_new_ad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
     about_page: A propos de %{website_name}
@@ -142,6 +141,7 @@ fr:
     not_found_descr1: "Cet emplacement n'a pas pu être trouvé, basé sur les informations entrées."
     not_found_descr2: "Mais ce n'est pas grave ! Cliquez sur la carte pour sélectionner cet emplacement."
     area_help: Choisissez la zone où cet emplacement se trouve.
+    error_location_fields: "Soit un quarier ou bien une adresse doit être renseigné."
   ad:
     new_ad: Nouvelle annonce
     once_created_expire_html: une fois créée, votre annonce sera publiée pour <strong>%{max_expire_days} jours</strong>.
@@ -562,16 +562,13 @@ fr:
     start_typing_item: Tapez le nom d'un objet
     no_result_create_item: Pas de résultat. Choisissez 'Créer un nouvel objet'.
     new_image_uploading: Téléchargement de la nouvelle image en cours. Veulliez attendre svp.
-    type_area_name: "Tapez le nom d'un quartier ici..."
     latitude: (latitude)
     longitude: (longitude)
     add: Ajouter
     updating_area: Mise à jour de la liste de quartiers...
-    area_show_up: "Cette zone apparaitra en tant que :"
     searching_location: Recherche d'un emplacement...
     update: Mettre à jour
     loading: Chargement...
-    choose_location: Choisissez un de ces emplacements disponibles
     remove: Retirer
     records_per_page: enregistrements par page
     search: "Recherche :"
@@ -586,7 +583,6 @@ fr:
     last: Dernier
     filtered_from: filtrés sur
     total_entries: enregistrements au total
-    in_this_area: Dans ce quartier
     ads_for: Annonces pour
     items_given: "Objets donnés :"
     items_searched: "Objets recherchés :"

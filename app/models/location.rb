@@ -4,8 +4,8 @@ class Location < ActiveRecord::Base
   belongs_to :area
 
   validates_presence_of :latitude, :longitude
-  # 'Postal code' field is not necessary only if user chooses an area name instead.
-  validates_presence_of :postal_code, if: lambda { self.area == nil}
+
+  validate :location_fields_cannot_be_blank
   validates :latitude , numericality: { greater_than:  -90, less_than:  90 }
   validates :longitude, numericality: { greater_than: -180, less_than: 180 }
 
@@ -93,6 +93,13 @@ class Location < ActiveRecord::Base
 
   def clickable_map_for_edit
     CLICKABLE_MAP_EXACT_MARKER
+  end
+
+  def location_fields_cannot_be_blank
+    conditions_met = address.present? || area.present?
+    if !conditions_met
+      errors.add(t('location.error_location_fields'))
+    end
   end
 
   def address_geocode_lookup(short: false)
