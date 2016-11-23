@@ -27,7 +27,7 @@ Scenario: Create successfully a new ad with a signed in user
   And I fill in 'ad[location_attributes][phone_number]' with '111222333'
   And I fill in 'ad[location_attributes][website]' with 'google.ca'
   And I fill in 'ad[location_attributes][description]' with 'This is how to get here.'
-  And I click on 'Create this ad!' button
+  And I click on 'Create this ad!' submit button
   Then I should see 'The ad 'Ad title example' has been created. You will shortly receive an e-mail, with the new ad details.'
   And I should see 'This is how to get here.'
   And I should see '111222333'

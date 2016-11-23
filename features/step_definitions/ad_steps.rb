@@ -36,6 +36,10 @@ When(/^I click on '([^"]*)' button$/) do |txt|
   find_button(txt).click
 end
 
+When (/^I click on 'Create this ad!' submit button$/) do
+  find('input[type="submit"]').click
+end
+
 When(/^I search for this place$/) do
   page.find('#find_geocodes_from_address').click
 end
