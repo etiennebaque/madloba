@@ -37,7 +37,7 @@ When(/^I click on '([^"]*)' button$/) do |txt|
 end
 
 When (/^I click on 'Create this ad!' submit button$/) do
-  find('input[type="submit"]').click
+  page.find('#submit_new_ad').click
 end
 
 When(/^I search for this place$/) do
