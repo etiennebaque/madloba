@@ -98,7 +98,7 @@ class Location < ActiveRecord::Base
   def location_fields_cannot_be_blank
     conditions_met = address.present? || area.present?
     if !conditions_met
-      errors.add(t('location.error_location_fields'))
+      errors.add(:base, I18n.t('location.error_location_fields'))
     end
   end
 
