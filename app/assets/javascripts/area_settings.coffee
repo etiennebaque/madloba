@@ -10,6 +10,7 @@ global.AreaSettings = (areas) ->
 AreaSettings::init = (areas) ->
   markers.areas = areas
 
+  @onMapClick()
   @drawMapAndAreaMarkers()
   @initMapEvents()
 
@@ -22,47 +23,47 @@ AreaSettings::drawMapAndAreaMarkers = ->
   if markers.areas != null
   # Adding existing areas to the map
     for area in markers.areas
-      marker_icon = L.icon({
-        iconUrl: area_marker
-        popupAnchor: [17,2]
-      })
-
       marker = L.marker(
         [area.latitude, area.longitude],
-        icon: marker_icon,
+        icon: markers.area_icon,
         bounceOnAdd: false
       )
 
-      areaName = "<div class='area-name'>#{area.name}</div>"
-
-      inputText = "<input type='text' id='#{area.id}' " +
-        "class='update-area-text name_#{area.id}' style='margin-right:5px;' placeholder='Area name' " +
-        "value='#{area.name}'>"
-
-      modifyButton = "<button type='button' id='update_#{area.id}' " +
-        "class='btn btn-xs btn-info update-area'><i class='fa fa-pencil' aria-hidden='true'></i></button>"
-
-      okButton = "<button type='button' id='save_#{area.id}' " +
-        "data-lat='#{area.latitude}' data-lng='#{area.longitude}' " +
-        "class='btn btn-xs btn-success save-area'>OK</button>&nbsp;"
-
-      deleteButton = "<button type='button' id='delete_#{area.id}' " +
-        "class='btn btn-xs btn-danger delete-area'><i class='fa fa-trash-o' aria-hidden='true'></i></button>"
-
-      popupContent = "<div class='area-popup-text'>" + areaName + modifyButton + deleteButton + "</div>"
-      editContent = "<div class='area-popup-update' style='display: none;'>" + inputText + okButton + "</div>"
+      popupContent = "<div class='area-popup-text'>" + @areaNameFor(area) + @modifyButtonFor(area) + @deleteButtonFor(area) + "</div>"
+      editContent = "<div class='area-popup-update' style='display: none;'>" + @inputTextFor(area) + @okButtonFor(area) + "</div>"
 
       popup = L.popup().setContent(popupContent + editContent)
       marker.bindPopup popup, popupOptions({minWidth: 200})
 
       marker.addTo(leaf.map)
 
+AreaSettings::areaNameFor = (area) ->
+  "<div class='area-name'>#{area.name}</div>"
+
+AreaSettings::inputTextFor = (area) ->
+  "<input type='text' id='#{area.id}' " +
+    "class='update-area-text name_#{area.id}' style='margin-right:5px;' placeholder='Area name' " +
+    "value='#{area.name}'>"
+
+AreaSettings::modifyButtonFor = (area) ->
+  "<button type='button' id='update_#{area.id}' " +
+    "class='btn btn-xs btn-info update-area'><i class='fa fa-pencil' aria-hidden='true'></i></button>"
+
+AreaSettings::okButtonFor = (area) ->
+  "<button type='button' id='save_#{area.id}' " +
+    "data-lat='#{area.latitude}' data-lng='#{area.longitude}' " +
+    "class='btn btn-xs btn-success save-area'>OK</button>&nbsp;"
+
+AreaSettings::deleteButtonFor = (area) ->
+  "<button type='button' id='delete_#{area.id}' " +
+    "class='btn btn-xs btn-danger delete-area'><i class='fa fa-trash-o' aria-hidden='true'></i></button>"
+
 AreaSettings::initMapEvents = ->
   $('#map').on 'keyup', '.update-area-text', ->
-    if $('.save_area_text').val().length > 0
-      $('.save_area').removeClass 'disabled'
+    if $('.update-area-text').val().length > 0
+      $('.save-area').removeClass 'disabled'
     else
-      $('.save_area').addClass 'disabled'
+      $('.save-area').addClass 'disabled'
 
   # Necessity to unbind click on map, to make
   # the "on click" event right below work.
@@ -78,8 +79,6 @@ AreaSettings::initMapEvents = ->
   # Saving area location and name.
   $('#map').on 'click', '.save-area', (e) ->
     _this = $(this)
-    _this.parent().hide()
-    _this.parent().prev().show()
 
     areaId = _this.attr('id').replace('save_', '')
     areaName = $('.name_'+areaId).val()
@@ -92,6 +91,10 @@ AreaSettings::initMapEvents = ->
     }, (data) ->
       msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
       $('#area_notification_message').html msg
+      _this.parent().hide()
+      _this.parent().prev().show()
+      _this.parent().prev().find('.area-name').html(data.name)
+
 
   $('#map').on 'click', '.delete-area', ->
     _this = $(this)
@@ -101,6 +104,20 @@ AreaSettings::initMapEvents = ->
       msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
       $('#area_notification_message').html msg
 
+
+AreaSettings::onMapClick = ->
+  leaf.map.on 'click', (e) =>
+    geocodes = initMapClick(e)
+    markers.new_marker = new (L.Marker)(e.latlng, { icon: markers.area_icon }, draggable: false)
+    leaf.map.addLayer markers.new_marker
+    newArea = {id: 'new', name: '', latitude: geocodes['lat'], longitude: geocodes['lng']}
+
+    popupContent = "<div class='area-popup-text' style='display: none;'>" + @areaNameFor(newArea) +
+      @modifyButtonFor(newArea) + @deleteButtonFor(newArea) + "</div>"
+    editContent = "<div class='area-popup-update'>" + @inputTextFor(newArea) + @okButtonFor(newArea) + "</div>"
+
+    popup = L.popup().setContent(popupContent + editContent)
+    markers.new_marker.bindPopup(popup, popupOptions({minWidth: 200})).openPopup()
 
 
 ####

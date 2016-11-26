@@ -122,7 +122,7 @@ class User::AdminPanelController < ApplicationController
   def area_settings
     authorize :admin, :areasettings?
 
-    @map_settings = MapInfo.new(has_center_marker: false, clickable: NOT_CLICKABLE_MAP).to_hash
+    @map_settings = MapInfo.new(has_center_marker: false, clickable: CLICKABLE_MAP_AREA_MARKER).to_hash
   end
 
   def update_area_settings
@@ -158,7 +158,7 @@ class User::AdminPanelController < ApplicationController
       status = 'error'
     end
 
-    render json: {message: message, style: STYLES[status.to_sym]}
+    render json: {message: message, style: STYLES[status.to_sym], name: params[:name]}
   end
 
   # Updating the name of an existing area

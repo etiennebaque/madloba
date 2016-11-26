@@ -46,9 +46,9 @@ global.leaf =
     leaf.map_tiles.addTo leaf.map
     leaf.map.setView [leaf.my_lat, leaf.my_lng], map_settings['zoom_level']
 
-    if map_settings['clickable_map_marker'] != 'none'
+    # if map_settings['clickable_map_marker'] != 'none'
       # Getting latitude and longitude when map is clicked
-      leaf.map.on 'click', onMapClickLocation
+      # leaf.map.on 'click', onMapClickLocation
 
   show_features_on_ad_details_page: (map_settings) ->
     if map_settings['ad_show_is_area'] == true
@@ -135,28 +135,33 @@ global.markers =
   area_group: ''
   locations_exact: null
   areas: null
+
   default_icon: null
   new_icon: null
+  area_icon: null
+
   marker_colors: null
   area_color: null
   area_geocodes: null
   location_marker_type: null
   center_marker: null
   init: (map_settings) ->
+
     markers.default_icon = L.icon(
       iconUrl: map_settings['default_marker_icon']
-      iconAnchor: [
-        12
-        41
-      ]
-      popupAnchor: [
-        0
-        -34
-      ])
+      iconAnchor: [12,41]
+      popupAnchor: [0,-34])
+
     markers.new_icon = L.icon(
       iconUrl: map_settings['new_marker_icon']
-      iconAnchor: [12, 41]
-      popupAnchor: [0, -34])
+      iconAnchor: [12,41]
+      popupAnchor: [0,-34])
+
+    markers.area_icon = L.icon(
+      iconUrl: area_marker
+      iconAnchor: [15,43]
+      popupAnchor: [1,-34])
+
     markers.location_marker_type = map_settings['clickable_map_marker']
     markers.area_color = map_settings['area_color']
     return
@@ -217,14 +222,9 @@ global.markers =
     for area in areas
 
       # Adding area marker
-      marker_icon = L.icon({
-        iconUrl: area_marker
-        popupAnchor: [17,2]
-      })
-    
       marker = L.marker(
         [area.latitude, area.longitude],
-        icon: marker_icon,
+        icon: markers.area_icon,
         bounceOnAdd: false)
 
       popup = L.popup().setContent('Loading...')
@@ -462,6 +462,18 @@ createPopupHtml = (first_sentence, ad, index) ->
   result
 
 
+global.initMapClick = (e) ->
+  if markers.new_marker != ''
+    leaf.map.removeLayer markers.new_marker
+    
+  myNewLat = e.latlng.lat
+  myNewLng = e.latlng.lng
+  # Rounding up latitude and longitude, with 5 decimals
+  myNewLat = Math.round(myNewLat * 100000) / 100000
+  myNewLng = Math.round(myNewLng * 100000) / 100000
+  {lat: myNewLat, lng: myNewLng}
+
+  
 ###*
 # Callback function that returns geocodes of clicked location.
 # @param e
@@ -479,7 +491,10 @@ onMapClick = (e) ->
   
   if markers.location_marker_type == 'exact'
     markers.new_marker = new (L.Marker)(e.latlng, { icon: markers.new_icon }, draggable: false)
-    leaf.map.addLayer markers.new_marker
+  else if markers.location_marker_type == 'area'
+    markers.new_marker = new (L.Marker)(e.latlng, { icon: markers.area_icon }, draggable: false)
+
+  leaf.map.addLayer markers.new_marker
 
   myNewLat + ',' + myNewLng
 
