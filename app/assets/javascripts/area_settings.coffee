@@ -33,26 +33,32 @@ AreaSettings::drawMapAndAreaMarkers = ->
         bounceOnAdd: false
       )
 
+      areaName = "<div class='area-name'>#{area.name}</div>"
+
       inputText = "<input type='text' id='#{area.id}' " +
-        "class='update_area_text name_#{area.id}' style='margin-right:5px;' placeholder='Area name' " +
+        "class='update-area-text name_#{area.id}' style='margin-right:5px;' placeholder='Area name' " +
         "value='#{area.name}'>"
+
+      modifyButton = "<button type='button' id='update_#{area.id}' " +
+        "class='btn btn-xs btn-info update-area'><i class='fa fa-pencil' aria-hidden='true'></i></button>"
 
       okButton = "<button type='button' id='save_#{area.id}' " +
         "data-lat='#{area.latitude}' data-lng='#{area.longitude}' " +
-        "class='btn btn-xs btn-success update-area'>OK</button>&nbsp;"
+        "class='btn btn-xs btn-success save-area'>OK</button>&nbsp;"
 
       deleteButton = "<button type='button' id='delete_#{area.id}' " +
         "class='btn btn-xs btn-danger delete-area'><i class='fa fa-trash-o' aria-hidden='true'></i></button>"
 
-      popupContent = inputText + okButton + deleteButton
+      popupContent = "<div class='area-popup-text'>" + areaName + modifyButton + deleteButton + "</div>"
+      editContent = "<div class='area-popup-update' style='display: none;'>" + inputText + okButton + "</div>"
 
-      popup = L.popup().setContent(popupContent)
+      popup = L.popup().setContent(popupContent + editContent)
       marker.bindPopup popup, popupOptions({minWidth: 200})
 
       marker.addTo(leaf.map)
 
 AreaSettings::initMapEvents = ->
-  $('#map').on 'keyup', '.update_area_text', ->
+  $('#map').on 'keyup', '.update-area-text', ->
     if $('.save_area_text').val().length > 0
       $('.save_area').removeClass 'disabled'
     else
@@ -62,20 +68,30 @@ AreaSettings::initMapEvents = ->
   # the "on click" event right below work.
   $('#map').unbind 'click'
 
-  # Saving area location and name.
   $('#map').on 'click', '.update-area', (e) ->
     _this = $(this)
-    areaId = _this.attr('id').replace('save_', '')
-    areaName = $('.name_'+areaId).val()
+    _this.parent().hide()
+    _this.parent().next().show()
 
-    $.post '/user/areasettings/save_area', {
-      id: areaId
-      name: areaName
-      latitude: _this.data('lat')
-      longitude: _this.data('lng')
-    }, (data) ->
-      msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
-      $('#area_notification_message').html msg
+
+  # Saving area location and name.
+  $('#map').on 'click', '.save-area', (e) ->
+    _this = $(this)
+    _this.parent().hide()
+    _this.parent().prev().show()
+
+#    _this = $(this)
+#    areaId = _this.attr('id').replace('save_', '')
+#    areaName = $('.name_'+areaId).val()
+#
+#    $.post '/user/areasettings/save_area', {
+#      id: areaId
+#      name: areaName
+#      latitude: _this.data('lat')
+#      longitude: _this.data('lng')
+#    }, (data) ->
+#      msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
+#      $('#area_notification_message').html msg
 
 
   $('#map').on 'click', '.delte-area', ->
