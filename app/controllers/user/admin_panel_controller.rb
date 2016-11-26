@@ -146,7 +146,7 @@ class User::AdminPanelController < ApplicationController
         # Creation of area
         a = Area.new(name: params[:name], latitude: params[:latitude].to_f, longitude: params[:longitude].to_f)
         if a.save
-          message = t('admin.area_settings.save_success')
+          message = t("admin.area_settings.#{updating ? 'update' : 'save'}_success")
           Rails.cache.write(CACHE_AREAS, Area.select(:id, :name, :latitude, :longitude))
         else
           status = 'error'
@@ -158,7 +158,7 @@ class User::AdminPanelController < ApplicationController
       status = 'error'
     end
 
-    render json: {message: message, style: STYLES[status.to_sym], name: params[:name]}
+    render json: {updating: updating, message: message, style: STYLES[status.to_sym], id: a.id || 0, name: params[:name]}
   end
 
   # Updating the name of an existing area
@@ -203,24 +203,22 @@ class User::AdminPanelController < ApplicationController
     render json: {'message' => message, 'style' => style}
   end 
 
-  # Deletes existing areas
-  def delete_areas
-    ids_to_delete = params[:ids]
+  # Deletes existing area
+  def delete_area
+    id = params[:id].to_i
     style, message = '', ''
-    ids_to_delete.each do |id|
-      d = Area.find(id)
-      if d.delete
-        message = t('admin.area_settings.delete_success')
-        style = STYLES[:success]
-        Rails.cache.write(CACHE_AREAS, Area.select(:id, :name, :bounds))
-      else
-        message = t('admin.area_settings.delete_error')
-        style = STYLES[:error]
-      end  
-    end  
+
+    area = Area.find(id)
+    if area.delete
+      message = t('admin.area_settings.delete_success')
+      style = STYLES[:success]
+      Rails.cache.write(CACHE_AREAS, Area.select(:id, :name, :latitude, :longitude))
+    else
+      message = t('admin.area_settings.delete_error')
+      style = STYLES[:error]
+    end
 
     render json: {'message' => message, 'style' => style}
-
   end
 
   # --------------------------------

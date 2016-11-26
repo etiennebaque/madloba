@@ -140,6 +140,8 @@ global.markers =
   new_icon: null
   area_icon: null
 
+  area_markers: {}
+
   marker_colors: null
   area_color: null
   area_geocodes: null

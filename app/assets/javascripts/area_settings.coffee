@@ -1,6 +1,7 @@
 global = this
 
 global.AreaSettings = (areas) ->
+  _areaSettings = $(this)
   @area_bounds = {}
   @layer = {}
   @init(areas)
@@ -34,6 +35,8 @@ AreaSettings::drawMapAndAreaMarkers = ->
 
       popup = L.popup().setContent(popupContent + editContent)
       marker.bindPopup popup, popupOptions({minWidth: 200})
+      
+      markers.area_markers[area.id] = marker
 
       marker.addTo(leaf.map)
 
@@ -61,6 +64,7 @@ AreaSettings::deleteButtonFor = (area) ->
 AreaSettings::initMapEvents = ->
   $('#map').on 'keyup', '.update-area-text', ->
     if $('.update-area-text').val().length > 0
+      $('#area_notification_message').html(' ')
       $('.save-area').removeClass 'disabled'
     else
       $('.save-area').addClass 'disabled'
@@ -89,9 +93,22 @@ AreaSettings::initMapEvents = ->
       latitude: _this.data('lat')
       longitude: _this.data('lng')
     }, (data) ->
+      if !data.updating
+        marker = L.marker(
+          [_this.data('lat'), _this.data('lng')],
+          icon: markers.area_icon,
+          bounceOnAdd: false
+        )
+        markers.area_markers[data.id] = marker if data.id > 0
+        console.log 'update'
+        markers.area_markers[data.id].addTo(leaf.map)
+
       msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
       $('#area_notification_message').html msg
       _this.parent().hide()
+      area = {id: data.id, name: data.name, latitude: _this.data('lat'), longitude: _this.data('lng')}
+      oldHtml = _this.parent().prev().html()
+      _this.parent().prev().html(oldHtml.replace(/\_new/g, "_#{area.id}"))
       _this.parent().prev().show()
       _this.parent().prev().find('.area-name').html(data.name)
 
@@ -100,7 +117,11 @@ AreaSettings::initMapEvents = ->
     _this = $(this)
     areaId = _this.attr('id').replace('delete_', '')
 
-    $.post '/user/areasettings/delete_areas', { id: areaId }, (data) ->
+    $.post '/user/areasettings/delete_area', { id: areaId }, (data) ->
+      markerToDelete = markers.area_markers[areaId]
+      leaf.map.removeLayer(markerToDelete)
+      delete(markers.area_markers[areaId])
+
       msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
       $('#area_notification_message').html msg
 

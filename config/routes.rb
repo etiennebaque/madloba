@@ -50,7 +50,7 @@ Madloba::Application.routes.draw do
     post 'areasettings/update_areas', to: 'admin_panel#update_areas'
     post 'areasettings/update_area_name', to: 'admin_panel#update_area_name'
     post 'areasettings/save_area', to: 'admin_panel#save_area'
-    post 'areasettings/delete_areas', to: 'admin_panel#delete_areas'
+    post 'areasettings/delete_area', to: 'admin_panel#delete_area'
 
     get 'ads/:id/edit', to: 'ads#edit'
 

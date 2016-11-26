@@ -429,7 +429,7 @@ en:
       save_name_success: Area name successfully updated.
       error_name_save: Error occured when updating area name. Please try again later.
       update_success: The areas have been successfully updated.
-      delete_success: Deletion completed.
+      delete_success: Area was deleted successfully.
       delete_error: Error occured when deleting an area. Please try again later.
     map_settings:
       title: Map
