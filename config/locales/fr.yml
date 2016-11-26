@@ -428,7 +428,11 @@ fr:
       by_area: par un quartier
       area_postal_code: Zone définie par un code postal
       area_area: Zone définie par un quartier
-      map_description: Utilisez cette carte pour dessiner, éditer ou supprimer les limites des différents quartiers de votre ville.
+      map_description: "Areas broadly define neighbourhoods and districts related to your Madloba website.
+                        Once defined, users will be able to looks at ads in the chosen neighbourhood on the home page.
+                        Alternatively, they will choose an area when creating a new ad."
+      map_description_2: "Click on the map to pinpoint and name a new area.
+                          Click on an previously defined area to either delete it or change its name."
       error_update_area: Erreur lors de la mise à jour des quartiers. Veuillez réessayer plus tard.
       error_save_area: Erreur lors de la sauvegarde de ce quartier. Veuillez réessayer plus tard.
       area_name: Nom du quartier

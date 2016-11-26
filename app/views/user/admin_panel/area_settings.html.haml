@@ -23,12 +23,15 @@
 
             #area_section
               -# Map canvas
-              .form-group
-                = label_tag 'map-canvas-wrapper', t('admin.area_settings.map_description'), class:'control-label'
-                .form-inline
-                  #map-canvas-wrapper
-                    #map.large
-                #area_notification_message
+              #area-settings-description
+                %p= t('admin.area_settings.map_description')
+                %p= t('admin.area_settings.map_description_2')
+
+              #area_notification_message
+
+              .form-inline
+                #map-canvas-wrapper
+                  #map.large
 
             %hr
             -# Submit button

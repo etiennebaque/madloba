@@ -68,11 +68,12 @@ AreaSettings::initMapEvents = ->
   # the "on click" event right below work.
   $('#map').unbind 'click'
 
+  # Showing the input text box (Edit mode)
   $('#map').on 'click', '.update-area', (e) ->
+    $('#area_notification_message').html('')
     _this = $(this)
     _this.parent().hide()
     _this.parent().next().show()
-
 
   # Saving area location and name.
   $('#map').on 'click', '.save-area', (e) ->
@@ -80,21 +81,19 @@ AreaSettings::initMapEvents = ->
     _this.parent().hide()
     _this.parent().prev().show()
 
-#    _this = $(this)
-#    areaId = _this.attr('id').replace('save_', '')
-#    areaName = $('.name_'+areaId).val()
-#
-#    $.post '/user/areasettings/save_area', {
-#      id: areaId
-#      name: areaName
-#      latitude: _this.data('lat')
-#      longitude: _this.data('lng')
-#    }, (data) ->
-#      msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
-#      $('#area_notification_message').html msg
+    areaId = _this.attr('id').replace('save_', '')
+    areaName = $('.name_'+areaId).val()
 
+    $.post '/user/areasettings/save_area', {
+      id: areaId
+      name: areaName
+      latitude: _this.data('lat')
+      longitude: _this.data('lng')
+    }, (data) ->
+      msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
+      $('#area_notification_message').html msg
 
-  $('#map').on 'click', '.delte-area', ->
+  $('#map').on 'click', '.delete-area', ->
     _this = $(this)
     areaId = _this.attr('id').replace('delete_', '')
 

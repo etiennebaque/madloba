@@ -414,9 +414,13 @@ en:
       by_area: by area
       area_postal_code: Area defined by a postal code
       area_area: Area defined by an area
-      map_description: "Use this map to draw, edit or delete the boundaries of your city's areas."
-      error_update_area: An server error occurred while updating areas. Please try again later.
-      error_save_area: An server error occurred while saving this area. Please try again later.
+      map_description: "Areas broadly define neighbourhoods and districts related to your Madloba website.
+                        Once defined, users will be able to looks at ads in the chosen neighbourhood on the home page.
+                        Alternatively, they will choose an area when creating a new ad."
+      map_description_2: "Click on the map to pinpoint and name a new area.
+                          Click on an previously defined area to either delete it or change its name."
+      error_update_area: An error occurred while updating this area. Please try again later.
+      error_save_area: An error occurred while saving this area. Please try again later.
       area_name: Area name
       latitude: Latitude
       longitude: Longitude
