@@ -31,6 +31,18 @@
             %span
               = t('home.create_new_ad')
 
+        -# Area drop down
+        .list-group
+          - if @areas.any?
+            - select_options = {class: 'form-control sidebar-area-select',
+                                include_blank: '-- Move to area --'}
+            - area_data = @areas.map{|a| [a.name, a.id, { 'data-latitude' => a.latitude, 'data-longitude' => a.longitude }]}
+            = select_tag 'area', options_for_select(area_data), select_options
+
+        .list-group
+          .selected-area
+          .area-description
+
         - if (@categories && @categories.select{|cat| cat.is_refinement(params)}.length > 0) || @location_search_refinement_to_display || user_search_action
           .list-group
             - if @location_search_refinement_to_display
@@ -74,14 +86,6 @@
               .list-group-item.smaller-no-border-no-background
                 %p= t('home.no_ad')
                 %p= t('home.create_an_ad_now_html', create_new_ad: (link_to t('home.create_new_ad'), new_ad_url) )
-
-
-        .list-group
-          - if Area.any?
-            %hr
-            - select_options = {class: 'form-control sidebar-area-select',
-                                include_blank: '-- Move to area --'}
-            = select_tag 'area', options_for_select(@areas.map{ |a| [a.name, a.id, { 'data-bounds' => a.bounds }] }), select_options
 
 
         -# Sidebar - note with some explanation, for demo only

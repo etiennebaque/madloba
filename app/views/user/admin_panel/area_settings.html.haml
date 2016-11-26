@@ -39,11 +39,9 @@
 
 %hr
 - content_for :scripts do
-  -# Inserting the Leaflet Draw plugin, in order to draw polygon to define areas
-  = render 'shared/included_leafletdraw_scripts'
   -# Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
   = render 'shared/map_scripts_after_body'
 
   :javascript
-    var areas = #{raw Area.bounds.to_json}
+    var areas = #{raw Area.all.to_json}
     var areaSettings = new AreaSettings(areas);

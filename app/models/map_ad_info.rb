@@ -12,7 +12,7 @@ class MapAdInfo < MapInfo
     items = ad.items
 
     if self.ad_show_is_area
-      # Getting information for this ads based that's based on district-only location
+      # Getting information for this ads based that's based on area-only location
       self.popup_message = items.map(&:capitalized_name).join(', ')
       self.bounds = ad_location.area.bounds
     else

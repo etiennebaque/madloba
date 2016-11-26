@@ -151,13 +151,14 @@ class HomeController < ApplicationController
       popup_html += "<div class='col-xs-12 button-popup'>#{button}</div>"
 
       popup_html += "</div>"
+
     rescue Exception => e
       logger.error e.message
       logger.error e.backtrace.join("\n")
       # An error occurred, we show a error message.
       popup_html = "<i>#{t('home.error_get_popup_content')}</i>"
     end
-
+    
     render json: popup_html
   end
 
@@ -199,10 +200,10 @@ class HomeController < ApplicationController
     @locations_exact = Ad.search(cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
 
     # If the users have the possiblity to post ad linked to a pre-defined area, we also get here these type of ads.
-    @locations_area = Location.search('area', cat_nav_state, params[:item], selected_item_ids, params[:q])
+    # locations_area = Location.search('area', cat_nav_state, params[:item], selected_item_ids, params[:q])
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
-    @areas, @area_geocodes = Location.define_area_geocodes(@locations_area)
+    @areas = Area.all.select(:id, :name, :latitude, :longitude)
   end
 
   def current_location_for(params)

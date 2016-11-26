@@ -57,17 +57,12 @@ class Location < ActiveRecord::Base
   end
 
   # This method creates the final longitudes and latitudes for each area to be displayed on the map.
-  def self.define_area_geocodes (locations_area)
+  def self.define_area_geocodes
     area_geocodes = {}
-
-    if (locations_area && locations_area.length > 0)
-      areas = Area.where(id: locations_area.keys)
-      areas.each do |area|
-        area_geocodes[area.id] = {'name' => area.name, 'bounds' => area.bounds}
-      end
+    Area.all.each do |area|
+      area_geocodes[area.id] = {name: area.name, latitude: area.latitude, longitude: area.longitude}
     end
-
-    return areas, area_geocodes
+    area_geocodes
   end
 
   def marker_message

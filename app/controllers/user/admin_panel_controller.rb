@@ -73,7 +73,7 @@ class User::AdminPanelController < ApplicationController
           app_name_settings.update_attribute(:value, params[key])
 
           # Updating cached value.
-          Rails.cache.write(CACHE_APP_NAME, params[key])
+          Rails.cache.write(CACHE_APP_NAME, params[key]) if !Rails.env.test?
         else
           # the application name has been deleted. We can't save an empty app name.
           flash[:setting_success] = 0

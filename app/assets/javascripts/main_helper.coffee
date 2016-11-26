@@ -134,7 +134,7 @@ global.markers =
   group: ''
   area_group: ''
   locations_exact: null
-  areas_exact: null
+  areas: null
   default_icon: null
   new_icon: null
   marker_colors: null
@@ -213,50 +213,48 @@ global.markers =
       i++
     return
 
-  place_area_markers: (location_areas) ->
-    Object.keys(locations_area).forEach (area_id) ->
-      area_bounds = markers.area_geocodes[area_id]['bounds']
-      L.geoJson JSON.parse(area_bounds), onEachFeature: (feature, layer) ->
+  place_area_markers: (areas) ->
+    for area in areas
+
       # Adding area marker
-        marker_icon = L.icon({
-          iconUrl: area_marker
-          popupAnchor: [17,2]
-        })
-      
-        marker = L.marker(
-          layer.getBounds().getCenter(),
-          icon: marker_icon,
-          bounceOnAdd: false)
+      marker_icon = L.icon({
+        iconUrl: area_marker
+        popupAnchor: [17,2]
+      })
+    
+      marker = L.marker(
+        [area.latitude, area.longitude],
+        icon: marker_icon,
+        bounceOnAdd: false)
 
-        popup = L.popup().setContent('Loading...')
-        marker.bindPopup popup, popupOptions()
+      popup = L.popup().setContent('Loading...')
+      marker.bindPopup popup, popupOptions()
 
-        marker.on 'click', (e) ->
-          marker_popup = e.target.getPopup()
-          $.ajax
-            url: '/showAreaPopup'
-            global: false
-            type: 'GET'
-            data:
-              area_id: area_id
-              area_marker: true
-            dataType: 'html'
-            beforeSend: (xhr) ->
-              xhr.setRequestHeader 'Accept', 'text/html-partial'
-            success: (data) ->
-              $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
-              marker_popup.setContent data
-              marker_popup.update()
-              adjustPopupPosition(marker_popup, 'area')
-            error: (data) ->
-              marker_popup.setContent data
-              marker_popup.update()
-          return
+      marker.on 'click', (e) ->
 
-        markers.group.addLayer marker
-      
+        marker_popup = e.target.getPopup()
+        $.ajax
+          url: '/showAreaPopup'
+          global: false
+          type: 'GET'
+          data:
+            area_id: area.id
+            area_marker: true
+          dataType: 'html'
+          beforeSend: (xhr) ->
+            xhr.setRequestHeader 'Accept', 'text/html-partial'
+          success: (data) ->
+            $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
+            marker_popup.setContent data
+            marker_popup.update()
+            adjustPopupPosition(marker_popup, 'area')
+          error: (data) ->
+            marker_popup.setContent data
+            marker_popup.update()
         return
-      return
+
+      markers.group.addLayer marker
+      
     return  
 
 
@@ -424,9 +422,12 @@ global.adjustPopupPosition = (popup, popup_type) ->
   leaf.map.panTo(leaf.map.unproject(px),{animate: true})
 
 # Option to attach to popup, on bindPopup event  
-global.popupOptions = ->
-  {className: 'area-popup'}
-  
+global.popupOptions = (otherOpts) ->
+  opts = {className: 'area-popup'}
+  for key, val of otherOpts
+    opts[key] = val
+  opts
+
 ###*
 # Creates the text to be shown in a marker popup, giving details about the selected exact location.
 # @param first_sentence
