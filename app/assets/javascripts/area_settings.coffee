@@ -100,7 +100,6 @@ AreaSettings::initMapEvents = ->
           bounceOnAdd: false
         )
         markers.area_markers[data.id] = marker if data.id > 0
-        console.log 'update'
         markers.area_markers[data.id].addTo(leaf.map)
 
       msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'

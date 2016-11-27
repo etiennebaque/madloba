@@ -35,6 +35,7 @@ class Ad < ActiveRecord::Base
 
       if cat_nav_state || searched_item
         if cat_nav_state
+          puts cat_nav_state
           if searched_item
             # We search for ads in relation to the searched item and the current category navigation state.
             ads = ads.joins(:items).where(items: {category_id: cat_nav_state, id: selected_item_ids})
@@ -54,7 +55,7 @@ class Ad < ActiveRecord::Base
 
     end
 
-    ads = ads.pluck(:marker_info)
+    ads = ads.pluck(:marker_info).uniq
 
     ads
 

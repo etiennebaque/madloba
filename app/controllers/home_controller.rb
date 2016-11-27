@@ -162,6 +162,40 @@ class HomeController < ApplicationController
     render json: popup_html
   end
 
+  def refine_state
+    # From the home page, based on the selected navigation, get the relevant ads.
+
+    state = params[:state]
+
+    new_nav_states = state.split('&')
+    nav_params = {}
+    new_nav_states.each do |state|
+      info = state.split('=')
+      nav_params[info[0]] = info[1]
+    end
+
+    if nav_params['cat'] && nav_params['cat'] != ''
+      selected_categories = nav_params['cat'].split('+')
+    end
+
+    if nav_params['item'] && nav_params['item'] != ''
+      selected_item_ids = []
+
+      # An item is being searched.
+      searched_item = nav_params['item']
+      selected_item_ids = Item.joins(:ads).where('name LIKE ?', "%#{searched_item}%").pluck(:id).uniq
+    end
+
+    response = {}
+    response['map_info'] = {}
+    response['map_info']['markers'] = Ad.search(selected_categories, searched_item, selected_item_ids, nav_params[:q], nil)
+
+    #response['map_info']['area'] = Location.search('area', selected_categories, searched_item, selected_item_ids, nav_params[:q])
+    #response['map_info']['area'] = Area.search(selected_categories, selected_item_ids, nav_params[:q])
+
+    render json: response.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})
+  end
+
   # Ajax call to show the ads related to 1 type of item and to 1 area
   # Call made when click on link, in area marker popup.
   def showSpecificAds

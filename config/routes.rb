@@ -7,6 +7,7 @@ Madloba::Application.routes.draw do
   get 'home/index'
   get 'search', to: 'home#index'
   get 'results', to: 'home#results'
+  get 'refine_state', to: 'home#refine_state'
 
   # About page
   get 'about', to: 'home#about'

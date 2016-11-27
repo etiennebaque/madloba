@@ -142,6 +142,7 @@ global.markers =
 
   area_markers: {}
 
+  selected_categories: []
   marker_colors: null
   area_color: null
   area_geocodes: null
@@ -174,48 +175,51 @@ global.markers =
       ad = locations_exact[i]
       j = 0
       while j < ad['markers'].length
+
         item = ad['markers'][j]
-        # Creating the marker for this ad here.
-        marker_icon = L.AwesomeMarkers.icon(
-          prefix: 'fa'
-          markerColor: item['color']
-          icon: item['icon'])
 
-        marker = L.marker([ad['lat'], ad['lng']],
-          icon: marker_icon
-          bounceOnAdd: is_bouncing_on_add)
+        if markers.canCategoryBeDisplayed(item)
+          # Creating the marker for this ad here.
+          marker_icon = L.AwesomeMarkers.icon(
+            prefix: 'fa'
+            markerColor: item['color']
+            icon: item['icon'])
 
-        marker.ad_id = ad['ad_id']
-        marker.item_id = item['item_id']
-        popup = L.popup(
-          minWidth: 250
-          maxWidth: 280).setContent('Loading...')
+          marker = L.marker([ad['lat'], ad['lng']],
+            icon: marker_icon
+            bounceOnAdd: is_bouncing_on_add)
 
-        marker.bindPopup popup, popupOptions()
-        # When a marker is clicked, an Ajax call is made to get the content of the popup to display
-        marker.on 'click', (e) ->
-          marker_popup = e.target.getPopup()
-          $.ajax
-            url: '/showAdPopup'
-            global: false
-            type: 'GET'
-            data:
-              ad_id: @ad_id
-              item_id: @item_id
-            dataType: 'html'
-            beforeSend: (xhr) ->
-              xhr.setRequestHeader 'Accept', 'text/html-partial'
-            success: (data) ->
-              $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
-              marker_popup.setContent data
-              marker_popup.update()
-              adjustPopupPosition(marker_popup, 'exact')
-            error: (data) ->
-              marker_popup.setContent data
-              marker_popup.update()
-          return
+          marker.ad_id = ad['ad_id']
+          marker.item_id = item['item_id']
+          popup = L.popup(
+            minWidth: 250
+            maxWidth: 280).setContent('Loading...')
 
-        markers.group.addLayer marker
+          marker.bindPopup popup, popupOptions()
+          # When a marker is clicked, an Ajax call is made to get the content of the popup to display
+          marker.on 'click', (e) ->
+            marker_popup = e.target.getPopup()
+            $.ajax
+              url: '/showAdPopup'
+              global: false
+              type: 'GET'
+              data:
+                ad_id: @ad_id
+                item_id: @item_id
+              dataType: 'html'
+              beforeSend: (xhr) ->
+                xhr.setRequestHeader 'Accept', 'text/html-partial'
+              success: (data) ->
+                $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
+                marker_popup.setContent data
+                marker_popup.update()
+                adjustPopupPosition(marker_popup, 'exact')
+              error: (data) ->
+                marker_popup.setContent data
+                marker_popup.update()
+            return
+          markers.group.addLayer marker
+
         j++
       i++
     return
@@ -259,13 +263,13 @@ global.markers =
       
     return  
 
+  # We show on the map all the markers if there's no specific navigation state.
+  # If there's one, we show only the markers which category are in the nav state.
+  canCategoryBeDisplayed: (item) ->
+    markers.selected_categories.length == 0 ||
+    item.category_id.toString() in markers.selected_categories
 
-  draw_area_areas: (locations_area) ->
-    # Snippet that creates markers, to represent ads tied to area-type location.
-    if locations_area != null and Object.keys(locations_area).length > 0
-      drawAreasOnMap(locations_area)
 
-    return
 
 ###*
 # Main function that initializes the map on different screens (eg home page, map setting page, ad page...).
