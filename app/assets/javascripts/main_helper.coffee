@@ -92,35 +92,25 @@ global.leaf =
     return
 
   show_single_marker: (map_settings) ->
-    if map_settings['loc_type'] == 'area'
-      leaf.show_single_area map_settings['marker_message'], map_settings['bounds']
+    # we are displaying the center point.
+    center_marker = L.marker([
+      leaf.my_lat
+      leaf.my_lng
+    ], icon: markers.default_icon)
+    if map_settings['marker_message'] != ''
+      center_marker.addTo(leaf.map).bindPopup(map_settings['marker_message']).openPopup()
     else
-      # we are displaying the center point.
-      center_marker = L.marker([
-        leaf.my_lat
-        leaf.my_lng
-      ], icon: markers.default_icon)
-      if map_settings['marker_message'] != ''
-        center_marker.addTo(leaf.map).bindPopup(map_settings['marker_message']).openPopup()
-      else
-        center_marker.addTo leaf.map
+      center_marker.addTo leaf.map
+
     return
 
 
-  show_single_area: (area_name, bounds) ->
+  show_single_area: (area_name) ->
     # Before adding the selected area, we need to remove all the currently displayed areas.
     if markers.selected_area != ''
       leaf.map.removeLayer markers.selected_area
     latlng = ''
-    # Drawing the selecting area on the map.
-    L.geoJson JSON.parse(bounds), onEachFeature: (feature, layer) ->
-      latlng = layer.getBounds().getCenter()
-      layer.bindPopup area_name, popupOptions()
 
-      layer.setStyle color: markers.area_color
-      leaf.map.addLayer layer
-      leaf.map.fitBounds(layer.getBounds())
-      markers.selected_area = layer
 
     latlng
     
@@ -224,27 +214,27 @@ global.markers =
       i++
     return
 
-  place_area_markers: (areas) ->
+  registerAreaMarkers: (areas) ->
     for area in areas
-
       # Adding area marker
       marker = L.marker(
         [area.latitude, area.longitude],
         icon: markers.area_icon,
-        bounceOnAdd: false)
+        bounceOnAdd: false,
+        areaId: area.id
+      )
 
       popup = L.popup().setContent('Loading...')
       marker.bindPopup popup, popupOptions()
 
       marker.on 'click', (e) ->
-
         marker_popup = e.target.getPopup()
         $.ajax
           url: '/showAreaPopup'
           global: false
           type: 'GET'
           data:
-            area_id: area.id
+            area_id: e.target.options.areaId
             area_marker: true
           dataType: 'html'
           beforeSend: (xhr) ->
@@ -257,9 +247,9 @@ global.markers =
           error: (data) ->
             marker_popup.setContent data
             marker_popup.update()
-        return
 
-      markers.group.addLayer marker
+      markers.area_markers[area.id] = marker
+      #markers.group.addLayer marker
       
     return  
 

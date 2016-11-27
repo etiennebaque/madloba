@@ -43,7 +43,9 @@ Home::putLocationMarkers = ->
 
   # Displaying markers on map
   markers.place_exact_locations_markers(markers.locations_exact, false)
-  markers.place_area_markers(markers.areas, false)
+
+  # Creating area markers and registering them (showing one area marker at a time when area selected in the sidebar)
+  markers.registerAreaMarkers(markers.areas, false)
 
   # Event to trigger when click on a link in an area popup, on the home page map. Makes a modal window appear.
   # Server side is in home_controller, method showSpecificAds.
@@ -96,6 +98,12 @@ Home::moveMapBasedOnArea = ->
     longitude = selectedOption.data('longitude')
 
     leaf.map.flyTo([latitude, longitude], 15, {animate: true})
+
+    if markers.selected_area != ''
+      leaf.map.removeLayer markers.selected_area
+
+    markers.selected_area = markers.area_markers[selectedOption.val()]
+    markers.selected_area.addTo(leaf.map)
 
   )
 
