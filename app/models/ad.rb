@@ -143,6 +143,41 @@ class Ad < ActiveRecord::Base
     return result.join(', ')
   end
 
+  # {
+  #   lat: 12.23456,
+  #   lng: 12.23456,
+  #   ad_id: 123,
+  #   markers: [
+  #     {
+  #       icon: 'fa-circle',
+  #       color: 'blue',
+  #       item_id: 5,
+  #       category_id: 2
+  #     },
+  #     {
+  #       icon: 'fa-square',
+  #       color: 'red',
+  #       item_id: 6,
+  #       category_id: 3
+  #     },
+  #     ...
+  #   ]
+  # }
+  def serialize!
+    location = self.location
+    items = self.items
+    info = {lat: location.latitude, lng: location.longitude, ad_id: self.id}
+    markers = []
+    items.each do |i|
+      cat = i.category
+      marker = {icon: cat.icon, color: cat.marker_color, item_id: i.id, category_id: cat.id}
+      markers << marker
+    end
+    info[:markers] = markers
+    self.marker_info = info
+    self.save
+  end
+
   private
 
   # Setting default values after initialization.

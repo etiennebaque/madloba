@@ -4,7 +4,7 @@ class User::LocationsController < ApplicationController
   before_action :requires_user, except: [:retrieve_geocodes]
   before_action :is_location_controller
   after_action :verify_authorized, except: [:retrieve_geocodes]
-  after_action :update_ad_json, only: [:update]
+  after_action :serialize_ads, only: [:update]
 
   include ApplicationHelper
 
@@ -145,12 +145,10 @@ class User::LocationsController < ApplicationController
   end
 
   # Updates the relevant ads marker_info (jsonb)
-  def update_ad_json
+  def serialize_ads
     if @location.errors.empty?
       Ad.where(location_id: @location.id).each do |ad|
-        ad.marker_info['lat'] = @location.latitude
-        ad.marker_info['lng'] = @location.longitude
-        ad.save
+        ad.serialize!
       end
     end
   end
