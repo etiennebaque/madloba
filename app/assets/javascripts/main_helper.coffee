@@ -119,6 +119,8 @@ global.leaf =
       if opts.showAreaIcon
         markers.selected_area = markers.area_markers[selectedOption.val()]
         markers.selected_area.addTo(leaf.map)
+        leaf.map.once 'zoomend', ->
+          markers.selected_area.fireEvent('click')
 
     )
     
