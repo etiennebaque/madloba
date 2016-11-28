@@ -105,6 +105,24 @@ global.leaf =
     return
 
 
+  moveMapBasedOnArea: (opts) ->
+    $('.area-select').on('change', ->
+      selectedOption = $('.area-select option:selected')
+      latitude = selectedOption.data('latitude')
+      longitude = selectedOption.data('longitude')
+
+      leaf.map.flyTo([latitude, longitude], opts.zoom, {animate: true})
+
+      if markers.selected_area != ''
+        leaf.map.removeLayer markers.selected_area
+
+      if opts.showAreaIcon
+        markers.selected_area = markers.area_markers[selectedOption.val()]
+        markers.selected_area.addTo(leaf.map)
+
+    )
+    
+
   show_single_area: (area_name) ->
     # Before adding the selected area, we need to remove all the currently displayed areas.
     if markers.selected_area != ''
@@ -367,22 +385,24 @@ global.find_geocodes = ->
       beforeSend: (xhr) ->
         xhr.setRequestHeader 'Accept', 'application/json'
         xhr.setRequestHeader 'Content-Type', 'application/json'
-        $('#findGeocodeLoaderId').html gon.vars['searching_location']
+        $('#find_geocode_loader').html gon.vars['searching_location']
         return
       success: (data) ->
         if data != null and data.status == 'ok'
           # Geocodes were found: the location is shown on the map.
-          myNewLat = Math.round(data.lat * 100000) / 100000
-          myNewLng = Math.round(data.lon * 100000) / 100000
-          $('.latitude').val myNewLat
-          $('.longitude').val myNewLng
+          latitude = Math.round(data.lat * 100000) / 100000
+          longitude = Math.round(data.lon * 100000) / 100000
+
+          $('.latitude').val latitude
+          $('.longitude').val longitude
+
           # Update the center of map, to show the general area
-          leaf.map.setView new (L.LatLng)(myNewLat, myNewLng), data.zoom_level
+          leaf.map.flyTo([latitude, longitude], 16, {animate: true})
         else
           # The address' geocodes were not found - the user has to pinpoint the location manually on the map.
           $('#myErrorModal').modal 'show'
         # Displaying notification about location found.
-        $('#findGeocodeLoaderId').html '<i>' + data.address_found + '</i>'
+        $('#find_geocode_loader').html '<i>' + data.address_found + '</i>'
 
 
 # This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,

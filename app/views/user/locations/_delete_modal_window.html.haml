@@ -6,7 +6,6 @@
         %button.close{"data-dismiss" => "modal", :type => "button"} ×
         %h3
           = t('admin.location.delete')
-          ?
       .modal-body
         - if @location.ads && @location.ads.length > 0
           %p= t('admin.warning_ads_before_delete_location')

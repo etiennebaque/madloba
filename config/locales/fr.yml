@@ -125,6 +125,12 @@ fr:
     definition: "Entrez votre emplacement* :"
     definition_exact: "Donner adresse complète"
     definition_area: "Indiquer quartier seulement"
+    why_choose_location_type: "Pourquoi dois-je choisir une option ?"
+    modal_exact_area_title: "Full address or area only?"
+    modal_exact_area_description: "On one hand, by clicking on '%{def_exact}', you will be able to enter the exact address of this location and pinpoint it on the map below."
+    modal_exact_area_description2: "After your ad has been created, you will be able to visualize it on the home page map with a colored marker placed at the previously marked location."
+    modal_exact_area_description3: "On the other hand, you may not want to give away that many details about the location, given any personal reasons (eg. anonymity, details about the ad...)."
+    modal_exact_area_description4: "By choosing '%{def_area}', you will just have to indicate which area does this location belong to. Once the ad is created, it won't appear as a colored marker on the home page, but it will show up in the search results page related to the selected area."
     street_number: "Numéro de rue :"
     street_name: "Nom de la rue :"
     street_name_help: "Exemple : nom de la rue, avenue, chemin..."
@@ -344,7 +350,7 @@ fr:
       ad_edit: Annonces - Mise à jour
       ad_updated: "L'annonce '%{title}' a été mise à jour."
       error_update: "%{errors} lors de la mise à jour de l'annonce"
-      delete: Supprimer cette annonce
+      delete: "Supprimer cette annonce ?"
       delete_ad_error_html: "Erreur lors de la mise à jour de cette annonce ! Retour à %{manage_ads_page}"
       manage_ads_page: "Gérer annonces"
       giving_accepting_title: Donne/Recherche

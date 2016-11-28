@@ -108,9 +108,15 @@ en:
     ad_action_accepting: I'm searching for items.
     name_username: the username
     name_fullname: the full name
-    definition: "Enter your location*:"
-    definition_exact: "Give full address"
-    definition_area: "Choose area only"
+    definition: "Enter your location by*:"
+    definition_exact: "Giving the full address"
+    definition_area: "Selecting the area only"
+    why_choose_location_type: "Why do I need to choose an option?"
+    modal_exact_area_title: "Full address or area only?"
+    modal_exact_area_description: "On one hand, by clicking on '%{def_exact}', you will be able to enter the exact address of this location and pinpoint it on the map below."
+    modal_exact_area_description2: "After your ad has been created, you will be able to visualize it on the home page map with a colored marker placed at the previously marked location."
+    modal_exact_area_description3: "On the other hand, you may not want to give away that many details about the location, given any personal reasons (eg. anonymity, details about the ad...)."
+    modal_exact_area_description4: "By choosing '%{def_area}', you will just have to indicate which area does this location belong to. Once the ad is created, it won't appear as a colored marker on the home page, but it will show up in the search results page related to the selected area."
     street_number: "Street number:"
     street_name: "Street name:"
     street_name_help: For this location, the name of the street, avenue, drive...
@@ -126,7 +132,7 @@ en:
     not_found: Location not found
     not_found_descr1: "Based on the information you've entered, the location could not be found."
     not_found_descr2: "But that's ok! Please select it manually on the map."
-    area_help: Choose the area where this location can be found.
+    area_help: Which area does this location belong to?
     error_location_fields: "Either an area or an address must be given"
   ad:
     new_ad: New ad
@@ -343,7 +349,7 @@ en:
       error_occurred: "%{errors} occurred while saving this location"
       update_success: The location '%{name}' has been updated.
       created_success: The location '%{name}' has been created.
-      delete: Delete this location
+      delete: "Delete this location?"
       linked_ads: Ads linked to that location
       no_ad: There is no ad linked to this location yet.
       area: Area

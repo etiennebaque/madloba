@@ -23,7 +23,7 @@ Home::init = ->
     $('#sidebar_category_icon').trigger('click')
 
   # After choosing an area, moves the map to where it is.
-  @moveMapBasedOnArea()
+  leaf.moveMapBasedOnArea({showAreaIcon: true, zoom: 15})
 
   # Ajax calls made when choosing a category, in the sidebar.
   @refineMarkers()
@@ -91,21 +91,6 @@ Home::putLocationMarkers = ->
     searched_location_marker.openPopup()
 
 
-Home::moveMapBasedOnArea = ->
-  $('.sidebar-area-select').on('change', ->
-    selectedOption = $('.sidebar-area-select option:selected')
-    latitude = selectedOption.data('latitude')
-    longitude = selectedOption.data('longitude')
-
-    leaf.map.flyTo([latitude, longitude], 15, {animate: true})
-
-    if markers.selected_area != ''
-      leaf.map.removeLayer markers.selected_area
-
-    markers.selected_area = markers.area_markers[selectedOption.val()]
-    markers.selected_area.addTo(leaf.map)
-
-  )
 
 Home::refineMarkers = ->
   _this = this
