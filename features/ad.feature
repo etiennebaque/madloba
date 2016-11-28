@@ -36,9 +36,18 @@ Scenario: Create successfully a new ad with a signed in user
 @javascript
 Scenario: The new ad page with an anonymous user should show relevant field
   Given I am an anonymous user
-  And I go to create a new ad page
+  When I go to create a new ad page
   Then I should see 'New ad'
   And I should see 'Create an account or sign in now before publishing your ad'
   And I should see 'Location name'
   And I should see 'About you'
   And I should see 'Captcha'
+
+Scenario: I visit a ad detail page, after this ad has been created.
+  Given I am an anonymous user
+  And an ad exists
+  When I go visit that ad detail page
+  Then I should see 'Back to home page'
+  When an area-only ad exists
+  And  I go visit that ad detail page
+  Then I should see 'Back to home page'

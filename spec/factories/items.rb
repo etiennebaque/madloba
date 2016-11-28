@@ -5,6 +5,7 @@ FactoryGirl.define do
 
   factory :item do |f|
     f.name { Faker::Name.title }
+    category
   end
 
   factory :first_item, parent: :item do

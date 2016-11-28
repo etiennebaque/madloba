@@ -50,3 +50,15 @@ Then(/^I should get new geocodes$/) do
   new_latitude.should_not be(@latitude)
   new_longitude.should_not be(@longitude)
 end
+
+When(/^an ad exists$/) do
+  @ad = FactoryGirl.create(:ad_with_items)
+end
+
+When(/^an area-only ad exists$/) do
+  @ad = FactoryGirl.create(:area_only_ad)
+end
+
+When(/^I go visit that ad detail page$/) do
+  visit ad_path @ad
+end
