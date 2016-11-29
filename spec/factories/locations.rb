@@ -16,7 +16,13 @@ FactoryGirl.define do
         create(:ad, location: location)
       end
     end
+  end
 
+  factory :area_only_location, parent: :location do |f|
+    f.address nil
+    f.postal_code nil
+    f.street_number nil
+    f.area { build(:area) }
   end
 
   factory :invalid_location, parent: :location do |f|

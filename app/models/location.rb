@@ -4,8 +4,8 @@ class Location < ActiveRecord::Base
   belongs_to :area
 
   validates_presence_of :latitude, :longitude
-  # 'Postal code' field is not necessary only if user chooses an area name instead.
-  validates_presence_of :postal_code, if: lambda { self.area == nil}
+
+  validate :location_fields_cannot_be_blank
   validates :latitude , numericality: { greater_than:  -90, less_than:  90 }
   validates :longitude, numericality: { greater_than: -180, less_than: 180 }
 
@@ -57,17 +57,12 @@ class Location < ActiveRecord::Base
   end
 
   # This method creates the final longitudes and latitudes for each area to be displayed on the map.
-  def self.define_area_geocodes (locations_area)
+  def self.define_area_geocodes
     area_geocodes = {}
-
-    if (locations_area && locations_area.length > 0)
-      areas = Area.where(id: locations_area.keys)
-      areas.each do |area|
-        area_geocodes[area.id] = {'name' => area.name, 'bounds' => area.bounds}
-      end
+    Area.all.each do |area|
+      area_geocodes[area.id] = {name: area.name, latitude: area.latitude, longitude: area.longitude}
     end
-
-    return area_geocodes
+    area_geocodes
   end
 
   def marker_message
@@ -91,8 +86,11 @@ class Location < ActiveRecord::Base
     website.include?('http') ? website : "http://#{self.website}"
   end
 
-  def clickable_map_for_edit
-    CLICKABLE_MAP_EXACT_MARKER
+  def location_fields_cannot_be_blank
+    conditions_met = address.present? || area.present?
+    if !conditions_met
+      errors.add(:base, I18n.t('location.error_location_fields'))
+    end
   end
 
   def address_geocode_lookup(short: false)

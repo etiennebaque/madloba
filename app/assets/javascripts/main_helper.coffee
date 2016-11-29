@@ -12,15 +12,14 @@ $ ->
 ###
 global.leaf =
   map: null
+  mapSettings: null
   map_tiles: null
   my_lat: ''
   my_lng: ''
-  drawn_items: null
   areas: null
   searched_address: ''
 
   init: (map_settings) ->
-
     leaf.map = L.map('map', scrollWheelZoom: false)
 
     leaf.map.on 'click', ->
@@ -28,6 +27,8 @@ global.leaf =
         leaf.map.scrollWheelZoom.disable()
       else
         leaf.map.scrollWheelZoom.enable()
+
+    leaf.mapSettings = map_settings
 
     leaf.my_lat = map_settings['latitude']
     leaf.my_lng = map_settings['longitude']
@@ -46,81 +47,48 @@ global.leaf =
     leaf.map_tiles.addTo leaf.map
     leaf.map.setView [leaf.my_lat, leaf.my_lng], map_settings['zoom_level']
 
-    if map_settings['clickable_map_marker'] != 'none'
-      # Getting latitude and longitude when map is clicked
-      leaf.map.on 'click', onMapClickLocation
-
-  show_features_on_ad_details_page: (map_settings) ->
-    if map_settings['ad_show_is_area'] == true
-      # Location where full address is not given (area only). Drawing the area related to this ad.
-      area_latlng = leaf.show_single_area(map_settings['popup_message'], map_settings['bounds'])
-      leaf.map.setView area_latlng, map_settings['zoom_level']
-
-    else
-      # Exact address. Potentially several center markers on the map.
-      # Displays a marker for each item tied to the ad we're showing the details of.
-      # Using the Marker Cluster plugin to spiderfy this ad's item marker.
-      markers.group = new (L.markerClusterGroup)(
-        spiderfyDistanceMultiplier: 2)
-
-      i = 0
-      while i < map_settings['ad_show'].length
-        item_category = map_settings['ad_show'][i]
-        icon_to_use = L.AwesomeMarkers.icon(
-          prefix: 'fa'
-          markerColor: item_category['color']
-          icon: item_category['icon'])
-
-        map_center_marker = L.marker([
-          leaf.my_lat
-          leaf.my_lng
-        ], icon: icon_to_use)
-
-        if map_settings['marker_message'] != ''
-          map_center_marker.bindPopup(map_settings['marker_message'] + ' - ' + item_category['item_name']).openPopup()
-
-        markers.group.addLayer map_center_marker
-        i++
-
-      leaf.map.addLayer markers.group
-
-      leaf.map.setView [
-        leaf.my_lat
-        leaf.my_lng
-      ], map_settings['zoom_level']
-
-    return
 
   show_single_marker: (map_settings) ->
-    if map_settings['loc_type'] == 'area'
-      leaf.show_single_area map_settings['marker_message'], map_settings['bounds']
+    # we are displaying the center point.
+    center_marker = L.marker([
+      leaf.my_lat
+      leaf.my_lng
+    ], icon: markers.default_icon)
+    if map_settings['marker_message'] != ''
+      center_marker.addTo(leaf.map).bindPopup(map_settings['marker_message']).openPopup()
     else
-      # we are displaying the center point.
-      center_marker = L.marker([
-        leaf.my_lat
-        leaf.my_lng
-      ], icon: markers.default_icon)
-      if map_settings['marker_message'] != ''
-        center_marker.addTo(leaf.map).bindPopup(map_settings['marker_message']).openPopup()
-      else
-        center_marker.addTo leaf.map
+      center_marker.addTo leaf.map
+
     return
 
 
-  show_single_area: (area_name, bounds) ->
+  moveMapBasedOnArea: (opts) ->
+    $('.area-select').on('change', ->
+      selectedOption = $('.area-select option:selected')
+
+      if markers.selected_area != ''
+        leaf.map.removeLayer markers.selected_area
+
+      if selectedOption.val() != ''
+        latitude = selectedOption.data('latitude')
+        longitude = selectedOption.data('longitude')
+
+        leaf.map.flyTo([latitude, longitude], opts.zoom, {animate: true})
+
+        if opts.showAreaIcon
+          markers.selected_area = markers.area_markers[selectedOption.val()]
+          markers.selected_area.addTo(leaf.map)
+          leaf.map.once 'zoomend', ->
+            markers.selected_area.fireEvent('click')
+    )
+    
+
+  show_single_area: (area_name) ->
     # Before adding the selected area, we need to remove all the currently displayed areas.
     if markers.selected_area != ''
       leaf.map.removeLayer markers.selected_area
     latlng = ''
-    # Drawing the selecting area on the map.
-    L.geoJson JSON.parse(bounds), onEachFeature: (feature, layer) ->
-      latlng = layer.getBounds().getCenter()
-      layer.bindPopup area_name, popupOptions()
 
-      layer.setStyle color: markers.area_color
-      leaf.map.addLayer layer
-      leaf.map.fitBounds(layer.getBounds())
-      markers.selected_area = layer
 
     latlng
     
@@ -134,30 +102,36 @@ global.markers =
   group: ''
   area_group: ''
   locations_exact: null
-  areas_exact: null
+  areas: null
+
   default_icon: null
   new_icon: null
+  area_icon: null
+
+  area_markers: {}
+
+  selected_categories: []
   marker_colors: null
   area_color: null
   area_geocodes: null
-  location_marker_type: null
   center_marker: null
   init: (map_settings) ->
+
     markers.default_icon = L.icon(
       iconUrl: map_settings['default_marker_icon']
-      iconAnchor: [
-        12
-        41
-      ]
-      popupAnchor: [
-        0
-        -34
-      ])
+      iconAnchor: [12,41]
+      popupAnchor: [0,-34])
+
     markers.new_icon = L.icon(
       iconUrl: map_settings['new_marker_icon']
-      iconAnchor: [12, 41]
-      popupAnchor: [0, -34])
-    markers.location_marker_type = map_settings['clickable_map_marker']
+      iconAnchor: [12,41]
+      popupAnchor: [0,-34])
+
+    markers.area_icon = L.icon(
+      iconUrl: area_marker
+      iconAnchor: [15,43]
+      popupAnchor: [1,-34])
+
     markers.area_color = map_settings['area_color']
     return
 
@@ -167,105 +141,100 @@ global.markers =
       ad = locations_exact[i]
       j = 0
       while j < ad['markers'].length
+
         item = ad['markers'][j]
-        # Creating the marker for this ad here.
-        marker_icon = L.AwesomeMarkers.icon(
-          prefix: 'fa'
-          markerColor: item['color']
-          icon: item['icon'])
 
-        marker = L.marker([ad['lat'], ad['lng']],
-          icon: marker_icon
-          bounceOnAdd: is_bouncing_on_add)
+        if markers.canCategoryBeDisplayed(item)
+          # Creating the marker for this ad here.
+          marker_icon = L.AwesomeMarkers.icon(
+            prefix: 'fa'
+            markerColor: item['color']
+            icon: item['icon'])
 
-        marker.ad_id = ad['ad_id']
-        marker.item_id = item['item_id']
-        popup = L.popup(
-          minWidth: 250
-          maxWidth: 280).setContent('Loading...')
+          marker = L.marker([ad['lat'], ad['lng']],
+            icon: marker_icon
+            bounceOnAdd: is_bouncing_on_add)
 
-        marker.bindPopup popup, popupOptions()
-        # When a marker is clicked, an Ajax call is made to get the content of the popup to display
-        marker.on 'click', (e) ->
-          marker_popup = e.target.getPopup()
-          $.ajax
-            url: '/showAdPopup'
-            global: false
-            type: 'GET'
-            data:
-              ad_id: @ad_id
-              item_id: @item_id
-            dataType: 'html'
-            beforeSend: (xhr) ->
-              xhr.setRequestHeader 'Accept', 'text/html-partial'
-            success: (data) ->
-              $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
-              marker_popup.setContent data
-              marker_popup.update()
-              adjustPopupPosition(marker_popup, 'exact')
-            error: (data) ->
-              marker_popup.setContent data
-              marker_popup.update()
-          return
+          marker.ad_id = ad['ad_id']
+          marker.item_id = item['item_id']
+          popup = L.popup(
+            minWidth: 250
+            maxWidth: 280).setContent('Loading...')
 
-        markers.group.addLayer marker
+          marker.bindPopup popup, popupOptions()
+          # When a marker is clicked, an Ajax call is made to get the content of the popup to display
+          marker.on 'click', (e) ->
+            marker_popup = e.target.getPopup()
+            $.ajax
+              url: '/showAdPopup'
+              global: false
+              type: 'GET'
+              data:
+                ad_id: @ad_id
+                item_id: @item_id
+              dataType: 'html'
+              beforeSend: (xhr) ->
+                xhr.setRequestHeader 'Accept', 'text/html-partial'
+              success: (data) ->
+                $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
+                marker_popup.setContent data
+                marker_popup.update()
+                adjustPopupPosition(marker_popup, 'exact')
+              error: (data) ->
+                marker_popup.setContent data
+                marker_popup.update()
+            return
+          markers.group.addLayer marker
+
         j++
       i++
     return
 
-  place_area_markers: (location_areas) ->
-    Object.keys(locations_area).forEach (area_id) ->
-      area_bounds = markers.area_geocodes[area_id]['bounds']
-      L.geoJson JSON.parse(area_bounds), onEachFeature: (feature, layer) ->
+  registerAreaMarkers: (areas) ->
+    for area in areas
       # Adding area marker
-        marker_icon = L.icon({
-          iconUrl: area_marker
-          popupAnchor: [17,2]
-        })
+      marker = L.marker(
+        [area.latitude, area.longitude],
+        icon: markers.area_icon,
+        bounceOnAdd: false,
+        areaId: area.id
+      )
+
+      popup = L.popup().setContent('Loading...')
+      marker.bindPopup popup, popupOptions()
+
+      marker.on 'click', (e) ->
+        marker_popup = e.target.getPopup()
+        $.ajax
+          url: '/showAreaPopup'
+          global: false
+          type: 'GET'
+          data:
+            area_id: e.target.options.areaId
+            area_marker: true
+          dataType: 'html'
+          beforeSend: (xhr) ->
+            xhr.setRequestHeader 'Accept', 'text/html-partial'
+          success: (data) ->
+            $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
+            marker_popup.setContent data
+            marker_popup.update()
+            adjustPopupPosition(marker_popup, 'area')
+          error: (data) ->
+            marker_popup.setContent data
+            marker_popup.update()
+
+      markers.area_markers[area.id] = marker
       
-        marker = L.marker(
-          layer.getBounds().getCenter(),
-          icon: marker_icon,
-          bounceOnAdd: false)
-
-        popup = L.popup().setContent('Loading...')
-        marker.bindPopup popup, popupOptions()
-
-        marker.on 'click', (e) ->
-          marker_popup = e.target.getPopup()
-          $.ajax
-            url: '/showAreaPopup'
-            global: false
-            type: 'GET'
-            data:
-              area_id: area_id
-              area_marker: true
-            dataType: 'html'
-            beforeSend: (xhr) ->
-              xhr.setRequestHeader 'Accept', 'text/html-partial'
-            success: (data) ->
-              $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
-              marker_popup.setContent data
-              marker_popup.update()
-              adjustPopupPosition(marker_popup, 'area')
-            error: (data) ->
-              marker_popup.setContent data
-              marker_popup.update()
-          return
-
-        markers.group.addLayer marker
-      
-        return
-      return
     return  
 
+  # We show on the map all the markers if there's no specific navigation state.
+  # If there's one, we show only the markers which category are in the nav state.
+  canCategoryBeDisplayed: (item) ->
+    markers.selected_categories.length == 0 ||
+    item.category_id.toString() in markers.selected_categories
 
-  draw_area_areas: (locations_area) ->
-    # Snippet that creates markers, to represent ads tied to area-type location.
-    if locations_area != null and Object.keys(locations_area).length > 0
-      drawAreasOnMap(locations_area)
 
-    return
 
 ###*
 # Main function that initializes the map on different screens (eg home page, map setting page, ad page...).
@@ -279,16 +248,6 @@ global.initLeafletMap = (map_settings) ->
   # Initialization of the map and markers.
   leaf.init map_settings
   markers.init map_settings
-
-  if map_settings['has_center_marker'] == true
-    if $('#show_ad_page').length > 0
-      # Showing markers or an area on the ad details page (ads#show)
-      leaf.show_features_on_ad_details_page map_settings
-    else
-      # Center single marker on the map
-      # Appearing only in admin map setting, and admin location page, on page load.
-      # Define first if it should be the area icon (for addresses based only on postal codes), or the default icon.
-      leaf.show_single_marker map_settings
 
 
 ###*
@@ -341,13 +300,12 @@ global.drawAreasOnMap = (locations_area) ->
 # Updates hidden fields, if needed, if the geocodes are part of a form.
 ###
 global.onMapClickLocation = (e) ->
-  new_geocodes = onMapClick(e)
-  geocodeSplit = new_geocodes.split(',')
+  geocodes = onMapClick(e)
 
   # latitude and longitude are classes used on area settings page.
   $('#new_dynamic_button_add').removeClass 'disabled'
-  $('.latitude').val geocodeSplit[0]
-  $('.longitude').val geocodeSplit[1]
+  $('.latitude').val geocodes.lat
+  $('.longitude').val geocodes.lng
 
 
 # Event triggered when click on "Locate me on the map" button,
@@ -373,22 +331,24 @@ global.find_geocodes = ->
       beforeSend: (xhr) ->
         xhr.setRequestHeader 'Accept', 'application/json'
         xhr.setRequestHeader 'Content-Type', 'application/json'
-        $('#findGeocodeLoaderId').html gon.vars['searching_location']
+        $('#find_geocode_loader').html gon.vars['searching_location']
         return
       success: (data) ->
         if data != null and data.status == 'ok'
           # Geocodes were found: the location is shown on the map.
-          myNewLat = Math.round(data.lat * 100000) / 100000
-          myNewLng = Math.round(data.lon * 100000) / 100000
-          $('.latitude').val myNewLat
-          $('.longitude').val myNewLng
+          latitude = Math.round(data.lat * 100000) / 100000
+          longitude = Math.round(data.lon * 100000) / 100000
+
+          $('.latitude').val latitude
+          $('.longitude').val longitude
+
           # Update the center of map, to show the general area
-          leaf.map.setView new (L.LatLng)(myNewLat, myNewLng), data.zoom_level
+          leaf.map.flyTo([latitude, longitude], 16, {animate: true})
         else
           # The address' geocodes were not found - the user has to pinpoint the location manually on the map.
           $('#myErrorModal').modal 'show'
         # Displaying notification about location found.
-        $('#findGeocodeLoaderId').html '<i>' + data.address_found + '</i>'
+        $('#find_geocode_loader').html '<i>' + data.address_found + '</i>'
 
 
 # This event replaces the 'zoomToBoundsOnClick' MarkerCluster option. When clicking on a marker cluster,
@@ -424,63 +384,36 @@ global.adjustPopupPosition = (popup, popup_type) ->
   leaf.map.panTo(leaf.map.unproject(px),{animate: true})
 
 # Option to attach to popup, on bindPopup event  
-global.popupOptions = ->
-  {className: 'area-popup'}
+global.popupOptions = (otherOpts) ->
+  opts = {className: 'area-popup'}
+  for key, val of otherOpts
+    opts[key] = val
+  opts
+
+
+global.initMapClick = (e) ->
+  if markers.new_marker != ''
+    leaf.map.removeLayer markers.new_marker
+    
+  myNewLat = e.latlng.lat
+  myNewLng = e.latlng.lng
+  # Rounding up latitude and longitude, with 5 decimals
+  myNewLat = Math.round(myNewLat * 100000) / 100000
+  myNewLng = Math.round(myNewLng * 100000) / 100000
+  {lat: myNewLat, lng: myNewLng}
+
   
-###*
-# Creates the text to be shown in a marker popup, giving details about the selected exact location.
-# @param first_sentence
-# @param location
-# @returns Popup text content.
-###
-createPopupHtml = (first_sentence, ad, index) ->
-  second_sentence = ''
-  result = ''
-  item = ad['items'][index]
-  popup_ad_link = '<a href=\'/ads/' + ad['id'] + '/\'>' + ad['title'] + '</a>'
-  markerColor = marker_colors[item['category']['marker_color']]
-  itemName = item['name'].capitalizeFirstLetter()
-  popup_item_name = '<span style=\'color:' + markerColor + '\';><strong>' + itemName + '</strong></span>'
-  if ad['giving'] == true
-    second_sentence = gon.vars['items_given'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
-  else
-    second_sentence = gon.vars['items_searched'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
-  if ad['image']['thumb']['url'] != null and ad['image']['thumb']['url'] != ''
-    # Popup is created with a thumbnail image in it.
-    ad_image = '<img class=\'thumb_ad_image\' onError="$(\'.thumb_ad_image\').remove(); ' +
-      '$(\'.image_notification\').html(\'<i>' + gon.vars['image_not_available'] + '</i>\');" src=\'' +
-      ad['image']['thumb']['url'] + '\'><span class="image_notification"></span>'
-
-    result = '<div style=\'overflow: auto;\'><div class=\'col-sm-6\'>' + first_sentence + '</div>' +
-        '<div class=\'col-sm-6\'>' + ad_image + '</div><div class=\'col-sm-12\'><br>' +
-        second_sentence + '</div></div>'
-
-  else
-    # Popup is created without any thumbnail image.
-    result = '<div style=\'overflow: auto;\'>' + first_sentence + '<br><br>' + second_sentence + '</div>'
-  result
-
-
 ###*
 # Callback function that returns geocodes of clicked location.
 # @param e
 # @returns "latitude,longitude"
 ###
 onMapClick = (e) ->
-  if markers.new_marker != ''
-    leaf.map.removeLayer markers.new_marker
 
-  myNewLat = e.latlng.lat
-  myNewLng = e.latlng.lng
-  # Rounding up latitude and longitude, with 5 decimals
-  myNewLat = Math.round(myNewLat * 100000) / 100000
-  myNewLng = Math.round(myNewLng * 100000) / 100000
-  
-  if markers.location_marker_type == 'exact'
-    markers.new_marker = new (L.Marker)(e.latlng, { icon: markers.new_icon }, draggable: false)
-    leaf.map.addLayer markers.new_marker
-
-  myNewLat + ',' + myNewLng
+  geocodes = initMapClick(e)
+  markers.new_marker = new (L.Marker)(e.latlng, { icon: markers.new_icon }, draggable: false)
+  leaf.map.addLayer markers.new_marker
+  geocodes
 
 String::capitalizeFirstLetter = ->
   @charAt(0).toUpperCase() + @slice(1)

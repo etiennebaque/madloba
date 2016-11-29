@@ -35,36 +35,7 @@ class AdSocket
         prefix = event.data[0..2]
         incoming_message = event.data[3..-1]
 
-        if prefix == 'map'
-          # From the home page, based on the selected navigation, get the relevant ads.
-          new_nav_states = incoming_message.split('&')
-          nav_params = {}
-          new_nav_states.each do |state|
-            info = state.split('=')
-            nav_params[info[0]] = info[1]
-          end
-
-          if nav_params['cat'] && nav_params['cat'] != ''
-            selected_categories = []
-            selected_categories = nav_params['cat'].split('+')
-          end
-
-          if nav_params['item'] && nav_params['item'] != ''
-            selected_item_ids = []
-            # An item is being searched.
-            searched_item = nav_params['item']
-            selected_item_ids = Item.joins(:ads).where('name LIKE ?', "%#{searched_item}%").pluck(:id).uniq
-          end
-
-          response = {}
-          response['status'] = 'mapok'
-          response['map_info'] = {}
-          response['map_info']['markers'] = Ad.search(selected_categories, searched_item, selected_item_ids, nav_params[:q], nil)
-          response['map_info']['area'] = Location.search('area', selected_categories, searched_item, selected_item_ids, nav_params[:q])
-
-          socket.send response.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})
-
-        elsif prefix == 'new'
+        if prefix == 'new'
           # Adding new ad on the home page map of other users.
           ad_id = incoming_message.to_i
           response = {}

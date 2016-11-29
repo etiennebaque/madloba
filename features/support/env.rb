@@ -48,6 +48,7 @@ end
 Capybara::Webkit.configure do |config|
   config.allow_url("api.mapbox.com")
   config.allow_url("fonts.googleapis.com")
+  config.allow_url("openstreetmap.org")
 end
 
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.

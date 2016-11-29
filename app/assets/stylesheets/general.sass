@@ -52,12 +52,15 @@ body
     height: 400px
 
 // responsive fixes for navigation bar
+.nav-form-center
+  text-align: center
 @media (min-width: 1060px)
-  #searchFormId
-    padding-left: 13%
+  #nav_search_form
+    float: none
+    display: inline-block
 
 @media (max-width: 1059px)
-  #searchFormId
+  #nav_search_form
     .twitter-typeahead
       width: 100%
     .form-group
@@ -76,6 +79,10 @@ body
 .popover
   max-width: 340px
   width: auto
+
+.sidebar-pane .area-select
+  margin: 25px 0px 10px 0px
+  font-size: 12px
 
 .blocking-notification
   position: fixed
@@ -100,7 +107,7 @@ body
   padding: 0 0 0 5px
 
 .smaller-no-border-no-background
-  padding: 5px 15px 0px
+  padding: 5px 15px 0px 0px
   border: none
   background-color: transparent
 
@@ -128,15 +135,14 @@ span.disabled
 .no-color
   color: #FFFFFF !important
 
-.area_link:hover
-  font-weight: bold
-
 #sidebar
   top: 60px
   background-color: white
   .inner-section
     padding-top: 15px
     font-size: 14px
+    .selected-area
+      font-weight: bold
     .send-us-message
       text-align: center
       padding: 20px 0px
@@ -148,7 +154,6 @@ span.disabled
       a
         margin: 0px 5px
   .create-ad
-    padding-left: 14px
     span
       font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
       font-size: 14px
@@ -192,6 +197,12 @@ span.disabled
   color: white
   font-size: 13px
   border-radius: 12px 12px 0px 0px
+
+#map_notification_exact
+  margin: 10px 0px
+
+.why-choose-section
+  margin: 10px 0px
 
 .area-popup .leaflet-popup-content-wrapper
   padding: 14px
@@ -298,8 +309,23 @@ html
   font-style: italic
   padding: 10px 20px
 
+// Area setting page - style for popup content
+#area_settings .leaflet-popup-content-wrapper
+  .area-name
+    width: 125px
+    float: left
+    margin-top: 2px
+  .update-area-text
+    margin-right: 7px
+    width: 145px
+  .btn
+    padding: 2px 7px
+    &.update-area
+      margin-right: 6px
+
 #area_notification_message
-  margin-top: 15px
+  margin: 18px 0px
+  min-height: 20px
 
 .no-padding
   padding: 0 !important

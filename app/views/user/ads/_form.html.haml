@@ -6,7 +6,7 @@
   %fieldset
 
     - if page == 'edit'
-      / Edit page: "Delete Ad" and "See published ad" buttons
+      -# Edit page: "Delete Ad" and "See published ad" buttons
       .form-group
         .col-lg-6
           %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#", :style => "margin-right: 10px;"}= t('admin.ad.delete')
@@ -152,7 +152,7 @@
     -# Submit section
     .form-group{style: 'margin-top: 35px'}
       .col-lg-10.col-lg-offset-2
-        = f.submit t("ad.submit_ad_#{page}"), class: 'btn btn-success'
+        = f.submit t("ad.submit_ad_#{page}"), id: 'submit_new_ad', class: 'btn btn-success'
         %a.btn{:href => "/"}= t('home.cancel')
 
     -# After submit, a notification shows up here, if a new image is being uploaded

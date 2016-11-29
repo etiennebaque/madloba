@@ -35,6 +35,7 @@ class Ad < ActiveRecord::Base
 
       if cat_nav_state || searched_item
         if cat_nav_state
+          puts cat_nav_state
           if searched_item
             # We search for ads in relation to the searched item and the current category navigation state.
             ads = ads.joins(:items).where(items: {category_id: cat_nav_state, id: selected_item_ids})
@@ -54,7 +55,7 @@ class Ad < ActiveRecord::Base
 
     end
 
-    ads = ads.pluck(:marker_info)
+    ads = ads.pluck(:marker_info).uniq
 
     ads
 
@@ -140,6 +141,41 @@ class Ad < ActiveRecord::Base
       result << ad_item.item.capitalized_name
     end
     return result.join(', ')
+  end
+
+  # {
+  #   lat: 12.23456,
+  #   lng: 12.23456,
+  #   ad_id: 123,
+  #   markers: [
+  #     {
+  #       icon: 'fa-circle',
+  #       color: 'blue',
+  #       item_id: 5,
+  #       category_id: 2
+  #     },
+  #     {
+  #       icon: 'fa-square',
+  #       color: 'red',
+  #       item_id: 6,
+  #       category_id: 3
+  #     },
+  #     ...
+  #   ]
+  # }
+  def serialize!
+    location = self.location
+    items = self.items
+    info = {lat: location.latitude, lng: location.longitude, ad_id: self.id}
+    markers = []
+    items.each do |i|
+      cat = i.category
+      marker = {icon: cat.icon, color: cat.marker_color, item_id: i.id, category_id: cat.id}
+      markers << marker
+    end
+    info[:markers] = markers
+    self.marker_info = info
+    self.save
   end
 
   private

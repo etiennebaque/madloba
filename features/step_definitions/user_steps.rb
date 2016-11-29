@@ -8,11 +8,11 @@ Given(/^I am an anonymous user$/) do
   end
 end
 
-Given(/^I am a signed user$/) do
-  user = FactoryGirl.create(:user)
+Given(/^I am a signed ([^"]*)$/) do |user_type|
+  @user = FactoryGirl.create(user_type.to_sym)
   visit root_path
   page.find('#popover').click
-  step("I fill in 'user[email]' with '#{user.email}'")
-  step("I fill in 'user[password]' with '#{user.password}'")
+  step("I fill in 'user[email]' with '#{@user.email}'")
+  step("I fill in 'user[password]' with '#{@user.password}'")
   click_button 'Sign in'
 end

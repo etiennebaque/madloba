@@ -31,7 +31,7 @@ en:
     create_account: create an account
     refinements: Your selection
     delete_all: Delete all
-    refine_location: Refine location
+    refine_location: Move to a specific location
     cancel: Cancel
     close: Close
     sign_register: Sign in / Create account
@@ -51,8 +51,7 @@ en:
     links: Links
     your_searched_location: Your searched location
     no_ad: There's no ad at the moment.
-    area_popup_message: "%{ad_count} ads posted in total in this area, featuring %{item_count} items."
-    area_marker_message: "%{ad_count} other ads posted in this area, featuring %{item_count} items."
+    area_marker_message: "%{ad_count} ads posted in total in this area, featuring %{item_count} items."
     show_results: "Show results for this area"
     create_an_ad_now_html: "%{create_new_ad} to tell your community what you have to give, or what you're looking for!"
     about_page: About %{website_name}
@@ -109,9 +108,15 @@ en:
     ad_action_accepting: I'm searching for items.
     name_username: the username
     name_fullname: the full name
-    definition: "Enter your location*:"
-    definition_exact: "Give full address"
-    definition_area: "Choose area only"
+    definition: "Enter your location by*:"
+    definition_exact: "Giving the full address"
+    definition_area: "Selecting the area only"
+    why_choose_location_type: "Why do I need to choose an option?"
+    modal_exact_area_title: "Full address or area only?"
+    modal_exact_area_description: "On one hand, by clicking on '%{def_exact}', you will be able to enter the exact address of this location and pinpoint it on the map below."
+    modal_exact_area_description2: "After your ad has been created, you will be able to visualize it on the home page map with a colored marker placed at the previously marked location."
+    modal_exact_area_description3: "On the other hand, you may not want to give away that many details about the location, given any personal reasons (eg. anonymity, details about the ad...)."
+    modal_exact_area_description4: "By choosing '%{def_area}', you will just have to indicate which area does this location belong to. Once the ad is created, it won't appear as a colored marker on the home page, but it will show up in the search results page related to the selected area."
     street_number: "Street number:"
     street_name: "Street name:"
     street_name_help: For this location, the name of the street, avenue, drive...
@@ -127,7 +132,8 @@ en:
     not_found: Location not found
     not_found_descr1: "Based on the information you've entered, the location could not be found."
     not_found_descr2: "But that's ok! Please select it manually on the map."
-    area_help: Choose the area where this location can be found.
+    area_help: Which area does this location belong to?
+    error_location_fields: "Either an area or an address must be given"
   ad:
     new_ad: New ad
     once_created_expire_html: Once created, your ad will be published for <strong>%{max_expire_days} days</strong>.
@@ -343,7 +349,7 @@ en:
       error_occurred: "%{errors} occurred while saving this location"
       update_success: The location '%{name}' has been updated.
       created_success: The location '%{name}' has been created.
-      delete: Delete this location
+      delete: "Delete this location?"
       linked_ads: Ads linked to that location
       no_ad: There is no ad linked to this location yet.
       area: Area
@@ -414,9 +420,13 @@ en:
       by_area: by area
       area_postal_code: Area defined by a postal code
       area_area: Area defined by an area
-      map_description: "Use this map to draw, edit or delete the boundaries of your city's areas."
-      error_update_area: An server error occurred while updating areas. Please try again later.
-      error_save_area: An server error occurred while saving this area. Please try again later.
+      map_description: "Areas broadly define neighbourhoods and districts related to your Madloba website.
+                        Once defined, users will be able to looks at ads in the chosen neighbourhood on the home page.
+                        Alternatively, they will choose an area when creating a new ad."
+      map_description_2: "Click on the map to pinpoint and name a new area.
+                          Click on an previously defined area to either delete it or change its name."
+      error_update_area: An error occurred while updating this area. Please try again later.
+      error_save_area: An error occurred while saving this area. Please try again later.
       area_name: Area name
       latitude: Latitude
       longitude: Longitude
@@ -425,7 +435,7 @@ en:
       save_name_success: Area name successfully updated.
       error_name_save: Error occured when updating area name. Please try again later.
       update_success: The areas have been successfully updated.
-      delete_success: Deletion completed.
+      delete_success: Area was deleted successfully.
       delete_error: Error occured when deleting an area. Please try again later.
     map_settings:
       title: Map
@@ -548,16 +558,13 @@ en:
     start_typing_item: Start typing an item
     no_result_create_item: No results. Select 'Create a new item'.
     new_image_uploading: New image is being uploaded. Please wait.
-    type_area_name: Type an area name here...
     latitude: (latitude)
     longitude: (longitude)
     add: Add
     updating_area: Updating area list...
-    area_show_up: "This location area will show up as:"
     searching_location: Searching location...
     update: Update
     loading: Loading...
-    choose_location: Choose one of the following available locations, provided by OpenStreetMap
     remove: Remove
     records_per_page: records per page
     search: "Search:"
@@ -572,11 +579,7 @@ en:
     last: Last
     filtered_from: filtered from
     total_entries: total entries
-    in_this_area: In this area
     ads_for: Ads for
-    items_given: "Item(s) being given away:"
-    items_searched: "Item(s) being searched for:"
-    image_not_available: Image not available yet.
     cancel_drawing: Cancel drawing
     cancel: Cancel
     delete_last_point_drawn: Delete last point drawn

@@ -5,6 +5,8 @@ global.MapSettings = ->
 
 MapSettings::init = ->
 
+  leaf.show_single_marker leaf.mapSettings
+
   find_geocodes()
 
   $('.leaflet-control-zoom-out, .leaflet-control-zoom-in').click ->
@@ -21,9 +23,9 @@ MapSettings::init = ->
   $('.map-chosen-list, .mapbox-name-list').change ->
     selected_map = ''
     $('select option:selected').each ->
-      map_settings['chosen_map'] = $('.map-chosen-list').val()
-      if map_settings['mapbox_tile_url'] != ''
-        toReplace = map_settings['mapbox_tile_url'].match("v4/(.*)/{z}")[1]
+      leaf.mapSettings['chosen_map'] = $('.map-chosen-list').val()
+      if leaf.mapSettings['mapbox_tile_url'] != ''
+        toReplace = leaf.mapSettings['mapbox_tile_url'].match("v4/(.*)/{z}")[1]
         newMapboxVal = $('.mapbox-name-list').val()
-        map_settings['mapbox_tile_url'] = map_settings['mapbox_tile_url'].replace(toReplace, newMapboxVal)
-      initLeafletMap(map_settings)
+        leaf.mapSettings['mapbox_tile_url'] = leaf.mapSettings['mapbox_tile_url'].replace(toReplace, newMapboxVal)
+      initLeafletMap(leaf.mapSettings)

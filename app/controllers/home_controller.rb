@@ -6,7 +6,7 @@ class HomeController < ApplicationController
   # --------------------------------------
   def index
     # Initializing the map, in relation to its center, defined in the settings table.
-    @map_settings = MapInfo.new(has_center_marker: false, clickable: NOT_CLICKABLE_MAP).to_hash
+    @map_settings = MapInfo.new.to_hash
 
     # Initializing links, and social media information, for the footer of the home page.
     settings = get_footer_info
@@ -125,38 +125,23 @@ class HomeController < ApplicationController
     popup_html = ''
     begin
       area_id = params['area_id']
-      area_marker = params['area_marker'] == 'true'
 
       area = Area.includes(locations: {ads: :items}).find(area_id.to_i)
       ad_count, item_count = 0, 0
 
-      # When show popup for area marker, message should mention the 'other ads'.
-      # Otherwise, when showing popup for area, mention all ads in this area.
+      # Counting items for all ads in this area.
       area.locations.each do |location|
-        if !area_marker || (area_marker && location.area?)
-          ad_count += location.ads.count
-          location.ads.each{|ad| item_count += ad.items.count}
-        end
+        ad_count += location.ads.count
+        location.ads.each{|ad| item_count += ad.items.count}
       end
 
-      dot_circle_icon = "<i class='fa #{Location::AREA_ADDRESS_ICON}' aria-hidden='true'></i>"
-      exact_marker_icon = "<i class='fa #{Location::EXACT_ADDRESS_ICON} aria-hidden='true'></i>"
-
-      if area_marker
-        message_key = 'area_marker_message'
-        icon_html = "#{dot_circle_icon}&nbsp;"
-      else
-        message_key = 'area_popup_message'
-        icon_html = "#{exact_marker_icon}&nbsp;#{dot_circle_icon}&nbsp;"
-      end
-
-      message = I18n.t("home.#{message_key}", ad_count: ad_count, item_count: item_count)
+      message = I18n.t("home.area_marker_message", ad_count: ad_count, item_count: item_count)
 
       popup_html = "<div style='overflow: auto;'>"
 
       # Title
       popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{Area::AREA_COLOR}'>" +
-          "<span>#{icon_html} #{area.name}</span></div>"
+          "<span>#{area.name}</span></div>"
 
       # Message
       popup_html += "<div class='col-xs-12' style='margin: 15px 0px;'>#{message}</div>"
@@ -166,14 +151,49 @@ class HomeController < ApplicationController
       popup_html += "<div class='col-xs-12 button-popup'>#{button}</div>"
 
       popup_html += "</div>"
+
     rescue Exception => e
       logger.error e.message
       logger.error e.backtrace.join("\n")
       # An error occurred, we show a error message.
       popup_html = "<i>#{t('home.error_get_popup_content')}</i>"
     end
-
+    
     render json: popup_html
+  end
+
+  def refine_state
+    # From the home page, based on the selected navigation, get the relevant ads.
+
+    state = params[:state]
+
+    new_nav_states = state.split('&')
+    nav_params = {}
+    new_nav_states.each do |state|
+      info = state.split('=')
+      nav_params[info[0]] = info[1]
+    end
+
+    if nav_params['cat'] && nav_params['cat'] != ''
+      selected_categories = nav_params['cat'].split('+')
+    end
+
+    if nav_params['item'] && nav_params['item'] != ''
+      selected_item_ids = []
+
+      # An item is being searched.
+      searched_item = nav_params['item']
+      selected_item_ids = Item.joins(:ads).where('name LIKE ?', "%#{searched_item}%").pluck(:id).uniq
+    end
+
+    response = {}
+    response['map_info'] = {}
+    response['map_info']['markers'] = Ad.search(selected_categories, searched_item, selected_item_ids, nav_params[:q], nil)
+
+    #response['map_info']['area'] = Location.search('area', selected_categories, searched_item, selected_item_ids, nav_params[:q])
+    #response['map_info']['area'] = Area.search(selected_categories, selected_item_ids, nav_params[:q])
+
+    render json: response.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})
   end
 
   # Ajax call to show the ads related to 1 type of item and to 1 area
@@ -214,10 +234,10 @@ class HomeController < ApplicationController
     @locations_exact = Ad.search(cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
 
     # If the users have the possiblity to post ad linked to a pre-defined area, we also get here these type of ads.
-    @locations_area = Location.search('area', cat_nav_state, params[:item], selected_item_ids, params[:q])
+    # locations_area = Location.search('area', cat_nav_state, params[:item], selected_item_ids, params[:q])
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
-    @area_geocodes = Location.define_area_geocodes(@locations_area)
+    @areas = Area.all.select(:id, :name, :latitude, :longitude)
   end
 
   def current_location_for(params)

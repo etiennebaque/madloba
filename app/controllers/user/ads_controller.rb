@@ -3,7 +3,7 @@ class User::AdsController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create, :send_message, :show]
   before_action :requires_user, except: [:new, :create, :send_message, :show]
   after_action :verify_authorized, except: [:new, :create, :send_message, :send_message]
-  after_action :generate_ad_json, only: [:create, :update]
+  after_action :serialize_ad, only: [:create, :update]
 
   include ApplicationHelper
 
@@ -171,21 +171,9 @@ class User::AdsController < ApplicationController
   end
 
   # Create the json for the 'exact location' ad, which will be read to render markers on the home page.
-  def generate_ad_json
+  def serialize_ad
     if @ad.errors.empty?
-      marker_info = {ad_id: @ad.id, lat: @ad.location.latitude, lng: @ad.location.longitude}
-      marker_info[:markers] = []
-      @ad.items.each do |item|
-        item_info = {}
-        cat = item.category
-        item_info[:item_id] = item.id
-        item_info[:category_id] = cat.id
-        item_info[:color] = cat.marker_color
-        item_info[:icon] = cat.icon
-        marker_info[:markers] << item_info
-      end
-      @ad.marker_info = marker_info
-      @ad.save
+      @ad.serialize!
     end
   end
 
@@ -195,7 +183,7 @@ class User::AdsController < ApplicationController
       @map_settings = MapAdInfo.new(@ad).to_hash
     else
       location = @ad.location
-      @map_settings = MapLocationInfo.new(location: location, has_center_marker: %w(create update).include?(action_name), clickable: location.try(:clickable_map_for_edit)).to_hash
+      @map_settings = MapLocationInfo.new(location: location).to_hash
     end
   end
 

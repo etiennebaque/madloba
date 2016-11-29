@@ -65,8 +65,7 @@ fr:
     links: Liens
     your_searched_location: Votre recherche
     no_ad: Pas d'annonce en ce moment.
-    area_popup_message: "%{ad_count} annonces au total postées dans ce quartier, présentant %{item_count} objets."
-    area_marker_message: "%{ad_count} autres annonces postées dans ce quartier, présentant %{item_count} objets."
+    area_marker_message: "%{ad_count} annonces au total postées dans ce quartier, présentant %{item_count} objets."
     show_results: "Voir résultats"
     create_an_ad_now_html: "%{create_new_ad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
     about_page: A propos de %{website_name}
@@ -126,6 +125,12 @@ fr:
     definition: "Entrez votre emplacement* :"
     definition_exact: "Donner adresse complète"
     definition_area: "Indiquer quartier seulement"
+    why_choose_location_type: "Pourquoi dois-je choisir une option ?"
+    modal_exact_area_title: "Full address or area only?"
+    modal_exact_area_description: "On one hand, by clicking on '%{def_exact}', you will be able to enter the exact address of this location and pinpoint it on the map below."
+    modal_exact_area_description2: "After your ad has been created, you will be able to visualize it on the home page map with a colored marker placed at the previously marked location."
+    modal_exact_area_description3: "On the other hand, you may not want to give away that many details about the location, given any personal reasons (eg. anonymity, details about the ad...)."
+    modal_exact_area_description4: "By choosing '%{def_area}', you will just have to indicate which area does this location belong to. Once the ad is created, it won't appear as a colored marker on the home page, but it will show up in the search results page related to the selected area."
     street_number: "Numéro de rue :"
     street_name: "Nom de la rue :"
     street_name_help: "Exemple : nom de la rue, avenue, chemin..."
@@ -142,6 +147,7 @@ fr:
     not_found_descr1: "Cet emplacement n'a pas pu être trouvé, basé sur les informations entrées."
     not_found_descr2: "Mais ce n'est pas grave ! Cliquez sur la carte pour sélectionner cet emplacement."
     area_help: Choisissez la zone où cet emplacement se trouve.
+    error_location_fields: "Soit un quarier ou bien une adresse doit être renseigné."
   ad:
     new_ad: Nouvelle annonce
     once_created_expire_html: une fois créée, votre annonce sera publiée pour <strong>%{max_expire_days} jours</strong>.
@@ -344,7 +350,7 @@ fr:
       ad_edit: Annonces - Mise à jour
       ad_updated: "L'annonce '%{title}' a été mise à jour."
       error_update: "%{errors} lors de la mise à jour de l'annonce"
-      delete: Supprimer cette annonce
+      delete: "Supprimer cette annonce ?"
       delete_ad_error_html: "Erreur lors de la mise à jour de cette annonce ! Retour à %{manage_ads_page}"
       manage_ads_page: "Gérer annonces"
       giving_accepting_title: Donne/Recherche
@@ -428,7 +434,11 @@ fr:
       by_area: par un quartier
       area_postal_code: Zone définie par un code postal
       area_area: Zone définie par un quartier
-      map_description: Utilisez cette carte pour dessiner, éditer ou supprimer les limites des différents quartiers de votre ville.
+      map_description: "Areas broadly define neighbourhoods and districts related to your Madloba website.
+                        Once defined, users will be able to looks at ads in the chosen neighbourhood on the home page.
+                        Alternatively, they will choose an area when creating a new ad."
+      map_description_2: "Click on the map to pinpoint and name a new area.
+                          Click on an previously defined area to either delete it or change its name."
       error_update_area: Erreur lors de la mise à jour des quartiers. Veuillez réessayer plus tard.
       error_save_area: Erreur lors de la sauvegarde de ce quartier. Veuillez réessayer plus tard.
       area_name: Nom du quartier
@@ -562,16 +572,13 @@ fr:
     start_typing_item: Tapez le nom d'un objet
     no_result_create_item: Pas de résultat. Choisissez 'Créer un nouvel objet'.
     new_image_uploading: Téléchargement de la nouvelle image en cours. Veulliez attendre svp.
-    type_area_name: "Tapez le nom d'un quartier ici..."
     latitude: (latitude)
     longitude: (longitude)
     add: Ajouter
     updating_area: Mise à jour de la liste de quartiers...
-    area_show_up: "Cette zone apparaitra en tant que :"
     searching_location: Recherche d'un emplacement...
     update: Mettre à jour
     loading: Chargement...
-    choose_location: Choisissez un de ces emplacements disponibles
     remove: Retirer
     records_per_page: enregistrements par page
     search: "Recherche :"
@@ -586,11 +593,7 @@ fr:
     last: Dernier
     filtered_from: filtrés sur
     total_entries: enregistrements au total
-    in_this_area: Dans ce quartier
     ads_for: Annonces pour
-    items_given: "Objets donnés :"
-    items_searched: "Objets recherchés :"
-    image_not_available: Image pas encore disponible.
     cancel_drawing: Cancel drawing
     cancel: Cancel
     delete_last_point_drawn: Delete last point drawn

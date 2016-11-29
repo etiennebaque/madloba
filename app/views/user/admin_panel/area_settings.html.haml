@@ -1,4 +1,4 @@
-#content.middle-col.col-xs-12.col-md-10
+#area_settings.middle-col.col-xs-12.col-md-10
   .row
     .box.col-md-12
       .box-inner
@@ -23,12 +23,15 @@
 
             #area_section
               -# Map canvas
-              .form-group
-                = label_tag 'map-canvas-wrapper', t('admin.area_settings.map_description'), class:'control-label'
-                .form-inline
-                  #map-canvas-wrapper
-                    #map.large
-                #area_notification_message
+              #area-settings-description
+                %p= t('admin.area_settings.map_description')
+                %p= t('admin.area_settings.map_description_2')
+
+              #area_notification_message
+
+              .form-inline
+                #map-canvas-wrapper
+                  #map.large
 
             %hr
             -# Submit button
@@ -39,11 +42,9 @@
 
 %hr
 - content_for :scripts do
-  -# Inserting the Leaflet Draw plugin, in order to draw polygon to define areas
-  = render 'shared/included_leafletdraw_scripts'
   -# Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
   = render 'shared/map_scripts_after_body'
 
   :javascript
-    var areas = #{raw Area.bounds.to_json}
+    var areas = #{raw Area.all.to_json}
     var areaSettings = new AreaSettings(areas);

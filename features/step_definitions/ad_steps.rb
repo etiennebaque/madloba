@@ -36,6 +36,10 @@ When(/^I click on '([^"]*)' button$/) do |txt|
   find_button(txt).click
 end
 
+When (/^I click on 'Create this ad!' submit button$/) do
+  page.find('#submit_new_ad').click
+end
+
 When(/^I search for this place$/) do
   page.find('#find_geocodes_from_address').click
 end
@@ -45,4 +49,16 @@ Then(/^I should get new geocodes$/) do
   new_longitude = page.find('#ad_location_attributes_longitude', visible: false).value
   new_latitude.should_not be(@latitude)
   new_longitude.should_not be(@longitude)
+end
+
+When(/^an ad exists$/) do
+  @ad = FactoryGirl.create(:ad_with_items)
+end
+
+When(/^an area-only ad exists$/) do
+  @ad = FactoryGirl.create(:area_only_ad)
+end
+
+When(/^I go visit that ad detail page$/) do
+  visit ad_path @ad
 end

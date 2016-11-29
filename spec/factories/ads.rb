@@ -14,6 +14,11 @@ FactoryGirl.define do
 
   end
 
+  factory :area_only_ad, parent: :ad do |f|
+    f.ad_items {[build(:ad_with_second_item)]}
+    f.location { FactoryGirl.create(:area_only_location) }
+  end
+
   factory :ad_with_items, parent: :ad do
     ad_items {[build(:ad_with_first_item)]}
   end

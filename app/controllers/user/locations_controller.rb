@@ -4,7 +4,7 @@ class User::LocationsController < ApplicationController
   before_action :requires_user, except: [:retrieve_geocodes]
   before_action :is_location_controller
   after_action :verify_authorized, except: [:retrieve_geocodes]
-  after_action :update_ad_json, only: [:update]
+  after_action :serialize_ads, only: [:update]
 
   include ApplicationHelper
 
@@ -42,7 +42,7 @@ class User::LocationsController < ApplicationController
     @location = Location.includes(ads: :items).includes(:area).where(id: params[:id]).first!
 
     authorize @location
-    @map_settings = MapLocationInfo.new(location: @location, clickable: @location.clickable_map_for_edit).to_hash
+    @map_settings = MapLocationInfo.new(location: @location).to_hash
 
     render 'location'
   end
@@ -59,13 +59,9 @@ class User::LocationsController < ApplicationController
       location_params['longitude'] = newLon.round(5, :up)
     end
 
-    @map_settings = MapLocationInfo.new(location: @location, clickable: @location.clickable_map_for_edit).to_hash
+    @map_settings = MapLocationInfo.new(location: @location).to_hash
 
     if @location.update(location_params)
-
-      # @location.area = nil
-      # @location.save
-
       flash[:name] = @location.name
       redirect_to edit_user_location_path
     else
@@ -145,12 +141,10 @@ class User::LocationsController < ApplicationController
   end
 
   # Updates the relevant ads marker_info (jsonb)
-  def update_ad_json
+  def serialize_ads
     if @location.errors.empty?
       Ad.where(location_id: @location.id).each do |ad|
-        ad.marker_info['lat'] = @location.latitude
-        ad.marker_info['lng'] = @location.longitude
-        ad.save
+        ad.serialize!
       end
     end
   end

@@ -1,5 +1,5 @@
 - footer_class = admin_panel? ? 'admin' : 'regular'
-- if !root_path
+- if !current_page?(root_url)
   %footer#footer{class: footer_class}
     .container-fluid
       - if setup_mode?
