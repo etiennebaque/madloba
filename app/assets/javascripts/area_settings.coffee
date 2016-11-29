@@ -98,6 +98,7 @@ AreaSettings::initMapEvents = ->
       if !data.updating
         # Creating and adding new marker to the map
         self.initMarkerAndAddToMap(area)
+        leaf.map.removeLayer(markers.new_marker)
 
       msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
       $('#area_notification_message').html msg

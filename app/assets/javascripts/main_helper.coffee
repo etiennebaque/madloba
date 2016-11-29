@@ -65,20 +65,21 @@ global.leaf =
   moveMapBasedOnArea: (opts) ->
     $('.area-select').on('change', ->
       selectedOption = $('.area-select option:selected')
-      latitude = selectedOption.data('latitude')
-      longitude = selectedOption.data('longitude')
-
-      leaf.map.flyTo([latitude, longitude], opts.zoom, {animate: true})
 
       if markers.selected_area != ''
         leaf.map.removeLayer markers.selected_area
 
-      if opts.showAreaIcon
-        markers.selected_area = markers.area_markers[selectedOption.val()]
-        markers.selected_area.addTo(leaf.map)
-        leaf.map.once 'zoomend', ->
-          markers.selected_area.fireEvent('click')
+      if selectedOption.val() != ''
+        latitude = selectedOption.data('latitude')
+        longitude = selectedOption.data('longitude')
 
+        leaf.map.flyTo([latitude, longitude], opts.zoom, {animate: true})
+
+        if opts.showAreaIcon
+          markers.selected_area = markers.area_markers[selectedOption.val()]
+          markers.selected_area.addTo(leaf.map)
+          leaf.map.once 'zoomend', ->
+            markers.selected_area.fireEvent('click')
     )
     
 
