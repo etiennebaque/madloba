@@ -167,6 +167,5 @@ show_exact_address_section = ->
   # "Locate me on the map" button will be in charge of this.
   $('.area-select').off 'change'
 
-  markers.location_marker_type = 'exact'
   leaf.map.on 'click', onMapClickLocation
   $('#map_notification_exact').removeClass 'hide'

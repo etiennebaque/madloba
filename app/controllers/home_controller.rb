@@ -6,7 +6,7 @@ class HomeController < ApplicationController
   # --------------------------------------
   def index
     # Initializing the map, in relation to its center, defined in the settings table.
-    @map_settings = MapInfo.new(has_center_marker: false, clickable: NOT_CLICKABLE_MAP).to_hash
+    @map_settings = MapInfo.new.to_hash
 
     # Initializing links, and social media information, for the footer of the home page.
     settings = get_footer_info

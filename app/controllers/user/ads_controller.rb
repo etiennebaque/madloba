@@ -183,7 +183,7 @@ class User::AdsController < ApplicationController
       @map_settings = MapAdInfo.new(@ad).to_hash
     else
       location = @ad.location
-      @map_settings = MapLocationInfo.new(location: location, has_center_marker: %w(create update).include?(action_name), clickable: location.try(:clickable_map_for_edit)).to_hash
+      @map_settings = MapLocationInfo.new(location: location).to_hash
     end
   end
 

@@ -1,5 +1,5 @@
 # Constants file
-#
+
 # Constants used across the application can be found here.
 
 # Map tiles URL, and attribution mentions (for OSM, Mapbox and MapQuest)
@@ -12,16 +12,6 @@ MAPQUEST_TILES_URL='http://open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=%
 
 # OpenStreetMap's Nominatim webservice end point (used to retrieve geocodes)
 OSM_NOMINATIM_URL = 'http://nominatim.openstreetmap.org/search?q=%{location}&format=json&polygon=0&addressdetails=0&accept-language=en'
-
-# Constants for controllers, when initializing map.
-AD_FLAG_FOR_MAP = 'ad'
-ADMIN_FLAG_FOR_MAP = 'admin'
-AREA_FLAG_FOR_MAP = 'area'
-SHOW_AD_FLAG_FOR_MAP = 'show_ad'
-
-NOT_CLICKABLE_MAP = 'none'
-CLICKABLE_MAP_EXACT_MARKER = 'exact'
-CLICKABLE_MAP_AREA_MARKER = 'area'
 
 GENERAL_AREA_ZOOM_LEVEL = 14
 CLOSER_ZOOM_LEVEL = 16

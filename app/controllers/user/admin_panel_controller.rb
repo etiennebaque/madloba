@@ -122,7 +122,7 @@ class User::AdminPanelController < ApplicationController
   def area_settings
     authorize :admin, :areasettings?
 
-    @map_settings = MapInfo.new(has_center_marker: false, clickable: CLICKABLE_MAP_AREA_MARKER).to_hash
+    @map_settings = MapInfo.new.to_hash
   end
 
   def update_area_settings

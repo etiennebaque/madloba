@@ -594,9 +594,6 @@ fr:
     filtered_from: filtrés sur
     total_entries: enregistrements au total
     ads_for: Annonces pour
-    items_given: "Objets donnés :"
-    items_searched: "Objets recherchés :"
-    image_not_available: Image pas encore disponible.
     cancel_drawing: Cancel drawing
     cancel: Cancel
     delete_last_point_drawn: Delete last point drawn

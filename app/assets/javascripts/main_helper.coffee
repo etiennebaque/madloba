@@ -12,15 +12,14 @@ $ ->
 ###
 global.leaf =
   map: null
+  mapSettings: null
   map_tiles: null
   my_lat: ''
   my_lng: ''
-  drawn_items: null
   areas: null
   searched_address: ''
 
   init: (map_settings) ->
-
     leaf.map = L.map('map', scrollWheelZoom: false)
 
     leaf.map.on 'click', ->
@@ -28,6 +27,8 @@ global.leaf =
         leaf.map.scrollWheelZoom.disable()
       else
         leaf.map.scrollWheelZoom.enable()
+
+    leaf.mapSettings = map_settings
 
     leaf.my_lat = map_settings['latitude']
     leaf.my_lng = map_settings['longitude']
@@ -46,50 +47,6 @@ global.leaf =
     leaf.map_tiles.addTo leaf.map
     leaf.map.setView [leaf.my_lat, leaf.my_lng], map_settings['zoom_level']
 
-    # if map_settings['clickable_map_marker'] != 'none'
-      # Getting latitude and longitude when map is clicked
-      # leaf.map.on 'click', onMapClickLocation
-
-  show_features_on_ad_details_page: (map_settings) ->
-    if map_settings['ad_show_is_area'] == true
-      # Location where full address is not given (area only). Drawing the area related to this ad.
-      area_latlng = leaf.show_single_area(map_settings['popup_message'], map_settings['bounds'])
-      leaf.map.setView area_latlng, map_settings['zoom_level']
-
-    else
-      # Exact address. Potentially several center markers on the map.
-      # Displays a marker for each item tied to the ad we're showing the details of.
-      # Using the Marker Cluster plugin to spiderfy this ad's item marker.
-      markers.group = new (L.markerClusterGroup)(
-        spiderfyDistanceMultiplier: 2)
-
-      i = 0
-      while i < map_settings['ad_show'].length
-        item_category = map_settings['ad_show'][i]
-        icon_to_use = L.AwesomeMarkers.icon(
-          prefix: 'fa'
-          markerColor: item_category['color']
-          icon: item_category['icon'])
-
-        map_center_marker = L.marker([
-          leaf.my_lat
-          leaf.my_lng
-        ], icon: icon_to_use)
-
-        if map_settings['marker_message'] != ''
-          map_center_marker.bindPopup(map_settings['marker_message'] + ' - ' + item_category['item_name']).openPopup()
-
-        markers.group.addLayer map_center_marker
-        i++
-
-      leaf.map.addLayer markers.group
-
-      leaf.map.setView [
-        leaf.my_lat
-        leaf.my_lng
-      ], map_settings['zoom_level']
-
-    return
 
   show_single_marker: (map_settings) ->
     # we are displaying the center point.
@@ -156,7 +113,6 @@ global.markers =
   marker_colors: null
   area_color: null
   area_geocodes: null
-  location_marker_type: null
   center_marker: null
   init: (map_settings) ->
 
@@ -175,7 +131,6 @@ global.markers =
       iconAnchor: [15,43]
       popupAnchor: [1,-34])
 
-    markers.location_marker_type = map_settings['clickable_map_marker']
     markers.area_color = map_settings['area_color']
     return
 
@@ -269,7 +224,6 @@ global.markers =
             marker_popup.update()
 
       markers.area_markers[area.id] = marker
-      #markers.group.addLayer marker
       
     return  
 
@@ -293,16 +247,6 @@ global.initLeafletMap = (map_settings) ->
   # Initialization of the map and markers.
   leaf.init map_settings
   markers.init map_settings
-
-  if map_settings['has_center_marker'] == true
-    if $('#show_ad_page').length > 0
-      # Showing markers or an area on the ad details page (ads#show)
-      leaf.show_features_on_ad_details_page map_settings
-    else
-      # Center single marker on the map
-      # Appearing only in admin map setting, and admin location page, on page load.
-      # Define first if it should be the area icon (for addresses based only on postal codes), or the default icon.
-      leaf.show_single_marker map_settings
 
 
 ###*
@@ -355,13 +299,12 @@ global.drawAreasOnMap = (locations_area) ->
 # Updates hidden fields, if needed, if the geocodes are part of a form.
 ###
 global.onMapClickLocation = (e) ->
-  new_geocodes = onMapClick(e)
-  geocodeSplit = new_geocodes.split(',')
+  geocodes = onMapClick(e)
 
   # latitude and longitude are classes used on area settings page.
   $('#new_dynamic_button_add').removeClass 'disabled'
-  $('.latitude').val geocodeSplit[0]
-  $('.longitude').val geocodeSplit[1]
+  $('.latitude').val geocodes.lat
+  $('.longitude').val geocodes.lng
 
 
 # Event triggered when click on "Locate me on the map" button,
@@ -446,39 +389,6 @@ global.popupOptions = (otherOpts) ->
     opts[key] = val
   opts
 
-###*
-# Creates the text to be shown in a marker popup, giving details about the selected exact location.
-# @param first_sentence
-# @param location
-# @returns Popup text content.
-###
-createPopupHtml = (first_sentence, ad, index) ->
-  second_sentence = ''
-  result = ''
-  item = ad['items'][index]
-  popup_ad_link = '<a href=\'/ads/' + ad['id'] + '/\'>' + ad['title'] + '</a>'
-  markerColor = marker_colors[item['category']['marker_color']]
-  itemName = item['name'].capitalizeFirstLetter()
-  popup_item_name = '<span style=\'color:' + markerColor + '\';><strong>' + itemName + '</strong></span>'
-  if ad['giving'] == true
-    second_sentence = gon.vars['items_given'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
-  else
-    second_sentence = gon.vars['items_searched'] + '<br />' + popup_item_name + ': ' + popup_ad_link + '<br />'
-  if ad['image']['thumb']['url'] != null and ad['image']['thumb']['url'] != ''
-    # Popup is created with a thumbnail image in it.
-    ad_image = '<img class=\'thumb_ad_image\' onError="$(\'.thumb_ad_image\').remove(); ' +
-      '$(\'.image_notification\').html(\'<i>' + gon.vars['image_not_available'] + '</i>\');" src=\'' +
-      ad['image']['thumb']['url'] + '\'><span class="image_notification"></span>'
-
-    result = '<div style=\'overflow: auto;\'><div class=\'col-sm-6\'>' + first_sentence + '</div>' +
-        '<div class=\'col-sm-6\'>' + ad_image + '</div><div class=\'col-sm-12\'><br>' +
-        second_sentence + '</div></div>'
-
-  else
-    # Popup is created without any thumbnail image.
-    result = '<div style=\'overflow: auto;\'>' + first_sentence + '<br><br>' + second_sentence + '</div>'
-  result
-
 
 global.initMapClick = (e) ->
   if markers.new_marker != ''
@@ -498,23 +408,11 @@ global.initMapClick = (e) ->
 # @returns "latitude,longitude"
 ###
 onMapClick = (e) ->
-  if markers.new_marker != ''
-    leaf.map.removeLayer markers.new_marker
 
-  myNewLat = e.latlng.lat
-  myNewLng = e.latlng.lng
-  # Rounding up latitude and longitude, with 5 decimals
-  myNewLat = Math.round(myNewLat * 100000) / 100000
-  myNewLng = Math.round(myNewLng * 100000) / 100000
-  
-  if markers.location_marker_type == 'exact'
-    markers.new_marker = new (L.Marker)(e.latlng, { icon: markers.new_icon }, draggable: false)
-  else if markers.location_marker_type == 'area'
-    markers.new_marker = new (L.Marker)(e.latlng, { icon: markers.area_icon }, draggable: false)
-
+  geocodes = initMapClick(e)
+  markers.new_marker = new (L.Marker)(e.latlng, { icon: markers.new_icon }, draggable: false)
   leaf.map.addLayer markers.new_marker
-
-  myNewLat + ',' + myNewLng
+  geocodes
 
 String::capitalizeFirstLetter = ->
   @charAt(0).toUpperCase() + @slice(1)

@@ -86,10 +86,6 @@ class Location < ActiveRecord::Base
     website.include?('http') ? website : "http://#{self.website}"
   end
 
-  def clickable_map_for_edit
-    CLICKABLE_MAP_EXACT_MARKER
-  end
-
   def location_fields_cannot_be_blank
     conditions_met = address.present? || area.present?
     if !conditions_met

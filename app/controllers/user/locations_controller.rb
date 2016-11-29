@@ -42,7 +42,7 @@ class User::LocationsController < ApplicationController
     @location = Location.includes(ads: :items).includes(:area).where(id: params[:id]).first!
 
     authorize @location
-    @map_settings = MapLocationInfo.new(location: @location, clickable: @location.clickable_map_for_edit).to_hash
+    @map_settings = MapLocationInfo.new(location: @location).to_hash
 
     render 'location'
   end
@@ -59,13 +59,9 @@ class User::LocationsController < ApplicationController
       location_params['longitude'] = newLon.round(5, :up)
     end
 
-    @map_settings = MapLocationInfo.new(location: @location, clickable: @location.clickable_map_for_edit).to_hash
+    @map_settings = MapLocationInfo.new(location: @location).to_hash
 
     if @location.update(location_params)
-
-      # @location.area = nil
-      # @location.save
-
       flash[:name] = @location.name
       redirect_to edit_user_location_path
     else
