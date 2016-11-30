@@ -404,7 +404,7 @@ fr:
       error_occurred: "%{errors} en enregistrant cet objet"
       update_success: "L'objet '%{name}' a été mis à jour."
       created_success: "L'objet '%{name}' a été créé."
-      delete_item: Supprimer cet objet
+      delete_item: "Supprimer cet objet ?"
       name: "Nom de l'objet"
       category: Catégorie
       ads_promoting: Annonces avec cet objet
@@ -450,7 +450,12 @@ fr:
       error_name_save: Erreur lors de la mise à jour du nom de ce quartier. Veuillez réessayer plus tard.
       update_success: Les quartiers ont été mis à jour.
       delete_success: Quartier(s) supprimé(s).
-      delete_error: Erreur lors de la suppression de ce quartier. Veuillez réessayer plus tard.      
+      delete_error: Erreur lors de la suppression de ce quartier. Veuillez réessayer plus tard.
+      before_delete1: "Attention : certains emplacements sont toujours liés a ce quartier !"
+      before_delete2: "Avant de supprimer ce quartier, quelle autre quartier souhaitez-vous associer avec ces emplacements ?"
+      transfer_and_delete: "Transférer emplacements & supprimer ce quartier"
+      confirm_delete: "Etes-vous sûr(e) que vous souhaitez supprimer ce quartier ?"
+      delete_this_area: "Supprimer ce quartier ?"
     map_settings:
       title: Paramètres de la carte
       type: "Type de carte :"

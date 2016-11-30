@@ -40,6 +40,9 @@
               %a.btn{:href => "/user/index"}= t('home.cancel')
 
 
+-# "Delete category" modal window
+= render 'delete_area_modal'
+
 %hr
 - content_for :scripts do
   -# Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map

@@ -437,6 +437,11 @@ en:
       update_success: The areas have been successfully updated.
       delete_success: Area was deleted successfully.
       delete_error: Error occured when deleting an area. Please try again later.
+      before_delete1: "Warning: some locations are tied to this area!"
+      before_delete2: "Before deleting this area, which area do you want to associate these locations with?"
+      transfer_and_delete: "Transfer locations & delete this area"
+      confirm_delete: "Are you sure you want to delete this area?"
+      delete_this_area: "Delete this area?"
     map_settings:
       title: Map
       type: "Map type:"
