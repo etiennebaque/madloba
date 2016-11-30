@@ -49,7 +49,7 @@ en:
     about: About
     about_website: About %{website_name}
     links: Links
-    your_searched_location: Your searched location
+    your_searched_location: Searched location
     no_ad: There's no ad at the moment.
     area_marker_message: "%{ad_count} ads posted in total in this area, featuring %{item_count} items."
     show_results: "Show results for this area"

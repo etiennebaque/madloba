@@ -22,8 +22,8 @@ class HomeController < ApplicationController
         @map_settings[:latitude] = params[:lat]
         @map_settings[:longitude] = params[:lon]
 
-        current_location = current_location_for(params)
-        @map_settings[:searched_address] = current_location
+        current_location, popup_html = current_location_for(params)
+        @map_settings[:searched_address] = popup_html
         @location_search_refinement_to_display = current_location
     end
 
@@ -162,6 +162,19 @@ class HomeController < ApplicationController
     render json: popup_html
   end
 
+  def show_location_popup(content)
+    popup_html = "<div style='overflow: auto;'>"
+
+    # Title
+    popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{Area::AREA_COLOR}'>" +
+        "<span>#{t('home.your_searched_location')}</span></div>"
+    # Message
+    popup_html += "<div class='col-xs-12' style='margin: 15px 0px;'>#{content}</div>"
+    popup_html += "</div>"
+
+    popup_html
+  end
+
   def refine_state
     # From the home page, based on the selected navigation, get the relevant ads.
 
@@ -242,12 +255,13 @@ class HomeController < ApplicationController
 
   def current_location_for(params)
     # A location search was just performed, with the name of the searched location (given back from Nominatim ws) in it.
-    return params[:loc] if params.has_key?(:loc)
+    return [params[:loc], show_location_popup(params[:loc])] if params.has_key?(:loc)
 
     # there was no search beforehand, we need to find the address, based on given latitude and longitude.
     current_location = address_from_geocodes(params[:lat], params[:lon])
     current_location = t('home.default_current_loc') if current_location.blank?
-    current_location
+
+    [current_location, show_location_popup(current_location)]
   end
 
   # Creates a hash with the link and the label of one "Useful link",

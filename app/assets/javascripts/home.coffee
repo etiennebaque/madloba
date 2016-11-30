@@ -78,11 +78,17 @@ Home::putLocationMarkers = ->
   searched_location_marker = ''
   if typeof leaf.searched_address != 'undefined'
     # Adding marker for the searched address, on the home page.
-    searched_location_marker = L.marker([
+    searchedLocationMarker = L.marker([
       leaf.my_lat
       leaf.my_lng
-    ], icon: markers.default_icon).bindPopup(leaf.searched_address)
-    searched_location_marker.addTo leaf.map
+    ], icon: markers.default_icon)
+
+    popup = L.popup().setContent(leaf.searched_address)
+
+    searchedLocationMarker.bindPopup popup
+    searchedLocationMarker.addTo leaf.map
+    searchedLocationMarker.openPopup()
+    leaf.map.flyTo([leaf.my_lat, leaf.my_lng], 15, {animate: true})
 
   # Adding all the markers to the map.
   leaf.map.addLayer markers.group
