@@ -14,5 +14,7 @@ services:
     image: library/postgres:9.4.9
     ports:
       - "5431:5431"
-    env_file:
-      - '.env.db'
+    environment:
+      POSTGRES_DB: madloba
+      POSTGRES_USER: ...
+      POSTGRES_PASSWORD: ...

@@ -18,15 +18,15 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV["MADLOBA_DEV_DATABASE"] %> #CHANGE ME
+  database: madloba
 
 test: &test
   <<: *default
-  database: your_test_db_name #CHANGE ME
+  database: madloba_test
 
 production:
   <<: *default
-  database: madloba #CHANGE ME
+  database: <%= ENV["MADLOBA_PROD_DATABASE"] %>
 
   # Deployment on a production server: please indicate your database credentials here
   # (database name, username and password)
