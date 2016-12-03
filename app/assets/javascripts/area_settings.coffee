@@ -1,166 +1,137 @@
 global = this
 
-global.AreaSettings = (districts) ->
-  @district_bounds = {}
+global.AreaSettings = (areas) ->
+  @area_bounds = {}
   @layer = {}
-  @init(districts)
+  @init(areas)
 
 # Adding specific events on the 'Area settings' page,
-# needed when drawing and saving districts.
-AreaSettings::init = (districts) ->
-  leaf.districts = districts
+# needed when drawing and saving areas.
+AreaSettings::init = (areas) ->
+  markers.areas = areas
 
-  # Show either the "postal code" or the "district" section.
-  $('.area_postal_code').click ->
-    $('#postal_code_section').toggle 0, ->
-
-  if $('.area_postal_code').is(':checked')
-    $('#postal_code_section').css 'display', 'block'
-
-  # Show appropriate section when choosing an area
-  $('.area_district').click ->
-    $('#district_section').toggle 0, ->
-    @drawMapAndDistricts()
-
-  if $('.area_district').is(':checked')
-    $('#district_section').css 'display', 'block'
-    @drawMapAndDistricts()
-
+  @onMapClick()
+  @drawMapAndAreaMarkers()
   @initMapEvents()
-  @initDrawingTools()
+
+AreaSettings::drawMapAndAreaMarkers = ->
+  if markers.areas != null
+  # Adding existing areas to the map
+    for area in markers.areas
+      @initMarkerAndAddToMap(area)
 
 
-AreaSettings::drawMapAndDistricts = ->
-  # Drawing map
-  initLeafletMap map_settings
-  leaf.drawn_items = L.featureGroup()
-  leaf.map.addLayer(leaf.drawn_items)
+AreaSettings::initMarkerAndAddToMap = (area) ->
+  marker = L.marker(
+    [area.latitude, area.longitude],
+    icon: markers.area_icon,
+    bounceOnAdd: false
+  )
 
-  # Adding drawing control panel to the map
-  leaf.map.addControl(new (L.Control.Draw)(edit: featureGroup: leaf.drawn_items))
+  popupContent = "<div class='area-popup-text'>" + @areaNameFor(area) + @modifyButtonFor(area) + @deleteButtonFor(area) + "</div>"
+  editContent = "<div class='area-popup-update' style='display: none;'>" + @inputTextFor(area) + @okButtonFor(area) + "</div>"
 
-  if leaf.districts != null
-    # Adding existing districts to the map
-    i = 0
-    while i < leaf.districts.length
-      # Adding the district id and name to the geoJson properties.
-      L.geoJson leaf.districts[i], onEachFeature: (feature, layer) ->
-        layer.bindPopup leaf.districts[i]['properties']['name']
-        layer.setStyle color: markers.district_color
-        leaf.drawn_items.addLayer layer
-      i++
+  popup = L.popup().setContent(popupContent + editContent)
+  marker.bindPopup popup, popupOptions({minWidth: 200})
 
+  markers.area_markers[area.id] = marker
+
+  marker.addTo(leaf.map)
+
+AreaSettings::areaNameFor = (area) ->
+  "<div class='area-name'>#{area.name}</div>"
+
+AreaSettings::inputTextFor = (area) ->
+  "<input type='text' id='#{area.id}' " +
+    "class='update-area-text name_#{area.id}' style='margin-right:5px;' placeholder='Area name' " +
+    "value='#{area.name}'>"
+
+AreaSettings::modifyButtonFor = (area) ->
+  "<button type='button' id='update_#{area.id}' " +
+    "class='btn btn-xs btn-info update-area'><i class='fa fa-pencil' aria-hidden='true'></i></button>"
+
+AreaSettings::okButtonFor = (area) ->
+  "<button type='button' id='save_#{area.id}' " +
+    "data-lat='#{area.latitude}' data-lng='#{area.longitude}' " +
+    "class='btn btn-xs btn-success save-area'>OK</button>&nbsp;"
+
+AreaSettings::deleteButtonFor = (area) ->
+  "<button type='button' id='delete_#{area.id}' " +
+    "class='btn btn-xs btn-danger delete-area'><i class='fa fa-trash-o' aria-hidden='true'></i></button>"
 
 AreaSettings::initMapEvents = ->
-  _this = this
-  # Event to activate 'Save district' button when district name not empty.
-  $('#map').on 'keyup', '.save_district_text', ->
-    if $('.save_district_text').val().length > 0
-      $('.save_district').removeClass 'disabled'
+  $('#map').on 'keyup', '.update-area-text', ->
+    if $('.update-area-text').val().length > 0
+      $('#area_notification_message').html(' ')
+      $('.save-area').removeClass 'disabled'
     else
-      $('.save_district').addClass 'disabled'
+      $('.save-area').addClass 'disabled'
 
   # Necessity to unbind click on map, to make
   # the "on click" event right below work.
   $('#map').unbind 'click'
-  # Saving district drawing (bounds) and name.
-  $('#map').on 'click', '.save_district', ->
-    district_name = $('.save_district_text').val()
-    $.post '/user/areasettings/save_district', {
-      bounds: JSON.stringify(_this.district_bounds)
-      name: district_name
-    }, (data) ->
+
+  # Showing the input text box (Edit mode)
+  $('#map').on 'click', '.update-area', (e) ->
+    $('#area_notification_message').html('')
+    _this = $(this)
+    _this.parent().hide()
+    _this.parent().next().show()
+
+  # Saving area location and name.
+  $('#map').on 'click', '.save-area', (e) =>
+    self = this
+    _this = $('.save-area:visible')
+
+    areaId = _this.attr('id').replace('save_', '')
+    areaName = $('.name_'+areaId).val()
+    lat = _this.data('lat')
+    lng = _this.data('lng')
+
+    $.post '/user/areasettings/save_area', {
+      id: areaId
+      name: areaName
+      latitude: _this.data('lat')
+      longitude: _this.data('lng')
+    }, (data) =>
+      area = {id: data.id, name: data.name, latitude: lat, longitude: lng}
+      if !data.updating
+        # Creating and adding new marker to the map
+        self.initMarkerAndAddToMap(area)
+        leaf.map.removeLayer(markers.new_marker)
+
       msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
-      $('#district_notification_message').html msg
-      if data.status == 'ok'
-        leaf.drawn_items.removeLayer _this.layer
-        _this.district_bounds['properties']['id'] = data.id
-        _this.district_bounds['properties']['name'] = district_name
-        L.geoJson _this.district_bounds, onEachFeature: (feature, layer) ->
-          layer.bindPopup district_name
-          layer.setStyle color: data.district_color
-          leaf.drawn_items.addLayer layer
+      $('#area_notification_message').html msg
+      _this.parent().hide()
+      oldHtml = _this.parent().prev().html()
+      _this.parent().prev().html(oldHtml.replace(/\_new/g, "_#{area.id}"))
+      _this.parent().prev().show()
+      _this.parent().prev().find('.area-name').html(data.name)
 
 
-  # Update district name into the GeoJSON properties hash.
-  $('#map').on 'click', '.update_district', ->
-    new_district_name = $('.update_district_text').val()
-    districtId = $('.update_district_text').attr('id')
-    $.post '/user/areasettings/update_district_name', {
-      id: districtId
-      name: new_district_name
-    }, (data) ->
+  $('#map').on 'click', '.delete-area', ->
+    _this = $(this)
+    areaId = _this.attr('id').replace('delete_', '')
+
+    $.post '/user/areasettings/delete_area', { id: areaId }, (data) ->
+      markerToDelete = markers.area_markers[areaId]
+      leaf.map.removeLayer(markerToDelete)
+      delete(markers.area_markers[areaId])
+
       msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
-      $('#district_notification_message').html msg
-
-    # Going through the districts and checking which one to update.
-    leaf.drawn_items.eachLayer (layer) ->
-      _this.district_bounds = layer.toGeoJSON()
-      if districtId == _this.district_bounds['properties']['id']
-        layer.bindPopup '<input type=\'text\' id=\'' + districtId + '\' ' +
-            'class=\'update_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\' ' +
-            'value=\'' + new_district_name + '\'>' +
-            '<button type=\'button\' id=\'save_' + _this.district_bounds['properties']['id'] + '\' ' +
-            'class=\'btn btn-xs btn-success update_district\'>OK</button>' +
-            '<br /><div class=\'district_notif\'></div>'
-
-        layer.closePopup()
+      $('#area_notification_message').html msg
 
 
-AreaSettings::initDrawingTools = ->
-  _this = this
-  # Events triggered once the polygon (district) has been drawn.
-  leaf.map.on 'draw:created', (e) ->
-    _this.layer = e.layer
-    leaf.drawn_items.addLayer _this.layer
-    # Text field and "Save district" button to show up in the popup.
-    popup = L.popup(closeButton: false).setContent('<input type=\'text\' class=\'save_district_text\' ' +
-        'style=\'margin-right:5px;\' placeholder=\'District name\'><button type=\'button\' ' +
-        'class=\'btn btn-xs btn-success save_district disabled\'>Save district</button>')
-    _this.layer.bindPopup popup
-    _this.district_bounds = _this.layer.toGeoJSON()
-    _this.layer.openPopup(_this.layer.getBounds().getCenter())
+AreaSettings::onMapClick = ->
+  leaf.map.on 'click', (e) =>
+    geocodes = initMapClick(e)
+    markers.new_marker = new (L.Marker)(e.latlng, { icon: markers.area_icon }, draggable: false)
+    leaf.map.addLayer markers.new_marker
+    newArea = {id: 'new', name: '', latitude: geocodes['lat'], longitude: geocodes['lng']}
 
-  # When starting to edit a district, create new popup
-  # for each district with current name in text field.
-  leaf.map.on 'draw:editstart', (e) ->
-    leaf.drawn_items.eachLayer (layer) ->
-      _this.district_bounds = layer.toGeoJSON()
-      layer.bindPopup '<input type=\'text\' id=\'' + _this.district_bounds['properties']['id'] + '\' ' +
-          'class=\'update_district_text\' style=\'margin-right:5px;\' placeholder=\'District name\' ' +
-          'value=\'' + _this.district_bounds['properties']['name'] + '\'>' +
-          '<button type=\'button\' id=\'save_' + _this.district_bounds['properties']['id'] + '\' ' +
-          'class=\'btn btn-xs btn-success update_district\'>OK</button><br /><div class=\'district_notif\'></div>'
+    popupContent = "<div class='area-popup-text' style='display: none;'>" + @areaNameFor(newArea) +
+      @modifyButtonFor(newArea) + @deleteButtonFor(newArea) + "</div>"
+    editContent = "<div class='area-popup-update'>" + @inputTextFor(newArea) + @okButtonFor(newArea) + "</div>"
 
-  # After saving new name of district,
-  # remove the text input and display new name as text only.
-  leaf.map.on 'draw:editstop', (e) ->
-    leaf.drawn_items.eachLayer (layer) ->
-      _this.district_bounds = layer.toGeoJSON()
-      layer.bindPopup _this.district_bounds['properties']['name']
-
-  # Event triggered when polygon (district) has been edited,
-  # and "Save" has been clicked.
-  leaf.map.on 'draw:edited', (e) ->
-    layers = e.layers
-    updated_districts = []
-    layers.eachLayer (layer) ->
-      _this.district_bounds = layer.toGeoJSON()
-      updated_districts.push _this.district_bounds
-
-    $.post '/user/areasettings/update_districts', { districts: JSON.stringify(updated_districts) }, (data) ->
-      msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
-      $('#district_notification_message').html msg
-
-  # Event triggered after deleting districts and clicking on 'Save'.
-  leaf.map.on 'draw:deleted', (e) ->
-    layers = e.layers
-    district_ids = []
-    layers.eachLayer (layer) ->
-      district = layer.toGeoJSON()
-      district_ids.push district['properties']['id']
-
-    $.post '/user/areasettings/delete_districts', { ids: district_ids }, (data) ->
-      msg = '<span class=\'' + data.style + '\'><strong>' + data.message + '</strong></span>'
-      $('#district_notification_message').html msg
-
+    popup = L.popup().setContent(popupContent + editContent)
+    markers.new_marker.bindPopup(popup, popupOptions({minWidth: 200})).openPopup()

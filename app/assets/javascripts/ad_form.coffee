@@ -29,6 +29,7 @@ AdForm::init = ->
     if image_path != null and image_path != ''
       $('#upload-in-progress').html '<i>' + gon.vars['new_image_uploading'] + '</i>'
 
+
   # Events to be triggered when item field added or removed, in the ad form.
   $('#items a.add_fields').data('association-insertion-position', 'before').data 'association-insertion-node', 'this'
   $('#items').on 'cocoon:after-insert', ->
@@ -47,8 +48,7 @@ AdForm::init = ->
     $('.selectpicker').selectpicker 'refresh'
 
   # Function call to initialize the location form (Location edit form, all Ad forms).
-  if typeof districts_bounds != 'undefined'
-    resetLocationForm districts_bounds, leaf.map
+  resetLocationForm()
 
   # "Edit ad" form: create message when image needs to be uploaded.
   $('#ad_edit_form').submit ->
@@ -62,7 +62,6 @@ AdForm::init = ->
     $('.add-new-location').hide()
     $('.location-form-for-ad :input').attr("disabled", false)
     $('#locations_from_list :input').attr('disabled', true)
-    $('#locations_from_list').hide()
     $(".remove-new-location").attr("tabindex",-1).focus() # Hack to center page on new location title.
 
   $('.remove-new-location').click ->
@@ -70,7 +69,7 @@ AdForm::init = ->
     $('.add-new-location').show()
     $('.location-form-for-ad :input').attr("disabled", true)
     $('#locations_from_list :input').attr('disabled', false)
-    $('#locations_from_list').show()
+
 
 ###*
 # Function that binds events to the item drop down list (in ads#new and ads#edit pages)
@@ -78,7 +77,6 @@ AdForm::init = ->
 # create a type-ahead for the search bar of that drop drown box.
 # @param object
 ###
-
 bindTypeaheadToItemSelect = (object) ->
   object.selectpicker(liveSearch: true).ajaxSelectPicker
     ajax:
@@ -111,9 +109,9 @@ bindTypeaheadToItemSelect = (object) ->
   return
 
 
-# This critical function initializes the location form (Location edit form, Ad forms)
+# This function initializes the location form (Location edit form, Ad forms)
 # as well as all the events tied to its relevant elements.
-resetLocationForm = (districts_bounds, map) ->
+resetLocationForm = ->
   if $('#map').length > 0
     $('.location_type_exact').click ->
       removes_location_layers()
@@ -121,91 +119,53 @@ resetLocationForm = (districts_bounds, map) ->
 
     if $('.location_type_exact').is(':checked')
       show_exact_address_section()
-    $('.location_type_postal_code').click ->
+
+    $('.location_type_area').click ->
       removes_location_layers()
-      show_postal_code_section()
+      show_area_section_only()
 
-    if $('.location_type_postal_code').is(':checked')
-      show_postal_code_section()
-    $('.location_type_district').click ->
-      removes_location_layers()
-      show_district_section()
+    if $('.location_type_area').is(':checked')
+      show_area_section_only()
 
-    if $('.location_type_district').is(':checked')
-      show_district_section()
-
-  # "Postal code" functionality: display a help message to inform about what the area will be named,
-  # after the postal code is entered.
-  $('.location_postal_code').focusout ->
-    if $('.location_type_postal_code').is(':checked')
-      area_code_length = undefined
-      postal_code_length = undefined
-      postal_code = $('.location_type_postal_code').val()
-      postal_code_value = $('.location_postal_code').val()
-      if typeof area_code_length == 'undefined' and typeof postal_code_length == 'undefined'
-        $.get '/user/getAreaSettings', {}, (data) ->
-          if data['code'] != null and data['area'] != null
-            # Based on the retrieved settings, we display which area code will be used for this ad.
-            area_code_length = data['area']
-            if postal_code.length >= area_code_length
-              postalCodeArea = postal_code_value.substring(0, area_code_length)
-              $('#postal_code_notification').html '<i>' + gon.vars['area_show_up'] + '\'' + postalCodeArea + '\'</i>'
+  # Open modal with explanation, when clicking on "Why do I need to choose an option?"
+  $('#why_choose_link').click ->
+    $('#why_choose_modal').modal('show')
 
   # Help messages for fields on "Create ad" form
   $('.help-message').popover()
-  # Initializing onclick event on "Locate me on the map" button, when looking for location on map, based on user input.
+
+  # Initializing onclick event on "Locate me on the map" button,
+  # when looking for location on map, based on user input.
   find_geocodes()
 
-# Function used in the location form - show appropriate section when choosing a district-based area
-show_district_section = ->
+# Function used in the location form - show appropriate section when choosing an area-based area
+show_area_section_only = ->
   $('.exact_location_section').addClass 'hide'
-  $('#postal_code_section').addClass 'hide'
-  $('#district_section').removeClass 'hide'
-  $('#map_notification_postal_code_only').addClass 'hide'
   $('#map_notification_exact').addClass 'hide'
-  markers.location_marker_type = 'area'
+  $('.exact_location_section :input').attr('disabled', true)
+
+  # After choosing an area, moves the map to where it is.
+  leaf.moveMapBasedOnArea({showAreaIcon: false, zoom: 16})
+  
   leaf.map.off 'click', onMapClickLocation
   $('#map_notification').addClass 'hide'
-  # Loading the district matching the default option in the district drop-down box.
-  id = $('.district_dropdown option:selected').val()
-  name = $('.district_dropdown option:selected').text()
-  bounds = districts_bounds[id]
-  leaf.show_single_district name, bounds
-  # Location form: when choosing a district from the drop-down box, we need to display the area on the map underneath.
-  $('#district_section').on('change', '.district_dropdown', ->
-    id = $('.district_dropdown option:selected').val()
-    name = $('.district_dropdown option:selected').text()
-    bounds = districts_bounds[id]
-    leaf.show_single_district name, bounds
-  ).change()
 
 
 # On the location form, removes layers representing a previously clicked exact location, postal code area,
-# or selected district.
+# or selected area.
 removes_location_layers = ->
   if markers.new_marker != null
     leaf.map.removeLayer markers.new_marker
-  if markers.selected_area != null
-    leaf.map.removeLayer markers.selected_area
-  if markers.postal_code_circle != null
-    leaf.map.removeLayer markers.postal_code_circle
+
 
 # Function used in the location form - show appropriate section when entering an exact address
 show_exact_address_section = ->
-  $('#postal_code_section').removeClass 'hide'
-  $('#district_section').addClass 'hide'
   $('.exact_location_section').removeClass 'hide'
-  markers.location_marker_type = 'exact'
-  leaf.map.on 'click', onMapClickLocation
-  $('#map_notification_postal_code_only').addClass 'hide'
-  $('#map_notification_exact').removeClass 'hide'
+  $('.exact_location_section :input').attr('disabled', false)
 
-# Function used in the location form - show appropriate section when choosing a postal code-based area
-show_postal_code_section = ->
-  $('.exact_location_section').addClass 'hide'
-  $('#district_section').addClass 'hide'
-  $('#postal_code_section').removeClass 'hide'
-  markers.location_marker_type = 'area'
+  # After choosing an area, do not move the map.
+  # "Locate me on the map" button will be in charge of this.
+  $('.area-select').off 'change'
+
   leaf.map.on 'click', onMapClickLocation
-  $('#map_notification_postal_code_only').removeClass 'hide'
-  $('#map_notification_exact').addClass 'hide'
+  $('#map_notification_exact').removeClass 'hide'

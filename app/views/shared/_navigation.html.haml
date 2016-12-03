@@ -8,61 +8,64 @@
           
   - if !setup_mode?
     #navbarCollapse.navbar-collapse.collapse.navbar-responsive-collapse
-      / Search form - start
-      %form#searchFormId.navbar-form.navbar-left{:action => "/search", :method => "get", :role => "search"}
-        .form-group
-          = select_tag :q, options_for_select([[t('home.searching'),'searching'], [t('home.giving'),'giving']], params['q']), class: 'form-control selectpicker'
-        .form-group
-          = text_field_tag :item, params['item'], class:'typeahead form-control', placeholder: t('home.search_items'), autocomplete: 'off'
-        .form-group
-          = text_field_tag :location,'', class:'form-control', placeholder: t('home.location_example')
-        .form-group
-          = button_tag t('home.search'), :id => 'btn-form-search', :type => 'button',:class => 'btn btn-default'
-        .form-group
-          %span#search_error_message{:style => "color: #d9534f; margin-left: 5px;"}
-      / Search form - end
 
-      %ul.nav.navbar-nav.navbar-right
-        / Sign in/Register/User drop down menu - start
-        - if user_signed_in?
-          %li.dropdown
-            %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
-              %i.glyphicon.glyphicon-user
-              = current_user.first_name
-              %b.caret
-            %ul.dropdown-menu
-              - if admin_panel?
-                %li= link_to t('home.page'), root_path
-              - elsif current_user.user?
-                %li= link_to t('home.user_panel'), user_index_path
-              - elsif current_user.admin?
-                %li= link_to t('home.admin_panel').capitalize, user_index_path
-              %li= link_to t('home.log_out'), destroy_user_session_path, method: :delete
-        - else
-          %li
-            %a#popover{:href => "#"}= t('home.sign_register')
-            #popover-content.hide.popover-larger
-              = form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-horizontal'}) do |f|
-                = t('home.e-mail')
-                %br
-                = f.email_field :email, {size: 30}
-                %br
-                = t('home.password')
-                %br
-                = f.password_field :password, {size: 30}
-                %br
-                = f.submit t('home.sign_in').capitalize, class: 'btn btn-primary btn-xs', style: 'margin-top: 5px'
-                %br
-                %br
-                = t('home.not_have_account_yet_html', sign_up_here: "#{link_to t('home.sign_up'), new_registration_path(resource_name)}".html_safe )
-                %br
-                - if demo?
-                  %br/
-                  %span{:style => "font-size: 12px;"}
-                    %i= t('home.demo_instructions_html', here: link_to(t('ad.here'), 'https://github.com/etiennebaque/madloba/wiki/Madloba-demo-instructions', target: '_blank') )
-      / Sign in/Register/User drop down menu - end
-      
-      / In admin panel, show admin actions in collapsed menu.
+      .nav-form-center
+        -# Search form - start
+        %form#nav_search_form.navbar-form{:action => "/search", :method => "get", :role => "search"}
+          .form-group
+            = select_tag :q, options_for_select([[t('home.searching'),'searching'], [t('home.giving'),'giving']], params['q']), class: 'form-control selectpicker'
+          .form-group
+            = text_field_tag :item, params['item'], class:'typeahead form-control', placeholder: t('home.search_items'), autocomplete: 'off'
+          .form-group
+            = text_field_tag :location,'', class:'form-control', placeholder: t('home.location_example')
+          .form-group
+            = button_tag t('home.search'), :id => 'btn-form-search', :type => 'button',:class => 'btn btn-default'
+          .form-group
+            %span#search_error_message{:style => "color: #d9534f; margin-left: 5px;"}
+        -# Search form - end
+
+        %ul.nav.navbar-nav.navbar-right
+          -# Sign in/Register/User drop down menu - start
+          - if user_signed_in?
+            %li.dropdown
+              %a.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+                %i.glyphicon.glyphicon-user
+                = current_user.first_name
+                %b.caret
+              %ul.dropdown-menu
+                - if admin_panel?
+                  %li= link_to t('home.page'), root_path
+                - elsif current_user.user?
+                  %li= link_to t('home.user_panel'), user_index_path
+                - elsif current_user.admin?
+                  %li= link_to t('home.admin_panel').capitalize, user_index_path
+                %li= link_to t('home.log_out'), destroy_user_session_path, method: :delete
+          - else
+            %li
+              %a#popover{:href => "#"}= t('home.sign_register')
+              #popover-content.hide.popover-larger
+                = form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-horizontal'}) do |f|
+                  = t('home.e-mail')
+                  %br
+                  = f.email_field :email, {size: 30}
+                  %br
+                  = t('home.password')
+                  %br
+                  = f.password_field :password, {size: 30}
+                  %br
+                  = f.submit t('home.sign_in').capitalize, class: 'btn btn-primary btn-xs', style: 'margin-top: 5px'
+                  %br
+                  %br
+                  = t('home.not_have_account_yet_html', sign_up_here: "#{link_to t('home.sign_up'), new_registration_path(resource_name)}".html_safe )
+                  %br
+                  - if demo?
+                    %br/
+                    %span{:style => "font-size: 12px;"}
+                      %i= t('home.demo_instructions_html', here: link_to(t('ad.here'), 'https://github.com/etiennebaque/madloba/wiki/Madloba-demo-instructions', target: '_blank') )
+        -# Sign in/Register/User drop down menu - end
+
+
+      -# In admin panel, show admin actions in collapsed menu.
       - if admin_panel?
         %ul.nav.navbar-nav
           %li.hidden-md.hidden-lg= link_to t('admin.dashboard'), user_index_path
@@ -79,20 +82,17 @@
                 %li= link_to t('admin.left_menu.area_settings'), user_areasettings_path
           %li.hidden-md.hidden-lg= link_to t('admin.manage_your_ads'), user_manageads_path
           %li.hidden-md.hidden-lg= link_to t('admin.left_menu.manage_profile'), user_manageprofile_path
-    /.nav-collapse
+
   - else
-    / Setup pages - display the current step
+    -# Setup pages - display the current step
     - if @current_step && @current_step > 0
       %span.navbar-brand= t('setup.step_html', current_step: @current_step)
-  / /.container
-
 
 - if admin_panel?
-  / Rendering admin panel, its second navigation bar and its footer in a 'ch-container' div
+  -# Rendering admin panel, its second navigation bar and its footer in a 'ch-container' div
   = render 'shared/navigation_admin'
 
-
-/ Modal popup that appears with OpenStreetMap address suggestions
+-# Modal popup that appears with OpenStreetMap address suggestions
 #basicModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "basicModal", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content

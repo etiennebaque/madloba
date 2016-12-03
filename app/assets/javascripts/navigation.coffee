@@ -14,7 +14,7 @@ global.NavigationBar = ->
 NavigationBar::init = ->
   _this = this
   # Press Enter to valid search form.
-  $('#searchFormId input').keypress (event) ->
+  $('#nav_search_form input').keypress (event) ->
     if event.which == 13
       event.preventDefault()
       _this.getLocationsPropositions()
@@ -126,4 +126,4 @@ NavigationBar::getLocationsPropositions = ->
 
   else if $('#item').val() != '' or $('#user_action').val() != ''
     # no location is being searched, but an item is. We need to submit the form with this information.
-    $('#searchFormId').submit()
+    $('#nav_search_form').submit()

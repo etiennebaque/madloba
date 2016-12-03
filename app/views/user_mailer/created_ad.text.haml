@@ -3,16 +3,16 @@
 \:
 
 \- #{t('mailer.ad_title')}: #{@ad.title}
-- if @ad.is_giving
+- if @ad.giving
   \- #{t('ad.giving_away')}:
   - @ad.items.each do |item|
     \- #{item.name}
-  \- #{t('mailer.where_pick_up')}: #{@ad.location.name_and_or_full_address}
+  \- #{t('mailer.where_pick_up')}: #{@ad.location.full_address}
 - else
   \- #{t('ad.accepting')}:
   - @ad.items.each do |item|
     \- #{item.name}
-  \- #{t('mailer.where_to_drop')}: #{@ad.location.name_and_or_full_address}
+  \- #{t('mailer.where_to_drop')}: #{@ad.location.full_address}
 = t('mailer.description')
 \: #{simple_format(@ad.description)}
 

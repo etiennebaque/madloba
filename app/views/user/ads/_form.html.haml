@@ -6,7 +6,7 @@
   %fieldset
 
     - if page == 'edit'
-      / Edit page: "Delete Ad" and "See published ad" buttons
+      -# Edit page: "Delete Ad" and "See published ad" buttons
       .form-group
         .col-lg-6
           %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#", :style => "margin-right: 10px;"}= t('admin.ad.delete')
@@ -31,30 +31,30 @@
     -# Name to use (it user is not anonymous)
     - if user_signed_in?
       .form-group
-        = f.label :is_username_used, t('location.name_to_use'), class: 'col-lg-2 control-label'
+        = f.label :username_used, t('location.name_to_use'), class: 'col-lg-2 control-label'
         .col-lg-6
           .radio
             %label
-              = f.radio_button :is_username_used, true, checked: true
+              = f.radio_button :username_used, true, checked: true
               = t('location.name_username')
               (#{current_user.username})
           .radio
             %label
-              = f.radio_button :is_username_used, false
+              = f.radio_button :username_used, false
               = t('location.name_fullname')
               (#{current_user.first_name} #{current_user.last_name})
 
     -# Giving / Accepting items
     .form-group
-      = f.label :is_giving, t('location.ad_action'), class: 'col-lg-2 control-label'
+      = f.label :giving, t('location.ad_action'), class: 'col-lg-2 control-label'
       .col-lg-6
         .radio
           %label
-            = f.radio_button :is_giving, true, checked: true
+            = f.radio_button :giving, true, checked: true
             = t('location.ad_action_giving')
         .radio
           %label
-            = f.radio_button :is_giving, false
+            = f.radio_button :giving, false
             = t('location.ad_action_accepting')
 
     -# Items
@@ -109,10 +109,10 @@
                 %label
                   - if index == 0
                     = f.radio_button :location_id, loc.id, checked: true
-                    = "#{loc.location_full_name} - #{loc.location_type_address}"
+                    = loc.full_address
                   - else
                     = f.radio_button :location_id, loc.id
-                    = "#{loc.location_full_name} - #{loc.location_type_address}"
+                    = loc.full_address
 
         .form-group
           .col-lg-6.col-lg-offset-2
@@ -152,7 +152,7 @@
     -# Submit section
     .form-group{style: 'margin-top: 35px'}
       .col-lg-10.col-lg-offset-2
-        = f.submit t("ad.submit_ad_#{page}"), class: 'btn btn-success'
+        = f.submit t("ad.submit_ad_#{page}"), id: 'submit_new_ad', class: 'btn btn-success'
         %a.btn{:href => "/"}= t('home.cancel')
 
     -# After submit, a notification shows up here, if a new image is being uploaded

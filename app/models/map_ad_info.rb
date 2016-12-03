@@ -1,30 +1,30 @@
 class MapAdInfo < MapInfo
 
-  MAP_AD_INFO_ATTRIBUTES = [:ad_show, :popup_message, :ad_show_is_area]
+  AD_INFO_ATTRIBUTES = [:ad_show, :popup_message, :area]
 
-  attr_accessor(*(MAP_INFO_ATTRIBUTES+MAP_AD_INFO_ATTRIBUTES))
+  attr_accessor(*(MAP_INFO_ATTRIBUTES+AD_INFO_ATTRIBUTES))
 
   def initialize(ad)
-    super(has_center_marker: true, clickable: NOT_CLICKABLE_MAP)
-
-    self.ad_show_is_area = ad.location.area?
+    super()
+    ad_location = ad.location
     items = ad.items
 
-    if self.ad_show_is_area
-      # Getting information whether it's a postal code area, or a district
+    if ad_location.area?
+      # Getting information for this ad based that's based on area-only location
       self.popup_message = items.map(&:capitalized_name).join(', ')
+      self.area = ad_location.area
     else
       # Getting information as an exact address location
       self.ad_show = []
       items.each {|item| self.ad_show << {icon: item.category.icon, color: item.category.marker_color, item_name: item.name}}
     end
 
-    self.latitude = ad.location.latitude
-    self.longitude = ad.location.longitude
+    self.latitude = ad_location.latitude
+    self.longitude = ad_location.longitude
     self.zoom_level = CLOSER_ZOOM_LEVEL
   end
 
   def attributes_to_read
-    MAP_INFO_ATTRIBUTES+MAP_AD_INFO_ATTRIBUTES
+    MAP_INFO_ATTRIBUTES+AD_INFO_ATTRIBUTES
   end
 end

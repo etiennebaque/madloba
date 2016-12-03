@@ -1,3 +1,4 @@
+- ad_type = @ad.location.area? ? 'area' : 'exact'
 .container#show_ad_page
   - if flash[:new_ad]
     #new_ad_success_message.alert.alert-dismissable.alert-success{:style => "margin-top: 21px;"}
@@ -42,7 +43,7 @@
         .back-link
           = link_to(t('ad.back_home'), root_path)
 
-  / Map
+  -# Map
   .row
     .col-lg-12.ad-paragraph
       #map.small
@@ -50,9 +51,10 @@
   - if @ad.image?
     .row
       .col-lg-7.col-sm-12.ad-paragraph
-        / Partial showing info about the ad
+        -# Partial showing info about the ad
         = render 'shared/ad_summary'
-      / Ad image
+
+      -# Ad image
       .col-lg-5.col-sm-12.ad-image
         - if is_image_available(@ad)
           = image_tag @ad.image_url(:normal).to_s, width: '100%'
@@ -64,18 +66,17 @@
   - else
     .row
       .col-lg-12.ad-paragraph
-        / Partial showing info about the ad
+        -# Partial showing info about the ad
         = render 'shared/ad_summary'
   .row
-    / 'Send message' text area
+    -# 'Send message' text area
     = render 'shared/ads_send_message', ad: @ad
 
-/ Rendering JS scripts
+-# Rendering JS scripts
 - content_for :scripts do
-  / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and scripts that creates the actual map
+  -# Includes all the Javascript related to map rendering (Leaflet, MapQuest, and scripts that creates the actual map
   = render 'shared/map_scripts_after_body'
   :javascript
-    // Initialize the Web socket object
-    #{render 'shared/initialize_websocket.js'}
-    adForm = new AdForm();
-
+    var adType = "#{ad_type}";
+    new AdForm();
+    new AdDetailPage(adType);

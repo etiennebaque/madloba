@@ -19,6 +19,8 @@ en:
             image:
               too_long: must be less than 5MB
   home:
+    yes: Yes
+    no: No
     home: Home
     page: Home page
     user_panel: User panel
@@ -29,7 +31,7 @@ en:
     create_account: create an account
     refinements: Your selection
     delete_all: Delete all
-    refine_location: Refine location
+    refine_location: Move to a specific location
     cancel: Cancel
     close: Close
     sign_register: Sign in / Create account
@@ -47,8 +49,10 @@ en:
     about: About
     about_website: About %{website_name}
     links: Links
-    your_searched_location: Your searched location
+    your_searched_location: Searched location
     no_ad: There's no ad at the moment.
+    area_marker_message: "%{ad_count} ads posted in total in this area, featuring %{item_count} items."
+    show_results: "Show results for this area"
     create_an_ad_now_html: "%{create_new_ad} to tell your community what you have to give, or what you're looking for!"
     about_page: About %{website_name}
     about_description_1_html: "%{website_name} is a website powered by %{madloba_link}."
@@ -74,12 +78,14 @@ en:
     footer_new_powered_by_html: New website powered by %{madloba_link}
     footer_theme_html: Theme from %{charisma}
     log_out: Log out
-    show_ads_districts: Show ads by areas
+    show_ads_areas: Show ads by areas
     show_details: Show details
     error_get_popup_content: Sorry, an error occurred. Please try again later.
     error:
       one: error
       more: errors
+  results:
+    title: "Ads for \"%{area}\" (%{num} results)"
   errors:
     oops: "Oops!"
     not_found: 404 Page Not Found
@@ -102,15 +108,21 @@ en:
     ad_action_accepting: I'm searching for items.
     name_username: the username
     name_fullname: the full name
-    definition: "Enter your location*:"
-    definition_exact: by exact address
-    definition_postal_code: by postal code
-    definition_district: by district
+    definition: "Enter your location by*:"
+    definition_exact: "Giving the full address"
+    definition_area: "Selecting the area only"
+    why_choose_location_type: "Why do I need to choose an option?"
+    modal_exact_area_title: "Full address or area only?"
+    modal_exact_area_description: "On one hand, by clicking on '%{def_exact}', you will be able to enter the exact address of this location and pinpoint it on the map below."
+    modal_exact_area_description2: "After your ad has been created, you will be able to visualize it on the home page map with a colored marker placed at the previously marked location."
+    modal_exact_area_description3: "On the other hand, you may not want to give away that many details about the location, given any personal reasons (eg. anonymity, details about the ad...)."
+    modal_exact_area_description4: "By choosing '%{def_area}', you will just have to indicate which area does this location belong to. Once the ad is created, it won't appear as a colored marker on the home page, but it will show up in the search results page related to the selected area."
     street_number: "Street number:"
-    street_name: "Street name*:"
+    street_name: "Street name:"
     street_name_help: For this location, the name of the street, avenue, drive...
-    postal_code: "Postal code*:"
-    district: "District*:"
+    postal_code: "Postal code:"
+    area: "Area:"
+    area_blank: "-- Choose an area --"
     define_geocode_button: Locate me on the map
     map: "Map:"
     phone_number: "Phone number:"
@@ -120,7 +132,8 @@ en:
     not_found: Location not found
     not_found_descr1: "Based on the information you've entered, the location could not be found."
     not_found_descr2: "But that's ok! Please select it manually on the map."
-    district_help: Choose the district where this location can be found.
+    area_help: Which area does this location belong to?
+    error_location_fields: "Either an area or an address must be given"
   ad:
     new_ad: New ad
     once_created_expire_html: Once created, your ad will be published for <strong>%{max_expire_days} days</strong>.
@@ -245,8 +258,8 @@ en:
     dashboard: Dashboard
     todo_list: To-do list
     name: Name
-    address: Address/Postal code/District
-    exact_area: Location type
+    address: Name/Address
+    exact_area: Area only?
     ads: Ads
     ad_settings: Ad settings
     location_name: location
@@ -285,15 +298,15 @@ en:
     settings_menu: Settings
     nothing_to_do: Yay! Nothing to worry about :)
     you_admin: You're an administrator of this website.
-    use_left_hand: Use the left-hand side menu to manage
+    use_menu_above: "Use the menu above to manage:"
     admin_descr1: the different components of this website (ads, locations, items, categories)
     admin_descr2: the registered users (admins and regulars users)
     admin_descr3: the website main settings
     admin_descr4: the settings for the map on the front page
-    admin_descr5: the settings that define an area in your town (eg postal codes and/or districts)
+    admin_descr5: the settings that define areas in your town
     regular_actions: You can also perform regular users' actions.
     todo_list: To-do list
-    welcome_user: Welcome to your %{site_name} dashboard. Use the left-hand side menu to manage
+    welcome_user: "Welcome to your %{site_name} dashboard. Use the menu above to manage:"
     user_descr1: the ads you published, as well as the locations tied to them.
     user_descr2: your user information.
     social_media: Social media
@@ -304,13 +317,13 @@ en:
     delete_confirm: Yes, delete this %{entity}
     save_not_possible: "Demo - Update not possible for this page"
     todo:
-      no_category: '<strong>No category available</strong>. Please create at least one category to be able to create ads.'
-      one_category: '<strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.'
-      no_area_type: '<strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area (Settings)", please indicate how an area is defined (by postal code or by district), to give the user more flexibility, when it comes to choose a location.'
-      mapbox_missing: You don't have entered a Mapbox key yet, in "Map (Settings)". You can get one by opening an account on <strong>%{mapbox_website}</strong>, to get a new map style for your website.
-      mapquest_missing: You don't have entered a MapQuest key yet, in "Map (Settings)". You can get one by opening an account on <strong>%{mapquest_website}</strong>, to get a new map style for your website.
-      description_missing: No website description has been written yet, in "General (Settings)". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
-      no_social_media: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General (Settings)". Specify some of them to increase your visibility.
+      no_category_html: '<strong>No category available</strong>. Please create at least one category to be able to create ads.'
+      one_category_html: '<strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.'
+      no_area_type_html: '<strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area (Settings)", please indicate how an area is defined (by postal code or by area), to give the user more flexibility, when it comes to choose a location.'
+      mapbox_missing_html: You don't have entered a Mapbox key yet, in "Map (Settings)". You can get one by opening an account on <a href="https://www.mapbox.com" target="_blank">Mapbox</a>, to get a new map style for your website.
+      mapquest_missing_html: You don't have entered a MapQuest key yet, in "Map (Settings)". You can get one by opening an account on <a href="https://developer.mapquest.com" target="_blank">Mapquest</a>, to get a new map style for your website.
+      description_missing_html: No website description has been written yet, in "General (Settings)". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
+      no_social_media_html: You didn't enter any social network addresses (Facebook, Twitter, Pinterest), in "General (Settings)". Specify some of them to increase your visibility.
     left_menu:
       admin_task: Admin tasks
       user_tasks: Regular user tasks
@@ -336,7 +349,7 @@ en:
       error_occurred: "%{errors} occurred while saving this location"
       update_success: The location '%{name}' has been updated.
       created_success: The location '%{name}' has been created.
-      delete: Delete this location
+      delete: "Delete this location?"
       linked_ads: Ads linked to that location
       no_ad: There is no ad linked to this location yet.
       area: Area
@@ -404,22 +417,31 @@ en:
       title: Area settings
       define_area: An area can be defined
       by_postal_code: by postal code
-      by_district: by district
+      by_area: by area
       area_postal_code: Area defined by a postal code
-      area_district: Area defined by a district
-      map_description: "Use this map to draw, edit or delete the boundaries of your city's districts."
-      error_update_district: An server error occurred while updating districts. Please try again later.
-      error_save_district: An server error occurred while saving this district. Please try again later.
-      district_name: District name
+      area_area: Area defined by an area
+      map_description: "Areas broadly define neighbourhoods and districts related to your Madloba website.
+                        Once defined, users will be able to looks at ads in the chosen neighbourhood on the home page.
+                        Alternatively, they will choose an area when creating a new ad."
+      map_description_2: "Click on the map to pinpoint and name a new area.
+                          Click on an previously defined area to either delete it or change its name."
+      error_update_area: An error occurred while updating this area. Please try again later.
+      error_save_area: An error occurred while saving this area. Please try again later.
+      area_name: Area name
       latitude: Latitude
       longitude: Longitude
-      add_district: Add district
-      save_success: New district has been saved.
-      save_name_success: District name successfully updated.
-      error_name_save: Error occured when updating district name. Please try again later.
-      update_success: The districts have been successfully updated.
-      delete_success: Deletion completed.
-      delete_error: Error occured when deleting a district. Please try again later.
+      add_area: Add area
+      save_success: New area has been saved.
+      save_name_success: Area name successfully updated.
+      error_name_save: Error occured when updating area name. Please try again later.
+      update_success: The areas have been successfully updated.
+      delete_success: Area was deleted successfully.
+      delete_error: Error occured when deleting an area. Please try again later.
+      before_delete1: "Warning: some locations are tied to this area!"
+      before_delete2: "Before deleting this area, which area do you want to associate these locations with?"
+      transfer_and_delete: "Transfer locations & delete this area"
+      confirm_delete: "Are you sure you want to delete this area?"
+      delete_this_area: "Delete this area?"
     map_settings:
       title: Map
       type: "Map type:"
@@ -541,16 +563,13 @@ en:
     start_typing_item: Start typing an item
     no_result_create_item: No results. Select 'Create a new item'.
     new_image_uploading: New image is being uploaded. Please wait.
-    type_district_name: Type a district name here...
     latitude: (latitude)
     longitude: (longitude)
     add: Add
-    updating_district: Updating district list...
-    area_show_up: "This location area will show up as:"
+    updating_area: Updating area list...
     searching_location: Searching location...
     update: Update
     loading: Loading...
-    choose_location: Choose one of the following available locations, provided by OpenStreetMap
     remove: Remove
     records_per_page: records per page
     search: "Search:"
@@ -565,24 +584,19 @@ en:
     last: Last
     filtered_from: filtered from
     total_entries: total entries
-    in_this_district: In this district
     ads_for: Ads for
-    items_given: "Item(s) being given away:"
-    items_searched: "Item(s) being searched for:"
-    image_not_available: Image not available yet.
-    select_item: Select an item below for more details.
     cancel_drawing: Cancel drawing
     cancel: Cancel
     delete_last_point_drawn: Delete last point drawn
     delete_last_point: Delete last point
-    draw_district: Draw a district
-    start_draw_district: Click to start drawing district.
-    continue_draw_district: Click to continue drawing district.
-    click_first_point: Click first point to close this district.
+    draw_area: Draw an area
+    start_draw_area: Click to start drawing area.
+    continue_draw_area: Click to continue drawing area.
+    click_first_point: Click first point to close this area.
     error: "Error:"
-    edges_cannot: "district edges cannot cross!"
-    edit_district: Edit district
-    no_edit_district: No district to edit
-    delete_district: Delete district
-    no_district_delete: No district to delete
-    drag_handles: Drag handles to edit district boundaries. Click on the area to edit its name.
+    edges_cannot: "area edges cannot cross!"
+    edit_area: Edit area
+    no_edit_area: No area to edit
+    delete_area: Delete area
+    no_area_delete: No area to delete
+    drag_handles: Drag handles to edit area boundaries. Click on the area to edit its name.

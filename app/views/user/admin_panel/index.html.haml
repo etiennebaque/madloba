@@ -50,9 +50,7 @@
                 = current_user.first_name
                 \!
               %p= t('admin.you_admin')
-              %p
-                = t('admin.use_left_hand')
-                \:
+              %p= t('admin.use_menu_above')
               %ul
                 %li= t('admin.admin_descr1')
                 %li= t('admin.admin_descr2')
@@ -94,9 +92,7 @@
                 = t('session.hello')
                 = current_user.first_name
                 \!
-              %p
-                = t('admin.welcome_user', site_name: site_name)
-                \:
+              %p= t('admin.welcome_user', site_name: site_name)
               %ul
                 %li= t('admin.user_descr1')
                 %li= t('admin.user_descr2')

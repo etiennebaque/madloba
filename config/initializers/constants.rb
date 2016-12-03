@@ -1,5 +1,5 @@
 # Constants file
-#
+
 # Constants used across the application can be found here.
 
 # Map tiles URL, and attribution mentions (for OSM, Mapbox and MapQuest)
@@ -12,16 +12,6 @@ MAPQUEST_TILES_URL='http://open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=%
 
 # OpenStreetMap's Nominatim webservice end point (used to retrieve geocodes)
 OSM_NOMINATIM_URL = 'http://nominatim.openstreetmap.org/search?q=%{location}&format=json&polygon=0&addressdetails=0&accept-language=en'
-
-# Constants for controllers, when initializing map.
-AD_FLAG_FOR_MAP = 'ad'
-ADMIN_FLAG_FOR_MAP = 'admin'
-AREA_FLAG_FOR_MAP = 'area'
-SHOW_AD_FLAG_FOR_MAP = 'show_ad'
-
-NOT_CLICKABLE_MAP = 'none'
-CLICKABLE_MAP_EXACT_MARKER = 'exact'
-CLICKABLE_MAP_AREA_MARKER = 'area'
 
 GENERAL_AREA_ZOOM_LEVEL = 14
 CLOSER_ZOOM_LEVEL = 16
@@ -41,10 +31,6 @@ MARKER_COLORS = {
     'red' => '#d63e2a',
 }
 
-# Color used to draw districts and postal code areas on map
-DISTRICT_COLOR = '#6ca585';
-POSTAL_CODE_AREA_COLOR = '#728edb';
-
 # Selection of Font-Awesome icons, to be displayed in popup, when editing categories.
 ICON_SELECTION =
     %w(fa-anchor fa-archive fa-automobile fa-beer fa-bell-o fa-bicycle fa-binoculars fa-birthday-cake fa-book
@@ -63,8 +49,7 @@ CACHE_CITY_NAME = 'cache_city_name'
 CACHE_COUNTRY_NAME = 'cache_country_name'
 CACHE_IMAGE_STORAGE = 'cache_image_storage'
 CACHE_MAX_DAYS_EXPIRE = 'cache_max_days_expire'
-CACHE_AREA_TYPE = 'cache_area_type'
-CACHE_DISTRICTS = 'cache_districts'
+CACHE_AREAS = 'cache_areas'
 CACHE_CHOSEN_LANGUAGE = 'cache_chosen_language'
 
 # Image storage constants

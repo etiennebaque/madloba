@@ -18,8 +18,8 @@ RSpec.describe Location, :type => :model do
     Location.reflect_on_association(:user).macro == :belongs_to
   end
 
-  it 'is invalid without a postal code' do
-    expect(FactoryGirl.build(:location, postal_code: nil)).not_to be_valid
+  it 'is invalid without an area or without an address' do
+    expect(FactoryGirl.build(:location, {address: nil, area: nil})).not_to be_valid
   end
 
   it 'is invalid without a latitude' do

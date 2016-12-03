@@ -10,14 +10,19 @@ FactoryGirl.define do
     f.postal_code { Faker::Address.postcode }
     f.latitude { Faker::Address.latitude }
     f.longitude { Faker::Address.longitude }
-    f.loc_type {'exact'}
 
     factory :location_with_ads do
       after_create do |location|
         create(:ad, location: location)
       end
     end
+  end
 
+  factory :area_only_location, parent: :location do |f|
+    f.address nil
+    f.postal_code nil
+    f.street_number nil
+    f.area { build(:area) }
   end
 
   factory :invalid_location, parent: :location do |f|

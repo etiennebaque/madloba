@@ -3,12 +3,12 @@ class User::AdsController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create, :send_message, :show]
   before_action :requires_user, except: [:new, :create, :send_message, :show]
   after_action :verify_authorized, except: [:new, :create, :send_message, :send_message]
-  after_action :generate_ad_json, only: [:create, :update]
+  after_action :serialize_ad, only: [:create, :update]
 
   include ApplicationHelper
 
   def show
-    @ad = Ad.includes(:location => :district).where(id: params['id']).first!
+    @ad = Ad.includes(:location => :area).where(id: params['id']).first!
     authorize @ad
 
     # Redirection to the home page, if this ad has expired, expect if current user owns this ad.
@@ -38,8 +38,6 @@ class User::AdsController < ApplicationController
     @ad.user = current_user
 
     if @ad.save_with_or_without_captcha(current_user)
-      # Update location type if needed
-      @ad.location.define_subclass
 
       flash[:new_ad] = @ad.title
 
@@ -76,7 +74,7 @@ class User::AdsController < ApplicationController
   end
 
   def edit
-    @ad = Ad.includes(:location => :district).where(id: params[:id]).first!
+    @ad = Ad.includes(:location => :area).where(id: params[:id]).first!
     authorize @ad
     get_map_settings_for_ad
   end
@@ -87,7 +85,6 @@ class User::AdsController < ApplicationController
 
     # Performing the update.
     if @ad.update(ad_params)
-      @ad.location.define_subclass
       flash[:ad_updated] = @ad.title
       redirect_to edit_user_ad_path(@ad.id)
     else
@@ -115,10 +112,10 @@ class User::AdsController < ApplicationController
   end
 
   def ad_params
-    params.require(:ad).permit(:title, :description, :is_username_used, :location_id, :is_giving,
+    params.require(:ad).permit(:title, :description, :username_used, :location_id, :giving,
                                :image, :image_cache, :remove_image, :anon_name, :anon_email, :captcha, :captcha_key,
                                :ad_items_attributes => [:id, :item_id, :_destroy, :item_attributes => [:id, :name, :category_id, :_destroy] ],
-                               :location_attributes => [:id, :user_id, :name, :street_number, :address, :postal_code, :province, :city, :district_id, :loc_type, :type, :latitude, :longitude, :phone_number, :website, :description])
+                               :location_attributes => [:id, :user_id, :name, :street_number, :address, :province, :postal_code, :city, :area_id, :type, :latitude, :longitude, :phone_number, :website, :description])
   end
 
   # This method is called when a user replies and sends a message to another user, who posted an ad.
@@ -174,26 +171,9 @@ class User::AdsController < ApplicationController
   end
 
   # Create the json for the 'exact location' ad, which will be read to render markers on the home page.
-  def generate_ad_json
+  def serialize_ad
     if @ad.errors.empty?
-      type = @ad.location.loc_type
-      if type == 'exact'
-        marker_info = {ad_id: @ad.id, lat: @ad.location.latitude, lng: @ad.location.longitude}
-        marker_info[:markers] = []
-        @ad.items.each do |item|
-          item_info = {}
-          cat = item.category
-          item_info[:item_id] = item.id
-          item_info[:category_id] = cat.id
-          item_info[:color] = cat.marker_color
-          item_info[:icon] = cat.icon
-          marker_info[:markers] << item_info
-        end
-      else
-        marker_info = {}
-      end
-      @ad.marker_info = marker_info
-      @ad.save
+      @ad.serialize!
     end
   end
 
@@ -203,7 +183,7 @@ class User::AdsController < ApplicationController
       @map_settings = MapAdInfo.new(@ad).to_hash
     else
       location = @ad.location
-      @map_settings = MapLocationInfo.new(location: location, has_center_marker: %w(create update).include?(action_name), clickable: location.try(:clickable_map_for_edit)).to_hash
+      @map_settings = MapLocationInfo.new(location: location).to_hash
     end
   end
 

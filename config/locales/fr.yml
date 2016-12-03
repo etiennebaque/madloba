@@ -33,6 +33,8 @@ fr:
             image:
               too_long: "ne doit pas dépasser 5 Mo"
   home:
+    yes: Oui
+    no: Non
     home: Accueil
     page: Page d'accueil
     user_panel: Votre profil
@@ -63,6 +65,8 @@ fr:
     links: Liens
     your_searched_location: Votre recherche
     no_ad: Pas d'annonce en ce moment.
+    area_marker_message: "%{ad_count} annonces au total postées dans ce quartier, présentant %{item_count} objets."
+    show_results: "Voir résultats"
     create_an_ad_now_html: "%{create_new_ad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
     about_page: A propos de %{website_name}
     about_description_1_html: "%{website_name} est un site utilisant %{madloba_link}."
@@ -88,12 +92,14 @@ fr:
     footer_new_powered_by_html: Nouveau site délivré par %{madloba_link}
     footer_theme_html: "Thème : %{charisma}"
     log_out: Déconnexion
-    show_ads_districts: Afficher quartiers
+    show_ads_areas: Afficher quartiers
     show_details: Afficher détails
     error_get_popup_content: "Désolé, une erreur s'est produite. Veuillez réessayer plus tard."
     error:
       one: erreur
       more: erreurs
+  results:
+    title: "Annonces pour \"%{area}\" (%{num} résultats)"
   errors:
     oops: "Oups !"
     not_found: 404 Page non trouvée
@@ -117,14 +123,20 @@ fr:
     name_username: Nom d'utilisateur
     name_fullname: Nom complet réel
     definition: "Entrez votre emplacement* :"
-    definition_exact: par adresse exacte
-    definition_postal_code: par code postal
-    definition_district: par zone
+    definition_exact: "Donner adresse complète"
+    definition_area: "Indiquer quartier seulement"
+    why_choose_location_type: "Pourquoi dois-je choisir une option ?"
+    modal_exact_area_title: "Full address or area only?"
+    modal_exact_area_description: "On one hand, by clicking on '%{def_exact}', you will be able to enter the exact address of this location and pinpoint it on the map below."
+    modal_exact_area_description2: "After your ad has been created, you will be able to visualize it on the home page map with a colored marker placed at the previously marked location."
+    modal_exact_area_description3: "On the other hand, you may not want to give away that many details about the location, given any personal reasons (eg. anonymity, details about the ad...)."
+    modal_exact_area_description4: "By choosing '%{def_area}', you will just have to indicate which area does this location belong to. Once the ad is created, it won't appear as a colored marker on the home page, but it will show up in the search results page related to the selected area."
     street_number: "Numéro de rue :"
-    street_name: "Nom de la rue* :"
+    street_name: "Nom de la rue :"
     street_name_help: "Exemple : nom de la rue, avenue, chemin..."
-    postal_code: "Code postal* :"
-    district: "Zone* :"
+    postal_code: "Code postal :"
+    area: "Quartier :"
+    area_blank: "-- Choisissez votre quartier --"
     define_geocode_button: Trouvez-moi sur la carte
     map: "Carte :"
     phone_number: "Numéro de téléphone :"
@@ -134,7 +146,8 @@ fr:
     not_found: Emplacement non trouvé
     not_found_descr1: "Cet emplacement n'a pas pu être trouvé, basé sur les informations entrées."
     not_found_descr2: "Mais ce n'est pas grave ! Cliquez sur la carte pour sélectionner cet emplacement."
-    district_help: Choisissez la zone où cet emplacement se trouve.
+    area_help: Choisissez la zone où cet emplacement se trouve.
+    error_location_fields: "Soit un quarier ou bien une adresse doit être renseigné."
   ad:
     new_ad: Nouvelle annonce
     once_created_expire_html: une fois créée, votre annonce sera publiée pour <strong>%{max_expire_days} jours</strong>.
@@ -260,7 +273,7 @@ fr:
     todo_list: A faire
     name: Nom
     address: Adresse/Code postal/Zone
-    exact_area: Type d'emplacement
+    exact_area: "Quartier seulement ?"
     ads: Annonces
     ad_settings: Paramètres pour annonces
     location_name: emplacement
@@ -299,15 +312,15 @@ fr:
     settings_menu: Paramètres
     nothing_to_do: Super, rien à faire ! :)
     you_admin: Vous êtes un administrateur de ce site.
-    use_left_hand: Utilisez le menu sur la gauche pour gérer
+    use_menu_above: "Utilisez le menu ci-dessus pour gérer :"
     admin_descr1: les différents éléments de ce site (annonces, emplacements, objets, catégories)
     admin_descr2: les utilisateurs (administrateurs et autres)
     admin_descr3: les paramètres généraux du site
     admin_descr4: les paramètres de la carte en page d'accueil
-    admin_descr5: "les paramètres qui définissent une zone dans votre ville (ex : codes postaux, quartiers...)"
+    admin_descr5: "les paramètres qui définissent les quartiers de votre ville"
     regular_actions: Vous avez aussi accès aux fonctions non-admins.
     todo_list: A faire
-    welcome_user: Bienvenue sur le panneau admin de %{site_name}. Utiliser le menu à gauche pour gérer
+    welcome_user: "Bienvenue sur le panneau admin de %{site_name}. Utilisez le menu ci-dessus pour gérer: "
     user_descr1: les annonces que vous publiez, ainsi que les emplacements qui leur sont rattachés.
     user_descr2: votre profil utilisateur.
     social_media: Médias sociaux
@@ -318,13 +331,13 @@ fr:
     delete_confirm: Oui, supprimer cet %{entity}
     save_not_possible: "Démo - Mise à jour non possible pour cette page :"
     todo:
-      no_category: "<strong>Aucune catégorie n'est disponible</strong>. Veuillez créer au moins une catégorie pour pouvoir créer des annonces."
-      one_category: '<strong>Seulement une seule catégorie est disponible</strong>. Veuillez créer quelques catégories pour permettre aux utilisateurs de filtrer leur recherche.'
-      no_area_type: <strong>Aucune zone n'a été spécifiée</strong>. S'il n'a pas la possibilité de choisir une zone lorsque une annonce est créé, l'utilisateur devra entrer une adresse exacte (ce qui ne sera pas forcément souhaité). Dans "Paramètres des zones", veuillez définir les zones de votre ville (par code postal, par quartiers), pour donner plus de flexibilité aux utilisateurs, lorsqu'ils définiront un emplacement.
-      mapbox_missing: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapbox_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
-      mapquest_missing: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <strong>%{mapquest_website}</strong>, to avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
-      description_missing: Aucune description de site web n'a été écrite, dans "Paramètres du site". Expliquez aux utilisateurs le but de votre site Madloba, en écrivant un texte court. Cette description apparaitra en page de la page d'accueil, ainsi que dans la page "A propos".
-      no_social_media: Vous n'avez pas encore entré d'adresses de réseaux sociaux (Facebook, Twitter, Pinterest), dans "Paramètres du site". Entrez vos différents profils pour augmenter votre visibilité.
+      no_category_html: "<strong>Aucune catégorie n'est disponible</strong>. Veuillez créer au moins une catégorie pour pouvoir créer des annonces."
+      one_category_html: '<strong>Seulement une seule catégorie est disponible</strong>. Veuillez créer quelques catégories pour permettre aux utilisateurs de filtrer leur recherche.'
+      no_area_type_html: <strong>Aucune zone n'a été spécifiée</strong>. S'il n'a pas la possibilité de choisir une zone lorsque une annonce est créé, l'utilisateur devra entrer une adresse exacte (ce qui ne sera pas forcément souhaité). Dans "Paramètres des zones", veuillez définir les zones de votre ville (par code postal, par quartiers), pour donner plus de flexibilité aux utilisateurs, lorsqu'ils définiront un emplacement.
+      mapbox_missing_html: Vous n'avez pas encore entré de clé API Mapbox, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <a href="https://www.mapbox.com" target="_blank">Mapbox</a>, pour avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+      mapquest_missing_html: Vous n'avez pas encore entré de clé API MapQuest, dans "Paramètres de la carte". Vous pouvez en obtenir une en ouvrant un compte sur <a href="https://developer.mapquest.com" target="_blank">Mapquest</a>, pour avoir la possibilité de choisir de nouveaux styles de carte pour votre site.
+      description_missing_html: Aucune description de site web n'a été écrite, dans "Paramètres du site". Expliquez aux utilisateurs le but de votre site Madloba, en écrivant un texte court. Cette description apparaitra en page de la page d'accueil, ainsi que dans la page "A propos".
+      no_social_media_html: Vous n'avez pas encore entré d'adresses de réseaux sociaux (Facebook, Twitter, Pinterest), dans "Paramètres du site". Entrez vos différents profils pour augmenter votre visibilité.
     left_menu:
       admin_task: Tâches admin
       user_tasks: Tâches utilisateur
@@ -337,7 +350,7 @@ fr:
       ad_edit: Annonces - Mise à jour
       ad_updated: "L'annonce '%{title}' a été mise à jour."
       error_update: "%{errors} lors de la mise à jour de l'annonce"
-      delete: Supprimer cette annonce
+      delete: "Supprimer cette annonce ?"
       delete_ad_error_html: "Erreur lors de la mise à jour de cette annonce ! Retour à %{manage_ads_page}"
       manage_ads_page: "Gérer annonces"
       giving_accepting_title: Donne/Recherche
@@ -391,7 +404,7 @@ fr:
       error_occurred: "%{errors} en enregistrant cet objet"
       update_success: "L'objet '%{name}' a été mis à jour."
       created_success: "L'objet '%{name}' a été créé."
-      delete_item: Supprimer cet objet
+      delete_item: "Supprimer cet objet ?"
       name: "Nom de l'objet"
       category: Catégorie
       ads_promoting: Annonces avec cet objet
@@ -418,22 +431,31 @@ fr:
       title: Paramètres des zones
       define_area: Une zone peut être définie
       by_postal_code: par un code postal
-      by_district: par un quartier
+      by_area: par un quartier
       area_postal_code: Zone définie par un code postal
-      area_district: Zone définie par un quartier
-      map_description: Utilisez cette carte pour dessiner, éditer ou supprimer les limites des différents quartiers de votre ville.
-      error_update_district: Erreur lors de la mise à jour des quartiers. Veuillez réessayer plus tard.
-      error_save_district: Erreur lors de la sauvegarde de ce quartier. Veuillez réessayer plus tard.
-      district_name: Nom du quartier
+      area_area: Zone définie par un quartier
+      map_description: "Areas broadly define neighbourhoods and districts related to your Madloba website.
+                        Once defined, users will be able to looks at ads in the chosen neighbourhood on the home page.
+                        Alternatively, they will choose an area when creating a new ad."
+      map_description_2: "Click on the map to pinpoint and name a new area.
+                          Click on an previously defined area to either delete it or change its name."
+      error_update_area: Erreur lors de la mise à jour des quartiers. Veuillez réessayer plus tard.
+      error_save_area: Erreur lors de la sauvegarde de ce quartier. Veuillez réessayer plus tard.
+      area_name: Nom du quartier
       latitude: Latitude
       longitude: Longitude
-      add_district: Ajouter quartier
+      add_area: Ajouter quartier
       save_success: Le nouveau quartier a été sauvegardé.
       save_name_success: Le nom de ce quartier a été mis à jour.
       error_name_save: Erreur lors de la mise à jour du nom de ce quartier. Veuillez réessayer plus tard.
       update_success: Les quartiers ont été mis à jour.
       delete_success: Quartier(s) supprimé(s).
-      delete_error: Erreur lors de la suppression de ce quartier. Veuillez réessayer plus tard.      
+      delete_error: Erreur lors de la suppression de ce quartier. Veuillez réessayer plus tard.
+      before_delete1: "Attention : certains emplacements sont toujours liés a ce quartier !"
+      before_delete2: "Avant de supprimer ce quartier, quelle autre quartier souhaitez-vous associer avec ces emplacements ?"
+      transfer_and_delete: "Transférer emplacements & supprimer ce quartier"
+      confirm_delete: "Etes-vous sûr(e) que vous souhaitez supprimer ce quartier ?"
+      delete_this_area: "Supprimer ce quartier ?"
     map_settings:
       title: Paramètres de la carte
       type: "Type de carte :"
@@ -555,16 +577,13 @@ fr:
     start_typing_item: Tapez le nom d'un objet
     no_result_create_item: Pas de résultat. Choisissez 'Créer un nouvel objet'.
     new_image_uploading: Téléchargement de la nouvelle image en cours. Veulliez attendre svp.
-    type_district_name: "Tapez le nom d'un quartier ici..."
     latitude: (latitude)
     longitude: (longitude)
     add: Ajouter
-    updating_district: Mise à jour de la liste de quartiers...
-    area_show_up: "Cette zone apparaitra en tant que :"
+    updating_area: Mise à jour de la liste de quartiers...
     searching_location: Recherche d'un emplacement...
     update: Mettre à jour
     loading: Chargement...
-    choose_location: Choisissez un de ces emplacements disponibles
     remove: Retirer
     records_per_page: enregistrements par page
     search: "Recherche :"
@@ -579,24 +598,19 @@ fr:
     last: Dernier
     filtered_from: filtrés sur
     total_entries: enregistrements au total
-    in_this_district: Dans ce quartier
     ads_for: Annonces pour
-    items_given: "Objets donnés :"
-    items_searched: "Objets recherchés :"
-    image_not_available: Image pas encore disponible.
-    select_item: Choisissez un objet ci-dessous pour plus de détails.
     cancel_drawing: Cancel drawing
     cancel: Cancel
     delete_last_point_drawn: Delete last point drawn
     delete_last_point: Delete last point
-    draw_district: Draw a district
-    start_draw_district: Click to start drawing district.
-    continue_draw_district: Click to continue drawing district.
-    click_first_point: Click first point to close this district.
+    draw_area: Draw an area
+    start_draw_area: Click to start drawing area.
+    continue_draw_area: Click to continue drawing area.
+    click_first_point: Click first point to close this area.
     error: "Error:"
-    edges_cannot: "district edges cannot cross!"
-    edit_district: Edit district
-    no_edit_district: No district to edit
-    delete_district: Delete district
-    no_district_delete: No district to delete
-    drag_handles: Drag handles to edit district boundaries. Click on the area to edit its name.
+    edges_cannot: "area edges cannot cross!"
+    edit_area: Edit area
+    no_edit_area: No area to edit
+    delete_area: Delete area
+    no_area_delete: No area to delete
+    drag_handles: Drag handles to edit area boundaries. Click on the area to edit its name.

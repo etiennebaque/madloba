@@ -1,6 +1,6 @@
 - website_description = Setting.description
 #sidebar.sidebar.sidebar-left.collapsed
-  / Nav tabs
+  -# Nav tabs
   .sidebar-tabs
     %ul{role: 'tablist'}
       %li
@@ -14,10 +14,10 @@
         %a{href: '#contact', role: 'tab'}
           %i.fa.fa-envelope
 
-  / Tab panes
+  -# Tab panes
   .sidebar-content
 
-    / Categories
+    -# Categories
     #category.sidebar-pane
       %h1.sidebar-header
         = site_city
@@ -30,6 +30,14 @@
             %i.fa.fa-plus
             %span
               = t('home.create_new_ad')
+
+        -# Area drop down
+        .list-group
+          - if @areas.any?
+            - select_options = {class: 'form-control area-select',
+                                include_blank: '-- Move to area --'}
+            - area_data = @areas.map{|a| [a.name, a.id, { 'data-latitude' => a.latitude, 'data-longitude' => a.longitude }]}
+            = select_tag 'area', options_for_select(area_data), select_options
 
         - if (@categories && @categories.select{|cat| cat.is_refinement(params)}.length > 0) || @location_search_refinement_to_display || user_search_action
           .list-group
@@ -45,7 +53,7 @@
                 %span= params[:item].capitalize
                 %i.glyphicon.glyphicon-remove.align-cross{:style => "float: right"}
 
-        / List of selected categories
+        -# List of selected categories
         #refinements
           - @categories.each do |category|
             - if category.is_refinement(params)
@@ -55,7 +63,7 @@
                 %span.guided-nav-label= category.name
                 %i.glyphicon.glyphicon-remove.align-cross{:style => "float: right"}
 
-        / Sidebar - list of Categories
+        -# Sidebar - list of Categories
         .list-group
           %br
           - if @categories.any?
@@ -68,26 +76,22 @@
                       %label{:style => "width: 15px;"}
                         %i{:class => "fa #{category.icon}", :style => "color: #{category.marker_color_hexacode};"}
                       %span.guided-nav-label= category.name
-            - if (@locations_postal && @locations_postal.length > 0) || (@locations_district && @locations_district.length > 0)
-              %hr/
-              .checkbox
-                %label
-                  = check_box_tag 'show_area_id', 'ok', true
-                  = t('home.show_ads_districts')
+
           - else
             .list-group
               .list-group-item.smaller-no-border-no-background
                 %p= t('home.no_ad')
                 %p= t('home.create_an_ad_now_html', create_new_ad: (link_to t('home.create_new_ad'), new_ad_url) )
 
-        / Sidebar - note with some explanation, for demo only
+
+        -# Sidebar - note with some explanation, for demo only
         - if demo?
           %hr/
           .list-group
             %i= t('home.demo_sidebar_note_html', admin_panel: link_to(t('home.admin_panel'), '/user/managerecords#categories'))
 
 
-    / Contact us
+    -# Contact us
     #contact.sidebar-pane
       %h1.sidebar-header
         Contact us
@@ -108,7 +112,7 @@
               - social_medias.each do |media|
                 = link_to image_tag("#{media.key}.png", size: '40x40'), media.url, target: '_blank'
 
-    / About us
+    -# About us
     - if website_description.present?
       #about.sidebar-pane
         %h1.sidebar-header
@@ -128,4 +132,3 @@
                 - if link && link[:label] && link[:label] != ''
                   %li
                     %a{:href => "#{link[:url]}"}= link[:label]
-

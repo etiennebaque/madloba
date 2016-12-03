@@ -42,6 +42,7 @@
 //= require bouncemarker
 
 //= require bootstrap-notify
+//= require bootstrap-switch.min
 
 //= require ad_websocket
 
