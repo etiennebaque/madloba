@@ -3,6 +3,9 @@ version: '2'
 services:
   web:
     build: .
+    command: bash -lc 'bundle exec puma -p 3000 -C config/puma.rb RAILS_ENV=production'
+    volumes:
+      - .:/var/www/madloba
     container_name: madloba_web
     ports:
       - "3000:3000"
@@ -14,7 +17,3 @@ services:
     image: library/postgres:9.4.9
     ports:
       - "5431:5431"
-    environment:
-      POSTGRES_DB: madloba
-      POSTGRES_USER: ...
-      POSTGRES_PASSWORD: ...

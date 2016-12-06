@@ -131,9 +131,11 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-# For Heroku deployments
+# For Heroku deployments... (not for now)
+# gem 'unicorn'
+
+gem 'puma'
 gem 'rails_12factor', group: :production
-gem 'unicorn'
 
 # Gems related to translation
 gem 'i18n-tasks', '~> 0.8.3'

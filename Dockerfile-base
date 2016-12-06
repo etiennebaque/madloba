@@ -1,0 +1,23 @@
+FROM ruby:2.3.3-slim
+MAINTAINER Etienne Baqué <contact@madloba.org>
+
+# - postgresql-client-9.4: In case you want to talk directly to postgres
+RUN apt-get update -qq && apt-get install -y build-essential nodejs libpq-dev postgresql-client-9.4 wget --fix-missing --no-install-recommends
+RUN gem install bundler
+
+ENV MADLOBA_ROOT /var/www/madloba
+RUN mkdir -p $MADLOBA_ROOT
+
+# Preparing config for Puma
+# Source: https://www.digitalocean.com/community/tutorials/how-to-deploy-a-rails-app-with-puma-and-nginx-on-ubuntu-14-04
+RUN mkdir -p $MADLOBA_ROOT/shared/pids $MADLOBA_ROOT/shared/sockets $MADLOBA_ROOT/shared/log
+
+RUN touch $MADLOBA_ROOT/shared/log/puma.stdout.log
+RUN touch $MADLOBA_ROOT/shared/log/puma.stderr.log
+RUN chmod 666 $MADLOBA_ROOT/shared/log/puma.stdout.log
+RUN chmod 666 $MADLOBA_ROOT/shared/log/puma.stderr.log
+
+RUN cd /etc/init
+RUN wget https://raw.githubusercontent.com/etiennebaque/madloba/docker/docker/puma-manager.conf
+RUN wget https://raw.githubusercontent.com/etiennebaque/madloba/docker/docker/puma.conf
+RUN echo $MADLOBA_ROOT > /etc/puma.conf
