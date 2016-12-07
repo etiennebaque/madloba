@@ -78,7 +78,7 @@ class Location < ActiveRecord::Base
 
     a = name.present? ? [name, '-'] : []
     a << street_number if street_number.present?
-    a << "#{address}, #{postal_code}"
+    a << "#{address}, #{postal_code}" if address.present? && postal_code.present?
     a.join(' ')
   end
 
@@ -99,7 +99,7 @@ class Location < ActiveRecord::Base
     this_city = self.city.nil? ? Rails.cache.fetch(CACHE_CITY_NAME) {Setting.find_by_key(:city).value} : self.city
     this_country = self.country.nil? ? Rails.cache.fetch(CACHE_COUNTRY_NAME) {Setting.find_by_key(:country).value} : self.country
     location_info += [this_city, self.province, this_country]
-    location_info.reject{|e| e.to_s.empty?}.join(',')
+    location_info.reject{|e| e.nil? || e.blank?}.join(',')
   end
 
 end
