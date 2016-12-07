@@ -16,8 +16,12 @@ en:
       models:
         ad:
           attributes:
+            title:
+              blank: 'The ad title cannot be blank'
+            description:
+              blank: 'Please write a description for this ad'
             image:
-              too_long: must be less than 5MB
+              too_long: "The image must be less than 5MB"
   home:
     yes: Yes
     no: No
@@ -134,6 +138,7 @@ en:
     not_found_descr2: "But that's ok! Please select it manually on the map."
     area_help: Which area does this location belong to?
     error_location_fields: "Either an area or an address must be given"
+    error_location_address_only: "An address must be given"
   ad:
     new_ad: New ad
     once_created_expire_html: Once created, your ad will be published for <strong>%{max_expire_days} days</strong>.
@@ -319,7 +324,7 @@ en:
     todo:
       no_category_html: '<strong>No category available</strong>. Please create at least one category to be able to create ads.'
       one_category_html: '<strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.'
-      no_area_type_html: '<strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area (Settings)", please indicate how an area is defined (by postal code or by area), to give the user more flexibility, when it comes to choose a location.'
+      no_area_type_html: '<strong>No area type has been specified</strong>. Without the ability to select an area when creating an ad, the user will have to enter an exact address (which might not be wanted). In "Area (Settings)", please define areas to give users more flexibility, when they will choose a location.'
       mapbox_missing_html: You don't have entered a Mapbox key yet, in "Map (Settings)". You can get one by opening an account on <a href="https://www.mapbox.com" target="_blank">Mapbox</a>, to get a new map style for your website.
       mapquest_missing_html: You don't have entered a MapQuest key yet, in "Map (Settings)". You can get one by opening an account on <a href="https://developer.mapquest.com" target="_blank">Mapquest</a>, to get a new map style for your website.
       description_missing_html: No website description has been written yet, in "General (Settings)". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.

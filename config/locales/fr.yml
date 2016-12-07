@@ -147,7 +147,8 @@ fr:
     not_found_descr1: "Cet emplacement n'a pas pu être trouvé, basé sur les informations entrées."
     not_found_descr2: "Mais ce n'est pas grave ! Cliquez sur la carte pour sélectionner cet emplacement."
     area_help: Choisissez la zone où cet emplacement se trouve.
-    error_location_fields: "Soit un quarier ou bien une adresse doit être renseigné."
+    error_location_fields: "Soit un quarier ou bien une adresse doit être renseignée."
+    error_location_address_only: "Une adresse doit être renseignée"
   ad:
     new_ad: Nouvelle annonce
     once_created_expire_html: une fois créée, votre annonce sera publiée pour <strong>%{max_expire_days} jours</strong>.
