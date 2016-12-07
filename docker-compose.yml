@@ -3,7 +3,7 @@ version: '2'
 services:
   web:
     build: .
-    command: bash -lc 'bundle exec puma -p 3000 -C config/puma.rb RAILS_ENV=production'
+    command: bash -lc 'bundle exec puma -p 3000 -C config/puma.rb config.ru RAILS_ENV=production'
     volumes:
       - .:/var/www/madloba
     container_name: madloba_web
