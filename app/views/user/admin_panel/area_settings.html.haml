@@ -40,8 +40,9 @@
               %a.btn{:href => "/user/index"}= t('home.cancel')
 
 
--# "Delete category" modal window
-= render 'delete_area_modal'
+-# "Delete category" modal window - TODO
+- if Area.any?
+  = render 'delete_area_modal'
 
 %hr
 - content_for :scripts do

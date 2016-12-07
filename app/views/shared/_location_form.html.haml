@@ -1,11 +1,12 @@
 .nested-fields.location-fields{:style => "padding-bottom: 10px;"}
-  - if current_user.present? && current_user.locations.any? && %w(new create edit update).include?(action_name) && !@is_location_edit
-    .form-group
-      %hr/
-    .form-group
-      .col-lg-4
-        %h4= t('location.new_location')
 
+  .form-group
+    %hr/
+  .form-group
+    .col-lg-4
+      %h4= t('location.new_location')
+
+    - if current_user.present? && current_user.locations.any? && %w(new create edit update).include?(action_name) && !@is_location_edit
       -# if the user is not anonymous and has created locations in the past, then give the possibility
       -# to remove the whole "new location" section to choose an existing location
       .col-lg-4{style: "line-height: 40px;"}
@@ -21,20 +22,21 @@
         :placement => 'top', :toggle => 'popover', :trigger => 'hover focus'}      |
 
   -# "Give full address" / "Choose area only" radio buttons
-  .form-group
-    = label_tag 'loc_type', t('location.definition'), class: 'col-lg-2 control-label'
-    .col-lg-6
-      .radio
-        %label
-          = radio_button_tag 'loc_type', 'exact', true, class: 'location_type_exact'
-          = t('location.definition_exact')
-      .radio
-        %label
-          = radio_button_tag 'loc_type', 'area', false, class: 'location_type_area'
-          = t('location.definition_area')
+  - if Area.any?
+    .form-group
+      = label_tag 'loc_type', t('location.definition'), class: 'col-lg-2 control-label'
+      .col-lg-6
+        .radio
+          %label
+            = radio_button_tag 'loc_type', 'exact', true, class: 'location_type_exact'
+            = t('location.definition_exact')
+        .radio
+          %label
+            = radio_button_tag 'loc_type', 'area', false, class: 'location_type_area'
+            = t('location.definition_area')
 
-      .why-choose-section
-        %a#why_choose_link{href: '#'}= t('location.why_choose_location_type')
+        .why-choose-section
+          %a#why_choose_link{href: '#'}= t('location.why_choose_location_type')
 
   .exact_location_section
     -# Street number
@@ -62,14 +64,15 @@
   = form.hidden_field :longitude, value: @map_settings[:longitude], class: 'longitude'
 
   -# List of area ('area' type address only)
-  #area_section
-    .form-group
-      = form.label :area_id, t('location.area'), class: 'col-lg-2 control-label'
-      .col-lg-3
-        - area_data = areas.map{|a| [a.name, a.id, { 'data-latitude' => a.latitude, 'data-longitude' => a.longitude }]}
-        = form.select :area_id, options_for_select(area_data, form.object.area_id), {include_blank: t('location.area_blank')}, {class: 'form-control help-message area-select',
-          :data => {:content => t('location.area_help'), :placement => 'top',
-          :toggle => 'popover', :trigger => 'hover focus'}}
+  - if Area.any?
+    #area_section
+      .form-group
+        = form.label :area_id, t('location.area'), class: 'col-lg-2 control-label'
+        .col-lg-3
+          - area_data = areas.map{|a| [a.name, a.id, { 'data-latitude' => a.latitude, 'data-longitude' => a.longitude }]}
+          = form.select :area_id, options_for_select(area_data, form.object.area_id), {include_blank: t('location.area_blank')}, {class: 'form-control help-message area-select',
+            :data => {:content => t('location.area_help'), :placement => 'top',
+            :toggle => 'popover', :trigger => 'hover focus'}}
 
   -# "Locate me on the map" button
   .exact_location_section

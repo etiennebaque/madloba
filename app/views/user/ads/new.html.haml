@@ -14,7 +14,7 @@
         = t('ad.error_occurred', errors: pluralize(@ad.errors.count, t('home.error.one'), t('home.error.more')))
         \:
       %ul
-        - @ad.errors.full_messages.each do |msg|
+        - @ad.errors.each do |_, msg|
           %li= msg
 
   .row
