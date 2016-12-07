@@ -14,6 +14,9 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+/shared/log/puma.stderr.log
+/shared/log/puma.stdout.log
+/shared/pids/puma.state
 
 /.idea
 
