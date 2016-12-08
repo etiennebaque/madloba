@@ -69,6 +69,10 @@ global.leaf =
       if markers.selected_area != ''
         leaf.map.removeLayer markers.selected_area
 
+      # Home page: close sidebar when changing location
+      if $('#sidebar_category_icon').length > 0 && $('.navbar-toggle').is(':visible')
+        $('#sidebar_category_icon').trigger('click')
+
       if selectedOption.val() != ''
         latitude = selectedOption.data('latitude')
         longitude = selectedOption.data('longitude')

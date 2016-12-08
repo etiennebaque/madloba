@@ -33,6 +33,8 @@ class ApplicationController < ActionController::Base
   # is not complete. Redirects to setup screens if it is the case.
   def check_if_setup
     current_url = request.original_url
+    return if setup_url = %w(setup user/register getCityGeocodes).any? {|term| current_url.include?(term)}
+
     setup_debug_mode = Rails.configuration.setup_debug_mode && !(current_url.include? 'setup')
     redirect_to setup_language_path if setup_debug_mode
 
@@ -41,10 +43,9 @@ class ApplicationController < ActionController::Base
     # If the locale has never been specified (even during the setup process), redirect to the setup language page.
     redirect_to setup_language_path if no_chosen_language
 
-    setup_url = %w(setup user/register getCityGeocodes).any? {|term| current_url.include?(term)}
     setup_step_value = Rails.cache.fetch(CACHE_SETUP_STEP) {Setting.where(key: 'setup_step').pluck(:value).first.to_i}
     # Redirect to the setup pages if it has never been completed.
-    redirect_to setup_language_path if !setup_url && setup_step_value == 1
+    redirect_to setup_language_path if setup_step_value == 1
   end
 
   # Uses the 'gon' gem to load the text that appears in javascript files.

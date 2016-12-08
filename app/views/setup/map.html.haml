@@ -51,5 +51,5 @@
   / Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and script that creates the actual map)
   = render 'shared/map_scripts_after_body', include_all_scripts: false
   :javascript
-    // Giving this page the possibility to find geocodes.
-    find_geocodes();
+    new MapSetupPage()
+
