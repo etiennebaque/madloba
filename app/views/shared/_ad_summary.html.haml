@@ -1,46 +1,46 @@
-/ Left-hand side: Items
-.show_ad_paragraph
-  - if @ad.giving
-    %label.ad-label
-      = t('ad.giving_away')
+-# Left-hand side: Items
+.show_post_paragraph
+  - if @post.giving
+    %label.post-label
+      = t('post.giving_away')
       \:
   - else
-    %label.ad-label
-      = t('ad.accepting')
+    %label.post-label
+      = t('post.accepting')
       \:
   %span
     %ul
-      - @ad.ad_items.each do |ad_item|
+      - @post.post_items.each do |post_item|
         %li{:style => "list-style-type: none;"}
-          %i{:class => "fa #{ad_item.item.category.icon}", :style => "color: #{"#{MARKER_COLORS[ad_item.item.category.marker_color]}"};"}>
-           #{ad_item.item.capitalized_name}
-/ Left-hand side: Location
-.show_ad_paragraph
+          %i{:class => "fa #{post_item.item.category.icon}", :style => "color: #{"#{MARKER_COLORS[post_item.item.category.marker_color]}"};"}>
+           #{post_item.item.capitalized_name}
+-# Left-hand side: Location
+.show_post_paragraph
   %label= t('location.location')+':'
-  %span= @ad.location.full_address
+  %span= @post.location.full_address
 
-/ Left-hand side: Phone number
-- if @ad.location.phone_number.present?
-  .show_ad_paragraph
+-# Left-hand side: Phone number
+- if @post.location.phone_number.present?
+  .show_post_paragraph
     %label= t('location.phone_number')
-    %span= @ad.location.phone_number
+    %span= @post.location.phone_number
 
-/ Left-hand side: Website
-- if @ad.location.website.present?
-  .show_ad_paragraph
-    %label= t('ad.location_website')
+-# Left-hand side: Website
+- if @post.location.website.present?
+  .show_post_paragraph
+    %label= t('post.location_website')
     %span
-      %a{:href => "#{@ad.location.full_website_url}", :target => "_blank"}= @ad.location.website
+      %a{:href => "#{@post.location.full_website_url}", :target => "_blank"}= @post.location.website
 
-/ Location description
-- if @ad.location.description.present?
-  .show_ad_paragraph
-    %label= t('ad.location_description')
-    %span= simple_format(@ad.location.description)
+-# Location description
+- if @post.location.description.present?
+  .show_post_paragraph
+    %label= t('post.location_description')
+    %span= simple_format(@post.location.description)
 
-/ Ad description
-.show_ad_paragraph
+-# Post description
+.show_post_paragraph
   %label
-    = t('ad.description')
+    = t('post.description')
     \:
-  %span= simple_format(@ad.description)
+  %span= simple_format(@post.description)

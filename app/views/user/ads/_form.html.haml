@@ -1,31 +1,31 @@
 - page ||= 'new'
-- form_id = "ad_#{page}_form"
-- obj ||= @ad
+- form_id = "post_#{page}_form"
+- obj ||= @post
 = form_for obj, html: { id: form_id, class: 'form-horizontal', role: 'form', multipart: true } do |f|
-  - note_about_expiration_date = page == 'new' ? expire_date_for_new_ad : expire_date_for(@ad)
+  - note_about_expiration_date = page == 'new' ? expire_date_for_new_post: expire_date_for(@post)
   %fieldset
 
     - if page == 'edit'
-      -# Edit page: "Delete Ad" and "See published ad" buttons
+      -# Edit page: "Delete Post" and "See published ad" buttons
       .form-group
         .col-lg-6
-          %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#", :style => "margin-right: 10px;"}= t('admin.ad.delete')
-          = link_to t('ad.see_published'), ad_path(@ad.id), {target: '_blank', class: 'btn btn-info'}
+          %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#", :style => "margin-right: 10px;"}= t('admin.post.delete')
+          = link_to t('post.see_published'), post_path(@post.id), {target: '_blank', class: 'btn btn-info'}
       %hr
 
     - if page == 'new'
-      %h3= t('ad.new_ad')
+      %h3= t('post.new_post')
 
     .form-group
       .col-lg-6.col-lg-offset-2
         %i= note_about_expiration_date
 
-    -# Ad title
+    -# Post title
     .form-group
-      = f.label :title, t('ad.title'), class: 'col-lg-2 control-label'
+      = f.label :title, t('post.title'), class: 'col-lg-2 control-label'
       .col-lg-6
         = f.text_field :title, class: 'form-control help-message', autofocus: true,
-                :data => {:content => t('ad.title_help'), :placement => 'top',
+                :data => {:content => t('post.title_help'), :placement => 'top',
                 :toggle => 'popover', :trigger => 'hover focus'}
 
     -# Name to use (it user is not anonymous)
@@ -46,58 +46,58 @@
 
     -# Giving / Accepting items
     .form-group
-      = f.label :giving, t('location.ad_action'), class: 'col-lg-2 control-label'
+      = f.label :giving, t('location.post_action'), class: 'col-lg-2 control-label'
       .col-lg-6
         .radio
           %label
             = f.radio_button :giving, true, checked: true
-            = t('location.ad_action_giving')
+            = t('location.post_action_giving')
         .radio
           %label
             = f.radio_button :giving, false
-            = t('location.ad_action_accepting')
+            = t('location.post_action_accepting')
 
     -# Items
     .form-group
-      = f.label :ad_items, t('ad.item'), class: 'col-lg-2 control-label'
+      = f.label :post_items, t('post.item'), class: 'col-lg-2 control-label'
       .col-lg-6
         #items
-          = f.fields_for :ad_items do |ad_item|
-            = render 'shared/ad_item_fields', f: ad_item
-          = link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('ad.add_item')}".html_safe, f, :ad_items, partial: 'shared/ad_item_fields', class: 'btn btn-success add-item-button'
+          = f.fields_for :post_items do |post_item|
+            = render 'shared/post_item_fields', f: post_item
+          = link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('post.add_item')}".html_safe, f, :post_items, partial: 'shared/post_item_fields', class: 'btn btn-success add-item-button'
 
-    -# Ad description
+    -# Post description
     .form-group
-      = f.label :description, t('ad.description')+'*:', class: 'col-lg-2 control-label'
+      = f.label :description, t('post.description')+'*:', class: 'col-lg-2 control-label'
       .col-lg-6
         = f.text_area :description, class: 'form-control help-message', rows: 6,
-                :data => {:content => t('ad.description_help'), :placement => 'top',
+                :data => {:content => t('post.description_help'), :placement => 'top',
                 :toggle => 'popover', :trigger => 'hover focus'}
 
     -# Image upload - only possible when app deployed on server, for now
     - if !on_heroku? && can_upload_image
       .form-group
-        = f.label :description, t('ad.upload_image'), class: 'col-lg-2 control-label'
+        = f.label :description, t('post.upload_image'), class: 'col-lg-2 control-label'
         .col-lg-6
           = f.file_field :image, class: 'form-control', style: 'border: 0px; height: auto;'
           = f.hidden_field :image_cache
-          %span#message= t('ad.less_than_limit')
+          %span#message= t('post.less_than_limit')
       .form-group
         .col-lg-2
         .col-lg-10
           #image-section
-          - if @ad.image?
-            - if is_image_available(@ad)
-              = image_tag @ad.image_url(:normal).to_s
+          - if @post.image?
+            - if is_image_available(@post)
+              = image_tag @post.image_url(:normal).to_s
               .checkbox
                 %label
                   = f.check_box :remove_image
-                  = t('ad.remove_image')
-            - elsif @ad.image && (@ad.errors[:image].nil? || (@ad.errors[:image] && @ad.errors[:image].length == 0))
-              .ad-processing
-                = t('ad.image_selected')
+                  = t('post.remove_image')
+            - elsif @post.image && (@post.errors[:image].nil? || (@post.errors[:image] && @post.errors[:image].length == 0))
+              .post-processing
+                = t('post.image_selected')
 
-    -# Ad location section
+    -# Post location section
     - if current_user.present? && current_user.locations.any?
       -# List of all the different locations previously entered by the current user
       #locations_from_list
@@ -117,34 +117,34 @@
         .form-group
           .col-lg-6.col-lg-offset-2
             %a.btn.btn-sm.btn-info.add-new-location
-              = t('ad.new_location')
+              = t('post.new_location')
 
     -# Location form partial
     .location-form-for-ad
       = f.fields_for :location, Location.new, html: {class: 'form-horizontal'} do |loc|
-        = render 'shared/location_form', form: loc, location: @ad.location
+        = render 'shared/location_form', form: loc, location: @post.location
 
     -# if anonymous user creates an ad, we need to ask for their name and email
     -# They need to provide a response to a captcha
     - if !user_signed_in?
-      %h4= t('ad.about_you')
+      %h4= t('post.about_you')
       -# Anonymous user's name
       .form-group
-        = f.label :anon_name, t('ad.name'), class: 'col-lg-2 control-label'
+        = f.label :anon_name, t('post.name'), class: 'col-lg-2 control-label'
         .col-lg-6
           = f.text_field :anon_name, class: 'form-control help-message',
-                  :data => {:content => t('ad.name_help'), :placement => 'top',
+                  :data => {:content => t('post.name_help'), :placement => 'top',
                   :toggle => 'popover', :trigger => 'hover focus'}
       -# Anonymous user's email
       .form-group
-        = f.label :anon_email, t('ad.your_email')+'*:', class: 'col-lg-2 control-label'
+        = f.label :anon_email, t('post.your_email')+'*:', class: 'col-lg-2 control-label'
         .col-lg-6
           = f.email_field :anon_email, class: 'form-control help-message', autofocus: true,
-                  :data => {:content => t('ad.email_help'), :placement => 'top',
+                  :data => {:content => t('post.email_help'), :placement => 'top',
                   :toggle => 'popover', :trigger => 'hover focus'}
       -# Captcha for anonymous user
       .form-group
-        = f.label :anon_captcha, t('ad.captcha'), class: 'col-lg-2 control-label'
+        = f.label :anon_captcha, t('post.captcha'), class: 'col-lg-2 control-label'
         .col-lg-6
           = f.show_simple_captcha
       %hr/
@@ -152,7 +152,7 @@
     -# Submit section
     .form-group{style: 'margin-top: 35px'}
       .col-lg-10.col-lg-offset-2
-        = f.submit t("ad.submit_ad_#{page}"), id: 'submit_new_ad', class: 'btn btn-success'
+        = f.submit t("post.submit_post_#{page}"), id: 'submit_new_post', class: 'btn btn-success'
         %a.btn{:href => "/"}= t('home.cancel')
 
     -# After submit, a notification shows up here, if a new image is being uploaded

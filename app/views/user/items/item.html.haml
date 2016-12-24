@@ -73,23 +73,23 @@
                              
                 / List of locations the item can be found
                 .form-group
-                  - if @item.ads.length > 0
-                    = f.label :ads, t('admin.item.ads_promoting')+':', class:'control-label'
+                  - if @item.posts.length > 0
+                    = f.label :posts, t('admin.item.posts_promoting')+':', class:'control-label'
                     %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
                       %thead
                         %tr
                           %th ID
-                          %th= t('admin.item.ad_title')
+                          %th= t('admin.item.post_title')
                           %th= t('admin.description')
                       %tbody
-                        - @item.ads.each do |ad|
+                        - @item.posts.each do |post|
                           %tr
-                            %td= ad.id
+                            %td= post.id
                             %td
-                              %a{:href => "/user/ads/#{ad.id}/edit"}= ad.title
-                            %td= ad.description
+                              %a{:href => "/user/posts/#{post.id}/edit"}= post.title
+                            %td= post.description
                   - elsif !adding
-                    %strong= t('admin.item.no_ad')
+                    %strong= t('admin.item.no_post')
                 %hr/
                 / Submit button and cancel link
                 = render 'shared/submit_section'

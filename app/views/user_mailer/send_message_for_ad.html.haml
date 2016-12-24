@@ -3,9 +3,9 @@
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
   %body
-    %strong= t('mailer.dear', name: @ad[:first_name])
+    %strong= t('mailer.dear', name: @post[:first_name])
     %p
-      = t('mailer.received_message', ad_title: @ad[:title], site_name: @site_name)
+      = t('mailer.received_message', ad_title: @post[:title], site_name: @site_name)
     %hr/
     %p
       = t('ad.from')

@@ -9,39 +9,39 @@
               %a{:href => "/user/managerecords"}= t('admin.manage_records')
           - else
             %li
-              %a{:href => "/user/manageads"}= t('admin.ad.manage_ads')
-          %li= t('admin.update_ad')
+              %a{:href => "/user/manageposts"}= t('admin.post.manage_posts')
+          %li= t('admin.update_post')
       .row
         .box.col-md-12
           .box-inner
             .box-header.well{"data-original-title" => ""}
               %h2
                 %i.glyphicon.glyphicon-edit
-                = t('admin.ad.ad_edit')
-            - if flash[:ad_updated]
+                = t('admin.post.post_edit')
+            - if flash[:post_updated]
               .alert.alert-success
                 %button.close{"data-dismiss" => "alert", :type => "button"} ×
-                = t('admin.ad.ad_updated', title: flash[:ad_updated])
+                = t('admin.post.post_updated', title: flash[:post_updated])
                 - if current_user.admin?
-                  %a{:href => "/user/managerecords#ads"}= t('admin.back_to_records')
+                  %a{:href => "/user/managerecords#posts"}= t('admin.back_to_records')
                 - else
-                  %a{:href => "/user/manageads"}= t('admin.back_to_ads')
-            - if flash[:error_ad] || flash[:error_delete_ad]
+                  %a{:href => "/user/manageposts"}= t('admin.back_to_posts')
+            - if flash[:error_post] || flash[:error_delete_post]
               .alert.alert-danger
                 %button.close{"data-dismiss" => "alert", :type => "button"} ×
-                - if @ad && @ad.errors.any?
+                - if @post && @post.errors.any?
                   %strong
-                    = t('admin.ad.error_update', errors: pluralize(@ad.errors.count, t('home.error.one'), t('home.error.more')))
+                    = t('admin.post.error_update', errors: pluralize(@post.errors.count, t('home.error.one'), t('home.error.more')))
                     \:
                   %ul
-                    - @ad.errors.full_messages.each do |msg|
+                    - @post.errors.full_messages.each do |msg|
                       %li= msg
                 - else
-                  - if flash[:error_delete_ad]
-                    = t('admin.ad.delete_ad_error_html', manage_ads_page: link_to(t('admin.ad.manage_ads_page'), '/user/manageads'))
+                  - if flash[:error_delete_post]
+                    = t('admin.post.delete_post_error_html', manage_posts_page: link_to(t('admin.post.manage_posts_page'), '/user/manageposts'))
 
             .box-content
-              = render 'user/ads/form', page: 'edit', obj: [:user, @ad]
+              = render 'user/posts/form', page: 'edit', obj: [:user, @post]
 
 
 / "Delete ad" - modal window
@@ -50,12 +50,12 @@
     .modal-content
       .modal-header
         %button.close{"data-dismiss" => "modal", :type => "button"} ×
-        %h3= t('admin.ad.delete_ad')
+        %h3= t('admin.post.delete_post')
       .modal-body
-        %p= t('admin.ad.delete_ad_permanently')
+        %p= t('admin.post.delete_post_permanently')
       .modal-footer
         %a.btn.btn-default{"data-dismiss" => "modal", :href => "#"}= t('home.cancel')
-        = link_to t('admin.ad.delete_this_ad'), user_ad_path(@ad), method: :delete, class: 'btn btn-danger'
+        = link_to t('admin.post.delete_this_post'), user_post_path(@post), method: :delete, class: 'btn btn-danger'
 
 / "Location not found" - modal window
 #myErrorModal.modal.hide.fade
@@ -72,4 +72,4 @@
   = render 'shared/map_scripts_after_body', include_all_scripts: false
 
   :javascript
-    adForm = new AdForm();
+    adForm = new PostForm();

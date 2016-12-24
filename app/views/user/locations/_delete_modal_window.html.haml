@@ -7,8 +7,8 @@
         %h3
           = t('admin.location.delete')
       .modal-body
-        - if @location.ads && @location.ads.length > 0
-          %p= t('admin.warning_ads_before_delete_location')
+        - if @location.posts && @location.posts.length > 0
+          %p= t('admin.warning_posts_before_delete_location')
         %p= t('admin.delete_sure', entity: t('admin.location_name'))
       .modal-footer
         %a.btn.btn-default{"data-dismiss" => "modal", :href => "#"}= t('home.cancel')

@@ -10,12 +10,12 @@
   - if current_user.admin?
     -# Admin dashboard
     .row
-      -# Ad count
+      -# Post count
       .col-md-3.col-sm-3.col-xs-3
-        %a.well.top-block{"data-toggle" => "tooltip", :href => "/user/managerecords#ads", :title => "#{t('admin.ads')}"}
+        %a.well.top-block{"data-toggle" => "tooltip", :href => "/user/managerecords#posts", :title => "#{t('admin.posts')}"}
           %i.glyphicon.glyphicon-comment.blue
-          %div= t('admin.ads')
-          %div= Ad.count
+          %div= t('admin.posts')
+          %div= Post.count
       -# Location count
       .col-md-3.col-sm-3.col-xs-3
         %a.well.top-block{"data-toggle" => "tooltip", :href => "/user/managerecords#locations", :title => "#{t('admin.locations')}"}

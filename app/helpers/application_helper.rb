@@ -9,13 +9,13 @@ module ApplicationHelper
     Rails.cache.fetch(CACHE_CITY_NAME) {Setting.find_by_key(:city).value}
   end
 
-  # Maximum number of days an ad can be published for.
+  # Maximum number of days an post can be published for.
   def max_number_days_publish
-    Rails.cache.fetch(CACHE_MAX_DAYS_EXPIRE) {Setting.find_by_key(:ad_max_expire).value}
+    Rails.cache.fetch(CACHE_MAX_DAYS_EXPIRE) {Setting.find_by_key(:post_max_expire).value}
   end
 
   # Regardless of what the current navigation state is, we need store all the item names into an array, in order to make the type-ahead of the item search bar work.
-  def all_ads_items
+  def all_posts_items
     Ad.joins(:item).pluck(:name).uniq
   end
 
@@ -25,7 +25,7 @@ module ApplicationHelper
   end
 
 
-  # methods for model-related controller (location, item, category, ad)
+  # methods for model-related controller (location, item, category, post)
   # --------------------------------------------------------------------
   def requires_user
     if !user_signed_in?
@@ -42,7 +42,7 @@ module ApplicationHelper
     end
   end
 
-  # display user's locations, to allow them to tie existing one to an ad.
+  # display user's locations, to allow them to tie existing one to an post.
   def user_locations_number
     if (current_user && current_user.locations)
       current_user.locations.count

@@ -1,13 +1,13 @@
-class AdPolicy < ApplicationPolicy
-  attr_reader :user, :ad
+class PostPolicy < ApplicationPolicy
+  attr_reader :user, :post
 
-  def initialize(user, ad)
+  def initialize(user, post)
     @user = user
-    @ad = ad
+    @post = post
   end
 
   def owned
-    user && (ad.user_id == user.id)
+    user && (post.user_id == user.id)
   end
 
   def index?

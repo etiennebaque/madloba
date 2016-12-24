@@ -25,11 +25,11 @@
           %i.fa.fa-caret-left
 
       .inner-section
-        .list-group.create-ad
-          %a.btn.btn-success.no-color{:href => "/ads/new"}
+        .list-group.create-post
+          %a.btn.btn-success.no-color{:href => "/posts/new"}
             %i.fa.fa-plus
             %span
-              = t('home.create_new_ad')
+              = t('home.create_new_post')
 
         -# Area drop down
         .list-group
@@ -80,8 +80,8 @@
           - else
             .list-group
               .list-group-item.smaller-no-border-no-background
-                %p= t('home.no_ad')
-                %p= t('home.create_an_ad_now_html', create_new_ad: (link_to t('home.create_new_ad'), new_ad_url) )
+                %p= t('home.no_post')
+                %p= t('home.create_an_post_now_html', create_new_post: (link_to t('home.create_new_post'), new_post_url) )
 
 
         -# Sidebar - note with some explanation, for demo only

@@ -17,49 +17,49 @@
         .box-header.well{"data-original-title" => ""}
           %h2
             %i.glyphicon.glyphicon-pencil
-            = t('admin.manage_your_ads')
+            = t('admin.manage_your_posts')
         %ul.nav.nav-tabs
           %li.active
-            %a{"data-toggle" => "tab", :href => "#ads"}= t('admin.ads')
+            %a{"data-toggle" => "tab", :href => "#posts"}= t('admin.posts')
           %li
             %a{"data-toggle" => "tab", :href => "#locations"}= t('admin.locations')
         .tab-content
-          -# Ads tab pane
-          #ads.tab-pane.active
+          -# Posts tab pane
+          #posts.tab-pane.active
             .box-content
               %p.left
-                %a.btn.btn-success{:href => "/ads/new"}
+                %a.btn.btn-success{:href => "/posts/new"}
                   %i.glyphicon.glyphicon-plus.icon-white
-                  = t('admin.create_ad')
-              - if @ads && @ads.length > 0
+                  = t('admin.create_post')
+              - if @posts && @posts.length > 0
                 %table.table.table-striped.table-bordered.bootstrap-datatable.datatable.responsive
                   %thead
                     %tr
                       %th= t('admin.title')
-                      %th= t('admin.ad.giving_accepting_title')
+                      %th= t('admin.post.giving_accepting_title')
                       %th= t('admin.items')
                       %th= t('admin.location_name').capitalize
                       %th= t('admin.expiration_date')
                       %th= t('admin.actions')
                   %tbody
-                    - @ads.each do |ad|
+                    - @posts.each do |post|
                       %tr
-                        %td.vert-align= ad.title
-                        %td.vert-align= ad.giving ? t('admin.ad.giving_away') : t('admin.ad.accepting')
-                        %td.vert-align= ad.item_list
+                        %td.vert-align= post.title
+                        %td.vert-align= post.giving ? t('admin.post.giving_away') : t('admin.post.accepting')
+                        %td.vert-align= post.item_list
                         %td.vert-align
-                          %a{:href => "/user/locations/#{ad.location.id}/edit"}= ad.location.full_address
-                        - if ad.expire_date.to_s != '2100-01-01'
-                          %td.vert-align= ad.expire_date
+                          %a{:href => "/user/locations/#{post.location.id}/edit"}= post.location.full_address
+                        - if post.expire_date.to_s != '2100-01-01'
+                          %td.vert-align= post.expire_date
                         - else
                           %td.vert-align N/A
                         %td.center
-                          %a.btn.btn-info{:href => "/user/ads/#{ad.id}/edit"}
+                          %a.btn.btn-info{:href => "/user/posts/#{post.id}/edit"}
                             %i.glyphicon.glyphicon-pencil
                             = t('admin.edit_delete')
               - else
-                %p= t('ad.no_ad_created_yet')
-          -# Ads tab pane end
+                %p= t('post.no_post_created_yet')
+          -# Posts tab pane end
 
           -# Location tab pane
           #locations.tab-pane
@@ -75,7 +75,7 @@
                       %th= t('admin.name')
                       %th= t('admin.exact_area')
                       %th= t('admin.address')
-                      %th= t('admin.ads')
+                      %th= t('admin.posts')
                       %th= t('admin.actions')
                   %tbody
                     - @locations.each do |location|
@@ -84,15 +84,15 @@
                         %td.vert-align= location.area? ? t('home.yes') : t('home.no')
                         %td.vert-align= location.full_address
                         %td
-                          - if location.ads.length == 0
-                            %i= t('admin.location.no_ad_tied')
+                          - if location.posts.length == 0
+                            %i= t('admin.location.no_post_tied')
                           - else
                             %ul
-                              - location.ads.each do |ad|
-                                %li= ad.title
+                              - location.posts.each do |post|
+                                %li= post.title
                         %td.center
                           %a.btn.btn-info{:href => "/user/locations/#{location.id}/edit"}
                             %i.glyphicon.glyphicon-pencil
                             = t('admin.edit_delete')
               - else
-                %p= t('ad.no_location_yet')
+                %p= t('post.no_location_yet')

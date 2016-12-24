@@ -1,30 +1,30 @@
 / 'Send message' text area
-- if !is_owning(ad)
-  .col-lg-12.ad-paragraph{:xmlns => "http://www.w3.org/1999/html"}
-    / Send message to the ad publisher
-    = form_tag '/ads/send_message', {class:'form-horizontal'} do
-      = hidden_field_tag 'id', ad.id
+- if !is_owning(post)
+  .col-lg-12.post-paragraph{:xmlns => "http://www.w3.org/1999/html"}
+    / Send message to the post publisher
+    = form_tag '/posts/send_message', {class:'form-horizontal'} do
+      = hidden_field_tag 'id', post.id
       %fieldset
         .form-group{:style => "margin-left: 0px;"}
-          = label_tag :title, t('ad.send_message_label', name: publisher_name(ad)), class: 'control-label'
+          = label_tag :title, t('post.send_message_label', name: publisher_name(post)), class: 'control-label'
         - if !user_signed_in?
           .form-group
-            = label_tag 'name', t('ad.name'), class: 'col-lg-2 control-label'
+            = label_tag 'name', t('post.name'), class: 'col-lg-2 control-label'
             .col-lg-4
               = text_field_tag 'name', params['name'], class: 'form-control', required: true
           .form-group
-            = label_tag 'email', t('ad.your_email')+'*:', class: 'col-lg-2 control-label'
+            = label_tag 'email', t('post.your_email')+'*:', class: 'col-lg-2 control-label'
             .col-lg-4
               = email_field_tag 'email', params['email'], class: 'form-control', required: true
           / Captcha for anonymous user
           .form-group
-            = label_tag 'captcha', t('ad.captcha'), class: 'col-lg-2 control-label'
+            = label_tag 'captcha', t('post.captcha'), class: 'col-lg-2 control-label'
             .col-lg-5
               = show_simple_captcha
         .form-group
-          = label_tag 'message', t('ad.your_message'), class: 'col-lg-2 control-label'
+          = label_tag 'message', t('post.your_message'), class: 'col-lg-2 control-label'
           .col-lg-6
             = text_area_tag 'message', params['message'], rows: 8, class: 'form-control', style: 'padding-bottom: 20px;'
       .form-actions
         .col-lg-8{:style => "text-align: right;"}
-          = submit_tag(t('ad.send_message'), class: 'btn btn-success')
+          = submit_tag(t('post.send_message'), class: 'btn btn-success')

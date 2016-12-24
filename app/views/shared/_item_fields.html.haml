@@ -1,5 +1,5 @@
 %div
-  %i= t('ad.write_new_item')
+  %i= t('post.write_new_item')
 .nested-fields{:style => "display:inline-flex;"}
-  = f.text_field :name, class: 'form-control ad_item ad-create-item-field'
-  = f.select :category_id, options_from_collection_for_select(Category.all, :id, :name), {}, {class: 'selectpicker ad-select-category form-control', data: {header: t('ad.select_category') }}
+  = f.text_field :name, class: 'form-control post_item post-create-item-field'
+  = f.select :category_id, options_from_collection_for_select(Category.all, :id, :name), {}, {class: 'selectpicker post-select-category form-control', data: {header: t('post.select_category') }}

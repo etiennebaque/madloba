@@ -5,19 +5,19 @@
 #map.home.sidebar-map
 
 
--# Modal popup that shows several ads promoting the same item, in a specific area/area
-#adsModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "basicModal", :role => "dialog", :tabindex => "-1"}
+-# Modal popup that shows several posts promoting the same item, in a specific area/area
+#postsModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "basicModal", :role => "dialog", :tabindex => "-1"}
   .modal-dialog
     .modal-content
       .modal-header
-        %h4#adsModalTitle.modal-title
-      #ads-modal-body-id.modal-body
+        %h4#postsModalTitle.modal-title
+      #posts-modal-body-id.modal-body
       .modal-footer
         %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"}= t('home.close')
 
 -# This div is to check whether or not the user has AdBlock on in their browser.
 -# If they do, it will affect the website's ability to work well.
-#ad-block{:style => "position: absolute; opacity: 1; top: 0; left: 0;"} adblock
+#post-block{:style => "position: absolute; opacity: 1; top: 0; left: 0;"} postblock
 
 -# Template sample for marker popup
 %div.hidden{style: 'overflow: auto;'}

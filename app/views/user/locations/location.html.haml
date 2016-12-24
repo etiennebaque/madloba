@@ -1,7 +1,7 @@
 .container
   .row
     #content.middle-col.col-xs-12.col-md-10
-      / content starts
+      -# content starts
       %div
         %ul.breadcrumb
           - if current_user.admin?
@@ -9,7 +9,7 @@
               %a{:href => "/user/managerecords"}= t('admin.manage_records')
           - else
             %li
-              %a{:href => "/user/manageads"}= t('admin.manage_your_ads')
+              %a{:href => "/user/manageposts"}= t('admin.manage_your_posts')
           - if is_adding_new
             %li= t('admin.add_location')
           - else
@@ -41,7 +41,7 @@
                 - if current_user.admin?
                   %a{:href => "/user/managerecords#locations"}= t('admin.back_to_records')
                 - else
-                  %a{:href => "/user/manageads#locations"}= t('admin.back_to_ads')
+                  %a{:href => "/user/manageposts#locations"}= t('admin.back_to_posts')
             - if flash[:new_name]
               .alert.alert-success
                 %button.close{"data-dismiss" => "alert", :type => "button"} ×
@@ -49,7 +49,7 @@
                 - if current_user.admin?
                   %a{:href => "/user/managerecords#locations"}= t('admin.back_to_records')
                 - else
-                  %a{:href => "/user/manageads#locations"}= t('admin.back_to_ads')
+                  %a{:href => "/user/manageposts#locations"}= t('admin.back_to_posts')
 
             .box-content
               = form_for [:user, @location.becomes(Location)], html: { id: 'locationForm', class: 'form-horizontal', role: 'form' } do |f|
@@ -65,38 +65,38 @@
                       .col-lg-6
                         = label_tag :nameId, t('admin.mandatory'), class:'control-label'
 
-                  / Partial that contains the location form
+                  -# Partial that contains the location form
                   = render 'shared/location_form', form: f, location: @location
 
                   - if !is_adding_new
-                    / List of items that can be found at this location
+                    -# List of items that can be found at this location
                     .form-group
                       .col-lg-6
-                        - if @location.ads.length > 0
-                          = label_tag :ad_linked, t('admin.location.linked_ads')+':', class:'control-label'
+                        - if @location.posts.length > 0
+                          = label_tag :post_linked, t('admin.location.linked_posts')+':', class:'control-label'
                           %table.table.table-striped.table-bordered.bootstrap-datatable.datatable
                             %thead
                               %tr
                                 %th ID
-                                %th= t('ad.title')
+                                %th= t('post.title')
                                 %th= t('admin.items')
-                                %th= t('ad.description')
+                                %th= t('post.description')
                             %tbody
-                              - @location.ads.each do |ad|
+                              - @location.posts.each do |post|
                                 %tr
-                                  %td= ad.id
+                                  %td= post.id
                                   %td
-                                    %a{:href => "/user/ads/#{ad.id}/edit"}= ad.title
-                                  %td= ad.items.map{|i| i.name}.join(', ')
-                                  %td= simple_format(ad.description)
+                                    %a{:href => "/user/posts/#{post.id}/edit"}= post.title
+                                  %td= post.items.map{|i| i.name}.join(', ')
+                                  %td= simple_format(post.description)
                         - else
-                          %strong= t('admin.location.no_ad')
-                  / Submit button and cancel link
+                          %strong= t('admin.location.no_post')
+                  -# Submit button and cancel link
                   = render 'shared/submit_section'
 
 
 - if !is_adding_new
-  / "Delete location" modal window
+  -# "Delete location" modal window
   = render 'delete_modal_window'
 
 #myErrorModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myErrorModalLabel", :role => "dialog", :tabindex => "-1"}
@@ -112,9 +112,9 @@
         %a.btn.btn-default{"data-dismiss" => "modal", :href => "#"} OK
 
 - content_for :scripts do
-  / Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that create the actual map
+  -# Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that create the actual map
   = render 'shared/map_scripts_after_body', include_all_scripts: false
 
   :javascript
     new LocationForm();
-    new AdForm();
+    new PostForm();

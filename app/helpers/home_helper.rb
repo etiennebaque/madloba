@@ -35,9 +35,9 @@ module HomeHelper
     desc.length > 100 ? "#{desc[0..96]}..." : desc
   end
 
-  def colored_items_for(ad)
+  def colored_items_for(post)
     it = []
-    ad.items.each do |item|
+    post.items.each do |item|
       it << "<span style=\"color: #{item.category.color_code}\">#{item.name}</span>"
     end
     it.join(', ').html_safe

@@ -2,20 +2,20 @@
   .col-xs-12.col-md-offset-2.col-md-8
 
     .summary
-      = t('results.title', area: @area.name, num: @ads.count)
+      = t('results.title', area: @area.name, num: @posts.count)
 
     %hr
 
     .results
-      - @ads.each do |ad|
+      - @posts.each do |post|
         .result
-          .ad-title= link_to ad.title, ad
-          .ad-address
-            %i.fa{class: ad.location.area? ? Location::AREA_ADDRESS_ICON : Location::EXACT_ADDRESS_ICON}
-            = ad.location.full_address
+          .post-title= link_to post.title, post
+          .post-address
+            %i.fa{class: post.location.area? ? Location::AREA_ADDRESS_ICON : Location::EXACT_ADDRESS_ICON}
+            = post.location.full_address
 
-          .ad-items= "#{ad.action} #{colored_items_for(ad)}".html_safe
-          .ad-description= short_description_for(ad.description)
+          .post-items= "#{post.action} #{colored_items_for(post)}".html_safe
+          .post-description= short_description_for(post.description)
 
     .madloba-pagination
-      = will_paginate @ads, container: false
+      = will_paginate @posts, container: false

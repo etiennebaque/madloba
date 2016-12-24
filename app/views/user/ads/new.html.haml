@@ -1,25 +1,25 @@
--# For anonymous user creating ads, we're adding a note saying that they can modify their ad, if they create an account.
+-# For anonymous user creating posts, we're adding a note saying that they can modify their ad, if they create an account.
 - if current_user.nil?
-  .col-lg-12.ad-non-signed-warning.alert.alert-dismissible.alert-warning{:role => "alert"}
+  .col-lg-12.post-non-signed-warning.alert.alert-dismissible.alert-warning{:role => "alert"}
     %button.close{"data-dismiss" => "alert", :type => "button"} ×
-    %p= t('ad.create_account_first_html',                                                                                         |
+    %p= t('post.create_account_first_html',                                                                                         |
         create_account: (link_to t('home.create_account').capitalize, new_registration_path(resource_name), class: 'alert-link'), |
         sign_in: (link_to t('home.sign_in'), new_session_path(resource_name), class: 'alert-link'))                               |
 
 .container
-  - if @ad.errors.any?
+  - if @post.errors.any?
     .alert.alert-dismissable.alert-danger{:style => "margin-top: 21px;"}
       %button.close{"data-dismiss" => "alert", :type => "button"} ×
       %strong
-        = t('ad.error_occurred', errors: pluralize(@ad.errors.count, t('home.error.one'), t('home.error.more')))
+        = t('post.error_occurred', errors: pluralize(@post.errors.count, t('home.error.one'), t('home.error.more')))
         \:
       %ul
-        - @ad.errors.each do |_, msg|
+        - @post.errors.each do |_, msg|
           %li= msg
 
   .row
     .col-lg-12
-      = render 'user/ads/form'
+      = render 'user/posts/form'
       
 -# Loading JS scripts
 - content_for :scripts do
@@ -30,4 +30,4 @@
   :javascript
     var location_number = #{user_locations_number};
     var canPickExistingLocs = #{can_choose_existing_locations(current_user)};
-    adForm = new AdForm();
+    adForm = new PostForm();
