@@ -1,6 +1,13 @@
 version: '2'
 
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
   web:
     build: .
     command: bash -lc 'bundle exec puma -p 3000 -C config/puma.rb config.ru RAILS_ENV=production'
@@ -11,6 +18,8 @@ services:
       - "3000:3000"
     depends_on:
       - db
+    environment:
+      - VIRTUAL_HOST=madloba.local
     env_file:
       - '.env.web'
   db:
