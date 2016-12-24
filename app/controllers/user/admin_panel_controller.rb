@@ -39,7 +39,7 @@ class User::AdminPanelController < ApplicationController
   # Methods for 'General settings' screens
   # --------------------------------------
   def general_settings_keys
-    %w(app_name description contact_email ad_max_expire facebook twitter pinterest
+    %w(app_name description contact_email post_max_expire facebook twitter pinterest
               link_one_label link_one_url link_two_label link_two_url
               link_three_label link_three_url link_four_label link_four_url)
   end
@@ -87,7 +87,7 @@ class User::AdminPanelController < ApplicationController
           if (params[key] != '') && (!params[key].include? 'http')
             cleaned_data = "http://#{params[key]}"
           end
-        elsif key == 'ad_max_expire'
+        elsif key == 'post_max_expire'
           Rails.cache.write(CACHE_MAX_DAYS_EXPIRE, cleaned_data)
         end
         app_name_settings.update_attribute(:value, cleaned_data)
@@ -224,8 +224,8 @@ class User::AdminPanelController < ApplicationController
   # --------------------------------
   # Methods for regular user screens
   # --------------------------------
-  def manageads
-    @ads = Ad.includes(:items).where(user: current_user)
+  def manageposts
+    @posts = Post.includes(:items).where(user: current_user)
     @locations = Location.where(user: current_user)
   end
 

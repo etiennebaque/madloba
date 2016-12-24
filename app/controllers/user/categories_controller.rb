@@ -2,7 +2,7 @@ class User::CategoriesController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   before_action :init_icons_to_propose
   after_action :verify_authorized
-  after_action :serialize_ads, only: [:update]
+  after_action :serialize_posts, only: [:update]
 
   def show
     @category = Category.find(params[:id])
@@ -81,12 +81,12 @@ class User::CategoriesController < ApplicationController
     params.require(:category).permit(:name, :description, :icon, :marker_color)
   end
 
-  # Updates the relevant ads marker_info (jsonb) and update the marker color and marker icon in the 'markers' nested array.
-  def serialize_ads
+  # Updates the relevant posts marker_info (jsonb) and update the marker color and marker icon in the 'markers' nested array.
+  def serialize_posts
     if @category.errors.empty?
-      ads = Ad.joins(:items).where('items.category_id = ?', params[:id])
-      ads.each do |ad|
-        ad.serialize!
+      posts = Post.joins(:items).where('items.category_id = ?', params[:id])
+      posts.each do |post|
+        post.serialize!
       end
     end
   end

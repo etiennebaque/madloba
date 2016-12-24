@@ -4,12 +4,12 @@ class User::LocationsController < ApplicationController
   before_action :requires_user, except: [:retrieve_geocodes]
   before_action :is_location_controller
   after_action :verify_authorized, except: [:retrieve_geocodes]
-  after_action :serialize_ads, only: [:update]
+  after_action :serialize_posts, only: [:update]
 
   include ApplicationHelper
 
   def show
-    @location = Location.includes(:ads => :item).includes(:area).where(id: params[:id]).first!
+    @location = Location.includes(:posts => :item).includes(:area).where(id: params[:id]).first!
     authorize @location
     @map_settings = MapLocationInfo.new(location: @location)
     render 'location'
@@ -39,7 +39,7 @@ class User::LocationsController < ApplicationController
   end
 
   def edit
-    @location = Location.includes(ads: :items).includes(:area).where(id: params[:id]).first!
+    @location = Location.includes(posts: :items).includes(:area).where(id: params[:id]).first!
 
     authorize @location
     @map_settings = MapLocationInfo.new(location: @location).to_hash
@@ -140,11 +140,11 @@ class User::LocationsController < ApplicationController
     params.permit(:name, :street_number, :address, :postal_code, :province, :city, :country)
   end
 
-  # Updates the relevant ads marker_info (jsonb)
-  def serialize_ads
+  # Updates the relevant posts marker_info (jsonb)
+  def serialize_posts
     if @location.errors.empty?
-      Ad.where(location_id: @location.id).each do |ad|
-        ad.serialize!
+      Post.where(location_id: @location.id).each do |post|
+        post.serialize!
       end
     end
   end
