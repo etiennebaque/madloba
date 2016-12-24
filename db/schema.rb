@@ -11,39 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161124151727) do
+ActiveRecord::Schema.define(version: 20161224163703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "ad_items", force: :cascade do |t|
-    t.integer  "ad_id"
-    t.integer  "item_id"
+  create_table "admins", force: :cascade do |t|
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "ad_items", ["ad_id"], name: "index_ad_items_on_ad_id", using: :btree
-  add_index "ad_items", ["item_id"], name: "index_ad_items_on_item_id", using: :btree
-
-  create_table "ads", force: :cascade do |t|
-    t.string   "title",         limit: 255
-    t.text     "description"
-    t.integer  "location_id"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "username_used"
-    t.boolean  "giving"
-    t.date     "expire_date"
-    t.string   "image",         limit: 255
-    t.string   "anon_name",     limit: 255
-    t.string   "anon_email",    limit: 255
-    t.jsonb    "marker_info",               default: {}
-  end
-
-  add_index "ads", ["location_id"], name: "index_ads_on_location_id", using: :btree
-  add_index "ads", ["user_id"], name: "index_ads_on_user_id", using: :btree
+  add_index "admins", ["email"], name: "index_admins_on_email", unique: true, using: :btree
+  add_index "admins", ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true, using: :btree
 
   create_table "areas", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -118,6 +107,35 @@ ActiveRecord::Schema.define(version: 20161124151727) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  create_table "post_items", force: :cascade do |t|
+    t.integer  "post_id"
+    t.integer  "item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "post_items", ["item_id"], name: "index_post_items_on_item_id", using: :btree
+  add_index "post_items", ["post_id"], name: "index_post_items_on_post_id", using: :btree
+
+  create_table "posts", force: :cascade do |t|
+    t.string   "title",         limit: 255
+    t.text     "description"
+    t.integer  "location_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "username_used"
+    t.boolean  "giving"
+    t.date     "expire_date"
+    t.string   "image",         limit: 255
+    t.string   "anon_name",     limit: 255
+    t.string   "anon_email",    limit: 255
+    t.jsonb    "marker_info",               default: {}
+  end
+
+  add_index "posts", ["location_id"], name: "index_posts_on_location_id", using: :btree
+  add_index "posts", ["user_id"], name: "index_posts_on_user_id", using: :btree
 
   create_table "settings", force: :cascade do |t|
     t.string   "key",        limit: 255
