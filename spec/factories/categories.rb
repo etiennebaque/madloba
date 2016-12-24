@@ -1,5 +1,3 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
-
 FactoryGirl.define do
 
   first_marker_color = MARKER_COLORS.keys[0]

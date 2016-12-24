@@ -1,7 +1,7 @@
-Given(/^I go to create a new ad page$/) do
-  visit new_ad_path
-  @latitude = page.find('#ad_location_attributes_latitude', visible: false).value
-  @longitude = page.find('#ad_location_attributes_longitude', visible: false).value
+Given(/^I go to create a new post page$/) do
+  visit new_post_path
+  @latitude = page.find('#post_location_attributes_latitude', visible: false).value
+  @longitude = page.find('#post_location_attributes_longitude', visible: false).value
 end
 
 Then(/^I should see '([^"]*)'$/) do |txt|
@@ -36,8 +36,8 @@ When(/^I click on '([^"]*)' button$/) do |txt|
   find_button(txt).click
 end
 
-When (/^I click on 'Create this ad!' submit button$/) do
-  page.find('#submit_new_ad').click
+When (/^I click on 'Create this post!' submit button$/) do
+  page.find('#submit_new_post').click
 end
 
 When(/^I search for this place$/) do
@@ -45,20 +45,20 @@ When(/^I search for this place$/) do
 end
 
 Then(/^I should get new geocodes$/) do
-  new_latitude = page.find('#ad_location_attributes_latitude', visible: false).value
-  new_longitude = page.find('#ad_location_attributes_longitude', visible: false).value
+  new_latitude = page.find('#post_location_attributes_latitude', visible: false).value
+  new_longitude = page.find('#post_location_attributes_longitude', visible: false).value
   new_latitude.should_not be(@latitude)
   new_longitude.should_not be(@longitude)
 end
 
-When(/^an ad exists$/) do
-  @ad = FactoryGirl.create(:ad_with_items)
+When(/^an post exists$/) do
+  @post = FactoryGirl.create(:post_with_items)
 end
 
-When(/^an area-only ad exists$/) do
-  @ad = FactoryGirl.create(:area_only_ad)
+When(/^an area-only post exists$/) do
+  @post = FactoryGirl.create(:area_only_post)
 end
 
-When(/^I go visit that ad detail page$/) do
-  visit ad_path @ad
+When(/^I go visit that post detail page$/) do
+  visit post_path @post
 end

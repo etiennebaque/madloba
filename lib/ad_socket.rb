@@ -1,4 +1,4 @@
-# Server side of the websocket in charge of showing the relevant ads on the home page,
+# Server side of the websocket in charge of showing the relevant posts on the home page,
 # based on guided navigation selection.
 class AdSocket
 
@@ -36,15 +36,15 @@ class AdSocket
         incoming_message = event.data[3..-1]
 
         if prefix == 'new'
-          # Adding new ad on the home page map of other users.
-          ad_id = incoming_message.to_i
+          # Adding new post on the home page map of other users.
+          post_id = incoming_message.to_i
           response = {}
-          response['status'] = 'new_ad'
+          response['status'] = 'new_post'
           response['map_info'] = {}
-          response['map_info']['markers'] = Ad.search(nil, nil, nil, nil, ad_id)
+          response['map_info']['markers'] = Ad.search(nil, nil, nil, nil, post_id)
 
           @clients.reject { |client| client == socket }.each do |client|
-            client.send response.to_json(:include => { :ads => { :include =>  {:items => { :include => :category }}}})
+            client.send response.to_json(:include => { :posts => { :include =>  {:items => { :include => :category }}}})
           end
 
         end

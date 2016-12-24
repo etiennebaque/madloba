@@ -6,7 +6,7 @@ Scenario: Be able to go to all admin pages
   Then I should see 'Dashboard'
   And I should see 'To-do list'
   When I click on 'Manage records'
-  Then I should see 'From here, you can manage the ads posted on the website'
+  Then I should see 'From here, you can manage the posts posted on the website'
   When I click on 'Manage users'
   Then I should see 'you can manage user accounts'
 
@@ -17,7 +17,7 @@ Scenario: General setting page
   When I fill in 'Website name' with 'demo'
   And I fill in 'Website description' with 'this is a demo website'
   And I fill in 'Contact e-mail address' with 'test@test.com'
-  And I fill in 'Ad expiration - Max. number of days:' with '60'
+  And I fill in 'Post expiration - Max. number of days:' with '60'
   And I fill in 'Facebook page URL:' with 'http://www.facebook.com'
   And I click on 'Save' button
   Then I should see 'The general settings have been updated.'

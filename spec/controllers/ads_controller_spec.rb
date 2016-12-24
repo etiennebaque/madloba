@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe User::AdsController, :type => :controller do
+RSpec.describe User::PostsController, :type => :controller do
 
   before :each do
     # Making sure we're not redirected to the setup screens.
@@ -21,29 +21,29 @@ RSpec.describe User::AdsController, :type => :controller do
   end
 
   describe 'GET #show' do
-    it 'assigns the requested ad to @ad' do
-      ad = FactoryGirl.create(:ad_with_items, user: @user)
-      get :show, id: ad.id
-      expect(assigns(:ad)).to eq(ad)
+    it 'assigns the requested post to @post' do
+      post = FactoryGirl.create(:post_with_items, user: @user)
+      get :show, id: post.id
+      expect(assigns(:post)).to eq(post)
     end
 
     it 'renders the right view' do
-      ad = FactoryGirl.create(:ad_with_items, user: @user)
-      get :show, id: ad.id
+      post = FactoryGirl.create(:post_with_items, user: @user)
+      get :show, id: post.id
       expect(response).to render_template('show')
     end
   end
 
   describe 'GET #edit' do
-    it 'assigns the requested item to @ad' do
-      ad = FactoryGirl.create(:ad_with_items, user: @user)
-      get :edit, id: ad.id
-      expect(assigns(:ad)).to eq(ad)
+    it 'assigns the requested item to @post' do
+      post = FactoryGirl.create(:post_with_items, user: @user)
+      get :edit, id: post.id
+      expect(assigns(:post)).to eq(post)
     end
 
     it 'renders the right view' do
-      ad = FactoryGirl.create(:ad_with_items, user: @user)
-      get :edit, id: ad.id
+      post = FactoryGirl.create(:post_with_items, user: @user)
+      get :edit, id: post.id
       expect(response).to render_template('edit')
     end
   end
@@ -51,7 +51,7 @@ RSpec.describe User::AdsController, :type => :controller do
   describe 'GET #new' do
     it 'instantiates a new @item' do
       get :new
-      expect(assigns(:ad)).to be_a_new(Ad)
+      expect(assigns(:post)).to be_a_new(Post)
     end
 
     it 'renders the right view' do
@@ -65,59 +65,59 @@ RSpec.describe User::AdsController, :type => :controller do
       before do
         @item_1 = FactoryGirl.create(:first_item)
         @item_2 = FactoryGirl.create(:second_item)
-        @valid_ad_attributes_with_signed_in_user = FactoryGirl.attributes_for(:ad).merge(
+        @valid_post_attributes_with_signed_in_user = FactoryGirl.attributes_for(:post).merge(
             user_id: @user.id,
-            :ad_items_attributes => {
-                '0' => FactoryGirl.attributes_for(:ad_item, :item_id => @item_1.id.to_s, :_destroy => 'false'),
-                '1' => FactoryGirl.attributes_for(:ad_item, :item_id => @item_2.id.to_s, :_destroy => 'false') },
+            :post_items_attributes => {
+                '0' => FactoryGirl.attributes_for(:post_item, :item_id => @item_1.id.to_s, :_destroy => 'false'),
+                '1' => FactoryGirl.attributes_for(:post_item, :item_id => @item_2.id.to_s, :_destroy => 'false') },
             :location_attributes => FactoryGirl.attributes_for(:location, user_id: @user.id)
         )
 
-        @valid_ad_attributes_with_anonymous_user = FactoryGirl.attributes_for(:ad_with_anon_user_only).merge(
+        @valid_post_attributes_with_anonymous_user = FactoryGirl.attributes_for(:post_with_anon_user_only).merge(
             user_id: nil,
-            :ad_items_attributes => {
-                '0' => FactoryGirl.attributes_for(:ad_item, :item_id => @item_1.id.to_s, :_destroy => 'false'),
-                '1' => FactoryGirl.attributes_for(:ad_item, :item_id => @item_2.id.to_s, :_destroy => 'false') },
+            :post_items_attributes => {
+                '0' => FactoryGirl.attributes_for(:post_item, :item_id => @item_1.id.to_s, :_destroy => 'false'),
+                '1' => FactoryGirl.attributes_for(:post_item, :item_id => @item_2.id.to_s, :_destroy => 'false') },
             :location_attributes => FactoryGirl.attributes_for(:location, user_id: @user.id)
         )
 
       end
 
-      it 'creates a new ad, with signed-in user' do
+      it 'creates a new post, with signed-in user' do
         expect{
-          post :create, ad: @valid_ad_attributes_with_signed_in_user
-        }.to change(Ad,:count).by(1)
+          post :create, post: @valid_post_attributes_with_signed_in_user
+        }.to change(Post,:count).by(1)
       end
 
-      it 'redirects to the new ad, after creation of ad with signed-in user' do
-        post :create, ad: @valid_ad_attributes_with_signed_in_user
-        expect(response).to redirect_to :action => :show, :id => assigns(:ad).id
+      it 'redirects to the new post, after creation of post with signed-in user' do
+        post :create, post: @valid_post_attributes_with_signed_in_user
+        expect(response).to redirect_to :action => :show, :id => assigns(:post).id
       end
 
-      it 'creates a new ad, with an anonymous user (not signed-in)' do
+      it 'creates a new post, with an anonymous user (not signed-in)' do
         sign_out @user
         expect{
-          post :create, ad: @valid_ad_attributes_with_anonymous_user
-        }.to change(Ad,:count).by(1)
+          post :create, post: @valid_post_attributes_with_anonymous_user
+        }.to change(Post,:count).by(1)
       end
 
-      it 'redirects to the new ad, after creation of ad with anonymous user' do
+      it 'redirects to the new post, after creation of post with anonymous user' do
         sign_out @user
-        post :create, ad: @valid_ad_attributes_with_anonymous_user
-        expect(response).to redirect_to :action => :show, :id => assigns(:ad).id
+        post :create, post: @valid_post_attributes_with_anonymous_user
+        expect(response).to redirect_to :action => :show, :id => assigns(:post).id
       end
     end
 
     context 'with invalid attributes' do
-      it 'does not save the new ad' do
+      it 'does not save the new post' do
         expect {
-          post :create, ad: FactoryGirl.attributes_for(:invalid_ad, user: @user, item: FactoryGirl.create(:second_item), location: FactoryGirl.create(:location))
-        }.to_not change(Ad,:count)
+          post :create, post: FactoryGirl.attributes_for(:invalid_post, user: @user, item: FactoryGirl.create(:second_item), location: FactoryGirl.create(:location))
+        }.to_not change(Post,:count)
       end
 
 
       it 're-renders the new method' do
-        post :create, ad: FactoryGirl.attributes_for(:invalid_ad)
+        post :create, post: FactoryGirl.attributes_for(:invalid_post)
         expect(response).to render_template('new')
       end
 
@@ -126,43 +126,43 @@ RSpec.describe User::AdsController, :type => :controller do
 
   describe 'PUT #update' do
     before :each do
-      @ad = FactoryGirl.create(:ad_with_items, user: @user, title: 'old ad title')
+      @post = FactoryGirl.create(:post_with_items, user: @user, title: 'old post title')
     end
 
     context 'with valid attributes' do
 
-      it 'locates the requested @ad' do
-        put :update, id: @ad, ad: FactoryGirl.attributes_for(:ad_with_other_items)
-        expect(assigns(:ad)).to eq(@ad)
+      it 'locates the requested @post' do
+        put :update, id: @post, post: FactoryGirl.attributes_for(:post_with_other_items)
+        expect(assigns(:post)).to eq(@post)
       end
 
-      it 'changes the @ad attributes' do
-        put :update, id: @ad, ad: FactoryGirl.attributes_for(:ad_with_other_items, title: 'new ad title')
-        @ad.reload
-        expect(@ad.title).to eq('new ad title')
+      it 'changes the @post attributes' do
+        put :update, id: @post, post: FactoryGirl.attributes_for(:post_with_other_items, title: 'new post title')
+        @post.reload
+        expect(@post.title).to eq('new post title')
       end
 
-      it 'redirects to the updated @ad' do
-        put :update, id: @ad, ad: FactoryGirl.attributes_for(:ad_with_other_items)
-        expect(response).to redirect_to :action => :edit, :id => assigns(:ad).id
+      it 'redirects to the updated @post' do
+        put :update, id: @post, post: FactoryGirl.attributes_for(:post_with_other_items)
+        expect(response).to redirect_to :action => :edit, :id => assigns(:post).id
       end
 
     end
 
     context 'with invalid attributes' do
-      it 'locates the requested @ad' do
-        put :update, id: @ad, ad: FactoryGirl.attributes_for(:invalid_ad)
-        expect(assigns(:ad)).to eq(@ad)
+      it 'locates the requested @post' do
+        put :update, id: @post, post: FactoryGirl.attributes_for(:invalid_post)
+        expect(assigns(:post)).to eq(@post)
       end
 
-      it 'does not changes the @ad attributes' do
-        put :update, id: @ad, ad: FactoryGirl.attributes_for(:ad, title: nil)
-        @ad.reload
-        expect(@ad.title).to eq('old ad title')
+      it 'does not changes the @post attributes' do
+        put :update, id: @post, post: FactoryGirl.attributes_for(:post, title: nil)
+        @post.reload
+        expect(@post.title).to eq('old post title')
       end
 
       it 're-renders the edit method' do
-        put :update, id: @ad, ad: FactoryGirl.attributes_for(:invalid_ad)
+        put :update, id: @post, post: FactoryGirl.attributes_for(:invalid_post)
         expect(response).to render_template('edit')
       end
     end
@@ -171,18 +171,18 @@ RSpec.describe User::AdsController, :type => :controller do
 
   describe 'DELETE #destroy' do
     before :each do
-      @ad = FactoryGirl.create(:ad_with_items, user: @user)
+      @post = FactoryGirl.create(:post_with_items, user: @user)
     end
 
-    it 'deletes the ad' do
+    it 'deletes the post' do
       expect{
-        delete :destroy, id: @ad
-      }.to change(Ad,:count).by(-1)
+        delete :destroy, id: @post
+      }.to change(Post,:count).by(-1)
     end
 
     it 'redirects to the record page' do
-      delete :destroy, id: @ad
-      expect(response).to redirect_to user_manageads_path
+      delete :destroy, id: @post
+      expect(response).to redirect_to user_manageposts_path
     end
   end
 

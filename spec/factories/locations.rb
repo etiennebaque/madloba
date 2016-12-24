@@ -1,4 +1,3 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
 require 'faker'
 
 FactoryGirl.define do
@@ -11,9 +10,9 @@ FactoryGirl.define do
     f.latitude { Faker::Address.latitude }
     f.longitude { Faker::Address.longitude }
 
-    factory :location_with_ads do
+    factory :location_with_posts do
       after_create do |location|
-        create(:ad, location: location)
+        create(:post, location: location)
       end
     end
   end
