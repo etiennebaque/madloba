@@ -10,7 +10,7 @@ fr:
     models:
       user: Utilisateur
     attributes:
-      ad:
+      post:
         title: "Titre de l'annonce"
         image: "L'image téléchargée"
       user:
@@ -28,7 +28,7 @@ fr:
         icon: "Nom de l'icône"
     errors:
       models:
-        ad:
+        post:
           attributes:
             image:
               too_long: "ne doit pas dépasser 5 Mo"
@@ -38,7 +38,7 @@ fr:
     home: Accueil
     page: Page d'accueil
     user_panel: Votre profil
-    create_new_ad: Créer annonce
+    create_new_post: Créer annonce
     sign_in: S'identifier
     sign_up: Enregistrez-vous ici
     not_have_account_yet_html: "%{sign_up_here} si vous n'avez pas encore de compte."
@@ -64,10 +64,10 @@ fr:
     about_website: A propos de %{website_name}
     links: Liens
     your_searched_location: Votre recherche
-    no_ad: Pas d'annonce en ce moment.
-    area_marker_message: "%{ad_count} annonces au total postées dans ce quartier, présentant %{item_count} objets."
+    no_post: Pas d'annonce en ce moment.
+    area_marker_message: "%{post_count} annonces au total postées dans ce quartier, présentant %{item_count} objets."
     show_results: "Voir résultats"
-    create_an_ad_now_html: "%{create_new_ad} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
+    create_an_post_now_html: "%{create_new_post} pour dire à votre communauté ce que vous avez à donner, ou ce que vous recherchez !"
     about_page: A propos de %{website_name}
     about_description_1_html: "%{website_name} est un site utilisant %{madloba_link}."
     about_description_2_html: "%{madloba_link} est un projet open-source qui vous permet de promouvoir à votre communauté ce que vous avez à donner."
@@ -92,7 +92,7 @@ fr:
     footer_new_powered_by_html: Nouveau site délivré par %{madloba_link}
     footer_theme_html: "Thème : %{charisma}"
     log_out: Déconnexion
-    show_ads_areas: Afficher quartiers
+    show_posts_areas: Afficher quartiers
     show_details: Afficher détails
     error_get_popup_content: "Désolé, une erreur s'est produite. Veuillez réessayer plus tard."
     error:
@@ -117,9 +117,9 @@ fr:
     name_help: "Nommez votre nouvel emplacement (ex: nom de votre boutique, lieu-dit...). Ce nom sera public. N'écrivez rien si vous ne voulez pas nommer votre emplacement. "
     name_to_use: "Quel nom voulez-vous afficher?*"
     anon_publisher_name_note: "Ceci est une annonce postée par un utilisateur anonyme :"
-    ad_action: "Action:*"
-    ad_action_giving: Je donne des objects.
-    ad_action_accepting: Je cherche des objects.
+    post_action: "Action:*"
+    post_action_giving: Je donne des objects.
+    post_action_accepting: Je cherche des objects.
     name_username: Nom d'utilisateur
     name_fullname: Nom complet réel
     definition: "Entrez votre emplacement* :"
@@ -130,7 +130,7 @@ fr:
     modal_exact_area_description: "On one hand, by clicking on '%{def_exact}', you will be able to enter the exact address of this location and pinpoint it on the map below."
     modal_exact_area_description2: "After your ad has been created, you will be able to visualize it on the home page map with a colored marker placed at the previously marked location."
     modal_exact_area_description3: "On the other hand, you may not want to give away that many details about the location, given any personal reasons (eg. anonymity, details about the ad...)."
-    modal_exact_area_description4: "By choosing '%{def_area}', you will just have to indicate which area does this location belong to. Once the ad is created, it won't appear as a colored marker on the home page, but it will show up in the search results page related to the selected area."
+    modal_exact_area_description4: "By choosing '%{def_area}', you will just have to indicate which area does this location belong to. Once the post is created, it won't appear as a colored marker on the home page, but it will show up in the search results page related to the selected area."
     street_number: "Numéro de rue :"
     street_name: "Nom de la rue :"
     street_name_help: "Exemple : nom de la rue, avenue, chemin..."
@@ -149,8 +149,8 @@ fr:
     area_help: Choisissez la zone où cet emplacement se trouve.
     error_location_fields: "Soit un quarier ou bien une adresse doit être renseignée."
     error_location_address_only: "Une adresse doit être renseignée"
-  ad:
-    new_ad: Nouvelle annonce
+  post:
+    new_post: Nouvelle annonce
     once_created_expire_html: une fois créée, votre annonce sera publiée pour <strong>%{max_expire_days} jours</strong>.
     area: zone
     error_occurred: "%{errors} à corriger ci-dessous "
@@ -168,7 +168,7 @@ fr:
     your_email: Votre adresse email
     captcha: "Captcha* :"
     email_help: "Votre adresse email ne sera pas publiée publiquement."
-    ad_is_deleted: "L'annonce '%{deleted_ad_title}' a été supprimé."
+    post_is_deleted: "L'annonce '%{deleted_post_title}' a été supprimé."
     location_website: "Site web :"
     your_message: "Votre message* :"
     send_message: Envoyer votre message
@@ -178,8 +178,8 @@ fr:
     description_help: Donnez quelques détails au sujet des objets que vous donnez/cherchez.
     new_location: Entrez un nouvel emplacement
     choose_existing: Choisir un emplacement existant
-    submit_ad_new: Créer cette annonce !
-    submit_ad_edit: "Mettre à jour cette annonce"
+    submit_post_new: Créer cette annonce !
+    submit_post_edit: "Mettre à jour cette annonce"
     create_success: "L'annonce '%{title}' a été créée. Vous recevrez un email dans un moment, avec un résumé de votre annonce."
     where_to_find: "Où trouver les objets :"
     where_to_bring: "Où apporter les objets :"
@@ -192,22 +192,22 @@ fr:
     success_sent: Votre message a été envoyé.
     giving_away: Donne
     accepting: Recherche
-    ad_create_expire: Votre annonce expirera dans %{day_number} jours, le %{expire_date}.
-    ad_has_expired: Désolé, cette annonce a expiré et n'est plus visible.
-    no_ad_created_yet: "Vous n'avez encore pas créé d'annonce. Cliquez sur le bouton ci-dessus pour créer votre première annonce."
+    post_create_expire: Votre annonce expirera dans %{day_number} jours, le %{expire_date}.
+    post_has_expired: Désolé, cette annonce a expiré et n'est plus visible.
+    no_post_created_yet: "Vous n'avez encore pas créé d'annonce. Cliquez sur le bouton ci-dessus pour créer votre première annonce."
     no_location_yet: "Rien à modifier ici: vous n'avez pas encore créé d'annonce avec un emplacement exact."
     upload_image: "Télécharger image :"
     less_than_limit: "L'image doit faire moins de 5 Mo."
     remove_image: "Retirer l'image"
     image_currently_processed: "Votre image est en train d'être traitée."
-    show_ad_image_processed: "L'image de cette annonce est en train d'être traitée."
+    show_post_image_processed: "L'image de cette annonce est en train d'être traitée."
     will_show_up: "Elle apparaitra dans un moment après avoir rechargé la page."
     image_selected: "Image sélectionée, elle sera téléchargée quand l'annonce sera créée."
     create_item: "Créer un nouvel objet"
     write_new_item: "Tapez un novel objet et choisissez sa catégorie"
     add_item: "Ajouter un objet"
     see_published: "Voir cette annonce"
-    error_ad_must_have_item: "Veuillez ajouter au moins 1 objet"
+    error_post_must_have_item: "Veuillez ajouter au moins 1 objet"
     provide_anon_name: "Veuillez entrer votre nom"
     provide_anon_email: "Veuillez entre votre adresse email"
     select_category: "Catégories disponibles"
@@ -221,21 +221,21 @@ fr:
     thanks: Merci ! :-)
     signature: "L'équipe %{name}."
     dear: "Cher %{name}"
-    ad_created: "Vous avez créé l'annonce suivante avec succès, sur %{site_name}"
-    ad_title: "Titre de l'annonce"
+    post_created: "Vous avez créé l'annonce suivante avec succès, sur %{site_name}"
+    post_title: "Titre de l'annonce"
     description: Description
     where_pick_up: Où trouver les objets
     where_to_drop: Où déposer les objets
     admin_panel: "notre panneau d'administration."
-    manage_ad_html: "Pour modifier cette annonce, ainsi que les annonces créées auparavant, connectez-vous sur %{admin_panel}"
+    manage_post_html: "Pour modifier cette annonce, ainsi que les annonces créées auparavant, connectez-vous sur %{admin_panel}"
     thanks: "Merci, et passez une bonne journée ! :)"
-    received_message: "Vous avez reçu une réponse pour votre annonce '%{ad_title}' sur %{site_name}."
-    new_ad_object: Votre nouvelle annonce sur %{site_name} - '%{ad_title}'
-    reply_ad_object: Réponse pour votre annonce '%{ad_title}' sur %{site_name}
+    received_message: "Vous avez reçu une réponse pour votre annonce '%{post_title}' sur %{site_name}."
+    new_post_object: Votre nouvelle annonce sur %{site_name} - '%{post_title}'
+    reply_post_object: Réponse pour votre annonce '%{post_title}' sur %{site_name}
     account_locked: Votre compte a été vérouillé à cause de trop nombreux essais de connection.
     link_unlock: Cliquez sur le lien ci-dessous pour dévérouiller votre compte.
     unlock_account: Dévérouiller mon compte.
-    ad_will_expire: Cette annonce expirera dans %{day_number} jours, le %{expire_date}
+    post_will_expire: Cette annonce expirera dans %{day_number} jours, le %{expire_date}
   registration:
     all_mandatory: (Tous les champs sont obligatoires)
     first_name: Prénom
@@ -275,8 +275,8 @@ fr:
     name: Nom
     address: Adresse/Code postal/Zone
     exact_area: "Quartier seulement ?"
-    ads: Annonces
-    ad_settings: Paramètres pour annonces
+    posts: Annonces
+    post_settings: Paramètres pour annonces
     location_name: emplacement
     expiration_date: "Date d'expiration"
     locations: Emplacements
@@ -300,13 +300,13 @@ fr:
     icon: Icône
     edit_delete: Mettre à jour / Supprimer
     created_by_user: Créée par utilisateur
-    manage_your_ads: Gérer vos annonces
+    manage_your_posts: Gérer vos annonces
     manage_records: Base de données
     records_message: Vous pouvez gérer ici les annonces postées sur ce site, ainsi que les emplacements, objets et catégories.
     back_to_records: Retour à "Base de données"
-    back_to_ads: Retour à "Gérer vos annonces"
+    back_to_posts: Retour à "Gérer vos annonces"
     back_to_users: Retour à "Gérer utilisateurs"
-    create_ad: Créer annonce
+    create_post: Créer annonce
     mandatory: (* champs obligatoires)
     general_settings_menu: Paramètres du site
     save: Enregistrer
@@ -327,8 +327,8 @@ fr:
     social_media: Médias sociaux
     useful_links: Liens
     delete_sure: Etes vous sûr aue vous voulez supprimer cet %{entity}?
-    warning_ads_before_delete_item: "ATTENTION: quelques annonces sont rattachés à cet objet. Supprimer cet objet le fera disparaître de ces annonces définitivement."
-    warning_ads_before_delete_location: "ATTENTION: quelques annonces sont rattachés à cet emplacement. Supprimer cet emplacement aura pour effet de supprimer ces annonces définitivement."
+    warning_posts_before_delete_item: "ATTENTION: quelques annonces sont rattachés à cet objet. Supprimer cet objet le fera disparaître de ces annonces définitivement."
+    warning_posts_before_delete_location: "ATTENTION: quelques annonces sont rattachés à cet emplacement. Supprimer cet emplacement aura pour effet de supprimer ces annonces définitivement."
     delete_confirm: Oui, supprimer cet %{entity}
     save_not_possible: "Démo - Mise à jour non possible pour cette page :"
     todo:
@@ -346,27 +346,27 @@ fr:
       area_settings: Paramètres des zones
       manage_users: Gérer utilisateurs
       manage_profile: Gérer votre profil
-    ad:
-      manage_ads: Gérer annonces
-      ad_edit: Annonces - Mise à jour
-      ad_updated: "L'annonce '%{title}' a été mise à jour."
+    post:
+      manage_posts: Gérer annonces
+      post_edit: Annonces - Mise à jour
+      post_updated: "L'annonce '%{title}' a été mise à jour."
       error_update: "%{errors} lors de la mise à jour de l'annonce"
       delete: "Supprimer cette annonce ?"
-      delete_ad_error_html: "Erreur lors de la mise à jour de cette annonce ! Retour à %{manage_ads_page}"
-      manage_ads_page: "Gérer annonces"
+      delete_post_error_html: "Erreur lors de la mise à jour de cette annonce ! Retour à %{manage_posts_page}"
+      manage_posts_page: "Gérer annonces"
       giving_accepting_title: Donne/Recherche
       giving_away: Donne
       accepting: Recherche
-      delete_ad: Supprimer cette annonce?
-      delete_ad_permanently: Etes-vous sûr que vous voulez supprimer cette annonce définitivement ?
-      delete_this_ad: Oui, supprimer cette annonce
+      delete_post: Supprimer cette annonce?
+      delete_post_permanently: Etes-vous sûr que vous voulez supprimer cette annonce définitivement ?
+      delete_this_post: Oui, supprimer cette annonce
     location:
       error_occurred: "%{errors} lors de la création de cet emplacement"
       update_success: "L'emplacement '%{name}' a été mis à jour."
       created_success: "L'emplacement '%{name}' a été créé."
       delete: "Supprimer cet emplacement"
-      linked_ads: "Annonces liées à cet emplacement"
-      no_ad: "Il n'y a pas encore d'annonce liée à cet emplacement."
+      linked_posts: "Annonces liées à cet emplacement"
+      no_post: "Il n'y a pas encore d'annonce liée à cet emplacement."
       area: Zone
       exact_address: Adresse exacte
       map_notification_postal_code: Cliquez sur la carte pour localiser votre zone générale, en rapport avec vtre code postal.
@@ -374,7 +374,7 @@ fr:
       location_deleted: "L'emplacement '%{deleted_location_name}' a été supprimé."
       unnamed: emplacement sans nom
       area_name: "zone %{area_name}"
-      no_ad_tied: "Pas d'annonce actuellement liée à cet emplacement."
+      no_post_tied: "Pas d'annonce actuellement liée à cet emplacement."
       anonymous_user: (Utilisateur anonyme)
     category:
       update_success: La catégorie '%{name}' a été mise à jour.
@@ -408,9 +408,9 @@ fr:
       delete_item: "Supprimer cet objet ?"
       name: "Nom de l'objet"
       category: Catégorie
-      ads_promoting: Annonces avec cet objet
-      ad_title: Titre
-      no_ad: "Pas d'annonce incluant cet objet pour le moment."
+      posts_promoting: Annonces avec cet objet
+      post_title: Titre
+      no_post: "Pas d'annonce incluant cet objet pour le moment."
       item_deleted: "L'objet '%{deleted_item_name}' a été supprimé."
     general_settings:
       name: Nom du site
@@ -421,8 +421,8 @@ fr:
       pinterest: Page Pinterest
       success_message: Les paramètres du site ont été mis à jour.
       error_message: Le champ "Nom du site" ne peut pas être vide.
-      max_ad_expire: Expiration d'annonce - Nombre de jours max.
-      max_ad_expire_help: Nombre de jours maximum de publication d'une annonce, après sa création (Tapez '0' pour ne pas fixer de limite).
+      max_post_expire: Expiration d'annonce - Nombre de jours max.
+      max_post_expire_help: Nombre de jours maximum de publication d'une annonce, après sa création (Tapez '0' pour ne pas fixer de limite).
       link_one: Premier lien
       link_two: Deuxième lien
       link_three: Troisième lien
@@ -436,8 +436,8 @@ fr:
       area_postal_code: Zone définie par un code postal
       area_area: Zone définie par un quartier
       map_description: "Areas broadly define neighbourhoods and districts related to your Madloba website.
-                        Once defined, users will be able to looks at ads in the chosen neighbourhood on the home page.
-                        Alternatively, they will choose an area when creating a new ad."
+                        Once defined, users will be able to looks at posts in the chosen neighbourhood on the home page.
+                        Alternatively, they will choose an area when creating a new post."
       map_description_2: "Click on the map to pinpoint and name a new area.
                           Click on an previously defined area to either delete it or change its name."
       error_update_area: Erreur lors de la mise à jour des quartiers. Veuillez réessayer plus tard.
@@ -599,7 +599,7 @@ fr:
     last: Dernier
     filtered_from: filtrés sur
     total_entries: enregistrements au total
-    ads_for: Annonces pour
+    posts_for: Annonces pour
     cancel_drawing: Cancel drawing
     cancel: Cancel
     delete_last_point_drawn: Delete last point drawn
