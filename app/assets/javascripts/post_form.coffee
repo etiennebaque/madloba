@@ -8,19 +8,6 @@ PostForm::init = ->
   if $('#locations_from_list').length > 0
     $('.location-form-for-post').hide()
 
-  # This is a test to see if the user is using clients like AdBlock.
-  # The use of AdBlock blocks a lot of markups on this website, unfortunately
-  # (eg. everything that has 'post' in the class name). When AdBlock is detected, we display a popup indicating
-  # that AdBlock should be deactivated for this Madloba website.
-  if $('#post-block').length and !$('#post-block').height()
-    $('#wrap').append '<div class="blocking-notification alert alert-dismissible alert-warning" role="alert">' + \
-        '<button type="button" class="close" data-dismiss="alert">×</button>' + \
-        '<h5>' + gon.vars['adblock_warning'] + '</h5>' + \
-        '<p>' + gon.vars['adblock_browser'] + '<br />' + gon.vars['adblock_affecting'] + '</p>' + \
-        '<p>' + gon.vars['adblock_turnoff'] + '</p>' + '</div>'
-  # Initially created in 'application.html.haml' layout, this div is now removed.
-  $('#ad-block').remove()
-
   bindTypeaheadToItemSelect $('#items .selectpicker-items')
   
   # "Create/Edit post" form: create message when image needs to be uploaded.

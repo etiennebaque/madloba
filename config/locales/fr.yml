@@ -570,10 +570,6 @@ fr:
     amazon_s3_warning_html: Si vous choisissez Amazon S3, vérifiez que vous avez spécifié les variables d'environnement correctement (Veuillez consulter %{install_guide} - section intitulée 'the set_environment_variables script' - pour plus de détails).
     image_error: Erreur lors de l'enregistrement de vos paramètres. Veuillez recharger cette page et essayez à nouveau dans un moment.
   general_js:
-    adblock_warning: Attention ! Utilisation de AdBlock
-    adblock_browser: Votre navigateur utilise AdBlock en ce moment.
-    adblock_affecting: Ceci affecte le bon fonctionnement de Madloba.
-    adblock_turnoff: Désactivez AdBlock pour ce site, et recharger cette page.
     search_for_items: Recheche d'objets...
     start_typing_item: Tapez le nom d'un objet
     no_result_create_item: Pas de résultat. Choisissez 'Créer un nouvel objet'.

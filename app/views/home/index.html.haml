@@ -1,6 +1,7 @@
 -# Sidebar
 = render 'sidebar'
 
+
 -# Map
 #map.home.sidebar-map
 
@@ -15,17 +16,6 @@
       .modal-footer
         %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"}= t('home.close')
 
--# This div is to check whether or not the user has AdBlock on in their browser.
--# If they do, it will affect the website's ability to work well.
-#post-block{:style => "position: absolute; opacity: 1; top: 0; left: 0;"} postblock
-
--# Template sample for marker popup
-%div.hidden{style: 'overflow: auto;'}
-  .col-xs-12.popup-title
-  .col-xs-12.popup-image
-  .col-xs-12.popup-button
-
-
 
 -# Loading JS scripts
 - content_for :scripts do
@@ -33,7 +23,6 @@
   -# Includes all the Javascript related to map rendering, to be loaded after page
   -# (Leaflet, MapQuest, and script that creates the actual map)
   = render 'shared/map_scripts_after_body', include_all_scripts: false
-
 
   -# Javascript function calls, related specifically to the home page
   :javascript
