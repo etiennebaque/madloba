@@ -1,6 +1,6 @@
 # Server side of the websocket in charge of showing the relevant posts on the home page,
 # based on guided navigation selection.
-class AdSocket
+class PostSocket
 
   def initialize(app)
      @app = app

@@ -70,7 +70,7 @@ Madloba::Application.routes.draw do
   get '/getItems', to: 'application#get_items'
 
   # Ajax call to show the posts related to 1 type of item and to 1 area/area.
-  get '/showSpecificAds', to: 'home#showSpecificAds'
+  get '/showSpecificPosts', to: 'home#showSpecificPosts'
 
   # Ajax call to show popup content, when marker clicked on home page.
   get '/showAdPopup', to: 'home#show_post_popup'

@@ -1,4 +1,4 @@
-module User::AdsHelper
+module User::PostsHelper
 
   # All items from the database, for the item field, in the New post form
   def all_items

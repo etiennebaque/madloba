@@ -142,24 +142,24 @@ global.markers =
   place_exact_locations_markers: (locations_exact, is_bouncing_on_add) ->
     i = 0
     while i < locations_exact.length
-      ad = locations_exact[i]
+      post = locations_exact[i]
       j = 0
-      while j < ad['markers'].length
+      while j < post['markers'].length
 
-        item = ad['markers'][j]
+        item = post['markers'][j]
 
         if markers.canCategoryBeDisplayed(item)
-          # Creating the marker for this ad here.
+          # Creating the marker for this post here.
           marker_icon = L.AwesomeMarkers.icon(
             prefix: 'fa'
             markerColor: item['color']
             icon: item['icon'])
 
-          marker = L.marker([ad['lat'], ad['lng']],
+          marker = L.marker([post['lat'], post['lng']],
             icon: marker_icon
             bounceOnAdd: is_bouncing_on_add)
 
-          marker.ad_id = ad['ad_id']
+          marker.post_id = post['post_id']
           marker.item_id = item['item_id']
           popup = L.popup(
             minWidth: 250
@@ -174,7 +174,7 @@ global.markers =
               global: false
               type: 'GET'
               data:
-                ad_id: @ad_id
+                post_id: @post_id
                 item_id: @item_id
               dataType: 'html'
               beforeSend: (xhr) ->
@@ -241,7 +241,7 @@ global.markers =
 
 
 ###*
-# Main function that initializes the map on different screens (eg home page, map setting page, ad page...).
+# Main function that initializes the map on different screens (eg home page, map setting page, post page...).
 # @param map_settings - hash that contains all info needed to initialize the map.
 ###
 
@@ -255,7 +255,7 @@ global.initLeafletMap = (map_settings) ->
 
 
 ###*
-# This function draws areas (where at least one current ad is included)
+# This function draws areas (where at least one current post is included)
 # on the map of the home page.
 ###
 global.drawAreasOnMap = (locations_area) ->
@@ -264,7 +264,7 @@ global.drawAreasOnMap = (locations_area) ->
     area_name = markers.area_geocodes[area_id]['name']
     area_bounds = markers.area_geocodes[area_id]['bounds']
 
-    # Adding the areas (which have ads) to the home page map.
+    # Adding the areas (which have posts) to the home page map.
     areaLayer = L.geoJson JSON.parse(area_bounds), onEachFeature: (feature, layer) ->
       layer.setStyle color: markers.area_color
       markers.area_group.addLayer layer
@@ -313,7 +313,7 @@ global.onMapClickLocation = (e) ->
 
 
 # Event triggered when click on "Locate me on the map" button,
-# on the "Create ad" form, and on the Ad edit form.
+# on the "Create post" form, and on the Ad edit form.
 global.find_geocodes = ->
   $('#find_geocodes_from_address').button().click ->
     location_type = 'exact'

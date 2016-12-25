@@ -1,5 +1,5 @@
 require File.expand_path('../boot', __FILE__)
-require File.expand_path('../../lib/ad_socket', __FILE__)
+require File.expand_path('../../lib/post_socket', __FILE__)
 
 require 'rails/all'
 
@@ -59,7 +59,7 @@ module Madloba
     config.autoload_paths << Rails.root.join('lib')
 
     # Adding Ad websocket class as a middleware
-    config.middleware.use AdSocket
+    config.middleware.use PostSocket
     config.middleware.delete Rack::Lock
 
     # Variable used to debug setup mode at runtime

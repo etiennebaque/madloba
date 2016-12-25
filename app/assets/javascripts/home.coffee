@@ -30,7 +30,7 @@ Home::init = ->
 
 
 ###*
-# Populates the map with different markers (eg exact address and area-type markers, to show ads)
+# Populates the map with different markers (eg exact address and area-type markers, to show posts)
 # @param locations_hash - hash containing the info to create all different markers.
 ###
 Home::putLocationMarkers = ->
@@ -48,32 +48,32 @@ Home::putLocationMarkers = ->
   markers.registerAreaMarkers(markers.areas, false)
 
   # Event to trigger when click on a link in an area popup, on the home page map. Makes a modal window appear.
-  # Server side is in home_controller, method showSpecificAds.
+  # Server side is in home_controller, method showSpecificPosts.
   $('#map').on 'click', '.area_link', ->
     input = $(this).attr('id').split('|')
-    $.get '/showSpecificAds', {
+    $.get '/showSpecificPosts', {
       item: input[0]
       type: input[1]
       area: input[2]
     }, (data) ->
       html_to_append = '<ul>'
       i = 0
-      while i < data['ads'].length
-        ad = data['ads'][i]
-        html_to_append = html_to_append + '<li><a href="/ads/' + ad['id'] + '/">' + ad['title'] + '</a></li>'
+      while i < data['posts'].length
+        post = data['posts'][i]
+        html_to_append = html_to_append + '<li><a href="/posts/' + post['id'] + '/">' + post['title'] + '</a></li>'
         i++
       html_to_append = html_to_append + '</ul>'
-      $('#ads-modal-body-id').html html_to_append
+      $('#posts-modal-body-id').html html_to_append
       icon = ''
       if typeof data['icon'] != 'undefined'
         icon = '<i class="fa ' + data['icon'] + '" style="color: ' + data['hexa_color'] + '; padding-right: 10px;"></i>'
 
-      resultModalTitle = gon.vars['ads_for'] + ' \'' + input[0].capitalizeFirstLetter() + '\' - ' + data['area_name']
-      $('#adsModalTitle').html icon + resultModalTitle
+      resultModalTitle = gon.vars['posts_for'] + ' \'' + input[0].capitalizeFirstLetter() + '\' - ' + data['area_name']
+      $('#postsModalTitle').html icon + resultModalTitle
       options =
         'backdrop': 'static'
         'show': 'true'
-      $('#adsModal').modal options
+      $('#postsModal').modal options
 
   searched_location_marker = ''
   if typeof leaf.searched_address != 'undefined'

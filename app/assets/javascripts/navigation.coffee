@@ -5,7 +5,7 @@ global.NavigationBar = ->
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value')
     queryTokenizer: Bloodhound.tokenizers.whitespace
     remote:
-      url: '/getItems?item=QUERY&type=search_ad_items'
+      url: '/getItems?item=QUERY&type=search_post_items'
       wildcard: 'QUERY')
   @searchedAdItems.clearPrefetchCache()
   @searchedAdItems.initialize()
@@ -51,7 +51,7 @@ NavigationBar::init = ->
 
   # Changing the typeahead query, depending of user choice between "I'm giving away" and "I'm searching for".
   $('#q').change(->
-    _this.searchedAdItems.remote.url = '/getItems?item=QUERY&type=search_ad_items&q=' + $('#q').val()
+    _this.searchedAdItems.remote.url = '/getItems?item=QUERY&type=search_post_items&q=' + $('#q').val()
     # As the type of search changes, the item name field needs to be reset.
     $('#item').val ''
   ).change()

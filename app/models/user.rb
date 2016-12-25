@@ -16,9 +16,9 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username
 
   has_many :locations, dependent: :destroy
-  has_many :ads, dependent: :destroy
+  has_many :posts, dependent: :destroy
 
-  def owns_ad (ad)
-    self.ads.include?(ad)
+  def owns_post (post)
+    self.posts.include?(post)
   end
 end

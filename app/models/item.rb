@@ -1,7 +1,7 @@
 class Item < ActiveRecord::Base
   belongs_to :category
-  has_many :ad_items
-  has_many :ads, through: :ad_items, dependent: :destroy
+  has_many :post_items
+  has_many :posts, through: :post_items, dependent: :destroy
 
   validates :name, :category, presence: true
 

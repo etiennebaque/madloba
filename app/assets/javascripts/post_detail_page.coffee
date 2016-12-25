@@ -1,12 +1,12 @@
 global = this
 
-global.AdDetailPage = (adType) ->
-  @adType = adType
+global.PostDetailPage = (postType) ->
+  @postType = postType
   @init()
 
-AdDetailPage::init = ->
+PostDetailPage::init = ->
 
-  if adType == 'area'
+  if postType == 'area'
     # Location where full address is not given (area only).
     # Placing a area marker on the map
     area = leaf.mapSettings.area
@@ -26,13 +26,13 @@ AdDetailPage::init = ->
   else
     # Exact address. Potentially several center markers on the map.
     # Displays a marker for each item tied to the ad we're showing the details of.
-    # Using the Marker Cluster plugin to spiderfy this ad's item marker.
+    # Using the Marker Cluster plugin to spiderfy this post's item marker.
     markers.group = new (L.markerClusterGroup)(
       spiderfyDistanceMultiplier: 2)
 
     i = 0
-    while i < leaf.mapSettings['ad_show'].length
-      item_category = leaf.mapSettings['ad_show'][i]
+    while i < leaf.mapSettings['post_show'].length
+      item_category = leaf.mapSettings['post_show'][i]
       icon_to_use = L.AwesomeMarkers.icon(
         prefix: 'fa'
         markerColor: item_category['color']

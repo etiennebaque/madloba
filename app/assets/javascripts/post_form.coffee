@@ -1,18 +1,18 @@
 global = this
 
-global.AdForm = ->
+global.PostForm = ->
   @init()
 
-AdForm::init = ->
+PostForm::init = ->
 
   if $('#locations_from_list').length > 0
-    $('.location-form-for-ad').hide()
+    $('.location-form-for-post').hide()
 
   # This is a test to see if the user is using clients like AdBlock.
   # The use of AdBlock blocks a lot of markups on this website, unfortunately
-  # (eg. everything that has 'ad' in the class name). When AdBlock is detected, we display a popup indicating
+  # (eg. everything that has 'post' in the class name). When AdBlock is detected, we display a popup indicating
   # that AdBlock should be deactivated for this Madloba website.
-  if $('#ad-block').length and !$('#ad-block').height()
+  if $('#post-block').length and !$('#post-block').height()
     $('#wrap').append '<div class="blocking-notification alert alert-dismissible alert-warning" role="alert">' + \
         '<button type="button" class="close" data-dismiss="alert">×</button>' + \
         '<h5>' + gon.vars['adblock_warning'] + '</h5>' + \
@@ -23,25 +23,25 @@ AdForm::init = ->
 
   bindTypeaheadToItemSelect $('#items .selectpicker-items')
   
-  # "Create/Edit ad" form: create message when image needs to be uploaded.
-  $('#new_ad').submit ->
-    image_path = $('#ad_image').val()
+  # "Create/Edit post" form: create message when image needs to be uploaded.
+  $('#new_post').submit ->
+    image_path = $('#post_image').val()
     if image_path != null and image_path != ''
       $('#upload-in-progress').html '<i>' + gon.vars['new_image_uploading'] + '</i>'
 
 
-  # Events to be triggered when item field added or removed, in the ad form.
+  # Events to be triggered when item field added or removed, in the post form.
   $('#items a.add_fields').data('association-insertion-position', 'before').data 'association-insertion-node', 'this'
   $('#items').on 'cocoon:after-insert', ->
-    $('.ad-item-fields a.add_fields').data('association-insertion-position', 'before').data \
+    $('.post-item-fields a.add_fields').data('association-insertion-position', 'before').data \
       'association-insertion-node', 'this'
     $('.selectpicker').selectpicker 'refresh'
     bindTypeaheadToItemSelect $('#items .selectpicker-items')
-    $('.ad-item-fields').on 'cocoon:after-insert', ->
+    $('.post-item-fields').on 'cocoon:after-insert', ->
       $(this).children('.item_from_list').remove()
       $(this).children('a.add_fields').hide()
 
-  $('.ad-item-fields').bind 'cocoon:after-insert', (e) ->
+  $('.post-item-fields').bind 'cocoon:after-insert', (e) ->
     e.stopPropagation()
     $(this).find('.item_from_list').remove()
     $(this).find('a.add_fields').hide()
@@ -50,29 +50,29 @@ AdForm::init = ->
   # Function call to initialize the location form (Location edit form, all Ad forms).
   resetLocationForm()
 
-  # "Edit ad" form: create message when image needs to be uploaded.
-  $('#ad_edit_form').submit ->
-    image_path = $('#ad_image').val()
+  # "Edit post" form: create message when image needs to be uploaded.
+  $('#post_edit_form').submit ->
+    image_path = $('#post_image').val()
     if image_path != null and image_path != ''
       $('#upload-in-progress').html '<i>' + gon.vars['new_image_uploading'] + '</i>'
 
-  # "New ad" form: open location form when clicking on "Enter new location" button
+  # "New post" form: open location form when clicking on "Enter new location" button
   $('.add-new-location').click ->
-    $('.location-form-for-ad').show()
+    $('.location-form-for-post').show()
     $('.add-new-location').hide()
-    $('.location-form-for-ad :input').attr("disabled", false)
+    $('.location-form-for-post :input').attr("disabled", false)
     $('#locations_from_list :input').attr('disabled', true)
     $(".remove-new-location").attr("tabindex",-1).focus() # Hack to center page on new location title.
 
   $('.remove-new-location').click ->
-    $('.location-form-for-ad').hide()
+    $('.location-form-for-post').hide()
     $('.add-new-location').show()
-    $('.location-form-for-ad :input').attr("disabled", true)
+    $('.location-form-for-post :input').attr("disabled", true)
     $('#locations_from_list :input').attr('disabled', false)
 
 
 ###*
-# Function that binds events to the item drop down list (in ads#new and ads#edit pages)
+# Function that binds events to the item drop down list (in posts#new and posts#edit pages)
 # These events consists of making ajax call to check what items exists, in order to
 # create a type-ahead for the search bar of that drop drown box.
 # @param object
@@ -131,7 +131,7 @@ resetLocationForm = ->
   $('#why_choose_link').click ->
     $('#why_choose_modal').modal('show')
 
-  # Help messages for fields on "Create ad" form
+  # Help messages for fields on "Create post" form
   $('.help-message').popover()
 
   # Initializing onclick event on "Locate me on the map" button,

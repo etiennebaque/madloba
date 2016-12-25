@@ -1,5 +1,5 @@
 class Location < ActiveRecord::Base
-  has_many :ads, dependent: :destroy
+  has_many :posts, dependent: :destroy
   belongs_to :user
   belongs_to :area
 
@@ -9,7 +9,7 @@ class Location < ActiveRecord::Base
   validates :latitude , numericality: { greater_than:  -90, less_than:  90 }
   validates :longitude, numericality: { greater_than: -180, less_than: 180 }
 
-  #scope :type, -> (location_type) { where('ads.expire_date >= ? AND loc_type = ?', Date.today, location_type)}
+  #scope :type, -> (location_type) { where('posts.expire_date >= ? AND loc_type = ?', Date.today, location_type)}
 
   attr_accessor :country
 
@@ -19,17 +19,17 @@ class Location < ActiveRecord::Base
   # This method returns the right query to display relevant markers, on the home page.
   def self.search(location_type, cat_nav_state, searched_item, selected_item_ids, user_action)
 
-    #locations = Location.includes(ads: {items: :category}).type(location_type).references(:ads)
+    #locations = Location.includes(posts: {items: :category}).type(location_type).references(:posts)
     if cat_nav_state || searched_item
 
-      locations = Location.includes(ads: {items: :category}).where('ads.expire_date >= ?', Date.today).references(:ads)
+      locations = Location.includes(posts: {items: :category}).where('posts.expire_date >= ?', Date.today).references(:posts)
 
       if cat_nav_state
         if searched_item
-          # We search for ads in relation to the searched item and the current category navigation state.
+          # We search for posts in relation to the searched item and the current category navigation state.
           locations = locations.where(items: {category_id: cat_nav_state, id: selected_item_ids})
         else
-          # We search for ads in relation to our current category navigation state.
+          # We search for posts in relation to our current category navigation state.
           locations = locations.where(items: {category_id: cat_nav_state})
         end
       elsif searched_item
@@ -37,12 +37,12 @@ class Location < ActiveRecord::Base
       end
 
     else
-      locations = Location.includes(:ads).where('ads.expire_date >= ?', Date.today).references(:ads)
+      locations = Location.includes(:posts).where('posts.expire_date >= ?', Date.today).references(:posts)
     end
 
     if user_action
-      # If the user is searching for items, we need to show the posted ads, which people give stuff away.
-      locations = locations.where("ads.giving = ?", user_action == 'searching')
+      # If the user is searching for items, we need to show the posted posts, which people give stuff away.
+      locations = locations.where("posts.giving = ?", user_action == 'searching')
     end
 
     if location_type == 'area'

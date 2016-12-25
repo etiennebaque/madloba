@@ -33,7 +33,7 @@ setting_list = [
     ['facebook', ''],
     ['twitter', ''],
     ['pinterest', ''],
-    %w(ad_max_expire 90),
+    %w(post_max_expire 90),
     %w(setup_step 1),
     ['image_storage', ''],
     ['chosen_language', 'en']
