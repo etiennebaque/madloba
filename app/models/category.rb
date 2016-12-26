@@ -61,7 +61,7 @@ class Category < ActiveRecord::Base
       cat_nav_state = params[:cat].split(" ")
     end
 
-    return cat_nav_state && (cat_nav_state.include? self.id.to_s)
+    cat_nav_state && (cat_nav_state.include? self.id.to_s)
   end
 
   def color_code

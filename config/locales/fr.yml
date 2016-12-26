@@ -190,8 +190,8 @@ fr:
     from: De
     get_back_to: Vous pouvez directement revenir vers %{first_name} en répondant à cet e-mail.
     success_sent: Votre message a été envoyé.
-    giving_away: Donne
-    accepting: Recherche
+    giving_away: "Donne : "
+    accepting: "Recherche : "
     post_create_expire: Votre annonce expirera dans %{day_number} jours, le %{expire_date}.
     post_has_expired: Désolé, cette annonce a expiré et n'est plus visible.
     no_post_created_yet: "Vous n'avez encore pas créé d'annonce. Cliquez sur le bouton ci-dessus pour créer votre première annonce."

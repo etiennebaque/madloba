@@ -10,7 +10,7 @@ module User::PostsHelper
     current_user && current_user.owns_post(post)
   end
 
-  # Checks if anonymous user who posted an post added their email address.
+  # Checks if anonymous user who posted a post added their email address.
   # If they did, users will be able to send them a message about this post.
   def anon_user_puts_email(post)
     current_user == nil && post.anon_email != nil
@@ -37,7 +37,7 @@ module User::PostsHelper
     return publisher_name
   end
 
-  # When an post-related page loads, the associated image might still be processed, or being uploaded to S3.
+  # When a post-related page loads, the associated image might still be processed, or being uploaded to S3.
   # This method checks if the normal image is available yet.
   def is_image_available(post)
     return post.image && (post.image.versions)[:normal].file.present? && (post.image.versions)[:normal].file.exists?
@@ -48,7 +48,7 @@ module User::PostsHelper
     Setting.where(key: 'post_max_expire').pluck(:value).first
   end
 
-  # If a signed-in user is creating an post, they will have the choice to create a new location
+  # If a signed-in user is creating a post, they will have the choice to create a new location
   # or to choose one of their existing location (registered when creating other posts before).
   def can_choose_existing_locations(current_user)
     current_user != nil && current_user.locations.length > 0

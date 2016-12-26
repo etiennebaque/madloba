@@ -29,7 +29,7 @@ class Post < ActiveRecord::Base
   def self.search(cat_nav_state, searched_item, selected_item_ids, user_action, post_id)
 
     if post_id.present?
-      # Search by post ids when adding posts on home page dynamically, when other user just created an post (websocket)
+      # Search by post ids when adding posts on home page dynamically, when other user just created a post (websocket)
       posts = Post.find(post_id)
     else
       posts = Post.select(:marker_info).where("expire_date >= ? and (marker_info->>'post_id') is not null", Date.today)
@@ -95,7 +95,7 @@ class Post < ActiveRecord::Base
     "#{act} #{self.items.map(&:name).join(', ')}"
   end
 
-  # The publisher of an post might not want to have their full name publicly displayed.
+  # The publisher of a post might not want to have their full name publicly displayed.
   # This method defines whether to show the username or the full name (whether it is anonymous or registered user)
   def username_to_display
     if self.is_anonymous
@@ -135,46 +135,24 @@ class Post < ActiveRecord::Base
     self.image.recreate_versions!
   end
 
-  # To be used in the map popup, on posts#show page.
+  # Clean list of items linked to a post
   def item_list
-    result = []
-    self.post_items.each do |post_item|
-      result << post_item.item.capitalized_name
-    end
-    return result.join(', ')
+    self.items.map{|i| i.try(:capitalize)}.compact.join(', ')
   end
 
   # {
   #   lat: 12.23456,
   #   lng: 12.23456,
   #   post_id: 123,
-  #   markers: [
-  #     {
-  #       icon: 'fa-circle',
-  #       color: 'blue',
-  #       item_id: 5,
-  #       category_id: 2
-  #     },
-  #     {
-  #       icon: 'fa-square',
-  #       color: 'red',
-  #       item_id: 6,
-  #       category_id: 3
-  #     },
-  #     ...
-  #   ]
+  #   category_id: 2
+  #   icon: 'fa-circle',
+  #   color: 'blue',
   # }
   def serialize!
     location = self.location
-    items = self.items
+    cat = self.category
     info = {lat: location.latitude, lng: location.longitude, post_id: self.id}
-    markers = []
-    items.each do |i|
-      cat = i.category
-      marker = {icon: cat.icon, color: cat.marker_color, item_id: i.id, category_id: cat.id}
-      markers << marker
-    end
-    info[:markers] = markers
+    info.merge!({icon: cat.icon, color: cat.marker_color, category_id: cat.id})
     self.marker_info = info
     self.save
   end

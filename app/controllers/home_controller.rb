@@ -30,10 +30,10 @@ class HomeController < ApplicationController
     # Defining all the categories attached to an item.
     if selected_item_ids
       # We select here only the categories, based on the items found after a search.
-      @categories = Category.joins(items: :posts).where("items.id IN (?)", selected_item_ids).order('name asc').uniq
+      @categories = Category.joins(posts: :items).where("items.id IN (?)", selected_item_ids).order('name asc').uniq
     else
       # We select the categories related to all available items
-      @categories = Category.joins(items: :posts).order('name asc').uniq
+      @categories = Category.joins(posts: :items).order('name asc').uniq
     end
 
     # We need to see if we have a navigation state. If we do, that will impact what will be displayed on the map.
@@ -79,13 +79,15 @@ class HomeController < ApplicationController
     popup_html = ''
     begin
       post_id = params['post_id']
-      post = Post.joins(:location, {items: :category}).where(id: post_id).first
-      number_of_items = post.items.count
-      item = post.items.select{|i| i.id == params['item_id'].to_i}.first
-      title = item.name.length > 40 ? item.name.chomp(a[-3..-1]) + '...' : item.name
+      post = Post.includes(:location, :category, :items).where(id: post_id).first
+      items = post.items
+      number_of_items = items.count
+      title = post.title.length > 40 ? post.title.chomp(a[-3..-1]) + '...' : post.title
 
       popup_html = "<div style='overflow: auto;'>"
-      popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{item.category.color_code}'>" +
+
+      # Title
+      popup_html += "<div class='col-xs-12 title-popup' style='background-color: #{post.category.color_code}'>" +
                     "<span>#{title.capitalize}</span></div>"
 
       if post.image?
@@ -93,18 +95,19 @@ class HomeController < ApplicationController
         popup_html += "<div class='col-xs-12 image-popup no-padding'>#{image_tag}</div>"
       end
 
-      # Title
-      popup_html += "<div class='col-xs-12' style='margin-top: 15px;'>#{view_context.link_to(post.title, post)}</div>"
+      # Category
+      category = "Category: <span style='color:" + post.category.color_code + "';><strong>" + post.category.name + "</strong></span>";
+      popup_html += "<div class='col-xs-12' style='margin-top: 15px;'>#{category}</div>"
 
-      # Action (giving away or searching for) + item name
+      # Action (giving away or searching for) + name of items
       post_action = post.giving ? t('post.giving_away') : t('post.accepting')
-      item_name = "<span style='color:" + item.category.color_code + "';><strong>" + item.name + "</strong></span>";
-      and_other_items = number_of_items > 1 ? "and #{number_of_items - 1} other item(s)" : ''
+      #and_other_items = number_of_items > 1 ? "and #{number_of_items - 1} other item(s)" : ''
+      item_names = post.items.map{|i| i.name.capitalize}.join(', ')
 
-      popup_html += "<div class='col-xs-12' style='margin-top: 15px;'>#{post_action} #{item_name} #{and_other_items}</div>"
+      popup_html += "<div class='col-xs-12'>#{post_action} #{item_names}</div>"
 
       # Location full address
-      popup_html += "<div class='col-xs-12' style='margin-bottom: 15px;'>#{post.location.full_address}</div>"
+      popup_html += "<div class='col-xs-12' style='margin: 15px 0px;'>#{post.location.full_address}</div>"
 
       # "Show details" button
       button = view_context.link_to(t('home.show_details'), post, class: 'btn btn-info btn-sm no-color' )

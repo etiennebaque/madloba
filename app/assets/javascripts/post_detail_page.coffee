@@ -30,25 +30,21 @@ PostDetailPage::init = ->
     markers.group = new (L.markerClusterGroup)(
       spiderfyDistanceMultiplier: 2)
 
-    i = 0
-    while i < leaf.mapSettings['post_show'].length
-      item_category = leaf.mapSettings['post_show'][i]
-      icon_to_use = L.AwesomeMarkers.icon(
-        prefix: 'fa'
-        markerColor: item_category['color']
-        icon: item_category['icon'])
+    post = leaf.mapSettings['marker']
+    icon_to_use = L.AwesomeMarkers.icon(
+      prefix: 'fa'
+      markerColor: post['color']
+      icon: post['icon'])
 
-      map_center_marker = L.marker([
-        leaf.my_lat
-        leaf.my_lng
-      ], icon: icon_to_use)
+    map_center_marker = L.marker([
+      leaf.my_lat
+      leaf.my_lng
+    ], icon: icon_to_use)
 
-      if leaf.mapSettings['marker_message'] != ''
-        map_center_marker.bindPopup(leaf.mapSettings['marker_message'] + ' - ' + item_category['item_name']).openPopup()
+    if leaf.mapSettings['marker_message'] != ''
+      map_center_marker.bindPopup(leaf.mapSettings['marker_message'] + ' - ' + item_category['item_name']).openPopup()
 
-      markers.group.addLayer map_center_marker
-      i++
-
+    markers.group.addLayer map_center_marker
     leaf.map.addLayer markers.group
 
     leaf.map.setView [

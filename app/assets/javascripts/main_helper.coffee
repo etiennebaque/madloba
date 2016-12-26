@@ -143,55 +143,51 @@ global.markers =
     i = 0
     while i < locations_exact.length
       post = locations_exact[i]
-      j = 0
-      while j < post['markers'].length
 
-        item = post['markers'][j]
+      if markers.canCategoryBeDisplayed(post)
+        # Creating the marker for this post here.
+        marker_icon = L.AwesomeMarkers.icon(
+          prefix: 'fa'
+          markerColor: post['color']
+          icon: post['icon'])
 
-        if markers.canCategoryBeDisplayed(item)
-          # Creating the marker for this post here.
-          marker_icon = L.AwesomeMarkers.icon(
-            prefix: 'fa'
-            markerColor: item['color']
-            icon: item['icon'])
+        marker = L.marker([post['lat'], post['lng']],
+          icon: marker_icon
+          bounceOnAdd: is_bouncing_on_add)
 
-          marker = L.marker([post['lat'], post['lng']],
-            icon: marker_icon
-            bounceOnAdd: is_bouncing_on_add)
+        marker.post_id = post['post_id']
+        marker.category_id = post['category_id']
+        popup = L.popup(
+          minWidth: 250
+          maxWidth: 280).setContent('Loading...')
 
-          marker.post_id = post['post_id']
-          marker.item_id = item['item_id']
-          popup = L.popup(
-            minWidth: 250
-            maxWidth: 280).setContent('Loading...')
+        marker.bindPopup popup, popupOptions()
+        # When a marker is clicked, an Ajax call is made to get the content of the popup to display
+        marker.on 'click', (e) ->
+          marker_popup = e.target.getPopup()
+          $.ajax
+            url: '/showPostPopup'
+            global: false
+            type: 'GET'
+            data:
+              post_id: @post_id
+              category_id: @category_id
+            dataType: 'html'
+            beforeSend: (xhr) ->
+              xhr.setRequestHeader 'Accept', 'text/html-partial'
+            success: (data) ->
+              $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
+              marker_popup.setContent data
+              marker_popup.update()
+              adjustPopupPosition(marker_popup, 'exact')
+            error: (data) ->
+              marker_popup.setContent data
+              marker_popup.update()
+          return
+        markers.group.addLayer marker
 
-          marker.bindPopup popup, popupOptions()
-          # When a marker is clicked, an Ajax call is made to get the content of the popup to display
-          marker.on 'click', (e) ->
-            marker_popup = e.target.getPopup()
-            $.ajax
-              url: '/showAdPopup'
-              global: false
-              type: 'GET'
-              data:
-                post_id: @post_id
-                item_id: @item_id
-              dataType: 'html'
-              beforeSend: (xhr) ->
-                xhr.setRequestHeader 'Accept', 'text/html-partial'
-              success: (data) ->
-                $(marker_popup._container).removeClass('area-popup').addClass('area-popup-no-margin')
-                marker_popup.setContent data
-                marker_popup.update()
-                adjustPopupPosition(marker_popup, 'exact')
-              error: (data) ->
-                marker_popup.setContent data
-                marker_popup.update()
-            return
-          markers.group.addLayer marker
-
-        j++
       i++
+
     return
 
   registerAreaMarkers: (areas) ->
@@ -234,9 +230,9 @@ global.markers =
 
   # We show on the map all the markers if there's no specific navigation state.
   # If there's one, we show only the markers which category are in the nav state.
-  canCategoryBeDisplayed: (item) ->
+  canCategoryBeDisplayed: (post) ->
     markers.selected_categories.length == 0 ||
-    item.category_id.toString() in markers.selected_categories
+    post.category_id.toString() in markers.selected_categories
 
 
 

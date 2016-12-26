@@ -66,14 +66,14 @@ Madloba::Application.routes.draw do
   get '/getNominatimLocationResponses', to: 'application#nominatim_location_responses'
   get '/getCityGeocodes', to: 'user/locations#retrieve_geocodes'
 
-  # Ajax call to get the list of items, for autocomplete, when searching for an item, or creating/editing an post.
+  # Ajax call to get the list of items, for autocomplete, when searching for an item, or creating/editing a post.
   get '/getItems', to: 'application#get_items'
 
   # Ajax call to show the posts related to 1 type of item and to 1 area/area.
   get '/showSpecificPosts', to: 'home#showSpecificPosts'
 
   # Ajax call to show popup content, when marker clicked on home page.
-  get '/showAdPopup', to: 'home#show_post_popup'
+  get '/showPostPopup', to: 'home#show_post_popup'
   get '/showAreaPopup', to: 'home#show_area_popup'
 
   # Root

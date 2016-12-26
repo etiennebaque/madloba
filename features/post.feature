@@ -44,7 +44,7 @@ Scenario: The new post page with an anonymous user should show relevant field
 
 Scenario: I visit a post detail page, after this post has been created.
   Given I am an anonymous user
-  And an post exists
+  And a post exists
   When I go visit that post detail page
   Then I should see 'Back to home page'
   When an area-only post exists

@@ -1,6 +1,6 @@
 class MapPostInfo < MapInfo
 
-  AD_INFO_ATTRIBUTES = [:post_show, :popup_message, :area]
+  AD_INFO_ATTRIBUTES = [:marker, :popup_message, :area]
 
   attr_accessor(*(MAP_INFO_ATTRIBUTES+AD_INFO_ATTRIBUTES))
 
@@ -11,12 +11,11 @@ class MapPostInfo < MapInfo
 
     if post_location.area?
       # Getting information for this post based that's based on area-only location
-      self.popup_message = items.map(&:capitalized_name).join(', ')
+      self.popup_message = post.item_list
       self.area = post_location.area
     else
       # Getting information as an exact address location
-      self.post_show = []
-      items.each {|item| self.post_show << {icon: item.category.icon, color: item.category.marker_color, item_name: item.name}}
+      self.marker = post.marker_info
     end
 
     self.latitude = post_location.latitude

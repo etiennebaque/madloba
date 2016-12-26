@@ -118,7 +118,7 @@ class User::PostsController < ApplicationController
                                :location_attributes => [:id, :user_id, :name, :street_number, :address, :province, :postal_code, :city, :area_id, :type, :latitude, :longitude, :phone_number, :website, :description])
   end
 
-  # This method is called when a user replies and sends a message to another user, who posted an post.
+  # This method is called when a user replies and sends a message to another user, who posted a post.
   # It sends the reply to the user who published this post.
   def send_message
     message = params[:message]

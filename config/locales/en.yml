@@ -106,7 +106,7 @@ en:
     name: "Location name:"
     name_help: Give a name to your new location (eg shop name, random name you give your workshop...). It will be shown publicly. Leave blank if you don't want to assign any name.
     name_to_use: "Which name would you like to show?*"
-    anon_publisher_name_note: "This is an post posted by an anonymous user:"
+    anon_publisher_name_note: "This is a post posted by an anonymous user:"
     post_action: "Action:*"
     post_action_giving: I'm giving away items.
     post_action_accepting: I'm searching for items.
@@ -180,8 +180,8 @@ en:
     from: From
     get_back_to: You can directly get back to %{first_name} by replying to this e-mail.
     success_sent: Your message has been sent successfully.
-    giving_away: Giving away
-    accepting: Searching for
+    giving_away: "Giving away:"
+    accepting: "Searching for:"
     post_create_expire: Your post will expire in %{day_number} days, on %{expire_date}.
     post_has_expired: Sorry, this post has expired and is not visible anymore.
     no_post_created_yet: You have not created any post yet. Click on the button above to create your first one!
@@ -231,7 +231,7 @@ en:
     first_name: First name
     last_name: Last name
     username: Username
-    username_help: Your username will be used if you don't want to show your full name, when publishing an post.
+    username_help: Your username will be used if you don't want to show your full name, when publishing a post.
     email: E-mail
     password: Password
     password_confirm: Password confirmation
@@ -324,7 +324,7 @@ en:
     todo:
       no_category_html: '<strong>No category available</strong>. Please create at least one category to be able to create posts.'
       one_category_html: '<strong>Only one category is available</strong>. Please create a few categories to allow the user to refine their search by specific item categories.'
-      no_area_type_html: '<strong>No area type has been specified</strong>. Without the ability to select an area when creating an post, the user will have to enter an exact postdress (which might not be wanted). In "Area (Settings)", please define areas to give users more flexibility, when they will choose a location.'
+      no_area_type_html: '<strong>No area type has been specified</strong>. Without the ability to select an area when creating a post, the user will have to enter an exact postdress (which might not be wanted). In "Area (Settings)", please define areas to give users more flexibility, when they will choose a location.'
       mapbox_missing_html: You don't have entered a Mapbox key yet, in "Map (Settings)". You can get one by opening an account on <a href="https://www.mapbox.com" target="_blank">Mapbox</a>, to get a new map style for your website.
       mapquest_missing_html: You don't have entered a MapQuest key yet, in "Map (Settings)". You can get one by opening an account on <a href="https://developer.mapquest.com" target="_blank">Mapquest</a>, to get a new map style for your website.
       description_missing_html: No website description has been written yet, in "General (Settings)". Give the users a chance to see what your website is about, by writting one. Your description will appear the front page footer, and in the "About" page.
@@ -412,7 +412,7 @@ en:
       success_message: The general settings have been updated.
       error_message: The "Website name" field cannot be empty.
       max_post_expire: Post expiration - Max. number of days
-      max_post_expire_help: Set the maximum number of days an post can remain published, after its creation (Enter '0' to set no limit).
+      max_post_expire_help: Set the maximum number of days a post can remain published, after its creation (Enter '0' to set no limit).
       link_one: First link
       link_two: Second link
       link_three: Third link

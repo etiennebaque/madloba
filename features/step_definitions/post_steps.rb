@@ -51,7 +51,7 @@ Then(/^I should get new geocodes$/) do
   new_longitude.should_not be(@longitude)
 end
 
-When(/^an post exists$/) do
+When(/^a post exists$/) do
   @post = FactoryGirl.create(:post_with_items)
 end
 

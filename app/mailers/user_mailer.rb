@@ -3,7 +3,7 @@ class UserMailer < ActionMailer::Base
 
   include ApplicationHelper
 
-  # When an post is created, this method sends an e-mail to the user who just created it.
+  # When a post is created, this method sends an e-mail to the user who just created it.
   def created_post(user_info, post, url)
     @post = post
     @full_admin_url = url

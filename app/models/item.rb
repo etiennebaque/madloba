@@ -6,8 +6,4 @@ class Item < ActiveRecord::Base
 
   before_save { |item| item.name.downcase! }
 
-  def capitalized_name
-    self.name.nil? ? '' : self.name.capitalize
-  end
-
 end

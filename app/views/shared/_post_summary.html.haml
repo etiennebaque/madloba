@@ -10,10 +10,10 @@
       \:
   %span
     %ul
-      - @post.post_items.each do |post_item|
+      - @post.item_list do |item|
         %li{:style => "list-style-type: none;"}
-          %i{:class => "fa #{post_item.item.category.icon}", :style => "color: #{"#{MARKER_COLORS[post_item.item.category.marker_color]}"};"}>
-           #{post_item.item.capitalized_name}
+          #{item}
+
 -# Left-hand side: Location
 .show_post_paragraph
   %label= t('location.location')+':'

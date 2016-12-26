@@ -98,7 +98,7 @@
                   - Item.all.each do |item|
                     %tr
                       %td.vert-align= item.id
-                      %td.vert-align= item.capitalized_name
+                      %td.vert-align= item.try(:capitalize)
                       %td.vert-align
                         %i{:class => "fa #{item.category.icon}", :style => "color: #{"#{MARKER_COLORS[item.category.marker_color]}"};"}>
                          #{item.category.name}
