@@ -1,6 +1,7 @@
 class Post < ActiveRecord::Base
   has_many :post_items
   has_many :items, through: :post_items
+  belongs_to :category
   belongs_to :location
   belongs_to :user
 
