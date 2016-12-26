@@ -36,13 +36,12 @@ class Post < ActiveRecord::Base
 
       if cat_nav_state || searched_item
         if cat_nav_state
-          puts cat_nav_state
           if searched_item
             # We search for posts in relation to the searched item and the current category navigation state.
-            posts = posts.joins(:items).where(items: {category_id: cat_nav_state, id: selected_item_ids})
+            posts = posts.joins(:items).where(category_id: cat_nav_state, items: {id: selected_item_ids})
           else
             # We search for posts in relation to our current category navigation state.
-            posts = posts.joins(:items).where(items: {category_id: cat_nav_state})
+            posts = posts.where(category_id: cat_nav_state)
           end
         elsif searched_item
           posts = posts.joins(:items).where(items: {id: selected_item_ids})
@@ -137,7 +136,7 @@ class Post < ActiveRecord::Base
 
   # Clean list of items linked to a post
   def item_list
-    self.items.map{|i| i.try(:capitalize)}.compact.join(', ')
+    self.items.map{|i| i.name.try(:capitalize)}.compact.join(', ')
   end
 
   # {

@@ -14,7 +14,7 @@
             %i.fa{class: post.location.area? ? Location::AREA_ADDRESS_ICON : Location::EXACT_ADDRESS_ICON}
             = post.location.full_address
 
-          .post-items= "#{post.action} #{colored_items_for(post)}".html_safe
+          .post-items= "#{post.action} #{post.item_list}".html_safe
           .post-description= short_description_for(post.description)
 
     .madloba-pagination
