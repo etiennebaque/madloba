@@ -100,7 +100,7 @@ group :development, :test do
   gem 'capistrano-rbenv', '~> 2.0.3'
 
   # RSpec
-  gem 'rspec-rails', '~> 3.3.3'
+  gem 'rspec-rails', '~> 3.5'
   gem 'shoulda-matchers', require: false
   gem 'factory_girl_rails'
 
