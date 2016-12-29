@@ -202,8 +202,8 @@ en:
     provide_anon_name: Please enter your name
     provide_anon_email: Please enter your email address
     select_category: Available categories
-    category: "Category:"
-    items: "Items:"
+    category: "Category*:"
+    items: "Items*:"
     captcha_not_valid: The captcha text you entered is not valid.
     create_account_first_html: "%{create_account} or %{sign_in} now before publishing your post, if you want to be able to edit it or delete it later."
   mailer:

@@ -121,7 +121,7 @@
               = t('post.new_location')
 
     -# Location form partial
-    .location-form-for-ad
+    .location-form-for-post
       = f.fields_for :location, Location.new, html: {class: 'form-horizontal'} do |loc|
         = render 'shared/location_form', form: loc, location: @post.location
 
