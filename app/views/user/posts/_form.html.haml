@@ -1,7 +1,6 @@
 - page ||= 'new'
-- form_id = "post_#{page}_form"
 - obj ||= @post
-= form_for obj, html: { id: form_id, class: 'form-horizontal', role: 'form', multipart: true } do |f|
+= form_for obj, html: { id: 'post_form', class: 'form-horizontal', role: 'form', multipart: true } do |f|
   - note_about_expiration_date = page == 'new' ? expire_date_for_new_post: expire_date_for(@post)
   %fieldset
 
@@ -44,6 +43,13 @@
               = t('location.name_fullname')
               (#{current_user.first_name} #{current_user.last_name})
 
+    -# Category
+    .form-group
+      = f.label :category_id, t('post.category'), class: 'col-lg-2 control-label'
+      .col-lg-3
+        - category_data = Category.all.map{|c| [c.name, c.id, { 'data-color' => c.color_code, 'data-icon' => c.icon }]}
+        = f.select :category_id, options_for_select(category_data, f.object.category_id), {include_blank: t('location.category_blank')}, {class: 'form-control'}
+
     -# Giving / Accepting items
     .form-group
       = f.label :giving, t('location.post_action'), class: 'col-lg-2 control-label'
@@ -59,20 +65,15 @@
 
     -# Items
     .form-group
-      = f.label :post_items, t('post.item'), class: 'col-lg-2 control-label'
-      .col-lg-6
-        #items
-          = f.fields_for :post_items do |post_item|
-            = render 'shared/post_item_fields', f: post_item
-          = link_to_add_association "<i class='glyphicon glyphicon-plus'></i> #{t('post.add_item')}".html_safe, f, :post_items, partial: 'shared/post_item_fields', class: 'btn btn-success add-item-button'
+      = f.label :item_ids, t('post.items'), class: 'col-lg-2 control-label'
+      .col-lg-6.field-for-items
+        = f.text_field :item_ids, {data: {role: 'tagsinput'}}
 
     -# Post description
     .form-group
       = f.label :description, t('post.description')+'*:', class: 'col-lg-2 control-label'
       .col-lg-6
-        = f.text_area :description, class: 'form-control help-message', rows: 6,
-                :data => {:content => t('post.description_help'), :placement => 'top',
-                :toggle => 'popover', :trigger => 'hover focus'}
+        = f.text_area :description, class: 'form-control help-message', rows: 6
 
     -# Image upload - only possible when app deployed on server, for now
     - if !on_heroku? && can_upload_image

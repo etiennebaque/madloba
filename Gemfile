@@ -86,6 +86,8 @@ gem 'highline'
 
 gem 'font-awesome-sass'
 gem 'will_paginate', '~> 3.1.0'
+gem 'bootstrap-tagsinput-rails'
+
 
 group :development, :test do
 

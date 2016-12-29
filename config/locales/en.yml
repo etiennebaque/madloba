@@ -127,6 +127,7 @@ en:
     postal_code: "Postal code:"
     area: "Area:"
     area_blank: "-- Choose an area --"
+    category_blank: "-- Choose a category --"
     define_geocode_button: Locate me on the map
     map: "Map:"
     phone_number: "Phone number:"
@@ -201,6 +202,8 @@ en:
     provide_anon_name: Please enter your name
     provide_anon_email: Please enter your email address
     select_category: Available categories
+    category: "Category:"
+    items: "Items:"
     captcha_not_valid: The captcha text you entered is not valid.
     create_account_first_html: "%{create_account} or %{sign_in} now before publishing your post, if you want to be able to edit it or delete it later."
   mailer:

@@ -7,55 +7,16 @@ PostForm::init = ->
 
   if $('#locations_from_list').length > 0
     $('.location-form-for-post').hide()
-
-  bindTypeaheadToItemSelect $('#items .selectpicker-items')
   
   # "Create/Edit post" form: create message when image needs to be uploaded.
-  $('#new_post').submit ->
+  $('#post_form').submit ->
     image_path = $('#post_image').val()
     if image_path != null and image_path != ''
       $('#upload-in-progress').html '<i>' + gon.vars['new_image_uploading'] + '</i>'
 
-
-  # Events to be triggered when item field added or removed, in the post form.
-  $('#items a.add_fields').data('association-insertion-position', 'before').data 'association-insertion-node', 'this'
-  $('#items').on 'cocoon:after-insert', ->
-    $('.post-item-fields a.add_fields').data('association-insertion-position', 'before').data \
-      'association-insertion-node', 'this'
-    $('.selectpicker').selectpicker 'refresh'
-    bindTypeaheadToItemSelect $('#items .selectpicker-items')
-    $('.post-item-fields').on 'cocoon:after-insert', ->
-      $(this).children('.item_from_list').remove()
-      $(this).children('a.add_fields').hide()
-
-  $('.post-item-fields').bind 'cocoon:after-insert', (e) ->
-    e.stopPropagation()
-    $(this).find('.item_from_list').remove()
-    $(this).find('a.add_fields').hide()
-    $('.selectpicker').selectpicker 'refresh'
-
-  # Function call to initialize the location form (Location edit form, all Ad forms).
   resetLocationForm()
-
-  # "Edit post" form: create message when image needs to be uploaded.
-  $('#post_edit_form').submit ->
-    image_path = $('#post_image').val()
-    if image_path != null and image_path != ''
-      $('#upload-in-progress').html '<i>' + gon.vars['new_image_uploading'] + '</i>'
-
-  # "New post" form: open location form when clicking on "Enter new location" button
-  $('.add-new-location').click ->
-    $('.location-form-for-post').show()
-    $('.add-new-location').hide()
-    $('.location-form-for-post :input').attr("disabled", false)
-    $('#locations_from_list :input').attr('disabled', true)
-    $(".remove-new-location").attr("tabindex",-1).focus() # Hack to center page on new location title.
-
-  $('.remove-new-location').click ->
-    $('.location-form-for-post').hide()
-    $('.add-new-location').show()
-    $('.location-form-for-post :input').attr("disabled", true)
-    $('#locations_from_list :input').attr('disabled', false)
+  hidingShowingLocationForm()
+  initItemDynamicField()
 
 
 ###*
@@ -124,6 +85,43 @@ resetLocationForm = ->
   # Initializing onclick event on "Locate me on the map" button,
   # when looking for location on map, based on user input.
   find_geocodes()
+
+hidingShowingLocationForm = ->
+  # "New post" form: open location form when clicking on "Enter new location" button
+  $('.add-new-location').click ->
+    $('.location-form-for-post').show()
+    $('.add-new-location').hide()
+    $('.location-form-for-post :input').attr("disabled", false)
+    $('#locations_from_list :input').attr('disabled', true)
+    $(".remove-new-location").attr("tabindex",-1).focus() # Hack to center page on new location title.
+
+  $('.remove-new-location').click ->
+    $('.location-form-for-post').hide()
+    $('.add-new-location').show()
+    $('.location-form-for-post :input').attr("disabled", true)
+    $('#locations_from_list :input').attr('disabled', false)
+
+# This makes all the necessary inits in order for the items field to work with typeahead
+# and bootstrap tagsinput plug-in.
+initItemDynamicField = ->
+  allItems = new Bloodhound(
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value')
+    queryTokenizer: Bloodhound.tokenizers.whitespace
+    remote:
+      url: '/getItems?item=QUERY&type=search_items'
+      wildcard: 'QUERY')
+  allItems.clearPrefetchCache()
+  allItems.initialize()
+  
+  itemField = $('.field-for-items input')
+  itemField.tagsinput
+    itemText: 'value'
+    itemValue: 'id'
+    typeaheadjs:
+      name: 'allItems'
+      displayKey: 'value'
+      source: allItems.ttAdapter()
+
 
 # Function used in the location form - show appropriate section when choosing an area-based area
 show_area_section_only = ->

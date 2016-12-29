@@ -16,7 +16,7 @@ class Post < ActiveRecord::Base
   accepts_nested_attributes_for :post_items, :reject_if => :all_blank, :allow_destroy => true
   accepts_nested_attributes_for :items
 
-  validates_presence_of :title, :description
+  validates_presence_of :title, :description, :category
   validates :giving, inclusion: [true, false]
   validates :username_used, inclusion: [true, false]
   validate :has_items

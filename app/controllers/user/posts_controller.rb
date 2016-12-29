@@ -50,6 +50,7 @@ class User::PostsController < ApplicationController
 
       # Sending email confirmation, about the creation of the post.
       full_admin_url = "http://#{request.env['HTTP_HOST']}/user/manageposts"
+
       # Reloading the now-created post, with associated items.
       @post = Post.includes(:items).where(id: @post.id).first
       user_info = {}
@@ -112,9 +113,8 @@ class User::PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :description, :username_used, :location_id, :giving,
+    params.require(:post).permit(:title, :description, :username_used, :location_id, :giving, :category_id, :item_ids,
                                :image, :image_cache, :remove_image, :anon_name, :anon_email, :captcha, :captcha_key,
-                               :post_items_attributes => [:id, :item_id, :_destroy, :item_attributes => [:id, :name, :category_id, :_destroy] ],
                                :location_attributes => [:id, :user_id, :name, :street_number, :address, :province, :postal_code, :city, :area_id, :type, :latitude, :longitude, :phone_number, :website, :description])
   end
 
@@ -164,9 +164,26 @@ class User::PostsController < ApplicationController
 
   def sanitize_post_params
     sanitized_params = post_params.dup
+
+    # Remove new location form if not needed (ie existing location was chosen)
     if post_params.has_key?(:location_id)
       sanitized_params.delete(:location_attributes)
     end
+
+    # Create new items if necessary
+    items = sanitized_params[:item_ids].split(',')
+    sanitized_items = []
+    items.each do |i|
+      if i.to_i == 0
+        # new item
+        new_item = Item.create(name: i.sub('new-',''))
+        sanitized_items << new_item.id.to_s
+      else
+        sanitized_items << i
+      end
+    end
+
+    sanitized_params[:item_ids] = sanitized_items
     sanitized_params
   end
 

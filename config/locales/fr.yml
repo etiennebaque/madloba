@@ -137,6 +137,7 @@ fr:
     postal_code: "Code postal :"
     area: "Quartier :"
     area_blank: "-- Choisissez votre quartier --"
+    category_blank: "-- Choisissez une catégorie --"
     define_geocode_button: Trouvez-moi sur la carte
     map: "Carte :"
     phone_number: "Numéro de téléphone :"
@@ -211,6 +212,8 @@ fr:
     provide_anon_name: "Veuillez entrer votre nom"
     provide_anon_email: "Veuillez entre votre adresse email"
     select_category: "Catégories disponibles"
+    category: "Catégorie :"
+    items: "Objets :"
     captcha_not_valid: "Le texte Captcha que vous avez entré n'est pas valide"
     create_account_first_html: "%{create_account} ou %{sign_in} maintenant avant de publier votre annonce, si vous voulez la modifier ou la supprimer plus tard."
   mailer:

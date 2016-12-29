@@ -132,22 +132,22 @@ class ApplicationController < ActionController::Base
     typeahead_type = params[:type]
     search_type = params[:q]
 
-    if typeahead_type == PREFETCH_AD_ITEMS
+    if typeahead_type == PREFETCH_POST_ITEMS
       # 'prefetch_ad_items' type - prefetching data when item typed in main navigation search bar.
-      matched_items = Ad.joins(:items).where(giving: search_type=='searching').pluck(:name).uniq
+      matched_items = Post.joins(:items).where(giving: search_type=='searching').pluck(:name).uniq
     elsif typeahead_type == PREFETCH_ALL_ITEMS
       matched_items = Item.all.pluck(:id, :name)
-    elsif typeahead_type == SEARCH_IN_AD_ITEMS
+    elsif typeahead_type == SEARCH_IN_POST_ITEMS
       # 'search_ad_items' type - used on Ajax call, when item typed in main navigation search bar.
-      matched_items = Ad.joins(:items).where('items.name LIKE ? and ads.giving = ?', "%#{params[:item].downcase}%", search_type=='searching').pluck(:name).uniq
+      matched_items = Post.joins(:items).where('items.name LIKE ? and posts.giving = ?', "%#{params[:item].downcase}%", search_type=='searching').pluck(:name).uniq
     elsif typeahead_type == SEARCH_IN_ALL_ITEMS
       # 'search_items' type - used on Ajax call, when item typed in drop-down box, when adding items,
-      # in ads#edit and ads#new pages.
+      # in posts#edit and posts#new pages.
       matched_items = Item.where('name LIKE ?', "%#{params[:item].downcase}%").pluck(:id, :name)
     end
 
     result = []
-    if [PREFETCH_AD_ITEMS, SEARCH_IN_AD_ITEMS].include? typeahead_type
+    if [PREFETCH_POST_ITEMS, SEARCH_IN_POST_ITEMS].include? typeahead_type
       matched_items.each do |match|
         result << {value: match}
       end
@@ -155,6 +155,11 @@ class ApplicationController < ActionController::Base
       matched_items.each do |match|
         result << {id: match[0].to_s, value: match[1]}
       end
+    end
+
+    # Setting id = 0 for new values entered on "New Post" form
+    if result.empty? && typeahead_type == SEARCH_IN_ALL_ITEMS
+      result << {id: "new-#{params[:item].downcase}", value: params[:item].downcase}
     end
 
     render json: result

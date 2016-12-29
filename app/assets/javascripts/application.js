@@ -43,6 +43,7 @@
 
 //= require bootstrap-notify
 //= require bootstrap-switch.min
+//= require bootstrap-tagsinput
 
 //= require post_websocket
 
