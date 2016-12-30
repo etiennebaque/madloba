@@ -286,6 +286,7 @@ en:
     edit_category: Edit category
     new_category: New category
     title: Title
+    category_title: Category
     actions: Actions
     description: Description
     category_name: Category name
@@ -388,9 +389,9 @@ en:
       font_awesome_link_html: Pick an icon from %{our_selection}.
       font_awesome_link2_html: You can also choose an icon from the complete list, in the %{fa_website} library, and type its keyword underneath.
       font_awesome_help: Type the name of the icon as you see them on the Font Awesome page (eg. 'fa-bell', 'fa-circle'...)
-      item_linked: Items linked to that category
+      posts_linked: Posts linked to that category
       item_name: Item name
-      no_item: There is no item linked to that category yet.
+      no_post: There is no post linked to that category yet.
       your_marker_icon: Your marker and icon
       marker_icon_not_unique: Both this icon and this marker color have already been used for another category. Please choose another marker and/or icon.
       our_selection: our selection list

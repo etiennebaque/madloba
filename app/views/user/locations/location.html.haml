@@ -71,7 +71,7 @@
                   - if !is_adding_new
                     -# List of items that can be found at this location
                     .form-group
-                      .col-lg-6
+                      .col-lg-12
                         - if @location.posts.length > 0
                           = label_tag :post_linked, t('admin.location.linked_posts')+':', class:'control-label'
                           %table.table.table-striped.table-bordered.bootstrap-datatable.datatable

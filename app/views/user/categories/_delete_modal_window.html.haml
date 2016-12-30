@@ -13,7 +13,7 @@
           %p= t('admin.category.cannot_delete')
         .modal-footer
           %a.btn{"data-dismiss" => "modal", :href => "#"}= t('home.cancel')
-      - elsif @category.items && @category.items.length > 0
+      - elsif @category.posts.present?
         -# Before deletion of this category, we need to transfer linked items to another category
         = form_tag "/user/categories/#{@category.id}", method: :destroy do
           .modal-body
@@ -29,7 +29,7 @@
             %a.btn{"data-dismiss" => "modal", :href => "#"}= t('home.cancel')
             = submit_tag(t('admin.category.transfer_and_delete'), class: 'btn btn-danger')
       - else
-        / No item tied to this category, just ask for confirmation.
+        / No post tied to this category, just ask for confirmation.
         .modal-body
           %p= t('admin.category.delete_confirm')
         .modal-footer

@@ -296,6 +296,7 @@ fr:
     edit_category: Mettre à jour catégorie
     new_category: Nouvelle catégorie
     title: Titre
+    category_title: Catégorie
     actions: Actions
     description: Description
     category_name: Nom de la catégorie
@@ -398,9 +399,9 @@ fr:
       font_awesome_link_html: Choisissez une icône de %{our_selection}.
       font_awesome_link2_html: Vous pouvez aussi choisir une icône parmi la liste complète dans la librarie %{fa_website}, en tapant son mot-clé ci-dessous.
       font_awesome_help: "Tapez le nom de l'icône tel que vous le voyez sur la page Font Awesome (ex : 'fa-bell', 'fa-circle'...)"
-      item_linked: Objets liés à cette catégorie
+      posts_linked: Annonces liées à cette catégorie
       item_name: "Nom de l'objet"
-      no_item: "Il n'y a pas encore d'objet lié à cette catégorie."
+      no_post: "Il n'y a pas encore d'annonce liée à cette catégorie."
       your_marker_icon: Vos marqueur et icône
       marker_icon_not_unique: La combinaison de cette icône et ce marqueur a déjà été utilisée. Veuillez choisir une autre icône et/ou un autre marqueur.
       our_selection: notre sélection

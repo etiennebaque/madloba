@@ -1,18 +1,9 @@
 -# Left-hand side: Items
 .show_post_paragraph
-  - if @post.giving
-    %label.post-label
-      = t('post.giving_away')
-      \:
-  - else
-    %label.post-label
-      = t('post.accepting')
-      \:
+  %label
+    = "#{@post.action}: "
   %span
-    %ul
-      - @post.item_list do |item|
-        %li{:style => "list-style-type: none;"}
-          #{item}
+    = @post.item_list
 
 -# Left-hand side: Location
 .show_post_paragraph

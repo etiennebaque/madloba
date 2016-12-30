@@ -2,7 +2,6 @@
 .container
   .row
     #content.middle-col.col-xs-12.col-md-10
-      / content starts
       %div
         %ul.breadcrumb
           %li
@@ -39,9 +38,10 @@
                 %button.close{"data-dismiss" => "alert", :type => "button"} ×
                 = t('admin.item.created_success', name: flash[:new_name])
                 %a{:href => "/user/managerecords"}= t('admin.back_to_records')
+
             .box-content
               = form_for [:user, @item], html: { id: 'itemForm', role: 'form' } do |f|
-                / Category id
+
                 - if !adding
                   .form-group
                     %a.btn.btn-danger.btn-delete-right.btn-setting{:href => "#"}= t('admin.item.delete_item')
@@ -51,27 +51,14 @@
                     = label_tag 'id', 'Id:', class:'control-label'
                     = @item.id
                   .form-group
-                / Item name
+
+                -# Item name
                 .form-group
                   = f.label :name, t('admin.item.name')+'*:', class:'control-label'
                   .form-inline
                     = f.text_field :name, class: 'form-control', maxlength:'90'
-                / Category the item belongs to
-                .form-group
-                  = f.label :marker_color, t('admin.item.category')+'*:', class:'control-label'
-                  .form-inline
-                    - Category.all.each_with_index do |category, index|
-                      .radio
-                        %label
-                          - if (@item.category && category.marker_color == "#{@item.category.marker_color}") || index == 0
-                            = f.radio_button :category_id, category.id, checked: true
-                          - else
-                            = f.radio_button :category_id, category.id
-                          = succeed "\u{a0}" do
-                            %i{:class => "fa #{category.icon}", :style => "color: #{"#{MARKER_COLORS[category.marker_color]}"};"}
-                          = category.name
-                             
-                / List of locations the item can be found
+
+                / List of posts the item can be found
                 .form-group
                   - if @item.posts.length > 0
                     = f.label :posts, t('admin.item.posts_promoting')+':', class:'control-label'

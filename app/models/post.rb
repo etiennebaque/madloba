@@ -136,7 +136,7 @@ class Post < ActiveRecord::Base
 
   # Clean list of items linked to a post
   def item_list
-    self.items.map{|i| i.name.try(:capitalize)}.compact.join(', ')
+    self.items.map{|i| i.name}.compact.join(', ')
   end
 
   # {

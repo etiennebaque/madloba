@@ -36,6 +36,7 @@
                   %tr
                     %th ID
                     %th= t('admin.title')
+                    %th= t('admin.category_title')
                     %th= t('admin.post.giving_accepting_title')
                     %th= t('admin.items')
                     %th= t('admin.created_by_user')
@@ -45,6 +46,7 @@
                     %tr
                       %td.vert-align= post.id
                       %td.vert-align= post.title
+                      %td.vert-align= post.category.name
                       %td.vert-align= post.giving ? t('admin.post.giving_away') : t('admin.post.accepting')
                       %td.vert-align= post.item_list
                       %td.vert-align= post.email_to_display
@@ -92,21 +94,18 @@
                   %tr
                     %th ID
                     %th= t('admin.name')
-                    %th= t('admin.item.category')
                     %th= t('admin.actions')
                 %tbody
                   - Item.all.each do |item|
                     %tr
                       %td.vert-align= item.id
-                      %td.vert-align= item.try(:capitalize)
-                      %td.vert-align
-                        %i{:class => "fa #{item.category.icon}", :style => "color: #{"#{MARKER_COLORS[item.category.marker_color]}"};"}>
-                         #{item.category.name}
+                      %td.vert-align= item.name.try(:capitalize)
                       %td.center
                         %a.btn.btn-info{:href => "/user/items/#{item.id}/edit"}
                           %i.glyphicon.glyphicon-pencil
                           Edit / Show details
           / Items tab pane end
+
           / Categories tab pane
           #categories.tab-pane
             .box-content
