@@ -19,44 +19,6 @@ PostForm::init = ->
   initItemDynamicField()
 
 
-###*
-# Function that binds events to the item drop down list (in posts#new and posts#edit pages)
-# These events consists of making ajax call to check what items exists, in order to
-# create a type-ahead for the search bar of that drop drown box.
-# @param object
-###
-bindTypeaheadToItemSelect = (object) ->
-  object.selectpicker(liveSearch: true).ajaxSelectPicker
-    ajax:
-      url: '/getItems'
-      type: 'GET'
-      dataType: 'json'
-      data: ->
-        params =
-          item: '{{{q}}}'
-          type: 'search_items'
-        params
-    locale:
-      emptyTitle: gon.vars['search_for_items']
-      statusInitialized: gon.vars['start_typing_item']
-      statusNoResults: gon.vars['no_result_create_item']
-    preprocessData: (data) ->
-      items = []
-      len = data.length
-      # Populating the item drop-down box
-      i = 0
-      while i < len
-        item = data[i]
-        items.push
-          'value': item.id
-          'text': item.value
-          'disable': false
-        i++
-      items
-    preserveSelected: false
-  return
-
-
 # This function initializes the location form (Location edit form, Ad forms)
 # as well as all the events tied to its relevant elements.
 resetLocationForm = ->
