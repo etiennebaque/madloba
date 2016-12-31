@@ -3,7 +3,7 @@ require 'rails_helper'
 describe ItemPolicy do
 
   let(:user) { FactoryGirl.create(:user) }
-  let(:item) { FactoryGirl.create(:first_item) }
+  let(:item) { FactoryGirl.create(:item) }
   let(:admin) { FactoryGirl.create(:admin) }
   let(:unsigned_user) { nil }
 

@@ -63,24 +63,22 @@ RSpec.describe User::PostsController, :type => :controller do
   describe 'POST #create' do
     context 'with valid attributes' do
       before do
-        @item_1 = FactoryGirl.create(:first_item)
-        @item_2 = FactoryGirl.create(:second_item)
+        @item_1 = FactoryGirl.create(:item)
+        @item_2 = FactoryGirl.create(:item)
+        @category = FactoryGirl.create(:first_category)
         @valid_post_attributes_with_signed_in_user = FactoryGirl.attributes_for(:post).merge(
             user_id: @user.id,
-            :post_items_attributes => {
-                '0' => FactoryGirl.attributes_for(:post_item, :item_id => @item_1.id.to_s, :_destroy => 'false'),
-                '1' => FactoryGirl.attributes_for(:post_item, :item_id => @item_2.id.to_s, :_destroy => 'false') },
-            :location_attributes => FactoryGirl.attributes_for(:location, user_id: @user.id)
+            item_ids: [@item_1.id, @item_2.id].join(','),
+            category_id: @category.id,
+            location_attributes: FactoryGirl.attributes_for(:location, user_id: @user.id)
         )
 
         @valid_post_attributes_with_anonymous_user = FactoryGirl.attributes_for(:post_with_anon_user_only).merge(
             user_id: nil,
-            :post_items_attributes => {
-                '0' => FactoryGirl.attributes_for(:post_item, :item_id => @item_1.id.to_s, :_destroy => 'false'),
-                '1' => FactoryGirl.attributes_for(:post_item, :item_id => @item_2.id.to_s, :_destroy => 'false') },
-            :location_attributes => FactoryGirl.attributes_for(:location, user_id: @user.id)
+            item_ids: [@item_1.id, @item_2.id].join(','),
+            category_id: @category.id,
+            location_attributes: FactoryGirl.attributes_for(:location, user_id: @user.id)
         )
-
       end
 
       it 'creates a new post, with signed-in user' do
@@ -109,15 +107,19 @@ RSpec.describe User::PostsController, :type => :controller do
     end
 
     context 'with invalid attributes' do
+      before (:all) do
+        @item = FactoryGirl.create(:item)
+      end
+
       it 'does not save the new post' do
         expect {
-          post :create, post: FactoryGirl.attributes_for(:invalid_post, user: @user, item: FactoryGirl.create(:second_item), location: FactoryGirl.create(:location))
+          post :create, post: FactoryGirl.attributes_for(:invalid_post, user: @user, item_ids: @item.id, location: FactoryGirl.create(:location))
         }.to_not change(Post,:count)
       end
 
 
       it 're-renders the new method' do
-        post :create, post: FactoryGirl.attributes_for(:invalid_post)
+        post :create, post: FactoryGirl.attributes_for(:invalid_post, item_ids: @item.id)
         expect(response).to render_template('new')
       end
 

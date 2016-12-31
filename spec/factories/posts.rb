@@ -8,6 +8,8 @@ FactoryGirl.define do
     f.username_used { [true, false].sample}
     f.expire_date { Date.new(2100,1,1) }
 
+    association :category, factory: :first_category
+
     location
     user
 
@@ -18,8 +20,8 @@ FactoryGirl.define do
     f.location { FactoryGirl.create(:area_only_location) }
   end
 
-  factory :post_with_items, parent: :post do
-    post_items {[build(:post_with_first_item)]}
+  factory :post_with_items, parent: :post do |f|
+    f.post_items {[build(:post_with_first_item)]}
   end
 
   factory :post_with_other_items, parent: :post do

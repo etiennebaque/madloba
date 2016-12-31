@@ -84,7 +84,7 @@ class User::CategoriesController < ApplicationController
   # Updates the relevant posts marker_info (jsonb) and update the marker color and marker icon in the 'markers' nested array.
   def serialize_posts
     if @category.errors.empty?
-      posts = Post.joins(:items).where('items.category_id = ?', params[:id])
+      posts = Post.where('category_id = ?', params[:id])
       posts.each do |post|
         post.serialize!
       end

@@ -6,11 +6,11 @@ FactoryGirl.define do
   end
 
   factory :post_with_first_item, class: 'PostItem' do
-    association :item, factory: :first_item
+    association :item
   end
 
   factory :post_with_second_item, class: 'PostItem' do
-    association :item, factory: :second_item
+    association :item
   end
 
 end

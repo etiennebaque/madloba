@@ -17,6 +17,7 @@
 
 require "capybara/rspec"
 require "pundit/rspec"
+require 'rspec/rails'
 require "devise"
 require_relative "../spec/support/controller_helpers"
 
@@ -24,8 +25,8 @@ RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
 
-  config.include Devise::TestHelpers, :type => :controller
-  config.include ControllerHelpers, :type => :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :view
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
