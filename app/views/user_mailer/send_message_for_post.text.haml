@@ -1,5 +1,5 @@
 = t('mailer.dear', name: @post[:first_name])
-= t('mailer.received_message', ad_title: @post[:title], site_name: @site_name)
+= t('mailer.received_message', post_title: @post[:title], site_name: @site_name)
 \------------------------------------------------
 = t('ad.from')
 \: #{"#{@sender[:full_name]} (#{@sender[:email]})"}

@@ -53,7 +53,7 @@ class User::PostsController < ApplicationController
 
       # Reloading the now-created post, with associated items.
       @post = Post.includes(:items).where(id: @post.id).first
-      if current_user
+      if current_user.present?
         user_info = {email: current_user.email, name: current_user.first_name, is_anon: false}
       else
         user_info = {email: @post.anon_email, name: @post.anon_name, is_anon: true}
