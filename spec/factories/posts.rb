@@ -17,6 +17,7 @@ FactoryGirl.define do
 
   factory :area_only_post, parent: :post do |f|
     f.post_items {[build(:post_with_second_item)]}
+    association :category, factory: :second_category
     f.location { FactoryGirl.create(:area_only_location) }
   end
 

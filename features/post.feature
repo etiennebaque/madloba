@@ -9,10 +9,8 @@ Scenario: Create successfully a new post with a signed in user
   And I should see 'Which name would you like to show'
   When I fill in 'post[title]' with 'Post title example'
   And I choose 'I'm giving away items.'
-  And I add an item
-  And I click on 'Create a new item'
-  Then I should see 'Write a new item and select its category'
-  When I fill in field with class 'post-create-item-field' with 'Thing'
+  And I add an item called 'thing'
+  And I choose a category
   And I fill in 'post[description]' with 'This is a post description'
   And I fill in 'post[location_attributes][name]' with 'My shop'
   And I fill in 'post[location_attributes][street_number]' with '250'

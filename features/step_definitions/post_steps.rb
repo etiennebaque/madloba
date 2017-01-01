@@ -24,8 +24,12 @@ When(/^I choose '([^"]*)'$/) do |radio_label|
   choose(radio_label)
 end
 
-When(/^I add an item$/) do
-  page.find('.add-item-button').click
+When(/^I add an item called '([^"]*)'$/) do |item_name|
+  page.execute_script("$('#post_item_ids').val('new-#{item_name}')")
+end
+
+When (/^I choose a category$/) do
+  find('#post_category_id').find(:xpath, 'option[2]').select_option
 end
 
 When(/^I click on '([^"]*)'$/) do |txt|
