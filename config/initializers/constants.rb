@@ -1,15 +1,5 @@
 # Constants file
 
-# Constants used across the application can be found here.
-
-# Map tiles URL, and attribution mentions (for OSM, Mapbox and MapQuest)
-# Some constants here need substitution when they're used (eg. MAPBOX_TILES_API).
-OSM_TILES_URL='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-OSM_ATTRIBUTION='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-MAPBOX_TILES_URL='https://{s}.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=%{api_key}'
-MAPBOX_ATTRIBUTION='<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
-MAPQUEST_TILES_URL='http://open.mapquestapi.com/sdk/leaflet/v1.s/mq-map.js?key=%{api_key}'
-
 # OpenStreetMap's Nominatim webservice end point (used to retrieve geocodes)
 OSM_NOMINATIM_URL = 'http://nominatim.openstreetmap.org/search?q=%{location}&format=json&polygon=0&addressdetails=0&accept-language=en'
 

@@ -602,16 +602,5 @@ fr:
     posts_for: Annonces pour
     cancel_drawing: Cancel drawing
     cancel: Cancel
-    delete_last_point_drawn: Delete last point drawn
-    delete_last_point: Delete last point
-    draw_area: Draw an area
-    start_draw_area: Click to start drawing area.
-    continue_draw_area: Click to continue drawing area.
-    click_first_point: Click first point to close this area.
     error: "Error:"
-    edges_cannot: "area edges cannot cross!"
-    edit_area: Edit area
-    no_edit_area: No area to edit
     delete_area: Delete area
-    no_area_delete: No area to delete
-    drag_handles: Drag handles to edit area boundaries. Click on the area to edit its name.
