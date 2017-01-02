@@ -555,7 +555,7 @@ en:
     option_s3: Images will directly uploaded to Amazon S3.
     option_server: Images will be stored on the same server where this Madloba website is deployed.
     image_description: When users create posts, they'll have the choice to attach an image with it.
-    image_server_or_s3_html: "This image can either be stored on your server, or on %{s3_link}"
+    image_server_or_s3_html: "This image can either be stored on your server, or on %{s3_link}."
     image_s3_only_html: "Post images will be stored on %{s3_link}"
     image_no_storage: Alternatively, you can choose not to have any image uploaded at all.
     image_strategy: Image storage strategy

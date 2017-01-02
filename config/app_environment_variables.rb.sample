@@ -15,6 +15,3 @@ ENV['MADLOBA_S3_KEY']='SecretKeyFromAWS'
 ENV['MADLOBA_S3_SECRET']='SecretAccessFromAWS'
 ENV['MADLOBA_S3_REGION']='us-east-1'
 ENV['MADLOBA_S3_BUCKET']='BucketNameFromAWS'
-
-# Is this app to be deployed on Heroku? (development and test: false)
-ENV['MADLOBA_IS_ON_HEROKU']='false'

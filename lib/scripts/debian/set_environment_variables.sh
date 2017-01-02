@@ -47,7 +47,6 @@ echo 'MADLOBA_S3_KEY='$s3_access_key >> $root_app/shared/.rbenv-vars
 echo 'MADLOBA_S3_SECRET='$s3_secret_key >> $root_app/shared/.rbenv-vars
 echo 'MADLOBA_S3_REGION='$s3_region >> $root_app/shared/.rbenv-vars
 echo 'MADLOBA_S3_BUCKET='$s3_bucket_name >> $root_app/shared/.rbenv-vars
-echo 'MADLOBA_IS_ON_HEROKU=false' >> $root_app/shared/.rbenv-vars
 
 echo "--------------------------------------------------------"
 echo "Environment variables for Madloba app have been created."

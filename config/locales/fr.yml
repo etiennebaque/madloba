@@ -565,7 +565,7 @@ fr:
     option_s3: Les images seront directement téléchargées sur Amazon S3.
     option_server: Les images seront storées sur le même serveur que ce site Madloba.
     image_description: Quand les utilisateurs créeront des annonces, ils auront le choix de joindre une image.
-    image_server_or_s3_html: "Cette image peut être storée soit sur votre serveur, soit sur %{s3_link}"
+    image_server_or_s3_html: "Cette image peut être storée soit sur votre serveur, soit sur %{s3_link}."
     image_s3_only_html: "Les images de cette annonce seront storées sur %{s3_link}"
     image_no_storage: Vous pouvez également choisir de ne pas télécharger d'image du tout.
     image_strategy: "Stratégie de storage d'images."

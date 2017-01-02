@@ -59,13 +59,7 @@ class User::PostsController < ApplicationController
         user_info = {email: @post.anon_email, name: @post.anon_name, is_anon: true}
       end
 
-      if on_heroku?
-        UserMailer.created_post(user_info, @post, full_admin_url).deliver
-      else
-        # Queueing email sending, when not on heroku.
-        UserMailer.delay.created_post(user_info, @post, full_admin_url)
-      end
-
+      UserMailer.delay.created_post(user_info, @post, full_admin_url)
     else
       # Saving the post failed.
       get_map_settings_for_post
@@ -145,11 +139,7 @@ class User::PostsController < ApplicationController
           sender_info = {full_name: params['name'], email: params['email']}
         end
 
-        if on_heroku?
-          UserMailer.send_message_for_post(sender_info, message, post_info).deliver
-        else
-          UserMailer.delay.send_message_for_post(sender_info, message, post_info)
-        end
+        UserMailer.delay.send_message_for_post(sender_info, message, post_info)
         flash[:success] = t('post.success_sent')
       else
         flash[:error] = t('post.error_empty_message')

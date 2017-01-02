@@ -17,11 +17,7 @@ module SetupHelper
 
   def total_setup_pages
     # Total number of setup pages
-    if on_heroku?
-      5 # Skipping the image storage page, while on Heroku (functionality not developed for Heroku yet)
-    else
-      6
-    end
+    6
   end
 
   # Very first page of setup process - choosing language for the application.

@@ -76,7 +76,7 @@
         = f.text_area :description, class: 'form-control help-message', rows: 6
 
     -# Image upload - only possible when app deployed on server, for now
-    - if !on_heroku? && can_upload_image
+    - if can_upload_image
       .form-group
         = f.label :description, t('post.upload_image'), class: 'col-lg-2 control-label'
         .col-lg-6

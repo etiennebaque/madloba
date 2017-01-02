@@ -54,8 +54,5 @@
             .form-group
               .col-lg-2
               .col-lg-6{style: 'text-align: right; padding-top: 20px;'}
-                - if on_heroku?
-                  %a.btn.btn-link{:href => "/setup/map"}= t('setup.back')
-                - else
-                  %a.btn.btn-link{:href => "/setup/image"}= t('setup.back')
+                %a.btn.btn-link{:href => "/setup/image"}= t('setup.back')
                 = submit_tag(t('setup.next'), class: 'btn btn-success')
