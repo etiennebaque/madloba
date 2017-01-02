@@ -9,7 +9,7 @@
 
 # Settings table, set with default values.
 setting_list = [
-    %w(app_name Madloba),
+    ['app_name', ''],
     ['description', ''],
     ['contact_email', ''],
     ['link_one_label', ''],
@@ -25,7 +25,7 @@ setting_list = [
     ['mapquest_api_key', ''],
     ['map_center_geocode', ''],
     ['latitude', '0.0'],
-    ['latitude', '0.0'],
+    ['longitude', '0.0'],
     %w(zoom_level 2),
     ['city', ''],
     ['state', ''],

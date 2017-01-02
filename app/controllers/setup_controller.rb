@@ -114,7 +114,13 @@ class SetupController < ApplicationController
     @storage_choices = [[IMAGE_NO_STORAGE, t('setup.option_no_storage')],
                         [IMAGE_AMAZON_S3, t('setup.option_s3')]]
 
-    @storage_choices << [IMAGE_ON_SERVER, t('setup.option_server')]
+    if !on_heroku?
+      @storage_choices << [IMAGE_ON_SERVER, t('setup.option_server')]
+    else
+      # If app deployed on Heroku, we should not be here. Redirection to next step, admin page.
+      redirect_to setup_admin_path
+    end
+
     @current_step = 4
     image_storage = Setting.find_or_create_by(key: 'image_storage')
     @current_image_choice = image_storage.value
