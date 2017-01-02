@@ -73,13 +73,11 @@ class Location < ActiveRecord::Base
     name.present? ? name : full_address
   end
 
-  def full_address
+  def full_address(with_name: true)
     return area.name if area?
-
-    a = name.present? ? [name, '-'] : []
-    a << street_number if street_number.present?
-    a << "#{address}, #{postal_code}" if address.present? && postal_code.present?
-    a.join(' ')
+    loc_address = [street_number, address, postal_code].reject{|a| a.blank?}.join(', ')
+    loc_full_address = (with_name && name.present?) ? "#{name} - #{loc_address}" : loc_address
+    loc_full_address
   end
 
   def full_website_url
@@ -95,11 +93,11 @@ class Location < ActiveRecord::Base
   end
 
   def address_geocode_lookup(short: false)
-    location_info = short ? [self.address] : [self.full_address, self.postal_code]
+    location_info = short ? [self.address] : [self.full_address(with_name: false)]
     this_city = self.city.nil? ? Rails.cache.fetch(CACHE_CITY_NAME) {Setting.find_by_key(:city).value} : self.city
     this_country = self.country.nil? ? Rails.cache.fetch(CACHE_COUNTRY_NAME) {Setting.find_by_key(:country).value} : self.country
     location_info += [this_city, self.province, this_country]
-    location_info.reject{|e| e.nil? || e.blank?}.join(',')
+    location_info.reject{|e| e.blank?}.join(', ')
   end
 
 end

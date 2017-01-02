@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   # is not complete. Redirects to setup screens if it is the case.
   def check_if_setup
     current_url = request.original_url
-    return if setup_url = %w(setup user/register getCityGeocodes).any? {|term| current_url.include?(term)}
+    return if setup_url = %w(setup user/register user/update retrieve_geocodes).any? {|term| current_url.include?(term)}
 
     setup_debug_mode = Rails.configuration.setup_debug_mode && !(current_url.include? 'setup')
     redirect_to setup_language_path if setup_debug_mode

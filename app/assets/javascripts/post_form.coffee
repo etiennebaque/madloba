@@ -23,6 +23,11 @@ PostForm::init = ->
 # as well as all the events tied to its relevant elements.
 resetLocationForm = ->
   if $('#map').length > 0
+
+    if $('.location_type_exact').length == 0
+      # No area exists yet. We initialize for exact location.
+      show_exact_address_section()
+
     $('.location_type_exact').click ->
       removes_location_layers()
       show_exact_address_section()

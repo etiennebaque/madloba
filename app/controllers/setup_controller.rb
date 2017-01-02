@@ -112,14 +112,8 @@ class SetupController < ApplicationController
   def show_image
 
     @storage_choices = [[IMAGE_NO_STORAGE, t('setup.option_no_storage')],
-                        [IMAGE_AMAZON_S3, t('setup.option_s3')]]
-
-    if !on_heroku?
-      @storage_choices << [IMAGE_ON_SERVER, t('setup.option_server')]
-    else
-      # If app deployed on Heroku, we should not be here. Redirection to next step, admin page.
-      redirect_to setup_admin_path
-    end
+                        [IMAGE_AMAZON_S3, t('setup.option_s3')],
+                        [IMAGE_ON_SERVER, t('setup.option_server')]]
 
     @current_step = 4
     image_storage = Setting.find_or_create_by(key: 'image_storage')
@@ -148,14 +142,21 @@ class SetupController < ApplicationController
   # -----------------------------------------
   def show_admin
     @user = User.new
-    @user.skip_confirmation!
     @user.role = 1 # New user will be admin.
     @current_step = 5
     render 'setup/admin'
   end
 
   def process_admin
-    # Creation of admin user takes place in 'users#create'
+    # We're registering the first admin user, during the website setup process.
+    # Redirection to the "All done" setup page, after creation of the admin user
+    @user = User.new(user_params)
+    @user.skip_confirmation!
+    if @user.save
+      redirect_to setup_done_path
+    else
+      render 'setup/admin'
+    end
   end
 
 
@@ -173,6 +174,12 @@ class SetupController < ApplicationController
     @current_step = 6
 
     render 'setup/finish'
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:first_name, :last_name, :username, :email, :role, :password, :password_confirmation, :current_password)
   end
 
 end

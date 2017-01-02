@@ -499,6 +499,7 @@ fr:
       full_name: Nom complet
       role: Rôle
       error_occurred: "%{errors} lors de la mise à jour cet utilisateur"
+      error_setup_occured: "%{errors} lors de la création cet administrateur"
       myprofile_update_success: Votre profil utilisateur a été mis à jour.
       update_success: "L'utilisateur '%{email}' a été mis à jour."
       created_success: "L'utilisateur '%{email}' a été créé. Un message de bienvenue a été envoyé à cette adresse e-mail."

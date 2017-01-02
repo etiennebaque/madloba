@@ -67,7 +67,7 @@
         .list-group
           %br
           - if @categories.any?
-            - if @categories.length > 1
+            - if @categories.length >= 1
               / No point in showing only one category
               #available_categories
                 - @categories.each do |category|

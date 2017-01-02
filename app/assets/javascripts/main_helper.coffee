@@ -318,7 +318,7 @@ global.find_geocodes = ->
     # This call is triggered by "Find this city", "Find this general location" buttons,
     # on Map settings page, location edit page, map setup page...
     $.ajax
-      url: '/getCityGeocodes'
+      url: '/retrieve_geocodes'
       global: false
       type: 'GET'
       data:

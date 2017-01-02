@@ -489,6 +489,7 @@ en:
       full_name: Full name
       role: Role
       error_occurred: "%{errors} occurred while saving this user"
+      error_setup_occured: "%{errors} occurred while creating this admin user"
       myprofile_update_success: Your user profile has been updated.
       update_success: The user '%{email}' has been updated.
       created_success: The user '%{email}' has been created. A welcome message has been sent to that e-mail address.
