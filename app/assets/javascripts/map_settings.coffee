@@ -8,6 +8,7 @@ MapSettings::init = ->
   leaf.show_single_marker leaf.mapSettings
 
   find_geocodes()
+  leaf.map.on 'click', onMapClickLocation
 
   $('.leaflet-control-zoom-out, .leaflet-control-zoom-in').click ->
     $('html, body').animate { scrollTop: 0 }, 0

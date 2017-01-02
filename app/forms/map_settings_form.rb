@@ -48,6 +48,9 @@ class MapSettingsForm < ApplicationForm
       # if there is no longer any Mapbox or MapQuest keys, we get back to the default map type, open_street_map.
       Setting.find_by_key('chosen_map').update_attributes(value: 'open_street_map') if fallback_on_osm?
 
+      Rails.cache.write(CACHE_CITY_NAME, Setting.find_by_key(:city).value)
+      Rails.cache.write(CACHE_COUNTRY_NAME, Setting.find_by_key(:country).value)
+
       I18n.t('admin.map_settings.update_success')
     end
   end
