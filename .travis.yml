@@ -9,5 +9,5 @@ before_script:
   - psql -c 'create database madloba_test;' -U postgres
 
 script:
-  - spring rspec spec
+  - bundle exec rspec spec
   - xvfb-run -a bundle exec rake cucumber
