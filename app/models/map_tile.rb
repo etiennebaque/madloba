@@ -2,7 +2,7 @@ class MapTile < ActiveRecord::Base
 
   MAPBOX_MAPTILES = [['Street','mapbox.streets'], ['Satellite','mapbox.satellite']]
 
-  def self.osm
+  def self.open_street_map
     self.find_by_name('open_street_map')
   end
 
@@ -11,7 +11,7 @@ class MapTile < ActiveRecord::Base
   end
 
   def self.mapquest
-    self.find_by_name('map_quest')
+    self.find_by_name('mapquest')
   end
 
   def self.chosen_map

@@ -34,12 +34,12 @@ global.leaf =
     leaf.my_lng = map_settings['longitude']
     leaf.searched_address = map_settings['searched_address']
 
-    if map_settings['chosen_map'] == 'map_quest'
+    if map_settings['chosen_map'] == 'mapquest'
       # Loading Mapquest tiles
       leaf.map_tiles = MQ.mapLayer()
     else if map_settings['chosen_map'] == 'open_street_map'
       # Loading Openstreetmap tiles
-      leaf.map_tiles = L.tileLayer(map_settings['osm_tile_url'], attribution: map_settings['osm_attribution'])
+      leaf.map_tiles = L.tileLayer(map_settings['open_street_map_tile_url'], attribution: map_settings['open_street_map_attribution'])
     else if map_settings['chosen_map'] == 'mapbox'
       # Loading Mapbox tiles
       leaf.map_tiles = L.tileLayer(map_settings['mapbox_tile_url'], attribution: map_settings['mapbox_attribution'])

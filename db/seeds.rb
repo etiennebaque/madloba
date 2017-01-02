@@ -20,7 +20,7 @@ setting_list = [
     ['link_three_url', ''],
     ['link_four_label', ''],
     ['link_four_url', ''],
-    %w(chosen_map osm),
+    %w(chosen_map open_street_map),
     ['map_box_api_key', ''],
     ['mapquest_api_key', ''],
     ['map_center_geocode', ''],

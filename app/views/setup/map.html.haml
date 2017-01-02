@@ -6,29 +6,29 @@
           .setup-padding
             %h3= t('setup.map_settings')
           .col-lg-10
-            / 'All fields mandatory' note
+            -# 'All fields mandatory' note
             .form-group
               .col-lg-6
                 %span= t('setup.city_country_mandatory')
 
-            / City
+            -# City
             .form-group
               = f.input :city, label: t('admin.map_settings.city'), placeholder: t('setup.city_help'), input_html: {class: 'help-message location_city', autofocus: true, required: true}
 
-            / State/Province/Region
+            -# State/Province/Region
             .form-group
               = f.input :state, label: t('admin.map_settings.state'), placeholder: t('setup.state_help'), input_html: {class: 'help-message location_state'}
 
-            / Country
+            -# Country
             .form-group
               = f.input :country, label: t('admin.map_settings.country'), placeholder: t('setup.country_help'), input_html: {class: 'help-message location_country', required: true}
 
-            / "Find city on the map" button
+            -# "Find city on the map" button
             .form-group
-              .col-lg-2
-              .col-lg-6
-                %a#find_geocodes_from_address.btn.btn-info{:href => "#"}= t('setup.find_city_on_map')
+              .col-lg-3
+              .col-lg-6.setup-find-city
                 %span#find_geocode_loader
+                %a#find_geocodes_from_address.btn.btn-info{:href => "#"}= t('setup.find_city_on_map')
             .form-group
               = label_tag 'map-canvas-wrapper', "#{t('setup.map_description')}<br /><br />#{t('setup.map_description_2')}".html_safe, class:'col-lg-2 control-label'
               .col-lg-10
@@ -37,18 +37,18 @@
                 = f.hidden_field :latitude, class: 'latitude'
                 = f.hidden_field :longitude, class: 'longitude'
 
-            / Zoom level
+            -# Zoom level
             = f.hidden_field :zoom_level, class: 'zoom-level'
 
-            / Next button / Back link
+            -# Next button / Back link
             .form-group
               .col-lg-12
                 = submit_tag(t('setup.next'), class: 'btn btn-success pull-right')
                 %a.btn.btn-link.pull-right{:href => "/setup/general"}= t('setup.back')
 
-/ Loading JS scripts
+-# Loading JS scripts
 - content_for :scripts do
-  / Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and script that creates the actual map)
+  -# Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and script that creates the actual map)
   = render 'shared/map_scripts_after_body', include_all_scripts: false
   :javascript
     new MapSetupPage()

@@ -3,7 +3,7 @@ module User::AdminPanelHelper
   # On the Map Setting page, initializing the map type drop down box.
   def options_for_maptype_select(map_setting)
     options_for_maptype_select = []
-    options_for_maptype_select << ['OpenStreetMap', 'osm']
+    options_for_maptype_select << ['OpenStreetMap', 'open_street_map']
     # If a Mapbox and a MapQuest keys has been provided, then we include them in the drop down box
     if map_setting['map_box_api_key'] && map_setting['map_box_api_key'] != ''
       options_for_maptype_select << ['Mapbox', 'mapbox']

@@ -5,7 +5,7 @@ class Setting < ActiveRecord::Base
   scope :social_medias, lambda { where key: SOCIAL_MEDIAS}
 
   def self.maptypes
-    %w(osm mapbox mapquest)
+    %w(open_street_map mapbox mapquest)
   end
 
   def self.description
@@ -15,6 +15,10 @@ class Setting < ActiveRecord::Base
 
   def self.contact_email
     Setting.find_by_key(:contact_email)
+  end
+
+  def self.value_for(key)
+    Setting.where(key: key).first.try(:value)
   end
 
   def url
