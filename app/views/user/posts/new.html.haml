@@ -25,7 +25,7 @@
 - content_for :scripts do
 
   -# Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
-  = render 'shared/map_scripts_after_body'
+  = render 'shared/map_scripts'
 
   :javascript
     var location_number = #{user_locations_number};

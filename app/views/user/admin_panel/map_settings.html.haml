@@ -59,7 +59,7 @@
 
 -# Includes all the Javascript related to map rendering (Leaflet, MapQuest, and script that creates the actual map
 - content_for :scripts do
-  = render 'shared/map_scripts_after_body', include_all_scripts: true
+  = render 'shared/map_scripts', include_all_scripts: true
   :javascript
     // Giving this page the possibility to find geocodes.
     new MapSettings();

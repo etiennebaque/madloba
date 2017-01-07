@@ -49,7 +49,7 @@
 -# Loading JS scripts
 - content_for :scripts do
   -# Includes all the Javascript related to map rendering, to be loaded after page (Leaflet, MapQuest, and script that creates the actual map)
-  = render 'shared/map_scripts_after_body', include_all_scripts: false
+  = render 'shared/map_scripts', include_all_scripts: false
   :javascript
     new MapSetupPage()
 
