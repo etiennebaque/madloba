@@ -46,34 +46,7 @@ Home::putLocationMarkers = ->
 
   # Creating area markers and registering them (showing one area marker at a time when area selected in the sidebar)
   markers.registerAreaMarkers(markers.areas, false)
-
-  # Event to trigger when click on a link in an area popup, on the home page map. Makes a modal window appear.
-  # Server side is in home_controller, method showSpecificPosts.
-  $('#map').on 'click', '.area_link', ->
-    input = $(this).attr('id').split('|')
-    $.get '/showSpecificPosts', {
-      item: input[0]
-      type: input[1]
-      area: input[2]
-    }, (data) ->
-      html_to_append = '<ul>'
-      i = 0
-      while i < data['posts'].length
-        post = data['posts'][i]
-        html_to_append = html_to_append + '<li><a href="/posts/' + post['id'] + '/">' + post['title'] + '</a></li>'
-        i++
-      html_to_append = html_to_append + '</ul>'
-      $('#posts-modal-body-id').html html_to_append
-      icon = ''
-      if typeof data['icon'] != 'undefined'
-        icon = '<i class="fa ' + data['icon'] + '" style="color: ' + data['hexa_color'] + '; padding-right: 10px;"></i>'
-
-      resultModalTitle = gon.vars['posts_for'] + ' \'' + input[0].capitalizeFirstLetter() + '\' - ' + data['area_name']
-      $('#postsModalTitle').html icon + resultModalTitle
-      options =
-        'backdrop': 'static'
-        'show': 'true'
-      $('#postsModal').modal options
+  
 
   searched_location_marker = ''
   if typeof leaf.searched_address != 'undefined'

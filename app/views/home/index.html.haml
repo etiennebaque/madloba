@@ -6,17 +6,6 @@
 #map.home.sidebar-map
 
 
--# Modal popup that shows several posts promoting the same item, in a specific area/area
-#postsModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "basicModal", :role => "dialog", :tabindex => "-1"}
-  .modal-dialog
-    .modal-content
-      .modal-header
-        %h4#postsModalTitle.modal-title
-      #posts-modal-body-id.modal-body
-      .modal-footer
-        %button.btn.btn-default{"data-dismiss" => "modal", :type => "button"}= t('home.close')
-
-
 -# Loading JS scripts
 - content_for :scripts do
 
