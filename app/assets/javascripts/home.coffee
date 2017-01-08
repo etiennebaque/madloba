@@ -17,8 +17,10 @@ Home::init = ->
   $('.leaflet-control-zoom-out, .leaflet-control-zoom-in').click ->
     $('html, body').animate { scrollTop: 0 }, 0
 
-  # Initialize the right-hand side navigation bar, on the home page. Open it on load (not on mobile)
+  # Initialize the sidebars on the home page. Open it on load (not on mobile)
   L.control.sidebar('sidebar').addTo(leaf.map)
+  L.control.sidebar('search_result', {position: 'right'}).addTo(leaf.map)
+  
   if !$('.navbar-toggle').is(':visible')
     $('#sidebar_category_icon').trigger('click')
 
@@ -46,7 +48,7 @@ Home::putLocationMarkers = ->
 
   # Creating area markers and registering them (showing one area marker at a time when area selected in the sidebar)
   markers.registerAreaMarkers(markers.areas, false)
-  
+
 
   searched_location_marker = ''
   if typeof leaf.searched_address != 'undefined'

@@ -1,0 +1,27 @@
+#search_result.sidebar.sidebar-right.collapsed
+  -# Nav tabs
+  .sidebar-tabs
+    %ul{role: 'tablist'}
+      %li
+        %a{href: '#result_list', role: 'tab', style: 'font-size: 20px'}
+          %i.fa.fa-search
+
+  -# Tab panes
+  .sidebar-content
+    -# Search results
+    #result_list.sidebar-pane.search-panes
+      %h1.sidebar-header
+        = 'Results'
+        %span.sidebar-close
+          %i.fa.fa-caret-left
+
+      .list-group.results
+        - Post.includes(:location).where(locations: {area_id: Area.first.id}).each do |post|
+          .result
+            .post-title= link_to post.title, post
+            .post-address
+              %i.fa{class: post.location.area? ? Location::AREA_ADDRESS_ICON : Location::EXACT_ADDRESS_ICON}
+              = post.location.full_address
+
+            .post-items= "#{post.action} #{post.item_list}".html_safe
+            .post-description= short_description_for(post.description)
