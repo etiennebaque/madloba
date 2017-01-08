@@ -19,11 +19,6 @@
   .row
     .col-lg-12
       %h3= @post.title
-      - if flash[:new_post] && !@map_settings[:is_area]
-        -#
-          Post id added just when the post has just been created. This is to be read by post_websocket.coffee,
-          when it is an exact location
-        = hidden_field_tag 'new_post_id', @post.id
       .post-title
         - if !is_owning(@post)
           -# Post publisher

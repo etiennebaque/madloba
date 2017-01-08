@@ -24,6 +24,3 @@
     var marker_colors = #{raw MARKER_COLORS.to_json};
 
     var homePage = new Home(locations_exact, areas, marker_colors);
-
-    // Initialize the Web socket object
-    #{render 'shared/initialize_websocket.js'}

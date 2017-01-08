@@ -25,10 +25,10 @@ PostSocket::initBinds = ->
   # Message sent to server when a new post has just been created
   # (ie. new post notification message has been loaded on posts#show)
   $(document).ready ->
-    new_post_id = $('#new_post_id').val()
-    if typeof new_post_id != 'undefined'
-      _this.sendNewAdNotification new_post_id
-    return
+#    new_post_id = $('#new_post_id').val()
+#    if typeof new_post_id != 'undefined'
+#      _this.sendNewAdNotification new_post_id
+#    return
 
   @socket.onmessage = (e) ->
     # We will have a status message in our response:

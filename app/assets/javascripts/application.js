@@ -45,6 +45,4 @@
 //= require bootstrap-switch.min
 //= require bootstrap-tagsinput
 
-//= require post_websocket
-
 //= require_tree .
