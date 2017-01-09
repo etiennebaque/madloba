@@ -5,7 +5,7 @@ Madloba::Application.routes.draw do
 
   # Home page
   get 'home/index'
-  get 'search', to: 'home#index'
+  post 'search', to: 'search#render_search_results_partial'
   get 'results', to: 'home#results'
   get 'refine_state', to: 'home#refine_state'
 

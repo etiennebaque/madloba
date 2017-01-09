@@ -1,6 +1,7 @@
 class MarkerPopup
 
   # Popup showing when clicking on exact address marker, on the home page.
+  # We'll be using this class until we use a front-end framework like Ember.
   def self.post_popup_for(post_id)
     popup_html = ''
     begin

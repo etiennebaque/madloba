@@ -109,12 +109,13 @@ class Post < ActiveRecord::Base
   # If we deal with an anonymous post publisher, we get the email from the post itself (no user model created)
   # Otherwise we get the email from the user model linked to the post.
   def email_to_display
-    if self.is_anonymous
-      self.anon_email
-    else
-      self.user.email
-    end
+    is_anonymous ? anon_email : user.email
   end
+
+  def short_description
+    description.length > 100 ? "#{description[0..96]}..." : description
+  end
+
 
   def has_expired
     self.expire_date < Date.today

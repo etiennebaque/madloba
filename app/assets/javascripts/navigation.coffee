@@ -31,7 +31,29 @@ NavigationBar::init = ->
 
   # Navigation - Search form: Ajax call to get locations proposition, based on user input in this form.
   $('#btn-form-search').click ->
-    _this.getLocationsPropositions()
+    #_this.getLocationsPropositions()
+    $.ajax
+      url: '/search'
+      global: false
+      type: 'POST'
+      data:
+        item: $('#item').val()
+      dataType: 'html'
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader 'Accept', 'text/html-partial'
+      success: (data) ->
+        d = JSON.parse(data)
+        console.log d.categories
+        $("#search_result").removeClass('hide')
+        if !$('.search-panes').is(':visible')
+          $('#search_result_icon').trigger('click')
+
+        $("#result_list").html(d.results)
+
+        $('.guided-nav-category').each (i, el)->
+          if $(el).attr('id') not in d.categories
+            console.log $(el).attr('id')
+            $(el).hide()
 
   # Popover when "Sign in / Register" link is clicked, in the navigation bar.
   $('#popover').popover

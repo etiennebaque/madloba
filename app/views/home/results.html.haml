@@ -15,7 +15,7 @@
             = post.location.full_address
 
           .post-items= "#{post.action} #{post.item_list}".html_safe
-          .post-description= short_description_for(post.description)
+          .post-description= post.short_description
 
     .madloba-pagination
       = will_paginate @posts, container: false

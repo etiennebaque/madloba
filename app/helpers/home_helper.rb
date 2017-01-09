@@ -31,10 +31,6 @@ module HomeHelper
     return search_action
   end
 
-  def short_description_for(desc)
-    desc.length > 100 ? "#{desc[0..96]}..." : desc
-  end
-
   def colored_items_for(post)
     it = []
     post.items.each do |item|

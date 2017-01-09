@@ -1,27 +1,19 @@
-#search_result.sidebar.sidebar-right.collapsed
+#search_result.sidebar.sidebar-right.collapsed.hide
   -# Nav tabs
   .sidebar-tabs
     %ul{role: 'tablist'}
       %li
-        %a{href: '#result_list', role: 'tab', style: 'font-size: 20px'}
-          %i.fa.fa-search
+        %a{href: '#results', role: 'tab', style: 'font-size: 20px'}
+          %i.fa.fa-search#search_result_icon
 
   -# Tab panes
   .sidebar-content
     -# Search results
-    #result_list.sidebar-pane.search-panes
+    #results.sidebar-pane.search-panes
       %h1.sidebar-header
         = 'Results'
         %span.sidebar-close
-          %i.fa.fa-caret-left
+          %i.fa.fa-caret-right
 
-      .list-group.results
-        - Post.includes(:location).where(locations: {area_id: Area.first.id}).each do |post|
-          .result
-            .post-title= link_to post.title, post
-            .post-address
-              %i.fa{class: post.location.area? ? Location::AREA_ADDRESS_ICON : Location::EXACT_ADDRESS_ICON}
-              = post.location.full_address
-
-            .post-items= "#{post.action} #{post.item_list}".html_safe
-            .post-description= short_description_for(post.description)
+      #result_list.list-group.results
+        = render partial: 'search_result_list', locals: {results: {}}

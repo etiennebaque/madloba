@@ -11,7 +11,7 @@
 
       .nav-form-center
         -# Search form - start
-        %form#nav_search_form.navbar-form{:action => "/search", :method => "get", :role => "search"}
+        %form#nav_search_form.navbar-form
           .form-group
             = select_tag :q, options_for_select([[t('home.searching'),'searching'], [t('home.giving'),'giving']], params['q']), class: 'form-control selectpicker'
           .form-group

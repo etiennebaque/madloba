@@ -47,7 +47,7 @@
                 %span= params[:loc]
                 %i.glyphicon.glyphicon-remove.align-cross{:style => "float: right"}
             - if user_search_action
-              / "You're searching for: / You're giving away:" refinement
+              -# "You're searching for: / You're giving away:" refinement
               %h4= user_search_action
               %a.list-group-item.smaller-no-border-no-background{:href => "/"}
                 %span= params[:item].capitalize
@@ -67,15 +67,13 @@
         .list-group
           %br
           - if @categories.any?
-            - if @categories.length >= 1
-              / No point in showing only one category
-              #available_categories
-                - @categories.each do |category|
-                  - if !category.is_refinement(params)
-                    %a.list-group-item.smaller-no-border-no-background.guided-nav-category{:href => "#", :id => "#{category.id}"}
-                      %label{:style => "width: 15px;"}
-                        %i{:class => "fa #{category.icon}", :style => "color: #{category.marker_color_hexacode};"}
-                      %span.guided-nav-label= category.name
+            #available_categories
+              - @categories.each do |category|
+                - if !category.is_refinement(params)
+                  %a.list-group-item.smaller-no-border-no-background.guided-nav-category{:href => "#", :id => "#{category.id}"}
+                    %label{:style => "width: 15px;"}
+                      %i{:class => "fa #{category.icon}", :style => "color: #{category.marker_color_hexacode};"}
+                    %span.guided-nav-label= category.name
 
           - else
             .list-group
