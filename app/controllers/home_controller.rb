@@ -11,11 +11,8 @@ class HomeController < ApplicationController
     # Initializing links, and social media information, for the footer of the home page.
     settings = get_footer_info
 
-    # We check if the user searched for an item and/or a location
-    if params[:item] && params[:item] != ''
-      # An item is being searched.
-      selected_item_ids = Item.joins(:posts).where('name LIKE ?', "%#{params[:item].downcase}%").pluck(:id).uniq
-    end
+    # Get items that match the wildcard search
+    selected_item_ids = matching_items_for(params)
 
     if (params[:lat] && params[:lon])
         # The center of the map is now represented by the searched location.
@@ -36,11 +33,8 @@ class HomeController < ApplicationController
       @categories = Category.joins(posts: :items).order('name asc').uniq
     end
 
-    # We need to see if we have a navigation state. If we do, that will impact what will be displayed on the map.
-    cat_nav_state = params[:cat].split(" ") if params[:cat]
-
     # Queries to get posts to be displayed on the map, based on their locations
-    location_search_result_objects(params, cat_nav_state, selected_item_ids, settings)
+    search_result_objects(params, selected_item_ids)
   end
 
 
@@ -84,59 +78,43 @@ class HomeController < ApplicationController
     render json: MarkerPopup.area_popup_for(params['area_id'])
   end
 
-
+  # From the home page, based on the selected navigation, get the relevant posts.
   def refine_state
-    # From the home page, based on the selected navigation, get the relevant posts.
-
-    cats = params[:state]
-    item = params[:item]
-
-    if item.present?
-      selected_item_ids = Item.joins(:posts).where('name LIKE ?', "%#{item}%").pluck(:id).uniq
-    end
-
-    response = {}
-    response['markers'] = Post.search(cats, item, selected_item_ids, params[:q], nil)
-
-    render json: response.to_json(:include => { :posts => { :include =>  {:items => { :include => :category }}}})
+    markers, post_results = post_markers_and_results_for(params)
+    render json: {markers: markers}
   end
 
-  # Ajax call to show the posts related to 1 type of item and to 1 area
-  # Call made when click on link, in area marker popup.
-  def showSpecificPosts
-    item_name = params['item']
-    location_type = params['type'] # 'postal', or 'area'
-    area_value = params['area'] # code postal area code, or area id
-    posts = Post.joins(:location, :items).where('expire_date >= ? AND  items.name = ?', Date.today, location_type, item_name)
-    item = Item.joins(:category).where('items.name = ?', item_name).first
-
-    result = {}
-    if location_type == 'postal'
-      posts = posts.where('locations.postal_code LIKE ?', "#{area_value}%")
-      result['area_name'] = area_value
-    elsif location_type == 'area'
-      posts = posts.where('locations.area_id = ?', area_value)
-      result['area_name'] = Area.find(area_value).name
+  # Method that gets markers and search results list, after a search is made on home page
+  def render_search_results
+    results = ''
+    markers, post_results = post_markers_and_results_for(params)
+    post_results.each do |post|
+      results += Result.create(post)
     end
 
-    if item
-      result['icon'] = item.category.icon
-      result['hexa_color'] = item.category.marker_color_hexacode
-    end
-
-    result['posts'] = []
-    posts.each do |post|
-      result['posts'] << {id: post.id, title: post.title, giving: post.giving}
-    end
-
-    render json: result
+    render json: {markers: markers, results: results, categories: post_results.map{|p| p.category_id.to_s}.uniq}
   end
 
   private
 
-  def location_search_result_objects(params, cat_nav_state, selected_item_ids, settings)
-    # First, we get the posts tied to an exact location.
-    @locations_exact = Post.search(cat_nav_state, params[:item], selected_item_ids, params[:q], nil)
+  def post_markers_and_results_for(params)
+    selected_item_ids = matching_items_for(params)
+    post_results = Post.search(params, selected_item_ids, nil)
+    markers = post_results.pluck(:marker_info).uniq
+    [markers, post_results]
+  end
+
+  def matching_items_for(params)
+    if params[:item].present?
+      selected_item_ids = Item.joins(:posts).where('name LIKE ?', "%#{params[:item].downcase}%").pluck(:id).uniq
+    end
+    selected_item_ids
+  end
+
+  def search_result_objects(params, selected_item_ids)
+    # Get the posts tied to an exact location.
+    post_results = Post.search(params, selected_item_ids, nil)
+    @locations_exact = post_results.pluck(:marker_info).uniq
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
     @areas = Area.all.select(:id, :name, :latitude, :longitude)

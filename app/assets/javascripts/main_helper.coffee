@@ -125,36 +125,36 @@ global.navState =
     complete_state
 
 
-  getMarkersFromNavState: (state = [], i = "") ->
-    categories = if state.length > 0 then state else global.navState.cat
-    item = if i.length > 0 then i else global.navState.item
-
+  getMarkersFromNavState:  ->
     $.ajax
       url: '/refine_state'
       global: false
       type: 'GET'
       data:
-        categories: categories
-        item: item
+        categories: global.navState.cat
+        item: global.navState.item
       dataType: 'html'
       beforeSend: (xhr) ->
         xhr.setRequestHeader 'Accept', 'text/html-partial'
       success: (data) ->
         # After receiving new data, we first need to clear all the current layers.
-        new_map_info = JSON.parse(data)
-
-        if markers.group != ''
-          markers.group.clearLayers()
-        if markers.area_group != ''
-          markers.area_group.clearLayers()
-
-        markers.locations_exact = new_map_info.markers
-
-        # Then we place the different markers .
-        markers.place_exact_locations_markers(new_map_info.markers, false)
-        global.navState.updateURL()
-
+        global.navState.updateMarkersOnMap(data)
         return
+        
+  updateMarkersOnMap: (data) ->
+    new_map_info = JSON.parse(data)
+
+    if markers.group != ''
+      markers.group.clearLayers()
+    if markers.area_group != ''
+      markers.area_group.clearLayers()
+
+    markers.locations_exact = new_map_info.markers
+
+    # Then we place the different markers .
+    markers.place_exact_locations_markers(new_map_info.markers, false)
+    global.navState.updateURL()
+    
 
   # This method allows to update the URL without redirecting, when a category is selected.
   # By doing so, we give the user the possibility to reload the page on a specific category nav state.

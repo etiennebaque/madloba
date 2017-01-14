@@ -26,39 +26,20 @@ class Post < ActiveRecord::Base
   apply_simple_captcha
 
   # This method returns the right query to display relevant markers, on the home page.
-  def self.search(cat_nav_state, searched_item, selected_item_ids, user_action, post_id)
+  def self.search(params, selected_item_ids, post_id)
+    return Post.find(post_id) if post_id.present?
 
-    if post_id.present?
-      # Search by post ids when adding posts on home page dynamically, when other user just created a post (websocket)
-      posts = Post.find(post_id)
-    else
-      posts = Post.select(:marker_info).where("expire_date >= ? and (marker_info->>'post_id') is not null", Date.today)
+    user_action = params[:q]
+    searched_item = params[:item]
+    cat_nav_state = params[:cat].present? ? params[:cat].split(" ") : []
 
-      if cat_nav_state || searched_item
-        if cat_nav_state
-          if searched_item
-            # We search for posts in relation to the searched item and the current category navigation state.
-            posts = posts.joins(:items).where(category_id: cat_nav_state, items: {id: selected_item_ids})
-          else
-            # We search for posts in relation to our current category navigation state.
-            posts = posts.where(category_id: cat_nav_state)
-          end
-        elsif searched_item
-          posts = posts.joins(:items).where(items: {id: selected_item_ids})
-        end
-      end
+    posts = Post.where("expire_date >= ? and (marker_info->>'post_id') is not null", Date.today)
 
-      if user_action
-        # If the user is searching for items, we need to show the posted posts, which people give stuff away.
-        posts = posts.where("posts.giving = ?", user_action == 'searching')
-      end
-
-    end
-
-    posts = posts.pluck(:marker_info).uniq
+    posts = posts.joins(:items).where(items: {id: selected_item_ids}) if searched_item.present?
+    posts = posts.where(category_id: cat_nav_state) if cat_nav_state.present?
+    posts = posts.where(giving: user_action == 'searching') if user_action.present?
 
     posts
-
   end
 
   # method used to save the posts#new form. A captcha is required when the user is anonymous.

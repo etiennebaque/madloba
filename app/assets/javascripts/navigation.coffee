@@ -62,7 +62,7 @@ NavigationBar::init = ->
           else
             $(el).hide()
 
-        global.navState.getMarkersFromNavState(searchItemNavState, itemValue)
+        global.navState.updateMarkersOnMap(data)
 
   # Popover when "Sign in / Register" link is clicked, in the navigation bar.
   $('#popover').popover
