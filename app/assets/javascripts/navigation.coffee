@@ -17,52 +17,13 @@ NavigationBar::init = ->
   $('#nav_search_form input').keypress (event) ->
     if event.which == 13
       event.preventDefault()
-      _this.getLocationsPropositions()
-
-  # Event tied to "up" arrow, to go back to the top of the page.
-  $('#navbar-up-link').click ->
-    $('html, body').animate { scrollTop: 0 }, 1000
-
-  #Checks if we need to show the arrow up, in the navigation bar, on mobile devices.
-  show_hide_up_arrow()
-
-  $(window).on 'scroll', ->
-    show_hide_up_arrow()
+      _this.processSearch()
 
   # Navigation - Search form: Ajax call to get locations proposition, based on user input in this form.
   $('#btn-form-search').click ->
-    #_this.getLocationsPropositions()
+    _this.processSearch()
 
-    itemValue = $('#item').val()
 
-    $.ajax
-      url: '/search'
-      global: false
-      type: 'POST'
-      data:
-        item: $('#item').val()
-        q: $('#q').val()
-      dataType: 'html'
-      beforeSend: (xhr) ->
-        xhr.setRequestHeader 'Accept', 'text/html-partial'
-      success: (data) ->
-        d = JSON.parse(data)
-
-        $("#search_result").removeClass('hide')
-        if !$('.search-panes').is(':visible')
-          $('#search_result_icon').trigger('click')
-
-        $("#result_list").html(d.results)
-
-        global.navState.cat = []
-        searchItemNavState = []
-        $('.guided-nav-category').each (i, el)->
-          if $(el).attr('id') in d.categories
-            searchItemNavState.push $(el).attr('id')
-          else
-            $(el).hide()
-
-        global.navState.updateMarkersOnMap(data)
 
   # Popover when "Sign in / Register" link is clicked, in the navigation bar.
   $('#popover').popover
@@ -96,6 +57,43 @@ show_hide_up_arrow = ->
   else
     $('#navbar-up-link').show()
 
+
+# Processing search (item and location search)
+NavigationBar::processSearch = ->
+  itemValue = $('#item').val()
+  queryValue = $('#q').val()
+
+  $.ajax
+    url: '/search'
+    global: false
+    type: 'POST'
+    data:
+      item: itemValue
+      q: queryValue
+    dataType: 'html'
+    beforeSend: (xhr) ->
+      xhr.setRequestHeader 'Accept', 'text/html-partial'
+    success: (data) ->
+      d = JSON.parse(data)
+
+      global.navState.q = queryValue
+      global.navState.item = itemValue
+
+      $("#search_result").removeClass('hide')
+      if !$('.search-panes').is(':visible')
+        $('#search_result_icon').trigger('click')
+
+      $("#result_list").html(d.results)
+
+      global.navState.cat = []
+      searchItemNavState = []
+      $('.guided-nav-category').each (i, el)->
+        if $(el).attr('id') in d.categories
+          searchItemNavState.push $(el).attr('id')
+        else
+          $(el).hide()
+
+      global.navState.updateMarkersOnMap(data)
 
 ###
 # Before submitting the form with the location, we first do an Ajax call to see

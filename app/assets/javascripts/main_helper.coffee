@@ -161,35 +161,11 @@ global.navState =
   # (Not used for now)
   updateURL: ->
     params = location.search
-    current_url = window.location.href
-    new_cat_params = 'cat=' + global.navState.cat.join('+')
-    new_url = ''
+    port = if location.port.length > 0 then ':'+location.port else ''
+    urlBase = location.protocol+'//'+location.hostname+port
+    newUrl = urlBase+'?'+global.navState.stringifyState()
 
-    if params != ''
-      param_array = params.replace('?', '').split('&')
-      cat_param = ''
-      i = 0
-      while i < param_array.length
-        if param_array[i].indexOf('cat=') > -1
-          cat_param = param_array[i]
-          break
-        i++
-      if cat_param != ''
-        if new_cat_params == 'cat='
-          new_url = current_url.replace(cat_param, '')
-        else
-          new_url = current_url.replace(cat_param, new_cat_params)
-      else
-        new_url = current_url + '&' + new_cat_params
-    else
-      if new_cat_params == 'cat='
-        new_url = current_url
-      else
-        new_url = current_url + '?' + new_cat_params
-    if new_url.indexOf('?#') > -1
-      new_url = new_url.replace('?#', '')
-
-    history.replaceState 'data', '', new_url
+    history.replaceState {}, '', newUrl
     return
   
   
