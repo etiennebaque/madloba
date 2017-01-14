@@ -92,11 +92,108 @@ global.leaf =
     if markers.selected_area != ''
       leaf.map.removeLayer markers.selected_area
     latlng = ''
-
-
     latlng
     
 
+global.navState =
+  cat: []
+  q: ''
+  item: ''
+  lat: ''
+  lon: ''
+
+  stringifyState: ->
+    fullState = ''
+    if global.navState.cat.length > 0
+      fullState = 'cat='
+      fullState += global.navState.cat.join('+')
+    if global.navState.item != ''
+      fullState = global.navState.append_to_state(fullState, 'item', global.navState.item)
+    if global.navState.q != ''
+      fullState = global.navState.append_to_state(fullState, 'q', global.navState.q)
+    if global.navState.lat != ''
+      fullState = global.navState.append_to_state(fullState, 'lat', global.navState.lat)
+    if global.navState.lon != ''
+      fullState = global.navState.append_to_state(fullState, 'lon', global.navState.lon)
+    fullState
+
+  append_to_state: (complete_state, param, value) ->
+    if complete_state != ''
+      complete_state = complete_state + '&' + param + '=' + value
+    else
+      complete_state = param + '=' + value
+    complete_state
+
+
+  getMarkersFromNavState: (state = [], i = "") ->
+    categories = if state.length > 0 then state else global.navState.cat
+    item = if i.length > 0 then i else global.navState.item
+
+    $.ajax
+      url: '/refine_state'
+      global: false
+      type: 'GET'
+      data:
+        categories: categories
+        item: item
+      dataType: 'html'
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader 'Accept', 'text/html-partial'
+      success: (data) ->
+        # After receiving new data, we first need to clear all the current layers.
+        new_map_info = JSON.parse(data)
+
+        if markers.group != ''
+          markers.group.clearLayers()
+        if markers.area_group != ''
+          markers.area_group.clearLayers()
+
+        markers.locations_exact = new_map_info.markers
+
+        # Then we place the different markers .
+        markers.place_exact_locations_markers(new_map_info.markers, false)
+        global.navState.updateURL()
+
+        return
+
+  # This method allows to update the URL without redirecting, when a category is selected.
+  # By doing so, we give the user the possibility to reload the page on a specific category nav state.
+  # (Not used for now)
+  updateURL: ->
+    params = location.search
+    current_url = window.location.href
+    new_cat_params = 'cat=' + global.navState.cat.join('+')
+    new_url = ''
+
+    if params != ''
+      param_array = params.replace('?', '').split('&')
+      cat_param = ''
+      i = 0
+      while i < param_array.length
+        if param_array[i].indexOf('cat=') > -1
+          cat_param = param_array[i]
+          break
+        i++
+      if cat_param != ''
+        if new_cat_params == 'cat='
+          new_url = current_url.replace(cat_param, '')
+        else
+          new_url = current_url.replace(cat_param, new_cat_params)
+      else
+        new_url = current_url + '&' + new_cat_params
+    else
+      if new_cat_params == 'cat='
+        new_url = current_url
+      else
+        new_url = current_url + '?' + new_cat_params
+    if new_url.indexOf('?#') > -1
+      new_url = new_url.replace('?#', '')
+
+    history.replaceState 'data', '', new_url
+    return
+  
+  
+    
 ###*
 # Object gathering different markers and icons that are used on the Madloba maps.
 ###
@@ -114,7 +211,6 @@ global.markers =
 
   area_markers: {}
 
-  selected_categories: []
   marker_colors: null
   area_color: null
   area_geocodes: null
@@ -231,8 +327,8 @@ global.markers =
   # We show on the map all the markers if there's no specific navigation state.
   # If there's one, we show only the markers which category are in the nav state.
   canCategoryBeDisplayed: (post) ->
-    markers.selected_categories.length == 0 ||
-    post.category_id.toString() in markers.selected_categories
+    global.navState.cat.length == 0 ||
+    post.category_id.toString() in global.navState.cat
 
 
 

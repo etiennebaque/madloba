@@ -88,33 +88,15 @@ class HomeController < ApplicationController
   def refine_state
     # From the home page, based on the selected navigation, get the relevant posts.
 
-    state = params[:state]
+    cats = params[:state]
+    item = params[:item]
 
-    new_nav_states = state.split('&')
-    nav_params = {}
-    new_nav_states.each do |state|
-      info = state.split('=')
-      nav_params[info[0]] = info[1]
-    end
-
-    if nav_params['cat'] && nav_params['cat'] != ''
-      selected_categories = nav_params['cat'].split('+')
-    end
-
-    if nav_params['item'] && nav_params['item'] != ''
-      selected_item_ids = []
-
-      # An item is being searched.
-      searched_item = nav_params['item']
-      selected_item_ids = Item.joins(:posts).where('name LIKE ?', "%#{searched_item}%").pluck(:id).uniq
+    if item.present?
+      selected_item_ids = Item.joins(:posts).where('name LIKE ?', "%#{item}%").pluck(:id).uniq
     end
 
     response = {}
-    response['map_info'] = {}
-    response['map_info']['markers'] = Post.search(selected_categories, searched_item, selected_item_ids, nav_params[:q], nil)
-
-    #response['map_info']['area'] = Location.search('area', selected_categories, searched_item, selected_item_ids, nav_params[:q])
-    #response['map_info']['area'] = Area.search(selected_categories, selected_item_ids, nav_params[:q])
+    response['markers'] = Post.search(cats, item, selected_item_ids, params[:q], nil)
 
     render json: response.to_json(:include => { :posts => { :include =>  {:items => { :include => :category }}}})
   end
