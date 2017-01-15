@@ -4,14 +4,14 @@
   .sidebar-tabs
     %ul{role: 'tablist'}
       %li
-        %a{href: '#category', role: 'tab', style: 'font-size: 20px'}
+        %a.sidebar-icon{href: '#category', role: 'tab', style: 'font-size: 20px'}
           %i.fa.fa-map-marker#sidebar_category_icon
       - if website_description.present?
         %li
-          %a{href: '#about', role: 'tab'}
+          %a.sidebar-icon{href: '#about', role: 'tab'}
             %i.fa.fa-info
       %li
-        %a{href: '#contact', role: 'tab'}
+        %a.sidebar-icon{href: '#contact', role: 'tab'}
           %i.fa.fa-envelope
 
   -# Tab panes
@@ -65,8 +65,8 @@
 
         -# Sidebar - list of Categories
         .list-group
-          %br
           - if @categories.any?
+            %h5= t('admin.categories')
             #available_categories
               - @categories.each do |category|
                 - if !category.is_refinement(params)
@@ -130,3 +130,7 @@
                 - if link && link[:label] && link[:label] != ''
                   %li
                     %a{:href => "#{link[:url]}"}= link[:label]
+
+- content_for :scripts do
+  :javascript
+    var sidebar = new Sidebar();

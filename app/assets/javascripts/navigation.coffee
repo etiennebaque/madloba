@@ -93,6 +93,7 @@ NavigationBar::processSearch = ->
         else
           $(el).hide()
 
+      updateCategorySidebarHeight()
       global.navState.updateMarkersOnMap(data)
 
 ###

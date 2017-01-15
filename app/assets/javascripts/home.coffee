@@ -91,6 +91,10 @@ Home::refineMarkers = ->
         $('#refinements').html ''
     else
       # User is selecting this category to refine their search.
+
+      if global.navState.cat.length == 0
+        $('#refinements h5').removeClass('hide')
+
       selectedLinkHtml.append '<i class=\'glyphicon glyphicon-remove align-cross\' style=\'float: right;\'></i>'
       $('#refinements').append selectedLinkHtml.prop('outerHTML')
 

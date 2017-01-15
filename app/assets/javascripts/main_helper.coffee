@@ -379,6 +379,9 @@ global.onMapClickLocation = (e) ->
   $('.latitude').val geocodes.lat
   $('.longitude').val geocodes.lng
 
+global.updateCategorySidebarHeight = ->
+  $('.sidebar-left').height($('#category').height() + 50)
+
 
 # Event triggered when click on "Locate me on the map" button,
 # on the "Create post" form, and on the Ad edit form.
