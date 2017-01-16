@@ -33,7 +33,7 @@ class Post < ActiveRecord::Base
     searched_item = params[:item]
     cat_nav_state = params[:cat].present? ? params[:cat].split(" ") : []
 
-    posts = Post.where("expire_date >= ? and (marker_info->>'post_id') is not null", Date.today)
+    posts = Post.where("expire_date >= ? and (marker_info->>'post_id') is not null", Date.today).uniq
 
     posts = posts.joins(:items).where(items: {id: selected_item_ids}) if searched_item.present?
     posts = posts.where(category_id: cat_nav_state) if cat_nav_state.present?
@@ -124,6 +124,7 @@ class Post < ActiveRecord::Base
   # {
   #   lat: 12.23456,
   #   lng: 12.23456,
+  #   area: 1
   #   post_id: 123,
   #   category_id: 2
   #   icon: 'fa-circle',
@@ -132,7 +133,12 @@ class Post < ActiveRecord::Base
   def serialize!
     location = self.location
     cat = self.category
-    info = {lat: location.latitude, lng: location.longitude, post_id: self.id}
+    info = {
+        lat: location.latitude,
+        lng: location.longitude,
+        area: location.area? ? location.area.id : 0,
+        post_id: self.id
+    }
     info.merge!({icon: cat.icon, color: cat.marker_color, category_id: cat.id})
     self.marker_info = info
     self.save

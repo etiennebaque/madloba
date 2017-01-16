@@ -262,7 +262,7 @@ global.markers =
 
     return
 
-  registerAreaMarkers: (areas) ->
+  registerAreaMarkers: (areas, showMarkers) ->
     for area in areas
       # Adding area marker
       marker = L.marker(
@@ -297,6 +297,9 @@ global.markers =
             marker_popup.update()
 
       markers.area_markers[area.id] = marker
+
+      if showMarkers
+        marker.addTo(leaf.map)
       
     return  
 
@@ -326,8 +329,9 @@ global.initLeafletMap = (map_settings) ->
 # This function draws areas (where at least one current post is included)
 # on the map of the home page.
 ###
-global.drawAreasOnMap = (locations_area) ->
-  Object.keys(locations_area).forEach (area_id) ->
+global.drawAreasOnMap = (areas) ->
+  for area in areas
+    debugger
     locations = locations_area[area_id]
     area_name = markers.area_geocodes[area_id]['name']
     area_bounds = markers.area_geocodes[area_id]['bounds']

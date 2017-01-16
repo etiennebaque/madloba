@@ -92,7 +92,17 @@ class HomeController < ApplicationController
       results += Result.create(post)
     end
 
-    render json: {markers: markers, results: results, categories: post_results.map{|p| p.category_id.to_s}.uniq}
+    areas = []
+    markers.each do |marker|
+      if marker['area'] > 0
+        areas << marker['area']
+        markers.delete(marker)
+      end
+    end
+
+    selected_areas = Area.where(id: areas.uniq).select(:id, :name, :latitude, :longitude)
+
+    render json: {markers: markers, areas: selected_areas, results: results, categories: post_results.map{|p| p.category_id.to_s}.uniq}
   end
 
   private

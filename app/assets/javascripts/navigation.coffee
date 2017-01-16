@@ -88,6 +88,7 @@ NavigationBar::processSearch = ->
       global.navState.cat = []
       searchItemNavState = []
       $('.guided-nav-category').each (i, el)->
+        $(el).show()
         if $(el).attr('id') in d.categories
           searchItemNavState.push $(el).attr('id')
         else
@@ -95,6 +96,9 @@ NavigationBar::processSearch = ->
 
       updateCategorySidebarHeight()
       global.navState.updateMarkersOnMap(data)
+      
+      markers.registerAreaMarkers(d.areas, true)
+      
 
 ###
 # Before submitting the form with the location, we first do an Ajax call to see

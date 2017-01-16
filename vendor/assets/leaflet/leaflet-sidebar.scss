@@ -287,7 +287,7 @@ $move-map-in-xs: true !default;
     @media(min-width:$threshold-lg) {
         min-width: $width-lg - $tab-size;
         &.search-panes {
-          min-width: $results-width-lg - $tab-size;
+          min-width: $results-width-lg - $tab-size - 20px;
         }
     }
 }
