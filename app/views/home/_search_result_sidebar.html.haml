@@ -1,3 +1,4 @@
+- currently_querying = @url_params[:item].present? && @post_results.present?
 #search_result.sidebar.sidebar-right.collapsed.hide
   -# Nav tabs
   .sidebar-tabs
@@ -7,7 +8,7 @@
           %i.fa.fa-search#search_result_icon
 
   -# Tab panes
-  .sidebar-content
+  .sidebar-content.search-content
     -# Search results
     #results.sidebar-pane.search-panes
       %h1.sidebar-header
@@ -16,4 +17,13 @@
           %i.fa.fa-caret-right
 
       #result_list.list-group.results
-        = render partial: 'search_result_list', locals: {results: {}}
+        - if currently_querying
+          - @post_results.each do |post|
+            .result
+              .post-title= link_to post.title, post
+              .post-address
+                %i.fa{class: post.location.area? ? Location::AREA_ADDRESS_ICON : Location::EXACT_ADDRESS_ICON}
+                = post.location.full_address
+
+              .post-items= "#{post.action} #{post.item_list}".html_safe
+              .post-description= post.short_description

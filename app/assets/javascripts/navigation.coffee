@@ -62,6 +62,7 @@ show_hide_up_arrow = ->
 NavigationBar::processSearch = ->
   itemValue = $('#item').val()
   queryValue = $('#q').val()
+  params = {q: queryValue, item: itemValue}
 
   $.ajax
     url: '/search'
@@ -79,11 +80,7 @@ NavigationBar::processSearch = ->
       global.navState.q = queryValue
       global.navState.item = itemValue
 
-      $("#search_result").removeClass('hide')
-      if !$('.search-panes').is(':visible')
-        $('#search_result_icon').trigger('click')
-
-      $("#result_list").html(d.results)
+      global.navState.populateSearchResultsSidebar(d.results)
 
       global.navState.cat = []
       searchItemNavState = []
@@ -94,10 +91,10 @@ NavigationBar::processSearch = ->
         else
           $(el).hide()
 
-      updateCategorySidebarHeight()
       global.navState.updateMarkersOnMap(data)
-      
+      global.navState.applyQueryParams(params)
       markers.registerAreaMarkers(d.areas, true)
+      updateCategorySidebarHeight()
       
 
 ###

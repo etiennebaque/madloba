@@ -1,9 +1,11 @@
 global = this
 
-global.Home = (locations_exact, areas, marker_colors) ->
+global.Home = (locations_exact, areas, params, marker_colors) ->
   markers.locations_exact = locations_exact
   markers.areas = areas
   markers.marker_colors = marker_colors
+
+  @params = params
 
   @init()
   @putLocationMarkers()
@@ -25,8 +27,17 @@ Home::init = ->
   # After choosing an area, moves the map to where it is.
   leaf.moveMapBasedOnArea({showAreaIcon: true, zoom: 15})
 
+
+  global.navState.populateSearchResultsSidebar()
+
+  # Update left sidebar with info related to url params
+  global.navState.applyQueryParams(@params)
+
   # Ajax calls made when choosing a category, in the sidebar.
   @refineMarkers()
+
+  # Update left sidebar height()
+  updateCategorySidebarHeight()
 
 
 ###*
@@ -68,7 +79,6 @@ Home::putLocationMarkers = ->
 
   if searched_location_marker != ''
     searched_location_marker.openPopup()
-
 
 
 Home::refineMarkers = ->

@@ -154,7 +154,12 @@ global.navState =
     # Then we place the different markers .
     markers.place_exact_locations_markers(new_map_info.markers, false)
     global.navState.updateURL()
-    
+
+  populateSearchResultsSidebar: (results) ->
+    $("#search_result").removeClass('hide')
+    if !$('.search-panes').is(':visible')
+      $('#search_result_icon').trigger('click')
+    $("#result_list").html(results)
 
   # This method allows to update the URL without redirecting, when a category is selected.
   # By doing so, we give the user the possibility to reload the page on a specific category nav state.
@@ -167,6 +172,15 @@ global.navState =
 
     history.replaceState {}, '', newUrl
     return
+
+  applyQueryParams:  (params)->
+    if params.q
+      $('.searching-giving h5').addClass('hide')
+      $('.searching-giving .'+params.q).removeClass('hide')
+
+    if params.item
+      $('.queried-item').removeClass('hide')
+      $('.queried-item span').html(params.item)
   
   
     

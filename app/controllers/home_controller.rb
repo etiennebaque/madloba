@@ -123,11 +123,15 @@ class HomeController < ApplicationController
 
   def search_result_objects(params, selected_item_ids)
     # Get the posts tied to an exact location.
-    post_results = Post.search(params, selected_item_ids, nil)
-    @locations_exact = post_results.pluck(:marker_info).uniq
+    @post_results = Post.search(params, selected_item_ids, nil)
+    @locations_exact = @post_results.pluck(:marker_info).uniq
 
     # Getting a hash that matches areas to their respective latitude and longitudes.
     @areas = Area.all.select(:id, :name, :latitude, :longitude)
+
+    @url_params = {}
+    @url_params[:q] = params[:q] if params[:q].present?
+    @url_params[:item] = params[:item] if params[:item].present?
   end
 
   def current_location_for(params)

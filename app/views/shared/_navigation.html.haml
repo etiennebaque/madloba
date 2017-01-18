@@ -15,7 +15,7 @@
           .form-group
             = select_tag :q, options_for_select([[t('home.searching'),'searching'], [t('home.giving'),'giving']], params['q']), class: 'form-control selectpicker'
           .form-group
-            = text_field_tag :item, params['item'], class:'typeahead form-control', placeholder: t('home.search_items'), autocomplete: 'off'
+            = text_field_tag :item, params[:item], class:'typeahead form-control', placeholder: t('home.search_items')
           .form-group
             = text_field_tag :location,'', class:'form-control', placeholder: t('home.location_example')
           .form-group
