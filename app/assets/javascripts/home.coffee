@@ -27,8 +27,8 @@ Home::init = ->
   # After choosing an area, moves the map to where it is.
   leaf.moveMapBasedOnArea({showAreaIcon: true, zoom: 15})
 
-
-  global.navState.populateSearchResultsSidebar()
+  if @params.item
+    global.navState.populateSearchResultsSidebar(markers.locations_exact, false)
 
   # Update left sidebar with info related to url params
   global.navState.applyQueryParams(@params)
