@@ -13,16 +13,16 @@ global.NavigationBar = ->
 
 NavigationBar::init = ->
   _this = this
+
   # Press Enter to valid search form.
   $('#nav_search_form input').keypress (event) ->
-    if event.which == 13
-      event.preventDefault()
+    if location.pathname == "/" && event.which == 13
       _this.processSearch()
 
   # Navigation - Search form: Ajax call to get locations proposition, based on user input in this form.
-  $('#btn-form-search').click ->
-    _this.processSearch()
-
+  $('#btn_form_search').click ->
+    if location.pathname == "/"
+      _this.processSearch()
 
 
   # Popover when "Sign in / Register" link is clicked, in the navigation bar.
@@ -60,6 +60,7 @@ show_hide_up_arrow = ->
 
 # Processing search (item and location search)
 NavigationBar::processSearch = ->
+  event.preventDefault()
   itemValue = $('#item').val()
   queryValue = $('#q').val()
   params = {q: queryValue, item: itemValue}
@@ -117,7 +118,7 @@ NavigationBar::getLocationsPropositions = ->
       beforeSend: (xhr) ->
         xhr.setRequestHeader 'Accept', 'application/json'
         xhr.setRequestHeader 'Content-Type', 'application/json'
-        $('#btn-form-search').html 'Loading...'
+        $('#btn_form_search').html 'Loading...'
         return
       success: (data) ->
         modalHtmlText = ''
@@ -153,7 +154,7 @@ NavigationBar::getLocationsPropositions = ->
               'show': 'true'
             $('#basicModal').modal options
         # Webservice response came back - button label goes back to "Search"
-        $('#btn-form-search').html 'Search'
+        $('#btn_form_search').html 'Search'
 
   else if $('#item').val() != '' or $('#user_action').val() != ''
     # no location is being searched, but an item is. We need to submit the form with this information.

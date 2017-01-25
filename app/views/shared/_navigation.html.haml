@@ -11,7 +11,7 @@
 
       .nav-form-center
         -# Search form - start
-        %form#nav_search_form.navbar-form
+        = form_tag root_url, {id: 'nav_search_form', class: 'navbar-form', method: 'get', role: 'search'} do
           .form-group
             = select_tag :q, options_for_select([[t('home.searching'),'searching'], [t('home.giving'),'giving']], params['q']), class: 'form-control selectpicker'
           .form-group
@@ -19,7 +19,7 @@
           .form-group
             = text_field_tag :location,'', class:'form-control', placeholder: t('home.location_example')
           .form-group
-            = button_tag t('home.search'), :id => 'btn-form-search', :type => 'button',:class => 'btn btn-default'
+            = submit_tag(t('home.search'), id: 'btn_form_search', class: 'btn btn-default', name: nil)
           .form-group
             %span#search_error_message{:style => "color: #d9534f; margin-left: 5px;"}
         -# Search form - end
