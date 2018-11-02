@@ -1,0 +1,22 @@
+.header-image {
+  background-image: url('./blue-sky-market.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: #999;
+  height: 700px;
+}
+
+.title {
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: normal;
+  font-size: 4.0em;
+  font-family: 'KoHo', sans-serif;
+}
+
+.subtitle {
+  color: #bbb;
+  font-size: 2.0em;
+}
