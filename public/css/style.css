@@ -20,3 +20,26 @@
   color: #bbb;
   font-size: 2.0em;
 }
+
+.intro {
+  background: #dcf5e7;
+  text-align: center;
+}
+
+.demo {
+  text-align: center;
+}
+
+h2 {
+  font-size: 25px;
+  padding: 32px 0px;
+}
+
+.intro .small-logo {
+  width: 34px;
+}
+
+.intro h3 {
+  font-size: 19px;
+  padding: 8px 0px;
+}
